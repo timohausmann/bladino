@@ -9,9 +9,9 @@ interface LayoutProps {
  */
 export function Layout({ children }: LayoutProps) {
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="min-h-screen flex flex-col">
             <Header />
-            <main style={{ flex: 1, padding: '2rem 0' }}>
+            <main className="flex-1 py-8">
                 <div className="container">
                     {children}
                 </div>

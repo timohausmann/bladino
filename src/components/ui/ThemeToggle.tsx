@@ -15,22 +15,9 @@ export function ThemeToggle() {
     return (
         <button
             onClick={toggleTheme}
-            className="theme-toggle"
+            className="bg-transparent border-none cursor-pointer flex items-center justify-center text-foreground w-8 h-8 rounded-full p-0"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            style={{
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--foreground)',
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                padding: '0'
-            }}
         >
             {theme === 'dark' ? (
                 <Sun size={18} />

@@ -6,23 +6,12 @@ import { ThemeToggle } from '../ui/ThemeToggle';
  */
 export function Header() {
     return (
-        <header
-            style={{
-                borderBottom: '1px solid var(--border)',
-                padding: '1rem 0',
-            }}
-        >
+        <header className="border-b border-border py-4">
             <div className="container flex items-center justify-between">
                 {/* Logo */}
                 <Link
                     to="/"
-                    style={{
-                        fontWeight: 'bold',
-                        fontSize: '1.5rem',
-                        color: 'var(--foreground)',
-                        fontFamily: '"Playfair Display", serif',
-                        letterSpacing: '-0.03em'
-                    }}
+                    className="font-bold text-2xl text-foreground font-['Playfair_Display',serif] tracking-tighter"
                 >
                     bladino
                 </Link>

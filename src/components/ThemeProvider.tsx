@@ -33,33 +33,48 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         return 'system';
     });
 
-    // Apply theme class to root element
+    // Apply theme class to document element for Tailwind
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark');
 
-        if (theme === 'system') {
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-            root.classList.add(systemTheme);
-        } else {
-            root.classList.add(theme);
+        // Remove the class
+        root.classList.remove('dark');
+
+        // Add class if dark mode
+        if (theme === 'dark') {
+            root.classList.add('dark');
+        } else if (theme === 'system') {
+            // Check system preference
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (systemTheme) {
+                root.classList.add('dark');
+            }
         }
     }, [theme]);
 
     // Listen for system theme changes
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Define the handler function
         const handleChange = () => {
             if (theme === 'system') {
                 const root = window.document.documentElement;
-                root.classList.remove('light', 'dark');
-                root.classList.add(mediaQuery.matches ? 'dark' : 'light');
+                if (mediaQuery.matches) {
+                    root.classList.add('dark');
+                } else {
+                    root.classList.remove('dark');
+                }
             }
         };
 
+        // Set up the listener
         mediaQuery.addEventListener('change', handleChange);
+
+        // Initial check
+        handleChange();
+
+        // Cleanup
         return () => mediaQuery.removeEventListener('change', handleChange);
     }, [theme]);
 

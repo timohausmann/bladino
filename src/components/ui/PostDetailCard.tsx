@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Heart, MessageCircle, Share2 } from 'react-feather';
 import * as Dialog from '@radix-ui/react-dialog';
+import { parseTextWithLinks, extractFirstUrl } from '../../utils/textUtils';
+import { LinkPreview } from './LinkPreview';
 
 interface PostDetailCardProps {
     avatar: string;
@@ -26,45 +28,32 @@ export function PostDetailCard({
     comments = 0,
     shares = 0
 }: PostDetailCardProps) {
+    // Parse content for links
+    const parsedContent = useMemo(() => parseTextWithLinks(content), [content]);
+
+    // Extract the first URL for link preview
+    const firstUrl = useMemo(() => extractFirstUrl(content), [content]);
+
     return (
-        <div
-            style={{
-                borderRadius: '12px',
-                border: '1px solid var(--border)',
-                backgroundColor: 'var(--card)',
-                color: 'var(--card-foreground)',
-                padding: '1rem',
-                marginBottom: '1rem',
-                maxWidth: '100%',
-                overflow: 'hidden',
-            }}
-        >
+        <div className="rounded-xl border border-border bg-card text-card-foreground p-4 mb-4 max-w-full overflow-hidden">
             {/* User info and timestamp */}
-            <div style={{ display: 'flex', marginBottom: '0.75rem' }}>
-                <div
-                    style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        marginRight: '12px',
-                    }}
-                >
+            <div className="flex mb-3">
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
                     <img
                         src={avatar}
                         alt={`${name}'s avatar`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        className="w-full h-full object-cover"
                     />
                 </div>
-                <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="flex-1">
+                    <div className="flex justify-between">
                         <div>
-                            <h3 style={{ fontWeight: 'bold', marginBottom: '2px' }}>{name}</h3>
-                            <span style={{ color: 'var(--muted-foreground)', fontSize: '14px' }}>
+                            <h3 className="font-bold mb-0.5">{name}</h3>
+                            <span className="text-muted-foreground text-sm">
                                 @{handle}
                             </span>
                         </div>
-                        <div style={{ color: 'var(--muted-foreground)', fontSize: '14px' }}>
+                        <div className="text-muted-foreground text-sm">
                             {timestamp}
                         </div>
                     </div>
@@ -74,74 +63,45 @@ export function PostDetailCard({
             {/* Post content */}
             <Dialog.Root>
                 <Dialog.Trigger asChild>
-                    <div
-                        style={{
-                            marginBottom: '1rem',
-                            cursor: 'pointer',
-                            fontSize: '17px',
-                            lineHeight: '1.4'
-                        }}
-                    >
-                        <p>{content}</p>
+                    <div className="mb-2 cursor-pointer text-[17px] leading-relaxed">
+                        <p>{parsedContent}</p>
                     </div>
                 </Dialog.Trigger>
                 <Dialog.Portal>
-                    <Dialog.Overlay style={{
-                        position: 'fixed',
-                        inset: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.45)',
-                        animation: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
-                        zIndex: 50
-                    }} />
-                    <Dialog.Content style={{
-                        position: 'fixed',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        minWidth: '90%',
-                        maxWidth: '500px',
-                        maxHeight: '85vh',
-                        padding: '24px',
-                        backgroundColor: 'var(--background)',
-                        borderRadius: '8px',
-                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
-                        zIndex: 51,
-                        overflowY: 'auto'
-                    }}>
-                        <div style={{
-                            display: 'flex',
-                            marginBottom: '12px',
-                            alignItems: 'center',
-                            gap: '12px'
-                        }}>
+                    <Dialog.Overlay className="fixed inset-0 bg-black/45 animate-in fade-in-0 z-50" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[500px] max-h-[85vh] p-6 bg-background rounded-lg shadow-lg z-50 overflow-y-auto">
+                        <div className="flex items-center gap-3 mb-3">
                             <img
                                 src={avatar}
                                 alt={`${name}'s avatar`}
-                                style={{ width: '48px', height: '48px', borderRadius: '50%' }}
+                                className="w-12 h-12 rounded-full"
                             />
                             <div>
-                                <h3 style={{ fontWeight: 'bold' }}>{name}</h3>
-                                <span style={{ color: 'var(--muted-foreground)', fontSize: '14px' }}>@{handle}</span>
+                                <h3 className="font-bold">{name}</h3>
+                                <span className="text-muted-foreground text-sm">@{handle}</span>
                             </div>
                         </div>
-                        <p style={{ fontSize: '18px', lineHeight: '1.5', marginBottom: '20px' }}>{content}</p>
-                        <div style={{ color: 'var(--muted-foreground)', marginBottom: '12px' }}>{timestamp}</div>
+                        <p className="text-lg leading-relaxed mb-5">{parsedContent}</p>
+                        {firstUrl && (
+                            <div className="mb-5">
+                                <LinkPreview url={firstUrl} />
+                            </div>
+                        )}
+                        <div className="text-muted-foreground mb-3">{timestamp}</div>
                         <Dialog.Close asChild>
-                            <button style={{
-                                border: 'none',
-                                borderRadius: '4px',
-                                padding: '8px 12px',
-                                backgroundColor: 'var(--muted)',
-                                color: 'var(--foreground)',
-                                cursor: 'pointer'
-                            }}>Close</button>
+                            <button className="border-none rounded bg-muted text-foreground py-2 px-3 cursor-pointer">
+                                Close
+                            </button>
                         </Dialog.Close>
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
 
+            {/* Link Preview (if there's a URL in the content) */}
+            {firstUrl && <LinkPreview url={firstUrl} />}
+
             {/* Interaction buttons */}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="flex justify-between">
                 <InteractionButton icon={<Heart size={18} />} count={likes} label="Likes" />
                 <InteractionButton icon={<MessageCircle size={18} />} count={comments} label="Comments" />
                 <InteractionButton icon={<Share2 size={18} />} count={shares} label="Shares" />
@@ -162,18 +122,7 @@ interface InteractionButtonProps {
 function InteractionButton({ icon, count, label }: InteractionButtonProps) {
     return (
         <button
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'transparent',
-                border: 'none',
-                padding: '8px 12px',
-                borderRadius: '4px',
-                color: 'var(--muted-foreground)',
-                cursor: 'pointer',
-                transition: 'color 0.2s, background-color 0.2s',
-            }}
+            className="flex items-center gap-1 bg-transparent border-none px-3 py-2 rounded text-muted-foreground cursor-pointer transition-colors"
             title={label}
             aria-label={`${count} ${label}`}
             onClick={() => { }}
