@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Heart, MessageCircle, Share2 } from 'react-feather';
+import { MessageCircle } from 'react-feather';
 import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
+import { EmojiReaction } from './EmojiReaction';
 import { LinkPreview } from './LinkPreview';
 
 interface PostDetailCardProps {
@@ -9,9 +10,9 @@ interface PostDetailCardProps {
     handle: string;
     timestamp: string;
     content: string;
-    likes: number;
+    reactions: { [emoji: string]: number; };
     comments: number;
-    shares: number;
+    likes?: number; // Optional for backward compatibility
 }
 
 /**
@@ -23,9 +24,9 @@ export function PostDetailCard({
     handle,
     timestamp,
     content,
-    likes = 0,
+    reactions = {},
+    likes, // Keep for backward compatibility
     comments = 0,
-    shares = 0
 }: PostDetailCardProps) {
     // Parse content for links
     const parsedContent = useMemo(() => parseTextWithLinks(content), [content]);
@@ -33,8 +34,27 @@ export function PostDetailCard({
     // Extract the first URL for link preview
     const firstUrl = useMemo(() => extractFirstUrl(content), [content]);
 
+    // If we have likes but no reactions, initialize reactions with likes
+    const initialReactions = useMemo(() => {
+        if (Object.keys(reactions).length > 0) {
+            return reactions;
+        }
+
+        // Backward compatibility: If only likes are provided
+        if (likes && likes > 0) {
+            return { '👍': likes };
+        }
+
+        return {};
+    }, [reactions, likes]);
+
+    // Handle emoji reaction - in a real app, this would update the post's reactions
+    const handleReaction = (emoji: string) => {
+        console.log(`Reacted with: ${emoji}`);
+    };
+
     return (
-        <div className="rounded-xl bg-card text-card-foreground p-4 mb-4 max-w-full overflow-hidden">
+        <div className="rounded-xl bg-card text-card-foreground p-4 mb-4 max-w-full border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow">
             {/* User info and timestamp */}
             <div className="flex mb-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
@@ -59,18 +79,20 @@ export function PostDetailCard({
                 </div>
             </div>
 
-            <div className="mb-2 text-[17px] leading-relaxed">
+            <div className="mb-3 text-[17px] leading-relaxed">
                 <p>{parsedContent}</p>
             </div>
 
             {/* Link Preview (if there's a URL in the content) */}
             {firstUrl && <LinkPreview url={firstUrl} />}
 
+            {/* Divider */}
+            <div className="h-px bg-gray-200 dark:bg-gray-800 my-3"></div>
+
             {/* Interaction buttons */}
-            <div className="flex justify-between">
-                <InteractionButton icon={<Heart size={18} />} count={likes} label="Likes" />
+            <div className="flex justify-between items-center">
+                <EmojiReaction reactions={initialReactions} onReaction={handleReaction} />
                 <InteractionButton icon={<MessageCircle size={18} />} count={comments} label="Comments" />
-                <InteractionButton icon={<Share2 size={18} />} count={shares} label="Shares" />
             </div>
         </div>
     );
@@ -83,18 +105,19 @@ interface InteractionButtonProps {
 }
 
 /**
- * InteractionButton - A button for post interactions (like, comment, share)
+ * InteractionButton - A button for post interactions (comment)
  */
 function InteractionButton({ icon, count, label }: InteractionButtonProps) {
     return (
         <button
-            className="flex items-center gap-1 bg-transparent border-none px-3 py-2 rounded text-muted-foreground cursor-pointer transition-colors"
+            className="flex items-center gap-1 border-none px-3 py-2 rounded-full bg-black/10 transition-all duration-200 hover:bg-black/20 hover:shadow-md cursor-pointer"
             title={label}
             aria-label={`${count} ${label}`}
             onClick={() => { }}
+            tabIndex={0}
         >
             {icon}
-            <span>{count}</span>
+            <span className="text-sm font-medium">{count}</span>
         </button>
     );
 } 
