@@ -15,30 +15,28 @@ const domainPreviewMap: Record<string, LinkPreviewData> = {
     title: "Example Website - Your Source for Examples",
     description:
       "This is a mock preview for example.com. In a real application, this data would be retrieved from the actual website metadata.",
-    image:
-      "https://via.placeholder.com/600x400/4299e1/ffffff?text=Example+Website",
+    image: "https://dummyimage.com/600x400/000/fff.jpg&text=Example+Website",
     siteName: "Example",
   },
   "medium.com": {
     title: "Responsive Design Patterns for Modern Web Applications",
     description:
       "Learn how to implement responsive design patterns that work across all devices and screen sizes. This comprehensive guide covers everything from fluid grids to advanced CSS techniques.",
-    image:
-      "https://via.placeholder.com/600x400/10b981/ffffff?text=Medium+Article",
+    image: "https://dummyimage.com/600x400/000/fff.jpg&text=Medium+Article",
     siteName: "Medium",
   },
   "unsplash.com": {
     title: "Beautiful Free Images & Pictures | Unsplash",
     description:
       "Beautiful, free images and photos that you can download and use for any project. Better than any royalty free or stock photos.",
-    image: "https://via.placeholder.com/600x400/6366f1/ffffff?text=Unsplash",
+    image: "https://dummyimage.com/600x400/000/fff.jpg&text=Unsplash",
     siteName: "Unsplash",
   },
   "google.com": {
     title: "Google",
     description:
       "Search the world's information, including webpages, images, videos and more.",
-    image: "https://via.placeholder.com/600x400/ef4444/ffffff?text=Google",
+    image: "https://dummyimage.com/600x400/000/fff.jpg&text=Google",
     siteName: "Google",
   },
 };

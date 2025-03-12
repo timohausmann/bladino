@@ -1,12 +1,29 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Light theme variables */
+  /* Light theme (default) */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-border: #e2e8f0;
+  --color-input: #f1f5f9;
+  --color-primary: #3b82f6;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+  --color-accent: #f1f5f9;
+  --color-accent-foreground: #0f172a;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+}
+
+/* Dark theme */
+.dark {
   --color-background: #0f172a;
   --color-foreground: #f1f5f9;
   --color-muted: #1e293b;
@@ -24,8 +41,3 @@
   --color-card: #1e293b;
   --color-card-foreground: #f1f5f9;
 }
-
-/*
-  
-
-*/

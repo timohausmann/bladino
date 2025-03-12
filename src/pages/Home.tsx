@@ -50,7 +50,7 @@ export function Home() {
 
     return (
         <div>
-            <h1 style={{ marginBottom: '1.5rem', fontSize: '1.75rem' }}>Home</h1>
+            <h1 className="mb-6 text-2xl">Home</h1>
 
             {/* Display all posts */}
             {posts.map((post, index) => (
