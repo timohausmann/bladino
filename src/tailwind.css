@@ -2,42 +2,29 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Base color palette */
+:root {
+  /* Neutral colors */
+  --base-white: #ffffff;
+  --base-black: #0f172a;
+}
+
 @theme {
   /* Light theme (default) */
-  --color-background: #ffffff;
-  --color-foreground: #0f172a;
-  --color-muted: #f1f5f9;
-  --color-muted-foreground: #64748b;
-  --color-border: #e2e8f0;
-  --color-input: #f1f5f9;
-  --color-primary: #3b82f6;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #0f172a;
-  --color-accent: #f1f5f9;
-  --color-accent-foreground: #0f172a;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #ffffff;
-  --color-card: #ffffff;
-  --color-card-foreground: #0f172a;
+  --color-background: var(--base-white);
+  --color-foreground: var(--base-black);
+  --color-muted: theme(colors.slate.50);
+  --color-muted-foreground: theme(colors.slate.500);
+  --color-card: theme(colors.slate.100);
+  --color-card-foreground: var(--base-black);
 }
 
 /* Dark theme */
 .dark {
-  --color-background: #0f172a;
-  --color-foreground: #f1f5f9;
-  --color-muted: #1e293b;
-  --color-muted-foreground: #94a3b8;
-  --color-border: #1e293b;
-  --color-input: #1e293b;
-  --color-primary: #3b82f6;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #1e293b;
-  --color-secondary-foreground: #f1f5f9;
-  --color-accent: #1e293b;
-  --color-accent-foreground: #f1f5f9;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #ffffff;
-  --color-card: #1e293b;
-  --color-card-foreground: #f1f5f9;
+  --color-background: var(--base-black);
+  --color-foreground: theme(colors.slate.50);
+  --color-muted: theme(colors.slate.800);
+  --color-muted-foreground: theme(colors.slate.400);
+  --color-card: theme(colors.slate.700);
+  --color-card-foreground: theme(colors.slate.50);
 }

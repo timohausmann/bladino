@@ -6,8 +6,8 @@ import { ThemeToggle } from '../ui/ThemeToggle';
  */
 export function Header() {
     return (
-        <header className="border-b border-border py-4">
-            <div className="container mx-auto px-4 flex items-center justify-between">
+        <header className="border-b border-slate- py-4">
+            <div className="container max-w-3xl mx-auto px-4 flex items-center justify-between">
                 {/* Logo */}
                 <Link
                     to="/"

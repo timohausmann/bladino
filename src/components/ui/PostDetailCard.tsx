@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Heart, MessageCircle, Share2 } from 'react-feather';
-import * as Dialog from '@radix-ui/react-dialog';
-import { parseTextWithLinks, extractFirstUrl } from '../../utils/textUtils';
+import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
 import { LinkPreview } from './LinkPreview';
 
 interface PostDetailCardProps {
@@ -35,7 +34,7 @@ export function PostDetailCard({
     const firstUrl = useMemo(() => extractFirstUrl(content), [content]);
 
     return (
-        <div className="rounded-xl border border-border bg-card text-card-foreground p-4 mb-4 max-w-full overflow-hidden">
+        <div className="rounded-xl bg-card text-card-foreground p-4 mb-4 max-w-full overflow-hidden">
             {/* User info and timestamp */}
             <div className="flex mb-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
@@ -60,42 +59,9 @@ export function PostDetailCard({
                 </div>
             </div>
 
-            {/* Post content */}
-            <Dialog.Root>
-                <Dialog.Trigger asChild>
-                    <div className="mb-2 cursor-pointer text-[17px] leading-relaxed">
-                        <p>{parsedContent}</p>
-                    </div>
-                </Dialog.Trigger>
-                <Dialog.Portal>
-                    <Dialog.Overlay className="fixed inset-0 bg-black/45 animate-in fade-in-0 z-50" />
-                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[500px] max-h-[85vh] p-6 bg-background rounded-lg shadow-lg z-50 overflow-y-auto">
-                        <div className="flex items-center gap-3 mb-3">
-                            <img
-                                src={avatar}
-                                alt={`${name}'s avatar`}
-                                className="w-12 h-12 rounded-full"
-                            />
-                            <div>
-                                <h3 className="font-bold">{name}</h3>
-                                <span className="text-muted-foreground text-sm">@{handle}</span>
-                            </div>
-                        </div>
-                        <p className="text-lg leading-relaxed mb-5">{parsedContent}</p>
-                        {firstUrl && (
-                            <div className="mb-5">
-                                <LinkPreview url={firstUrl} />
-                            </div>
-                        )}
-                        <div className="text-muted-foreground mb-3">{timestamp}</div>
-                        <Dialog.Close asChild>
-                            <button className="border-none rounded bg-muted text-foreground py-2 px-3 cursor-pointer">
-                                Close
-                            </button>
-                        </Dialog.Close>
-                    </Dialog.Content>
-                </Dialog.Portal>
-            </Dialog.Root>
+            <div className="mb-2 text-[17px] leading-relaxed">
+                <p>{parsedContent}</p>
+            </div>
 
             {/* Link Preview (if there's a URL in the content) */}
             {firstUrl && <LinkPreview url={firstUrl} />}

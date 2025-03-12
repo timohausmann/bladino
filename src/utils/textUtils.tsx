@@ -33,35 +33,46 @@ export function truncateUrl(url: string): string {
 export function parseTextWithLinks(text: string): React.ReactNode[] {
     if (!text) return [];
 
-    // Split the text by URLs
-    const parts = text.split(URL_REGEX);
-
-    // Find all URLs using the regex
-    const urls = text.match(URL_REGEX) || [];
-
-    // Combine the parts and URLs into a single array of React nodes
+    // Create a copy of the text to work with
+    let remainingText = text;
     const result: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match;
 
-    parts.forEach((part, index) => {
-        if (part) {
-            result.push(part);
+    // Reset the regex before using it with exec
+    URL_REGEX.lastIndex = 0;
+
+    // Find each URL match and process the text before and including the URL
+    while ((match = URL_REGEX.exec(text)) !== null) {
+        const url = match[0];
+        const matchIndex = match.index;
+
+        // Add the text before the URL
+        if (matchIndex > lastIndex) {
+            result.push(text.substring(lastIndex, matchIndex));
         }
 
-        if (urls[index]) {
-            const url = urls[index];
-            result.push(
-                <a
-                    key={`link-${index}`}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="break-words"
-                >
-                    {truncateUrl(url)}
-                </a>
-            );
-        }
-    });
+        // Add the URL as a link element
+        result.push(
+            <a
+                key={`link-${matchIndex}`}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-words text-sky-400"
+            >
+                {truncateUrl(url)}
+            </a>
+        );
+
+        // Update the last index to after this URL
+        lastIndex = matchIndex + url.length;
+    }
+
+    // Add any remaining text after the last URL
+    if (lastIndex < text.length) {
+        result.push(text.substring(lastIndex));
+    }
 
     return result;
 }

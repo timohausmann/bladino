@@ -12,7 +12,7 @@ export function Layout({ children }: LayoutProps) {
         <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1 py-8">
-                <div className="container mx-auto px-4">
+                <div className="container max-w-3xl mx-auto px-4">
                     {children}
                 </div>
             </main>
