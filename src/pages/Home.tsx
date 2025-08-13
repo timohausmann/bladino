@@ -86,9 +86,11 @@ export function Home() {
             <h1 className="mb-6 text-2xl">Home</h1>
 
             {/* Display all posts */}
-            {posts.map((post, index) => (
-                <PostDetailCard key={`post-${index}`} {...post} />
-            ))}
+            <div className="flex flex-col gap-6">
+                {posts.map((post, index) => (
+                    <PostDetailCard key={`post-${index}`} {...post} />
+                ))}
+            </div>
         </div>
     );
 } 

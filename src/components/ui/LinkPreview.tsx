@@ -13,7 +13,7 @@ interface LinkPreviewProps {
 /**
  * LinkPreview - A component that displays a preview of a linked website
  * Uses mock data from our linkPreviewData utility
- * On tablets and larger screens (md breakpoint), displays image and content in a single row
+ * On tablets and larger screens (sm breakpoint), displays image and content in a single row
  */
 export function LinkPreview({
     url,
@@ -51,10 +51,10 @@ export function LinkPreview({
             aria-label={`Visit ${previewData.title || "website"}`}
             tabIndex={0}
         >
-            <div className="flex flex-col overflow-hidden rounded-lg bg-black/10 transition-all duration-200 hover:bg-black/20 hover:shadow-md md:flex-row">
-                {/* Image - Full width on mobile, fixed width on md+ */}
+            <div className="flex flex-col overflow-hidden rounded-lg bg-black/5 dark:bg-black/10 transition-all duration-200 hover:bg-black/10 dark:hover:bg-black/20 sm:flex-row">
+                {/* Image - Full width on mobile, fixed width on sm+ */}
                 {previewData.image && (
-                    <div className="bg-black/10 h-40 w-full flex-shrink-0 overflow-hidden md:w-1/3 md:max-w-[240px]">
+                    <div className="bg-black/10 h-40 w-full flex-shrink-0 overflow-hidden sm:w-1/3 sm:max-w-[240px]">
                         <img
                             src={previewData.image}
                             alt={previewData.title || "Link preview image"}
@@ -64,7 +64,7 @@ export function LinkPreview({
                 )}
 
                 {/* Content - Takes remaining space */}
-                <div className="flex-grow p-3 md:p-4">
+                <div className="flex-grow p-3 sm:p-4">
                     {/* Site info */}
                     <div className="text-muted-foreground mb-2 flex items-center text-sm">
                         <span>{previewData.siteName || domain}</span>

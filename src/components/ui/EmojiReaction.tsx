@@ -25,13 +25,8 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
     const topReactions = useMemo(() => {
         return Object.entries(reactions)
             .sort(([, countA], [, countB]) => countB - countA)
-            .slice(0, 5);
+            .slice(0, 4);
     }, [reactions]);
-
-    // Total reaction count
-    const totalReactions = useMemo(() =>
-        Object.values(reactions).reduce((sum, count) => sum + count, 0),
-        [reactions]);
 
     // Handle showing the quick reaction picker
     const handleShowQuickPicker = () => {
@@ -126,7 +121,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                         {topReactions.map(([emoji, count]) => (
                             <button
                                 key={emoji}
-                                className="h-10 px-3 flex items-center justify-center gap-1 text-base bg-black/10 rounded-full border-none transition-all duration-200 hover:bg-black/20 hover:shadow-md"
+                                className="h-10 px-3 flex items-center justify-center gap-2 text-base bg-black/5 rounded-full border-none transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/20 hover:shadow-md"
                                 onClick={() => onReaction(emoji)}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' || e.key === ' ') {
@@ -138,14 +133,14 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                                 title={`${count} reactions`}
                                 tabIndex={0}
                             >
-                                <span className="text-lg">{emoji}</span>
+                                <span className="text-sm">{emoji}</span>
                                 <span className="text-sm font-medium">{count}</span>
                             </button>
                         ))}
                     </>
                 ) : (
                     <button
-                        className="flex items-center justify-center w-10 h-10 bg-black/10 rounded-full transition-all duration-200 hover:bg-black/20 hover:shadow-md"
+                        className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all dark:bg-black/10 dark:hover:bg-black/20 duration-200 hover:bg-black/10 hover:shadow-md"
                         onClick={handleShowQuickPicker}
                         onKeyDown={handleKeyDown}
                         aria-label="Add a reaction"
@@ -158,7 +153,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
 
                 {/* Add reaction button */}
                 <button
-                    className="flex items-center justify-center w-10 h-10 bg-black/10 rounded-full transition-all duration-200 hover:bg-black/20 hover:shadow-md"
+                    className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md"
                     onClick={handleShowQuickPicker}
                     onKeyDown={handleKeyDown}
                     aria-label="Add a reaction"

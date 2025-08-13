@@ -54,9 +54,9 @@ export function PostDetailCard({
     };
 
     return (
-        <div className="rounded-xl bg-card text-card-foreground p-4 mb-4 max-w-full border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow">
+        <div className="rounded-xl bg-card text-card-foreground py-6 px-6 max-w-full border border-white dark:border-white/10">
             {/* User info and timestamp */}
-            <div className="flex mb-3">
+            <div className="flex mb-3 items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
                     <img
                         src={avatar}
@@ -65,21 +65,21 @@ export function PostDetailCard({
                     />
                 </div>
                 <div className="flex-1">
-                    <div className="flex justify-between">
-                        <div>
-                            <h3 className="font-bold mb-0.5">{name}</h3>
-                            <span className="text-muted-foreground text-sm">
+                    <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">
+                        <div className="flex gap-2 items-baseline sm:flex-col">
+                            <h3 className="font-bold leading-none text-base">{name}</h3>
+                            <span className="text-muted-foreground leading-none text-sm">
                                 @{handle}
                             </span>
                         </div>
-                        <div className="text-muted-foreground text-sm">
+                        <div className="text-muted-foreground leading-none text-xs sm:text-sm">
                             {timestamp}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="mb-3 text-[17px] leading-relaxed">
+            <div className="mb-3 text-[17px]">
                 <p>{parsedContent}</p>
             </div>
 
@@ -87,7 +87,7 @@ export function PostDetailCard({
             {firstUrl && <LinkPreview url={firstUrl} />}
 
             {/* Divider */}
-            <div className="h-px bg-gray-200 dark:bg-gray-800 my-3"></div>
+            <div className="h-px bg-gray-200 dark:bg-white/14 my-4"></div>
 
             {/* Interaction buttons */}
             <div className="flex justify-between items-center">
@@ -110,7 +110,7 @@ interface InteractionButtonProps {
 function InteractionButton({ icon, count, label }: InteractionButtonProps) {
     return (
         <button
-            className="flex items-center gap-1 border-none px-3 py-2 rounded-full bg-black/10 transition-all duration-200 hover:bg-black/20 hover:shadow-md cursor-pointer"
+            className="flex items-center gap-1 border-none px-3 py-2 rounded-full bg-black/5 transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md cursor-pointer"
             title={label}
             aria-label={`${count} ${label}`}
             onClick={() => { }}

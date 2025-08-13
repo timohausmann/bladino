@@ -6,19 +6,25 @@ import { ThemeToggle } from '../ui/ThemeToggle';
  */
 export function Header() {
     return (
-        <header className="border-b border-slate- py-4">
-            <div className="container max-w-3xl mx-auto px-4 flex items-center justify-between">
-                {/* Logo */}
-                <Link
-                    to="/"
-                    className="font-bold text-2xl text-foreground font-['Playfair_Display',serif] tracking-tighter"
-                >
-                    bladino
-                </Link>
+        <>
+            <header className="fixed top-4 left-4 right-4 z-50">
+                <div className="rounded-full py-4 px-4 mx-auto max-w-[calc(768px+2rem)]
+            backdrop-blur-sm bg-white/50 dark:bg-white/5 ">
+                    <div className="container max-w-3xl px-4 flex items-center justify-between gap-4">
+                        {/* Logo */}
+                        <Link
+                            to="/"
+                            className="font-bold text-2xl text-foreground font-['Playfair_Display',serif] tracking-tighter"
+                        >
+                            bladino
+                        </Link>
 
-                {/* Theme Toggle */}
-                <ThemeToggle />
-            </div>
-        </header>
+                        {/* Theme Toggle */}
+                        <ThemeToggle />
+                    </div>
+                </div>
+            </header>
+            <div className="h-20"></div>
+        </>
     );
 } 
