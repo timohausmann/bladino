@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Smile } from 'react-feather';
+import { PostActionButton } from './PostActionButton';
 
 // Define the props for the EmojiReaction component
 interface EmojiReactionProps {
@@ -119,28 +120,19 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                 {topReactions.length > 0 ? (
                     <>
                         {topReactions.map(([emoji, count]) => (
-                            <button
+                            <PostActionButton
                                 key={emoji}
-                                className="h-10 px-3 flex items-center justify-center gap-2 text-base bg-black/5 rounded-full border-none transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/20 hover:shadow-md"
+                                icon={<span className="text-sm">{emoji}</span>}
+                                count={count}
+                                label={`React with ${emoji}`}
                                 onClick={() => onReaction(emoji)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        onReaction(emoji);
-                                    }
-                                }}
-                                aria-label={`React with ${emoji}. Currently ${count} reactions`}
-                                title={`${count} reactions`}
-                                tabIndex={0}
-                            >
-                                <span className="text-sm">{emoji}</span>
-                                <span className="text-sm font-medium">{count}</span>
-                            </button>
+                                className="h-10 px-3"
+                            />
                         ))}
                     </>
                 ) : (
                     <button
-                        className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all dark:bg-black/10 dark:hover:bg-black/20 duration-200 hover:bg-black/10 hover:shadow-md"
+                        className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all dark:bg-black/10 dark:hover:bg-black/20 duration-200 hover:bg-black/10 hover:shadow-md cursor-pointer"
                         onClick={handleShowQuickPicker}
                         onKeyDown={handleKeyDown}
                         aria-label="Add a reaction"

@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { MessageCircle } from 'react-feather';
 import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
 import { EmojiReaction } from './EmojiReaction';
 import { LinkPreview } from './LinkPreview';
+import { PostActionButton } from './PostActionButton';
 
 interface PostDetailCardProps {
     avatar: string;
@@ -54,7 +55,7 @@ export function PostDetailCard({
     };
 
     return (
-        <div className="rounded-xl bg-card text-card-foreground py-6 px-6 max-w-full border border-white dark:border-white/10">
+        <div className="rounded-xl bg-card text-card-foreground py-4 px-6 max-w-full border border-white dark:border-white/10">
             {/* User info and timestamp */}
             <div className="flex mb-3 items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
@@ -92,32 +93,13 @@ export function PostDetailCard({
             {/* Interaction buttons */}
             <div className="flex justify-between items-center">
                 <EmojiReaction reactions={initialReactions} onReaction={handleReaction} />
-                <InteractionButton icon={<MessageCircle size={18} />} count={comments} label="Comments" />
+                <PostActionButton
+                    icon={<MessageCircle size={18} />}
+                    count={comments}
+                    label="Comments"
+                    onClick={() => { }}
+                />
             </div>
         </div>
-    );
-}
-
-interface InteractionButtonProps {
-    icon: React.ReactNode;
-    count: number;
-    label: string;
-}
-
-/**
- * InteractionButton - A button for post interactions (comment)
- */
-function InteractionButton({ icon, count, label }: InteractionButtonProps) {
-    return (
-        <button
-            className="flex items-center gap-1 border-none px-3 py-2 rounded-full bg-black/5 transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md cursor-pointer"
-            title={label}
-            aria-label={`${count} ${label}`}
-            onClick={() => { }}
-            tabIndex={0}
-        >
-            {icon}
-            <span className="text-sm font-medium">{count}</span>
-        </button>
     );
 } 
