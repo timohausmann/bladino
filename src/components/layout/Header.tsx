@@ -1,5 +1,5 @@
+import { Link } from '@tanstack/react-router';
 import { Bell } from 'react-feather';
-import { Link } from 'react-router-dom';
 import { Avatar } from '../ui/Avatar';
 import { HeaderButton } from '../ui/HeaderButton';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -39,7 +39,6 @@ export function Header() {
                     </div>
                 </div>
             </header>
-            <div className="h-20"></div>
         </>
     );
 } 

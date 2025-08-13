@@ -6,12 +6,19 @@ import { samplePosts } from '../utils/samplePosts';
  */
 export function Home() {
     return (
-        <div>
-            {/* Display all posts */}
-            <div className="flex flex-col gap-6">
-                {samplePosts.map((post, index) => (
-                    <PostDetailCard key={`post-${index}`} {...post} />
-                ))}
+        <div className="flex-1 py-8">
+            <div className="container max-w-3xl mx-auto px-4">
+                {/* Display all posts */}
+                <div className="flex flex-col gap-6">
+                    {samplePosts.map((post, index) => (
+                        <div key={`post-${index}`}>
+                            <PostDetailCard
+                                postId={index + 1}
+                                {...post}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

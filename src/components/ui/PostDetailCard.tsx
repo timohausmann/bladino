@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import { MessageCircle } from 'react-feather';
 import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
@@ -7,6 +8,7 @@ import { LinkPreview } from './LinkPreview';
 import { PostActionButton } from './PostActionButton';
 
 interface PostDetailCardProps {
+    postId: number; // Add post ID for navigation
     avatar: string;
     name: string;
     handle: string;
@@ -21,6 +23,7 @@ interface PostDetailCardProps {
  * PostDetailCard - A card that displays a post with user info and interactions
  */
 export function PostDetailCard({
+    postId,
     avatar,
     name,
     handle,
@@ -72,9 +75,13 @@ export function PostDetailCard({
                                 @{handle}
                             </span>
                         </div>
-                        <div className="text-muted-foreground leading-none text-xs sm:text-sm">
+                        <Link
+                            to="/post/$id"
+                            params={{ id: postId.toString() }}
+                            className="text-muted-foreground leading-none text-xs sm:text-sm hover:text-foreground transition-colors duration-200 underline decoration-transparent hover:decoration-current"
+                        >
                             {timestamp}
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>
