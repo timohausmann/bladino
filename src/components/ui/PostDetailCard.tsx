@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { MessageCircle } from 'react-feather';
 import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
+import { Avatar } from './Avatar';
 import { EmojiReaction } from './EmojiReaction';
 import { LinkPreview } from './LinkPreview';
 import { PostActionButton } from './PostActionButton';
@@ -55,16 +56,14 @@ export function PostDetailCard({
     };
 
     return (
-        <div className="rounded-xl bg-card text-card-foreground py-4 px-6 max-w-full border border-white dark:border-white/10">
+        <div className="rounded-xl bg-card text-card-foreground p-4 max-w-full border border-white dark:border-white/10">
             {/* User info and timestamp */}
-            <div className="flex mb-3 items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-                    <img
-                        src={avatar}
-                        alt={`${name}'s avatar`}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+            <div className="flex mb-3 items-center gap-3">
+                <Avatar
+                    src={avatar}
+                    alt={`${name}'s avatar`}
+                    size={12}
+                />
                 <div className="flex-1">
                     <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">
                         <div className="flex gap-2 items-baseline sm:flex-col">
