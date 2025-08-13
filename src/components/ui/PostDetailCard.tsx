@@ -65,7 +65,7 @@ export function PostDetailCard({
                 <Avatar
                     src={avatar}
                     alt={`${name}'s avatar`}
-                    size={12}
+                    className="w-12 h-12"
                 />
                 <div className="flex-1">
                     <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">

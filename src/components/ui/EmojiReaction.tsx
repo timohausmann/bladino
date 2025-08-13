@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Smile } from 'react-feather';
 import { PostActionButton } from './PostActionButton';
 
@@ -9,36 +9,25 @@ interface EmojiReactionProps {
 }
 
 /**
- * EmojiReaction - A component for adding emoji reactions to posts
- * Uses emoji-mart under the hood for the emoji picker
- * Shows the top 5 emoji reactions with their counts
+ * EmojiReaction - A simplified component for adding emoji reactions to posts
+ * Uses built-in emojis for better performance and compatibility
+ * Shows the top 4 emoji reactions with their counts
  */
 export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
-    const [pickerVisible, setPickerVisible] = useState(false);
     const [quickPickerVisible, setQuickPickerVisible] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [emojiMartPicker, setEmojiMartPicker] = useState<any>(null);
 
-    // Popular emoji quick reactions
-    const popularEmojis = ['👍', '❤️', '😂', '🔥', '👏', '🎉'];
+    // Popular emoji quick reactions - using built-in emojis
+    const popularEmojis = ['👍', '❤️', '😂', '🔥', '👏', '🎉', '😍', '🤔'];
 
-    // Get the top 5 emoji reactions
-    const topReactions = useMemo(() => {
-        return Object.entries(reactions)
-            .sort(([, countA], [, countB]) => countB - countA)
-            .slice(0, 4);
-    }, [reactions]);
+    // Get the top 4 emoji reactions
+    const topReactions = Object.entries(reactions)
+        .sort(([, countA], [, countB]) => countB - countA)
+        .slice(0, 4);
 
     // Handle showing the quick reaction picker
     const handleShowQuickPicker = () => {
         setQuickPickerVisible(true);
-        setPickerVisible(false);
-    };
-
-    // Handle showing the full emoji picker
-    const handleShowFullPicker = () => {
-        setPickerVisible(true);
-        setQuickPickerVisible(false);
     };
 
     // Handle keyboard navigation
@@ -49,59 +38,13 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
         }
         if (event.key === 'Escape') {
             setQuickPickerVisible(false);
-            setPickerVisible(false);
         }
     };
 
-    // Load emoji-mart dynamically to avoid SSR issues
-    useEffect(() => {
-        let isMounted = true;
-
-        const loadEmojiMart = async () => {
-            if (pickerVisible && !emojiMartPicker) {
-                try {
-                    // Dynamic imports to avoid SSR issues
-                    const dataModule = await import('@emoji-mart/data');
-                    const emojiMartReact = await import('@emoji-mart/react');
-
-                    if (isMounted) {
-                        // Use the default export from @emoji-mart/react
-                        const EmojiPickerComponent = emojiMartReact.default;
-
-                        setEmojiMartPicker(
-                            <EmojiPickerComponent
-                                data={dataModule.default}
-                                onEmojiSelect={(emoji: any) => {
-                                    onReaction(emoji.native);
-                                    setPickerVisible(false);
-                                }}
-                                autoFocus={true}
-                                set="native"
-                                theme="light"
-                                skinTonePosition="none"
-                                previewPosition="none"
-                                maxFrequentRows={0}
-                            />
-                        );
-                    }
-                } catch (error) {
-                    console.error('Error loading emoji-mart:', error);
-                }
-            }
-        };
-
-        loadEmojiMart();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [pickerVisible, emojiMartPicker, onReaction]);
-
-    // Handle clicking outside to close pickers
+    // Handle clicking outside to close picker
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setPickerVisible(false);
                 setQuickPickerVisible(false);
             }
         };
@@ -150,7 +93,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                     onKeyDown={handleKeyDown}
                     aria-label="Add a reaction"
                     title="Add a reaction"
-                    aria-expanded={quickPickerVisible || pickerVisible}
+                    aria-expanded={quickPickerVisible}
                     aria-haspopup="true"
                     tabIndex={0}
                 >
@@ -165,7 +108,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                     role="menu"
                     aria-label="Quick emoji reactions"
                 >
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                         {popularEmojis.map((emoji) => (
                             <button
                                 key={emoji}
@@ -188,34 +131,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
                                 {emoji}
                             </button>
                         ))}
-                        <button
-                            className="w-10 h-10 flex items-center justify-center text-gray-500 bg-black/10 rounded-full transition-all duration-200 hover:bg-black/20 hover:shadow-md"
-                            onClick={handleShowFullPicker}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    handleShowFullPicker();
-                                }
-                            }}
-                            aria-label="More emojis"
-                            title="More emojis"
-                            role="menuitem"
-                            tabIndex={0}
-                        >
-                            <span>···</span>
-                        </button>
                     </div>
-                </div>
-            )}
-
-            {/* Full emoji picker */}
-            {pickerVisible && (
-                <div
-                    className="absolute z-10 bottom-full left-0 mb-2 shadow-lg rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
-                    role="dialog"
-                    aria-label="Emoji picker"
-                >
-                    {emojiMartPicker}
                 </div>
             )}
         </div>

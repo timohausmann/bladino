@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Bell } from 'react-feather';
+import dinoAsset from '../../assets/dino-1.svg';
 import { Avatar } from '../ui/Avatar';
 import { HeaderButton } from '../ui/HeaderButton';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -16,8 +17,14 @@ export function Header() {
                     <div className="container flex items-center justify-between gap-4">
                         <Link
                             to="/"
-                            className="font-bold text-2xl text-foreground font-['Playfair_Display',serif] tracking-tighter"
+                            className="font-bold text-2xl text-foreground font-['Playfair_Display',serif] tracking-tighter
+                            flex items-center gap-3"
                         >
+                            <img
+                                src={dinoAsset}
+                                alt="Dinosaur"
+                                className="w-7 h-7"
+                            />
                             bladino
                         </Link>
 
@@ -33,7 +40,7 @@ export function Header() {
                             <Avatar
                                 src="https://i.pravatar.cc/150?img=2"
                                 alt="avatar"
-                                size={10}
+                                className="w-10 h-10"
                             />
                         </div>
                     </div>

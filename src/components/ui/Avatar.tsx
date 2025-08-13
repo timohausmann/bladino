@@ -1,16 +1,17 @@
 interface AvatarProps {
     src: string;
     alt: string;
-    size?: number;
     className?: string;
 }
 
 /**
  * Avatar component - displays a circular avatar image
+ * Use Tailwind classes like w-8, w-12, w-16 for sizing
+ * Component automatically maintains 1:1 aspect ratio
  */
-export function Avatar({ src, alt, size = 12, className = '' }: AvatarProps) {
+export function Avatar({ src, alt, className = '' }: AvatarProps) {
     return (
-        <div className={`w-${size} h-${size} rounded-full overflow-hidden ${className}`}>
+        <div className={`rounded-full overflow-hidden aspect-square ${className}`}>
             <img
                 src={src}
                 alt={alt}
