@@ -59,7 +59,7 @@ export function parseTextWithLinks(text: string): React.ReactNode[] {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-words text-sky-400"
+                className="break-words text-cyan-400"
             >
                 {truncateUrl(url)}
             </a>

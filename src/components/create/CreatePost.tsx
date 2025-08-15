@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { Image, Link, Type, X } from 'react-feather';
+import { SubmitButton } from '../form';
 import { HeaderButton } from '../ui/HeaderButton';
 import { CreateImage } from './CreateImage';
 import { CreateLink } from './CreateLink';
@@ -11,18 +12,20 @@ type PostType = 'text' | 'image' | 'link';
 interface CreatePostProps {
     open: boolean;
     onClose: () => void;
+    setIsOpen: (open: boolean) => void;
 }
 
 /**
  * CreatePost component - integrated into Home page for creating new posts
  */
-export function CreatePost({ open, onClose }: CreatePostProps) {
+export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
     const [postType, setPostType] = useState<PostType>('text');
     const [content, setContent] = useState('');
 
     const handlePostTypeChange = (type: PostType) => {
         setPostType(type);
         setContent(''); // Clear content when switching types
+        setIsOpen(true); // Open the form when a post type is selected
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -58,34 +61,38 @@ export function CreatePost({ open, onClose }: CreatePostProps) {
     };
 
     return (
-        <div className={clsx(
-            'relative transition-all duration-300 flex flex-col gap-4 rounded-xl border border-transparent',
-            open && 'bg-card border-white dark:border-white/10 p-6'
-        )}>
-            {/* Post Type Selector with Close Button */}
-            <div className={clsx(
-                'flex justify-between items-center transition-opacity duration-300',
-                open ? 'opacity-100' : 'opacity-60'
-            )}>
-                <div className="flex gap-2">
-                    <HeaderButton
-                        onClick={() => handlePostTypeChange('text')}
-                        icon={<Type size={20} />}
-                        label="Text Post"
-                        active={open && postType === 'text'}
-                    />
-                    <HeaderButton
-                        onClick={() => handlePostTypeChange('image')}
-                        icon={<Image size={20} />}
-                        label="Image Post"
-                        active={open && postType === 'image'}
-                    />
-                    <HeaderButton
-                        onClick={() => handlePostTypeChange('link')}
-                        icon={<Link size={20} />}
-                        label="Link Post"
-                        active={open && postType === 'link'}
-                    />
+        <div className="flex flex-col gap-4">
+            {/* Static Post Type Selector Row - No padding transition */}
+            <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                    <div className="text-foreground font-medium">
+                        Post something:
+                    </div>
+
+                    {/* Tabs - detached from main container */}
+                    <div className="flex gap-2">
+                        <HeaderButton
+                            onClick={() => handlePostTypeChange('text')}
+                            icon={<Type size={20} />}
+                            label="Text Post"
+                            variant="persistent"
+                            active={open && postType === 'text'}
+                        />
+                        <HeaderButton
+                            onClick={() => handlePostTypeChange('image')}
+                            icon={<Image size={20} />}
+                            label="Image Post"
+                            variant="persistent"
+                            active={open && postType === 'image'}
+                        />
+                        <HeaderButton
+                            onClick={() => handlePostTypeChange('link')}
+                            icon={<Link size={20} />}
+                            label="Link Post"
+                            variant="persistent"
+                            active={open && postType === 'link'}
+                        />
+                    </div>
                 </div>
 
                 {/* Close button - only visible when open */}
@@ -101,22 +108,23 @@ export function CreatePost({ open, onClose }: CreatePostProps) {
                 )}
             </div>
 
-            {/* Content Input - only visible when open */}
-            {open && (
+            <div className={clsx(
+                'transition-all duration-300 ease-in-out overflow-hidden',
+                open
+                    ? 'max-h-[800px] opacity-100 bg-card border border-white dark:border-white/10 rounded-xl p-6'
+                    : 'max-h-0 opacity-0'
+            )}>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     {renderContentInput()}
 
                     {/* Word Count and Submit Button */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
-
                         {/* Submit Button */}
-                        <button
-                            type="submit"
+                        <SubmitButton
                             disabled={postType !== 'image' && content.trim().length === 0}
-                            className="px-6 py-2 bg-white/90 text-black hover:bg-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed rounded-full font-medium transition-colors"
                         >
                             Publish
-                        </button>
+                        </SubmitButton>
                         {/* Word Count - only show for text and link posts */}
                         {postType !== 'image' && (
                             <div className="text-sm text-muted-foreground">
@@ -125,7 +133,7 @@ export function CreatePost({ open, onClose }: CreatePostProps) {
                         )}
                     </div>
                 </form>
-            )}
+            </div>
         </div>
     );
 }

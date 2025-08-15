@@ -35,6 +35,7 @@ export function PostDetail() {
                     content={post.content}
                     reactions={post.reactions}
                     comments={post.comments}
+                    currentUserAvatar="https://i.pravatar.cc/150?img=2"
                 />
             </div>
         </div>

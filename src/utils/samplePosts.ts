@@ -12,7 +12,8 @@ export interface Post {
   timestamp: string;
   content: string;
   reactions: { [emoji: string]: number };
-  comments: number;
+  comments?: Post[]; // Optional comments array
+  commentCount?: number; // Optional comment count for backward compatibility
 }
 
 /**
@@ -33,7 +34,26 @@ export const samplePosts: Post[] = [
       "🚀": 8,
       "👏": 2,
     },
-    comments: 24,
+    commentCount: 24,
+    comments: [
+      {
+        avatar: "https://i.pravatar.cc/150?img=6",
+        name: "Mike Chen",
+        handle: "mikechen",
+        timestamp: "May 25, 2023",
+        content:
+          "Congratulations! The website looks amazing. Love the clean design!",
+        reactions: { "👍": 5, "❤️": 2 },
+      },
+      {
+        avatar: "https://i.pravatar.cc/150?img=7",
+        name: "Sarah Wilson",
+        handle: "sarahw",
+        timestamp: "May 25, 2023",
+        content: "This is exactly what I needed for inspiration. Great work!",
+        reactions: { "👍": 3, "🔥": 1 },
+      },
+    ],
   },
   {
     avatar: "https://i.pravatar.cc/150?img=3",
@@ -49,7 +69,18 @@ export const samplePosts: Post[] = [
       "❤️": 10,
       "🤔": 3,
     },
-    comments: 12,
+    commentCount: 12,
+    comments: [
+      {
+        avatar: "https://i.pravatar.cc/150?img=8",
+        name: "David Kim",
+        handle: "davidk",
+        timestamp: "May 24, 2023",
+        content:
+          "What specific techniques are you using? Would love to learn more!",
+        reactions: { "👍": 8, "💡": 3 },
+      },
+    ],
   },
   {
     avatar: "https://i.pravatar.cc/150?img=4",
@@ -65,7 +96,26 @@ export const samplePosts: Post[] = [
       "👀": 18,
       "💯": 11,
     },
-    comments: 31,
+    commentCount: 31,
+    comments: [
+      {
+        avatar: "https://i.pravatar.cc/150?img=9",
+        name: "Emma Rodriguez",
+        handle: "emmar",
+        timestamp: "May 23, 2023",
+        content:
+          "Great article! The mobile-first approach you mentioned really helped me understand the concept better.",
+        reactions: { "👍": 12, "❤️": 4 },
+      },
+      {
+        avatar: "https://i.pravatar.cc/150?img=10",
+        name: "Tom Anderson",
+        handle: "tomand",
+        timestamp: "May 23, 2023",
+        content: "Bookmarked this for later. Thanks for sharing your insights!",
+        reactions: { "👍": 7 },
+      },
+    ],
   },
   {
     avatar: "https://i.pravatar.cc/150?img=5",
@@ -81,6 +131,17 @@ export const samplePosts: Post[] = [
       "😍": 14,
       "🔥": 5,
     },
-    comments: 8,
+    commentCount: 8,
+    comments: [
+      {
+        avatar: "https://i.pravatar.cc/150?img=11",
+        name: "Lisa Park",
+        handle: "lisap",
+        timestamp: "May 22, 2023",
+        content:
+          "Unsplash is my go-to as well! The quality is incredible for free images.",
+        reactions: { "👍": 9, "❤️": 3 },
+      },
+    ],
   },
 ];

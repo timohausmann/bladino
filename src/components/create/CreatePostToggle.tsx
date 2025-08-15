@@ -16,8 +16,8 @@ export function CreatePostToggle() {
     };
 
     return (
-        <div onClick={handleToggle} className="cursor-pointer">
-            <CreatePost open={isOpen} onClose={handleClose} />
+        <div>
+            <CreatePost open={isOpen} onClose={handleClose} setIsOpen={setIsOpen} />
         </div>
     );
 }

@@ -47,7 +47,7 @@ export function LinkPreview({
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 mb-4 block text-inherit no-underline"
+            className="block text-inherit no-underline"
             aria-label={`Visit ${previewData.title || "website"}`}
             tabIndex={0}
         >

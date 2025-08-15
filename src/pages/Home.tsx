@@ -19,6 +19,7 @@ export function Home() {
                             <PostDetailCard
                                 postId={index + 1}
                                 {...post}
+                                currentUserAvatar="https://i.pravatar.cc/150?img=2"
                             />
                         </div>
                     ))}
