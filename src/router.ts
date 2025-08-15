@@ -4,8 +4,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import App from "./App";
-import { Home } from "./pages/Home";
-import { PostDetail } from "./pages/PostDetail";
+import { Home, Login, PostDetail } from "./routes";
 
 // Define the root route with App component
 const rootRoute = createRootRoute({
@@ -26,8 +25,15 @@ const postRoute = createRoute({
   component: PostDetail,
 });
 
+// Define the login route
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/login",
+  component: Login,
+});
+
 // Create the route tree
-const routeTree = rootRoute.addChildren([homeRoute, postRoute]);
+const routeTree = rootRoute.addChildren([homeRoute, postRoute, loginRoute]);
 
 // Create the router instance
 export const router = createRouter({ routeTree });

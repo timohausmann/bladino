@@ -34,7 +34,7 @@ export function Input({
                     className="block text-sm font-medium text-foreground mb-2"
                 >
                     {label}
-                    {required && <span className="text-red-500 ml-1">*</span>}
+                    {required && <span className="text-cyan-500 ml-1">*</span>}
                 </label>
             )}
             <input
