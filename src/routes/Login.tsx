@@ -36,31 +36,25 @@ export function Login() {
     return (
         <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-xl">
-                {/* Header */}
-                <h1 className="text-2xl font-bold text-foreground text-center mb-8">Sign in</h1>
                 <div className="flex flex-col gap-6 rounded-xl bg-card text-card-foreground p-4 max-w-full border border-white dark:border-white/10">
+                    <h1 className="text-2xl font-bold text-foreground text-center">Sign in</h1>
 
-
-                    {/* Login Form */}
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <Input
-                            label="Email"
-                            type="email"
+                            type="text"
                             value={formData.email}
                             onChange={(value) => handleInputChange('email', value)}
-                            placeholder="Enter your email"
+                            placeholder="Email or username"
                             required
                         />
 
                         <Input
-                            label="Password"
                             type="password"
                             value={formData.password}
                             onChange={(value) => handleInputChange('password', value)}
-                            placeholder="Enter your password"
+                            placeholder="Password"
                             required
                         />
-
 
                         <div className="flex justify-between items-baseline">
                             <div>
@@ -74,7 +68,7 @@ export function Login() {
                                 </SubmitButton>
                             </div>
                             <a
-                                href="#"
+                                href="/forgot-password"
                                 className="text-muted-foreground hover:text-foreground transition-colors duration-200 underline decoration-transparent hover:decoration-current"
                                 tabIndex={0}
                                 aria-label="Forgot password"
