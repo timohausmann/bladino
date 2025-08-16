@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Input } from '../components/form/Input';
 import { SubmitButton } from '../components/form/SubmitButton';
+import { Card } from '../components/ui/Card';
 
 /**
  * Forgot Password page - displays a form with just the email field for password reset
@@ -25,7 +26,7 @@ export function ForgotPassword() {
     return (
         <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-xl">
-                <div className="flex flex-col gap-6 rounded-xl bg-card text-card-foreground p-4 max-w-full border border-white dark:border-white/10">
+                <Card className="flex flex-col gap-6">
                     <h1 className="text-2xl font-bold text-foreground text-center">Reset Password</h1>
 
                     <p className="text-muted-foreground text-center">
@@ -63,7 +64,7 @@ export function ForgotPassword() {
                             </div>
                         </div>
                     </form>
-                </div>
+                </Card>
             </div>
         </div>
     );

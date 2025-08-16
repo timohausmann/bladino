@@ -14,6 +14,7 @@
   --color-muted-foreground: theme(colors.neutral.500);
   --color-card: rgb(255 255 255 / 50%);
   --color-card-foreground: theme(colors.neutral.900);
+  --color-card-border: rgb(255 255 255 / 100%);
 }
 
 /* Dark theme */
@@ -24,6 +25,7 @@
   --color-muted-foreground: theme(colors.neutral.400);
   --color-card: rgb(255 255 255 / 7.5%);
   --color-card-foreground: theme(colors.neutral.100);
+  --color-card-border: rgb(255 255 255 / 10%);
 }
 
 /* Base layer - for base element styles */

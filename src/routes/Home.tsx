@@ -15,13 +15,12 @@ export function Home() {
                 {/* Display all posts */}
                 <div className="flex flex-col gap-6">
                     {samplePosts.map((post, index) => (
-                        <div key={`post-${index}`}>
-                            <PostDetailCard
-                                postId={index + 1}
-                                {...post}
-                                currentUserAvatar="https://i.pravatar.cc/150?img=2"
-                            />
-                        </div>
+                        <PostDetailCard
+                            key={`post-${index}`}
+                            postId={index + 1}
+                            {...post}
+                            currentUserAvatar="https://i.pravatar.cc/150?img=2"
+                        />
                     ))}
                 </div>
             </div>

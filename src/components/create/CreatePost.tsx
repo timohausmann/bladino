@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Image, Link, Type, X } from 'react-feather';
 import { SubmitButton } from '../form';
+import { Card } from '../ui/Card';
 import { HeaderButton } from '../ui/HeaderButton';
 import { CreateImage } from './CreateImage';
 import { CreateLink } from './CreateLink';
@@ -61,15 +62,16 @@ export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
     };
 
     return (
-        <div className="flex flex-col gap-4">
-            {/* Static Post Type Selector Row - No padding transition */}
+        <div className={clsx(
+            "flex flex-col transition-all duration-300 ease-in-out",
+            open ? 'gap-4' : 'gap-0'
+        )}>
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                     <div className="text-foreground font-medium">
                         Post something:
                     </div>
 
-                    {/* Tabs - detached from main container */}
                     <div className="flex gap-2">
                         <HeaderButton
                             onClick={() => handlePostTypeChange('text')}
@@ -108,11 +110,11 @@ export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
                 )}
             </div>
 
-            <div className={clsx(
+            <Card className={clsx(
                 'transition-all duration-300 ease-in-out overflow-hidden',
                 open
-                    ? 'max-h-[800px] opacity-100 bg-card border border-white dark:border-white/10 rounded-xl p-6'
-                    : 'max-h-0 opacity-0'
+                    ? 'max-h-[400px] opacity-100'
+                    : 'max-h-0 opacity-0 p-0 border-0'
             )}>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     {renderContentInput()}
@@ -133,7 +135,7 @@ export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
                         )}
                     </div>
                 </form>
-            </div>
+            </Card>
         </div>
     );
 }

@@ -4,6 +4,7 @@ import { MessageCircle } from 'react-feather';
 import { Post } from '../../utils/samplePosts';
 import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
 import { Avatar } from './Avatar';
+import { Card } from './Card';
 import { EmojiReaction } from './EmojiReaction';
 import { LinkPreview } from './LinkPreview';
 import { PostActionButton } from './PostActionButton';
@@ -79,7 +80,7 @@ export function PostDetailCard({
     };
 
     return (
-        <div className="flex flex-col gap-6 rounded-xl bg-card text-card-foreground p-4 max-w-full border border-white dark:border-white/10">
+        <Card className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
                 <div className="flex items-center gap-3">
@@ -162,6 +163,6 @@ export function PostDetailCard({
                     )}
                 </div>
             )}
-        </div>
+        </Card>
     );
 } 

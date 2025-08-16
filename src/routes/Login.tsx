@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Input } from '../components/form/Input';
 import { SubmitButton } from '../components/form/SubmitButton';
+import { Card } from '../components/ui/Card';
 
 /**
  * Login page - displays a login form with email and password fields
@@ -36,7 +37,7 @@ export function Login() {
     return (
         <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-xl">
-                <div className="flex flex-col gap-6 rounded-xl bg-card text-card-foreground p-4 max-w-full border border-white dark:border-white/10">
+                <Card className="flex flex-col gap-6">
                     <h1 className="text-2xl font-bold text-foreground text-center">Sign in</h1>
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -77,7 +78,7 @@ export function Login() {
                             </a>
                         </div>
                     </form>
-                </div>
+                </Card>
             </div>
         </div>
     );
