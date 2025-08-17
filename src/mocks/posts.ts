@@ -18,6 +18,22 @@ export const mockPosts: Post[] = [
       "🚀": 8,
       "👏": 2,
     },
+    files: [
+      {
+        id: "file-1-1",
+        url: "/mockfiles/image-landscape.jpeg",
+        filename: "website-screenshot.jpeg",
+        type: "image/jpeg",
+        size: 71000,
+      },
+      {
+        id: "file-1-2",
+        url: "/mockfiles/dummy.pdf",
+        filename: "project-specs.pdf",
+        type: "application/pdf",
+        size: 13000,
+      },
+    ],
     comments: [
       {
         id: "comment-1-1",
@@ -49,6 +65,22 @@ export const mockPosts: Post[] = [
       "❤️": 10,
       "🤔": 3,
     },
+    files: [
+      {
+        id: "file-2-1",
+        url: "/mockfiles/image-portrait.jpeg",
+        filename: "performance-chart.jpeg",
+        type: "image/jpeg",
+        size: 50000,
+      },
+      {
+        id: "file-2-2",
+        url: "/mockfiles/audio.mp3",
+        filename: "demo-audio.mp3",
+        type: "audio/mpeg",
+        size: 181000,
+      },
+    ],
     comments: [
       {
         id: "comment-2-1",
@@ -73,6 +105,15 @@ export const mockPosts: Post[] = [
       "👀": 18,
       "💯": 11,
     },
+    files: [
+      {
+        id: "file-3-1",
+        url: "/mockfiles/MP4_640_3MG.mp4",
+        filename: "responsive-demo.mp4",
+        type: "video/mp4",
+        size: 3000000,
+      },
+    ],
     comments: [
       {
         id: "comment-3-1",

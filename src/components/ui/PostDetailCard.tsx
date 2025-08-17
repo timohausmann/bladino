@@ -7,6 +7,7 @@ import { MessageCircle } from 'react-feather';
 import { Avatar } from './Avatar';
 import { Card } from './Card';
 import { EmojiReaction } from './EmojiReaction';
+import { FilePreview } from './FilePreview';
 import { LinkPreview } from './LinkPreview';
 import { PostActionButton } from './PostActionButton';
 import { PostComment } from './PostComment';
@@ -114,6 +115,9 @@ export function PostDetailCard({
 
                 {/* Link Preview (if there's a URL in the content) */}
                 {firstUrl && <LinkPreview url={firstUrl} />}
+
+                {/* File Preview (if there are files) */}
+                {post.files && post.files.length > 0 && <FilePreview files={post.files} />}
 
                 {/* Divider */}
                 <div className="h-px bg-gray-200 dark:bg-white/14"></div>
