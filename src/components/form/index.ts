@@ -1,3 +1,3 @@
+export { Button } from "./Button";
 export { Input } from "./Input";
-export { SubmitButton } from "./SubmitButton";
 export { Textarea } from "./Textarea";

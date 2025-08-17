@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SubmitButton, Textarea } from '../form';
+import { Button, Textarea } from '../form';
 import { Avatar } from './Avatar';
 
 interface PostReplyProps {
@@ -63,12 +63,12 @@ export function PostReply({
                     {content.length}/{maxLength}
                 </div>
                 <div className="flex gap-2">
-                    <SubmitButton
+                    <Button
                         disabled={content.trim().length === 0}
                         type="submit"
                     >
                         Reply
-                    </SubmitButton>
+                    </Button>
                 </div>
             </div>
         </form>

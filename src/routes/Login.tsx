@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { Button } from '../components/form/Button';
 import { Input } from '../components/form/Input';
-import { SubmitButton } from '../components/form/SubmitButton';
 import { Card } from '../components/ui/Card';
 
 /**
@@ -59,14 +59,14 @@ export function Login() {
 
                         <div className="flex justify-between items-baseline">
                             <div>
-                                <SubmitButton
+                                <Button
                                     type="submit"
                                     loading={isLoading}
                                     disabled={!formData.email || !formData.password}
                                     className="w-full mt-2"
                                 >
                                     Sign In
-                                </SubmitButton>
+                                </Button>
                             </div>
                             <a
                                 href="/forgot-password"

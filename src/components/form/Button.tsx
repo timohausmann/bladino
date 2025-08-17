@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface SubmitButtonProps {
+interface ButtonProps {
     children: React.ReactNode;
     disabled?: boolean;
     loading?: boolean;
@@ -9,14 +9,14 @@ interface SubmitButtonProps {
     onClick?: () => void;
 }
 
-export function SubmitButton({
+export function Button({
     children,
     disabled = false,
     loading = false,
     className = "",
     type = "submit",
     onClick
-}: SubmitButtonProps) {
+}: ButtonProps) {
     return (
         <button
             type={type}

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { Image, Link, Type, X } from 'react-feather';
-import { SubmitButton } from '../form';
+import { Button } from '../form';
 import { Card } from '../ui/Card';
 import { HeaderButton } from '../ui/HeaderButton';
 import { CreateImage } from './CreateImage';
@@ -122,11 +122,11 @@ export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
                     {/* Word Count and Submit Button */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
                         {/* Submit Button */}
-                        <SubmitButton
+                        <Button
                             disabled={postType !== 'image' && content.trim().length === 0}
                         >
                             Publish
-                        </SubmitButton>
+                        </Button>
                         {/* Word Count - only show for text and link posts */}
                         {postType !== 'image' && (
                             <div className="text-sm text-muted-foreground">
