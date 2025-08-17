@@ -1,17 +1,26 @@
+import { getUserById } from '@/mocks';
+import { PostComment as PostCommentType } from '@/types';
 import { Avatar } from './Avatar';
 
 interface PostCommentProps {
-    avatar: string;
-    name: string;
-    handle: string;
-    timestamp: string;
-    content: string;
+    comment: PostCommentType; // Pass the comment object using PostComment type
 }
 
 /**
  * PostComment - Compact comment display component
  */
-export function PostComment({ avatar, name, handle, timestamp, content }: PostCommentProps) {
+export function PostComment({ comment }: PostCommentProps) {
+    // Extract user data from the comment
+    const user = getUserById(comment.userId);
+
+    if (!user) {
+        console.error(`User not found for comment ${comment.id}`);
+        return null;
+    }
+
+    const { avatar, name, handle } = user;
+    const { content, timestamp } = comment;
+
     return (
         <div className="flex gap-3 py-3 border-b border-white/10 last:border-b-0">
             <Avatar

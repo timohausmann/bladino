@@ -1,6 +1,6 @@
+import dinoAsset from '@/assets/dino-1.svg';
 import { Link } from '@tanstack/react-router';
 import { Bell } from 'react-feather';
-import dinoAsset from '../../assets/dino-1.svg';
 import { Avatar } from '../ui/Avatar';
 import { HeaderButton } from '../ui/HeaderButton';
 import { ThemeToggle } from '../ui/ThemeToggle';

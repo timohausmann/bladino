@@ -1,32 +1,16 @@
-/**
- * Sample posts data for demonstration purposes
- */
-
-/**
- * Post type that matches PostDetailCardProps
- */
-export interface Post {
-  avatar: string;
-  name: string;
-  handle: string;
-  timestamp: string;
-  content: string;
-  reactions: { [emoji: string]: number };
-  comments?: Post[]; // Optional comments array
-  commentCount?: number; // Optional comment count for backward compatibility
-}
+import { Post } from "@/types";
 
 /**
  * Sample posts with different types of content and links
+ * Now references users by ID instead of embedding user data
  */
-export const samplePosts: Post[] = [
+export const mockPosts: Post[] = [
   {
-    avatar: "https://i.pravatar.cc/150?img=2",
-    name: "Jane Smith",
-    handle: "janesmith",
-    timestamp: "May 25, 2023",
+    id: "post-1",
+    userId: "user-1", // Jane Smith
     content:
       "Just launched my new website! It's amazing how much you can accomplish with the right tools and a clear vision. Check it out at https://example.com and let me know what you think. #webdev #launch #excited",
+    timestamp: "May 25, 2023",
     reactions: {
       "👍": 72,
       "🎉": 48,
@@ -34,34 +18,30 @@ export const samplePosts: Post[] = [
       "🚀": 8,
       "👏": 2,
     },
-    commentCount: 24,
     comments: [
       {
-        avatar: "https://i.pravatar.cc/150?img=6",
-        name: "Mike Chen",
-        handle: "mikechen",
-        timestamp: "May 25, 2023",
+        id: "comment-1-1",
+        userId: "user-5", // Mike Chen
         content:
           "Congratulations! The website looks amazing. Love the clean design!",
+        timestamp: "May 25, 2023",
         reactions: { "👍": 5, "❤️": 2 },
       },
       {
-        avatar: "https://i.pravatar.cc/150?img=7",
-        name: "Sarah Wilson",
-        handle: "sarahw",
-        timestamp: "May 25, 2023",
+        id: "comment-1-2",
+        userId: "user-6", // Sarah Wilson
         content: "This is exactly what I needed for inspiration. Great work!",
+        timestamp: "May 25, 2023",
         reactions: { "👍": 3, "🔥": 1 },
       },
     ],
   },
   {
-    avatar: "https://i.pravatar.cc/150?img=3",
-    name: "Alex Johnson",
-    handle: "alexj",
-    timestamp: "May 24, 2023",
+    id: "post-2",
+    userId: "user-2", // Alex Johnson
     content:
       "The future of web development is here, and it's all about performance and user experience. I've been exploring some cutting-edge techniques that have dramatically improved load times on my projects.",
+    timestamp: "May 24, 2023",
     reactions: {
       "👍": 31,
       "💡": 28,
@@ -69,26 +49,23 @@ export const samplePosts: Post[] = [
       "❤️": 10,
       "🤔": 3,
     },
-    commentCount: 12,
     comments: [
       {
-        avatar: "https://i.pravatar.cc/150?img=8",
-        name: "David Kim",
-        handle: "davidk",
-        timestamp: "May 24, 2023",
+        id: "comment-2-1",
+        userId: "user-7", // David Kim
         content:
           "What specific techniques are you using? Would love to learn more!",
+        timestamp: "May 24, 2023",
         reactions: { "👍": 8, "💡": 3 },
       },
     ],
   },
   {
-    avatar: "https://i.pravatar.cc/150?img=4",
-    name: "Sophia Chen",
-    handle: "sophiac",
-    timestamp: "May 23, 2023",
+    id: "post-3",
+    userId: "user-3", // Sophia Chen
     content:
       "I just published a new article about responsive design patterns: https://medium.com/someverylongpathname/article-about-responsive-design-that-would-normally-be-too-long-to-display-properly",
+    timestamp: "May 23, 2023",
     reactions: {
       "👍": 87,
       "❤️": 56,
@@ -96,34 +73,30 @@ export const samplePosts: Post[] = [
       "👀": 18,
       "💯": 11,
     },
-    commentCount: 31,
     comments: [
       {
-        avatar: "https://i.pravatar.cc/150?img=9",
-        name: "Emma Rodriguez",
-        handle: "emmar",
-        timestamp: "May 23, 2023",
+        id: "comment-3-1",
+        userId: "user-8", // Emma Rodriguez
         content:
           "Great article! The mobile-first approach you mentioned really helped me understand the concept better.",
+        timestamp: "May 23, 2023",
         reactions: { "👍": 12, "❤️": 4 },
       },
       {
-        avatar: "https://i.pravatar.cc/150?img=10",
-        name: "Tom Anderson",
-        handle: "tomand",
-        timestamp: "May 23, 2023",
+        id: "comment-3-2",
+        userId: "user-9", // Tom Anderson
         content: "Bookmarked this for later. Thanks for sharing your insights!",
+        timestamp: "May 23, 2023",
         reactions: { "👍": 7 },
       },
     ],
   },
   {
-    avatar: "https://i.pravatar.cc/150?img=5",
-    name: "Marcus Williams",
-    handle: "marcusw",
-    timestamp: "May 22, 2023",
+    id: "post-4",
+    userId: "user-4", // Marcus Williams
     content:
       "Check out this amazing resource for free stock photos: https://unsplash.com - I use it all the time for my design projects!",
+    timestamp: "May 22, 2023",
     reactions: {
       "👍": 52,
       "🙏": 27,
@@ -131,15 +104,13 @@ export const samplePosts: Post[] = [
       "😍": 14,
       "🔥": 5,
     },
-    commentCount: 8,
     comments: [
       {
-        avatar: "https://i.pravatar.cc/150?img=11",
-        name: "Lisa Park",
-        handle: "lisap",
-        timestamp: "May 22, 2023",
+        id: "comment-4-1",
+        userId: "user-10", // Lisa Park
         content:
           "Unsplash is my go-to as well! The quality is incredible for free images.",
+        timestamp: "May 22, 2023",
         reactions: { "👍": 9, "❤️": 3 },
       },
     ],

@@ -12,14 +12,13 @@ type PostType = 'text' | 'image' | 'link';
 
 interface CreatePostProps {
     open: boolean;
-    onClose: () => void;
     setIsOpen: (open: boolean) => void;
 }
 
 /**
  * CreatePost component - integrated into Home page for creating new posts
  */
-export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
+export function CreatePost({ open, setIsOpen }: CreatePostProps) {
     const [postType, setPostType] = useState<PostType>('text');
     const [content, setContent] = useState('');
 
@@ -102,7 +101,7 @@ export function CreatePost({ open, onClose, setIsOpen }: CreatePostProps) {
                     <HeaderButton
                         onClick={(e) => {
                             e?.stopPropagation();
-                            onClose();
+                            setIsOpen(false);
                         }}
                         icon={<X size={20} />}
                         label="Close post creation"

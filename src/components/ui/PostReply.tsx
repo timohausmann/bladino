@@ -15,7 +15,6 @@ interface PostReplyProps {
  */
 export function PostReply({
     onSubmit,
-    onCancel,
     placeholder = "Write a reply...",
     maxLength = 280,
     currentUserAvatar
@@ -28,11 +27,6 @@ export function PostReply({
             onSubmit(content.trim());
             setContent('');
         }
-    };
-
-    const handleCancel = () => {
-        setContent('');
-        onCancel();
     };
 
     return (

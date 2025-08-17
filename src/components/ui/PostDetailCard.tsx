@@ -1,8 +1,9 @@
+import { getUserById } from '@/mocks';
+import { Post, PostComment as PostCommentType } from '@/types';
+import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { Link } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
 import { MessageCircle } from 'react-feather';
-import { Post } from '../../utils/samplePosts';
-import { extractFirstUrl, parseTextWithLinks } from '../../utils/textUtils';
 import { Avatar } from './Avatar';
 import { Card } from './Card';
 import { EmojiReaction } from './EmojiReaction';
@@ -12,16 +13,7 @@ import { PostComment } from './PostComment';
 import { PostReply } from './PostReply';
 
 interface PostDetailCardProps {
-    postId: number; // Add post ID for navigation
-    avatar: string;
-    name: string;
-    handle: string;
-    timestamp: string;
-    content: string;
-    reactions: { [emoji: string]: number; };
-    comments?: Post[]; // Optional comments array
-    commentCount?: number; // Optional comment count for backward compatibility
-    likes?: number; // Optional for backward compatibility
+    post: Post; // Pass the entire post object
     currentUserAvatar?: string; // Add current user avatar for reply form
 }
 
@@ -29,18 +21,19 @@ interface PostDetailCardProps {
  * PostDetailCard - A card that displays a post with user info and interactions
  */
 export function PostDetailCard({
-    postId,
-    avatar,
-    name,
-    handle,
-    timestamp,
-    content,
-    reactions = {},
-    likes, // Keep for backward compatibility
-    comments = [],
-    commentCount,
+    post,
     currentUserAvatar,
 }: PostDetailCardProps) {
+    // Extract user data from the post
+    const user = getUserById(post.userId);
+
+    if (!user) {
+        console.error(`User not found for post ${post.id}`);
+        return null;
+    }
+
+    const { avatar, name, handle } = user;
+    const { id: postId, content, timestamp, reactions = {}, comments = [] } = post;
     const [showComments, setShowComments] = useState(false);
 
     // Parse content for links
@@ -49,19 +42,10 @@ export function PostDetailCard({
     // Extract the first URL for link preview
     const firstUrl = useMemo(() => extractFirstUrl(content), [content]);
 
-    // If we have likes but no reactions, initialize reactions with likes
+    // Initialize reactions
     const initialReactions = useMemo(() => {
-        if (Object.keys(reactions).length > 0) {
-            return reactions;
-        }
-
-        // Backward compatibility: If only likes are provided
-        if (likes && likes > 0) {
-            return { '👍': likes };
-        }
-
-        return {};
-    }, [reactions, likes]);
+        return reactions;
+    }, [reactions]);
 
     // Handle emoji reaction - in a real app, this would update the post's reactions
     const handleReaction = (emoji: string) => {
@@ -99,7 +83,7 @@ export function PostDetailCard({
                             </div>
                             <Link
                                 to="/post/$id"
-                                params={{ id: postId.toString() }}
+                                params={{ id: postId }}
                                 className="text-muted-foreground leading-none text-xs sm:text-sm hover:text-foreground transition-colors duration-200 underline decoration-transparent hover:decoration-current"
                             >
                                 {timestamp}
@@ -123,7 +107,7 @@ export function PostDetailCard({
                     <EmojiReaction reactions={initialReactions} onReaction={handleReaction} />
                     <PostActionButton
                         icon={<MessageCircle size={18} />}
-                        count={commentCount || comments?.length || 0}
+                        count={comments?.length || 0}
                         label="Comments"
                         onClick={() => setShowComments(!showComments)}
                     />
@@ -148,14 +132,10 @@ export function PostDetailCard({
                                 Comments ({comments.length})
                             </h4>
                             <div className="space-y-0">
-                                {comments.map((comment, index) => (
+                                {comments.map((comment: PostCommentType, index: number) => (
                                     <PostComment
-                                        key={`${comment.handle}-${index}`}
-                                        avatar={comment.avatar}
-                                        name={comment.name}
-                                        handle={comment.handle}
-                                        timestamp={comment.timestamp}
-                                        content={comment.content}
+                                        key={`${comment.id}-${index}`}
+                                        comment={comment}
                                     />
                                 ))}
                             </div>

@@ -1,6 +1,6 @@
-import { CreatePostToggle } from '../components/create';
-import { PostDetailCard } from '../components/ui/PostDetailCard';
-import { samplePosts } from '../utils/samplePosts';
+import { CreatePostToggle } from '@/components/create';
+import { PostDetailCard } from '@/components/ui/PostDetailCard';
+import { mockPosts } from '@/mocks';
 
 /**
  * Home page component displaying create post form and sample posts
@@ -14,11 +14,10 @@ export function Home() {
 
                 {/* Display all posts */}
                 <div className="flex flex-col gap-6">
-                    {samplePosts.map((post, index) => (
+                    {mockPosts.map((post) => (
                         <PostDetailCard
-                            key={`post-${index}`}
-                            postId={index + 1}
-                            {...post}
+                            key={post.id}
+                            post={post}
                             currentUserAvatar="https://i.pravatar.cc/150?img=2"
                         />
                     ))}

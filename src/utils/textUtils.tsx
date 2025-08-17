@@ -33,8 +33,6 @@ export function truncateUrl(url: string): string {
 export function parseTextWithLinks(text: string): React.ReactNode[] {
     if (!text) return [];
 
-    // Create a copy of the text to work with
-    let remainingText = text;
     const result: React.ReactNode[] = [];
     let lastIndex = 0;
     let match;
