@@ -4,7 +4,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import App from "./App";
-import { ForgotPassword, Home, Login, PostDetail } from "./routes";
+import { ForgotPassword, Home, Login, PostDetail, Profile } from "./routes";
 
 // Define the root route with App component
 const rootRoute = createRootRoute({
@@ -39,12 +39,20 @@ const forgotPasswordRoute = createRoute({
   component: ForgotPassword,
 });
 
+// Define the profile route
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/u/$handle",
+  component: Profile,
+});
+
 // Create the route tree
 const routeTree = rootRoute.addChildren([
   homeRoute,
   postRoute,
   loginRoute,
   forgotPasswordRoute,
+  profileRoute,
 ]);
 
 // Create the router instance

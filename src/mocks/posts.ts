@@ -116,3 +116,10 @@ export const mockPosts: Post[] = [
     ],
   },
 ];
+
+/**
+ * Helper function to get posts by user ID
+ */
+export function getPostsByUserId(userId: string): Post[] {
+  return mockPosts.filter((post) => post.userId === userId);
+}

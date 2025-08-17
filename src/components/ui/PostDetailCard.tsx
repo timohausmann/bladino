@@ -68,18 +68,34 @@ export function PostDetailCard({
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
                 <div className="flex items-center gap-3">
-                    <Avatar
-                        src={avatar}
-                        alt={`${name}'s avatar`}
-                        className="w-12 h-12"
-                    />
+                    <Link
+                        to="/u/$handle"
+                        params={{ handle }}
+                        className="hover:opacity-80 transition-opacity duration-200"
+                    >
+                        <Avatar
+                            src={avatar}
+                            alt={`${name}'s avatar`}
+                            className="w-12 h-12"
+                        />
+                    </Link>
                     <div className="flex-1">
                         <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">
                             <div className="flex gap-2 items-baseline sm:flex-col">
-                                <h3 className="font-bold leading-none text-base">{name}</h3>
-                                <span className="text-muted-foreground leading-none text-sm">
+                                <Link
+                                    to="/u/$handle"
+                                    params={{ handle }}
+                                    className="font-bold leading-none text-base hover:underline transition-colors duration-200"
+                                >
+                                    {name}
+                                </Link>
+                                <Link
+                                    to="/u/$handle"
+                                    params={{ handle }}
+                                    className="text-muted-foreground leading-none text-sm hover:text-foreground transition-colors duration-200"
+                                >
                                     @{handle}
-                                </span>
+                                </Link>
                             </div>
                             <Link
                                 to="/post/$id"
