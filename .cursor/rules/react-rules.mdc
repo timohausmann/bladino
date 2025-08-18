@@ -50,3 +50,5 @@ Follow these rules when you write code:
 - Never use `any` type
 - Always use named exports for app code, never default exports
 - Components should be margin-less. Never use margins on a top level element of a component. The parents should always handle the margins.
+- Always import the React hooks themselves, never React (e.g. useState, don't use React.useState).
+- Always use clsx for conditional CSS classes.

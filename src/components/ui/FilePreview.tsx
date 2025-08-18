@@ -54,7 +54,7 @@ export function FilePreview({ files }: FilePreviewProps) {
                     href={file.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-shrink-0 w-54 h-36 bg-black/10 rounded-lg overflow-hidden transition-all duration-200 hover:bg-black/20"
+                    className="flex-shrink-0 w-1/2 md:w-1/3 aspect-3/2 bg-black/10 rounded-lg overflow-hidden transition-all duration-200 hover:bg-black/20"
                     aria-label={`Open ${file.filename}`}
                     tabIndex={0}
                 >

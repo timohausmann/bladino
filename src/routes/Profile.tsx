@@ -39,7 +39,7 @@ export function Profile() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-2xl">
+        <div className="container mx-auto px-4 py-8 max-w-3xl">
             {/* Profile Card */}
             <Card className="relative overflow-hidden mb-6 p-0">
                 {/* Banner Image */}

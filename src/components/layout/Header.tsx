@@ -1,8 +1,7 @@
 import dinoAsset from '@/assets/dino-1.svg';
 import { Link } from '@tanstack/react-router';
-import { Bell } from 'react-feather';
-import { Avatar } from '../ui/Avatar';
-import { HeaderButton } from '../ui/HeaderButton';
+import { InteractiveAvatar } from '../ui/InteractiveAvatar';
+import { NotificationButton } from '../ui/NotificationButton';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 /**
@@ -29,15 +28,32 @@ export function Header() {
                         </Link>
 
                         <div className="min-w-1/6 flex items-center justify-end gap-4">
-                            {/* Notifications placeholder */}
-                            <HeaderButton
-                                onClick={() => console.log('Notifications clicked')}
-                                icon={<Bell size={18} />}
-                                label="Notifications"
+                            <NotificationButton
+                                count={2}
+                                notifications={[
+                                    {
+                                        id: '1',
+                                        message: 'Jane Smith liked your post',
+                                        isNew: true,
+                                        timestamp: '2 minutes ago'
+                                    },
+                                    {
+                                        id: '2',
+                                        message: 'New comment on your post',
+                                        isNew: true,
+                                        timestamp: '5 minutes ago'
+                                    },
+                                    {
+                                        id: '3',
+                                        message: 'You have a new follower',
+                                        isNew: false,
+                                        timestamp: '1 hour ago'
+                                    }
+                                ]}
                             />
                             {/* Theme Toggle */}
                             <ThemeToggle />
-                            <Avatar
+                            <InteractiveAvatar
                                 src="https://i.pravatar.cc/150?img=2"
                                 alt="avatar"
                                 className="w-10 h-10"

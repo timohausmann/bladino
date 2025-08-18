@@ -4,7 +4,15 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import App from "./App";
-import { ForgotPassword, Home, Login, PostDetail, Profile } from "./routes";
+import {
+  ForgotPassword,
+  Home,
+  Login,
+  Logout,
+  PostDetail,
+  Profile,
+  Settings,
+} from "./routes";
 
 // Define the root route with App component
 const rootRoute = createRootRoute({
@@ -46,6 +54,20 @@ const profileRoute = createRoute({
   component: Profile,
 });
 
+// Define the logout route
+const logoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/logout",
+  component: Logout,
+});
+
+// Define the settings route
+const settingsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/settings",
+  component: Settings,
+});
+
 // Create the route tree
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -53,6 +75,8 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   forgotPasswordRoute,
   profileRoute,
+  logoutRoute,
+  settingsRoute,
 ]);
 
 // Create the router instance
