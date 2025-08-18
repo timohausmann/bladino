@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Smile } from 'react-feather';
+import * as Popover from '@radix-ui/react-popover';
+import { useState } from 'react';
+import { EmojiPicker } from './EmojiPicker';
 import { PostActionButton } from './PostActionButton';
 
 // Define the props for the EmojiReaction component
@@ -9,131 +10,88 @@ interface EmojiReactionProps {
 }
 
 /**
- * EmojiReaction - A simplified component for adding emoji reactions to posts
- * Uses built-in emojis for better performance and compatibility
- * Shows the top 4 emoji reactions with their counts
+ * EmojiReaction - A component for adding emoji reactions to posts using Frimousse emoji picker
+ * Shows the top 4 emoji reactions with their counts and provides a full emoji picker
  */
 export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
-    const [quickPickerVisible, setQuickPickerVisible] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    // Popular emoji quick reactions - using built-in emojis
-    const popularEmojis = ['👍', '❤️', '😂', '🔥', '👏', '🎉', '😍', '🤔'];
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
     // Get the top 4 emoji reactions
     const topReactions = Object.entries(reactions)
         .sort(([, countA], [, countB]) => countB - countA)
         .slice(0, 4);
 
-    // Handle showing the quick reaction picker
-    const handleShowQuickPicker = () => {
-        setQuickPickerVisible(true);
+    // Handle emoji selection
+    const handleEmojiSelect = (emoji: string) => {
+        onReaction(emoji);
+        setEmojiPickerOpen(false);
     };
-
-    // Handle keyboard navigation
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleShowQuickPicker();
-        }
-        if (event.key === 'Escape') {
-            setQuickPickerVisible(false);
-        }
-    };
-
-    // Handle clicking outside to close picker
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setQuickPickerVisible(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     return (
-        <div className="relative" ref={containerRef}>
+        <div className="relative">
             {/* Top reactions display */}
             <div className="flex items-center flex-wrap gap-2">
                 {/* Reaction bubbles with counts */}
-                {topReactions.length > 0 ? (
-                    <>
-                        {topReactions.map(([emoji, count]) => (
-                            <PostActionButton
-                                key={emoji}
-                                icon={<span className="text-sm">{emoji}</span>}
-                                count={count}
-                                label={`React with ${emoji}`}
-                                onClick={() => onReaction(emoji)}
-                                className="h-10 px-3"
-                            />
-                        ))}
-                    </>
-                ) : (
-                    <button
-                        className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all dark:bg-black/10 dark:hover:bg-black/20 duration-200 hover:bg-black/10 hover:shadow-md cursor-pointer"
-                        onClick={handleShowQuickPicker}
-                        onKeyDown={handleKeyDown}
-                        aria-label="Add a reaction"
-                        title="Add a reaction"
-                        tabIndex={0}
-                    >
-                        <Smile size={18} />
-                    </button>
-                )}
+                {topReactions.map(([emoji, count]) => (
+                    <PostActionButton
+                        key={emoji}
+                        icon={<span className="text-xs">{emoji}</span>}
+                        count={count}
+                        label={`React with ${emoji}`}
+                        onClick={() => onReaction(emoji)}
+                        className="h-10 px-3"
+                    />
+                ))}
 
-                {/* Add reaction button */}
-                <button
-                    className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md"
-                    onClick={handleShowQuickPicker}
-                    onKeyDown={handleKeyDown}
-                    aria-label="Add a reaction"
-                    title="Add a reaction"
-                    aria-expanded={quickPickerVisible}
-                    aria-haspopup="true"
-                    tabIndex={0}
-                >
-                    <span className="text-sm font-bold">+</span>
-                </button>
-            </div>
-
-            {/* Quick reaction picker */}
-            {quickPickerVisible && (
-                <div
-                    className="absolute z-10 bottom-full left-0 mb-2 p-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-                    role="menu"
-                    aria-label="Quick emoji reactions"
-                >
-                    <div className="grid grid-cols-4 gap-2">
-                        {popularEmojis.map((emoji) => (
-                            <button
-                                key={emoji}
-                                className="w-10 h-10 flex items-center justify-center text-lg bg-black/10 rounded-full transition-all duration-200 hover:bg-black/20 hover:shadow-md"
-                                onClick={() => {
-                                    onReaction(emoji);
-                                    setQuickPickerVisible(false);
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        onReaction(emoji);
-                                        setQuickPickerVisible(false);
-                                    }
-                                }}
-                                aria-label={`React with ${emoji}`}
-                                role="menuitem"
-                                tabIndex={0}
+                {/* Add reaction button with mood-plus icon */}
+                <Popover.Root open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+                    <Popover.Trigger asChild>
+                        <button
+                            className="flex items-center justify-center w-10 h-10 bg-black/5 rounded-full transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md"
+                            aria-label="Add a reaction"
+                            title="Add a reaction"
+                            aria-expanded={emojiPickerOpen}
+                            aria-haspopup="true"
+                            tabIndex={0}
+                        >
+                            {/* tabler mood-plus icon */}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="w-5 h-5"
                             >
-                                {emoji}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M20.985 12.528a9 9 0 1 0 -8.45 8.456" />
+                                <path d="M16 19h6" />
+                                <path d="M19 16v6" />
+                                <path d="M9 10h.01" />
+                                <path d="M15 10h.01" />
+                                <path d="M9.5 15c.658 .64 1.56 1 2.5 1s1.842 -.36 2.5 -1" />
+                            </svg>
+                        </button>
+                    </Popover.Trigger>
+
+                    <Popover.Portal>
+                        <Popover.Content
+                            className="z-50"
+                            sideOffset={8}
+                            align="start"
+                        >
+                            <EmojiPicker
+                                onEmojiSelect={handleEmojiSelect}
+                                onClose={() => setEmojiPickerOpen(false)}
+                            />
+                        </Popover.Content>
+                    </Popover.Portal>
+                </Popover.Root>
+            </div>
         </div>
     );
 } 

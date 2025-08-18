@@ -14,7 +14,7 @@ interface PostActionButtonProps {
 export function PostActionButton({ icon, count, label, onClick, className = "" }: PostActionButtonProps) {
     return (
         <button
-            className={`flex items-center gap-1 border-none px-3 py-2 rounded-full bg-black/5 transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md cursor-pointer ${className}`}
+            className={`flex items-center gap-2 border-none px-3 py-2 rounded-full bg-black/5 transition-all duration-200 dark:bg-black/10 dark:hover:bg-black/20 hover:bg-black/10 hover:shadow-md cursor-pointer ${className}`}
             title={label}
             aria-label={`${count} ${label}`}
             onClick={onClick}

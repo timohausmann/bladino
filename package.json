@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.15",
     "@tailwindcss/vite": "^4.0.10",
     "@tanstack/react-router": "^1.131.8",
     "@tanstack/router-core": "^1.131.7",
     "@tanstack/router-devtools": "^1.131.8",
     "clsx": "^2.1.1",
+    "frimousse": "^0.3.0",
     "motion": "^12.4.10",
     "nanoid": "^5.1.5",
     "react": "^19.0.0",
