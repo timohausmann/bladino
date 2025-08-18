@@ -80,4 +80,7 @@ const routeTree = rootRoute.addChildren([
 ]);
 
 // Create the router instance
-export const router = createRouter({ routeTree });
+export const router = createRouter({
+  routeTree,
+  defaultViewTransition: true,
+});

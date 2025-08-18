@@ -65,7 +65,7 @@ export function PostDetailCard({
     };
 
     return (
-        <Card className="flex flex-col gap-6">
+        <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${postId}`}>
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
                 <div className="flex items-center gap-3">

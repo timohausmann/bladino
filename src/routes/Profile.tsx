@@ -1,5 +1,6 @@
 import { Button } from '@/components/form/Button';
 import { Avatar } from '@/components/ui/Avatar';
+import { Back } from '@/components/ui/Back';
 import { Card } from '@/components/ui/Card';
 import { PostDetailCard } from '@/components/ui/PostDetailCard';
 import { getPostsByUserId } from '@/mocks/posts';
@@ -40,6 +41,9 @@ export function Profile() {
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-3xl">
+
+            <Back />
+
             {/* Profile Card */}
             <Card className="relative overflow-hidden mb-6 p-0">
                 {/* Banner Image */}

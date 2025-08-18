@@ -1,11 +1,13 @@
-
+import { Back } from '@/components/ui/Back';
 /**
  * Settings page - placeholder for future implementation
  */
 export function Settings() {
     return (
         <div className="min-h-screen pt-8">
-            <div className="max-w-3xl mx-auto px-4">
+            <div className="max-w-3xl mx-auto px-4 space-y-4">
+
+                <Back />
 
                 <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
                     <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-6">

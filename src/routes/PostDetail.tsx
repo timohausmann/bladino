@@ -1,3 +1,4 @@
+import { Back } from '@/components/ui/Back';
 import { PostDetailCard } from '@/components/ui/PostDetailCard';
 import { mockPosts } from '@/mocks';
 import { useParams } from '@tanstack/react-router';
@@ -17,6 +18,9 @@ export function PostDetail() {
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-foreground mb-2">Post Not Found</h1>
                     <p className="text-muted-foreground">The post you're looking for doesn't exist.</p>
+                    <div className="mt-4">
+                        <Back />
+                    </div>
                 </div>
             </div>
         );
@@ -24,7 +28,8 @@ export function PostDetail() {
 
     return (
         <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-2xl">
+            <div className="w-full max-w-3xl px-4 space-y-4">
+                <Back />
                 <PostDetailCard
                     post={post}
                     currentUserAvatar="https://i.pravatar.cc/150?img=2"
