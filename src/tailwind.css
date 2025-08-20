@@ -48,3 +48,26 @@
     animation-duration: 0.4s;
   }
 }
+
+/* Accordion animations using Radix CSS custom properties */
+@keyframes radixSlideDown {
+  from {
+    height: 0;
+    padding-bottom: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    padding-bottom: 1rem;
+  }
+}
+
+@keyframes radixSlideUp {
+  from {
+    height: var(--radix-accordion-content-height);
+    padding-bottom: 1rem;
+  }
+  to {
+    height: 0;
+    padding-bottom: 0;
+  }
+}

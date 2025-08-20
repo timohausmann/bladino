@@ -1,4 +1,5 @@
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
     children: React.ReactNode;
@@ -22,13 +23,13 @@ export function Button({
             type={type}
             disabled={disabled || loading}
             onClick={onClick}
-            className={`
-                px-6 py-2 bg-black/90 dark:bg-white/90 text-white dark:text-black 
-                hover:bg-black/95 dark:hover:bg-white/95 disabled:opacity-50 
-                cursor-pointer disabled:cursor-not-allowed 
-                rounded-full font-medium transition-all
-                ${className}
-            `.trim()}
+            className={twMerge(
+                'px-6 py-2 bg-black/90 dark:bg-white/90 text-white dark:text-black',
+                'hover:bg-black/95 dark:hover:bg-white/95 disabled:opacity-50',
+                'cursor-pointer disabled:cursor-not-allowed',
+                'rounded-full font-medium transition-all',
+                className
+            )}
             aria-label={typeof children === 'string' ? children : 'Submit'}
             tabIndex={disabled || loading ? -1 : 0}
         >

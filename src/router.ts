@@ -9,6 +9,7 @@ import {
   Home,
   Login,
   Logout,
+  NotFound,
   PostDetail,
   Profile,
   Settings,
@@ -17,6 +18,7 @@ import {
 // Define the root route with App component
 const rootRoute = createRootRoute({
   component: App,
+  notFoundComponent: NotFound,
 });
 
 // Define the home route

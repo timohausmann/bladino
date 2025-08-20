@@ -11,6 +11,7 @@ interface InputProps {
     className?: string;
     label?: string;
     required?: boolean;
+    hint?: string;
 }
 
 export function Input({
@@ -22,7 +23,8 @@ export function Input({
     disabled = false,
     className = "",
     label,
-    required = false
+    required = false,
+    hint
 }: InputProps) {
     const inputId = `input-${nanoid()}`;
 
@@ -58,6 +60,11 @@ export function Input({
                 aria-label={label || placeholder}
                 tabIndex={disabled ? -1 : 0}
             />
+            {hint && (
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 ml-1">
+                    {hint}
+                </p>
+            )}
         </div>
     );
 }

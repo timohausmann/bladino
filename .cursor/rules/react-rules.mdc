@@ -52,3 +52,4 @@ Follow these rules when you write code:
 - Components should be margin-less. Never use margins on a top level element of a component. The parents should always handle the margins.
 - Always import the React hooks themselves, never React (e.g. useState, don't use React.useState).
 - Always use clsx for conditional CSS classes.
+- Always use Links for navigation, not buttons with click handlers. It's more accessible!
