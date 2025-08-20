@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -6,20 +7,24 @@ import { LogOut, Settings, User } from 'react-feather';
 import { Avatar } from './Avatar';
 
 interface InteractiveAvatarProps {
-    src: string;
-    alt: string;
     className?: string;
 }
 
 /**
  * Interactive avatar with popover menu for profile actions
  */
-export function InteractiveAvatar({ src, alt, className }: InteractiveAvatarProps) {
+export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
     const [open, setOpen] = useState(false);
+    const { currentUser } = useUserStore();
 
     const handleLinkClick = () => {
         setOpen(false);
     };
+
+    // Don't render if no user is authenticated
+    if (!currentUser) {
+        return null;
+    }
 
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
@@ -31,7 +36,7 @@ export function InteractiveAvatar({ src, alt, className }: InteractiveAvatarProp
                     )}
                     aria-label="Open profile menu"
                 >
-                    <Avatar src={src} alt={alt} className={className} />
+                    <Avatar src={currentUser.avatar} alt={currentUser.name} className={className} />
                 </button>
             </Popover.Trigger>
 
@@ -44,7 +49,7 @@ export function InteractiveAvatar({ src, alt, className }: InteractiveAvatarProp
                     <div className="space-y-1">
                         <div onClick={handleLinkClick}>
                             <Link
-                                to="/u/janesmith"
+                                to={`/u/${currentUser.handle}`}
                                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-150"
                             >
                                 <User size={16} />
@@ -67,7 +72,7 @@ export function InteractiveAvatar({ src, alt, className }: InteractiveAvatarProp
                         <div onClick={handleLinkClick}>
                             <Link
                                 to="/logout"
-                                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-md hover:bg-neutral-100 dark:hover:bg-red-900/20 transition-colors duration-150"
+                                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-md hover:bg-red-900/20 transition-colors duration-150"
                             >
                                 <LogOut size={16} />
                                 Logout

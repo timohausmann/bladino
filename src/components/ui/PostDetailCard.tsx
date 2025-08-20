@@ -15,7 +15,6 @@ import { PostReply } from './PostReply';
 
 interface PostDetailCardProps {
     post: Post; // Pass the entire post object
-    currentUserAvatar?: string; // Add current user avatar for reply form
 }
 
 /**
@@ -23,7 +22,6 @@ interface PostDetailCardProps {
  */
 export function PostDetailCard({
     post,
-    currentUserAvatar,
 }: PostDetailCardProps) {
     // Extract user data from the post
     const user = getUserById(post.userId);
@@ -142,7 +140,6 @@ export function PostDetailCard({
                         onSubmit={handleReplySubmit}
                         onCancel={handleReplyCancel}
                         placeholder={`Reply to @${handle}...`}
-                        currentUserAvatar={currentUserAvatar}
                     />
 
                     {/* Comments list */}

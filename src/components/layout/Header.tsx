@@ -1,4 +1,5 @@
 import dinoAsset from '@/assets/dino-1.svg';
+import { useUserStore } from '@/stores/userStore';
 import { Link } from '@tanstack/react-router';
 import { InteractiveAvatar } from '../ui/InteractiveAvatar';
 import { NotificationButton } from '../ui/NotificationButton';
@@ -8,6 +9,8 @@ import { ThemeToggle } from '../ui/ThemeToggle';
  * Header component with bladino logo and theme toggle
  */
 export function Header() {
+    const { currentUser } = useUserStore();
+
     return (
         <>
             <header className="fixed top-4 left-4 right-4 z-50">
@@ -53,11 +56,7 @@ export function Header() {
                             />
                             {/* Theme Toggle */}
                             <ThemeToggle />
-                            <InteractiveAvatar
-                                src="https://i.pravatar.cc/150?img=2"
-                                alt="avatar"
-                                className="w-10 h-10"
-                            />
+                            <InteractiveAvatar className="w-10 h-10" />
                         </div>
                     </div>
                 </div>

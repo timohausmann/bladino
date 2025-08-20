@@ -7,7 +7,9 @@ import {
     AccordionTrigger
 } from '@/components/ui/accordion';
 import { Back } from '@/components/ui/Back';
+import { useUserStore } from '@/stores/userStore';
 import * as Select from '@radix-ui/react-select';
+import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ChevronDown } from 'react-feather';
 
@@ -15,10 +17,11 @@ import { ChevronDown } from 'react-feather';
  * Settings page with accordion-based settings groups
  */
 export function Settings() {
+    // Get current user from Zustand store
+    const { currentUser } = useUserStore();
+
     const [email, setEmail] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [theme, setTheme] = useState('dark');
 
     const handleEmailChange = () => {
@@ -84,29 +87,14 @@ export function Settings() {
                                     <AccordionContent>
                                         <div className="space-y-3">
                                             <Input
-                                                label="Current Password"
-                                                type="password"
-                                                value={currentPassword}
-                                                onChange={setCurrentPassword}
-                                                placeholder="Enter current password"
-                                                required
-                                            />
-                                            <Input
                                                 label="New Password"
                                                 type="password"
                                                 value={newPassword}
                                                 onChange={setNewPassword}
                                                 placeholder="Enter new password"
+                                                showPasswordToggle
                                                 required
                                                 hint="Password must be at least 8 characters long."
-                                            />
-                                            <Input
-                                                label="Confirm New Password"
-                                                type="password"
-                                                value={confirmPassword}
-                                                onChange={setConfirmPassword}
-                                                placeholder="Confirm new password"
-                                                required
                                             />
                                             <Button onClick={handlePasswordChange}>
                                                 Update Password
@@ -124,7 +112,7 @@ export function Settings() {
                                         <div className="space-y-3">
                                             <Input
                                                 label="Handle"
-                                                value="@username"
+                                                value={currentUser ? `@${currentUser.handle}` : '@username'}
                                                 onChange={() => { }}
                                                 placeholder="Enter new handle"
                                                 disabled
@@ -147,12 +135,12 @@ export function Settings() {
                             <div className="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-4">
                                 <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                                     Profile information is edited on your profile page.
-                                    <button
+                                    <Link
+                                        to={`/u/${currentUser?.handle}`}
                                         className="text-cyan-600 dark:text-cyan-400 hover:underline ml-1"
-                                        onClick={() => {/* TODO: Navigate to profile */ }}
                                     >
                                         Go to Profile →
-                                    </button>
+                                    </Link>
                                 </p>
                             </div>
                         </div>

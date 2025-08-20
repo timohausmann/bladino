@@ -53,3 +53,4 @@ Follow these rules when you write code:
 - Always import the React hooks themselves, never React (e.g. useState, don't use React.useState).
 - Always use clsx for conditional CSS classes.
 - Always use Links for navigation, not buttons with click handlers. It's more accessible!
+- For components and function arguments, always use a interface, even if we only have one prop!

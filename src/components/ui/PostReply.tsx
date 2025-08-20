@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/userStore';
 import { useState } from 'react';
 import { Button, Textarea } from '../form';
 import { Avatar } from './Avatar';
@@ -7,7 +8,6 @@ interface PostReplyProps {
     onCancel: () => void;
     placeholder?: string;
     maxLength?: number;
-    currentUserAvatar?: string; // Add avatar prop for current user
 }
 
 /**
@@ -17,9 +17,9 @@ export function PostReply({
     onSubmit,
     placeholder = "Write a reply...",
     maxLength = 280,
-    currentUserAvatar
 }: PostReplyProps) {
     const [content, setContent] = useState('');
+    const { currentUser } = useUserStore();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,9 +32,9 @@ export function PostReply({
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex gap-3">
-                {currentUserAvatar && (
+                {currentUser?.avatar && (
                     <Avatar
-                        src={currentUserAvatar}
+                        src={currentUser.avatar}
                         alt="Your avatar"
                         className="w-10 h-10 flex-shrink-0 mt-2"
                     />
