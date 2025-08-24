@@ -7,9 +7,11 @@ type ThemeProviderState = {
     setTheme: (theme: Theme) => void;
 };
 
+const defaultTheme = 'dark';
+
 // Create context with default values
 const ThemeProviderContext = createContext<ThemeProviderState>({
-    theme: 'system',
+    theme: defaultTheme,
     setTheme: () => null,
 });
 
@@ -28,9 +30,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         // Check if we're in the browser
         if (typeof window !== 'undefined') {
             const storedTheme = localStorage.getItem('theme') as Theme;
-            return storedTheme || 'system';
+            return storedTheme || defaultTheme;
         }
-        return 'system';
+        return defaultTheme;
     });
 
     // Apply theme class to document element for Tailwind
