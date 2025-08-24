@@ -18,7 +18,6 @@ export function Home() {
                         <PostDetailCard
                             key={post.id}
                             post={post}
-                            currentUserAvatar="https://i.pravatar.cc/150?img=2"
                         />
                     ))}
                 </div>

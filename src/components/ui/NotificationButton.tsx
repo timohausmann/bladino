@@ -20,7 +20,7 @@ interface NotificationButtonProps {
 /**
  * Notification button with badge showing notification count
  */
-export function NotificationButton({ count = 0, notifications = [], onClick }: NotificationButtonProps) {
+export function NotificationButton({ count = 0, notifications = [] }: NotificationButtonProps) {
     const [open, setOpen] = useState(false);
 
     const handleNotificationClick = () => {

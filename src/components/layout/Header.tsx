@@ -1,5 +1,4 @@
 import dinoAsset from '@/assets/dino-1.svg';
-import { useUserStore } from '@/stores/userStore';
 import { Link } from '@tanstack/react-router';
 import { InteractiveAvatar } from '../ui/InteractiveAvatar';
 import { NotificationButton } from '../ui/NotificationButton';
@@ -9,7 +8,6 @@ import { ThemeToggle } from '../ui/ThemeToggle';
  * Header component with bladino logo and theme toggle
  */
 export function Header() {
-    const { currentUser } = useUserStore();
 
     return (
         <>
