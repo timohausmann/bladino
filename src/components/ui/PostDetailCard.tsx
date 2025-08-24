@@ -2,6 +2,7 @@ import { getUserById } from '@/mocks';
 import { Post, PostComment as PostCommentType } from '@/types';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { MessageCircle } from 'react-feather';
 import { Avatar } from './Avatar';
@@ -70,7 +71,6 @@ export function PostDetailCard({
                     <Link
                         to="/u/$handle"
                         params={{ handle }}
-                        className="hover:opacity-80 transition-opacity duration-200"
                     >
                         <Avatar
                             src={avatar}
@@ -84,14 +84,24 @@ export function PostDetailCard({
                                 <Link
                                     to="/u/$handle"
                                     params={{ handle }}
-                                    className="font-bold leading-none text-base hover:underline transition-colors duration-200"
+                                    className={clsx([
+                                        "font-bold leading-none text-base",
+                                        "underline decoration-transparent",
+                                        "hover:decoration-current",
+                                        "transition-colors duration-200"
+                                    ])}
                                 >
                                     {name}
                                 </Link>
                                 <Link
                                     to="/u/$handle"
                                     params={{ handle }}
-                                    className="text-muted-foreground leading-none text-sm hover:text-foreground transition-colors duration-200"
+                                    className={clsx([
+                                        "text-muted-foreground leading-none text-sm",
+                                        "underline decoration-transparent",
+                                        "hover:text-foreground hover:decoration-current",
+                                        "transition-colors duration-200"
+                                    ])}
                                 >
                                     @{handle}
                                 </Link>
@@ -99,7 +109,12 @@ export function PostDetailCard({
                             <Link
                                 to="/post/$id"
                                 params={{ id: postId }}
-                                className="text-muted-foreground leading-none text-xs sm:text-sm hover:text-foreground transition-colors duration-200 underline decoration-transparent hover:decoration-current"
+                                className={clsx([
+                                    "text-muted-foreground leading-none text-xs sm:text-sm",
+                                    "underline decoration-transparent",
+                                    "hover:text-foreground hover:decoration-current",
+                                    "transition-colors duration-200"
+                                ])}
                             >
                                 {timestamp}
                             </Link>

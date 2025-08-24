@@ -54,3 +54,4 @@ Follow these rules when you write code:
 - Always use clsx for conditional CSS classes.
 - Always use Links for navigation, not buttons with click handlers. It's more accessible!
 - For components and function arguments, always use a interface, even if we only have one prop!
+- When the tailwind classes get too many (around 8), break them up in logical groups (an array) using clsx. Don't comment the groups, just do it.
