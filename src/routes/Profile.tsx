@@ -1,8 +1,8 @@
 import { Button } from '@/components/form/Button';
+import { PostCard } from '@/components/post/PostCard';
 import { Avatar } from '@/components/ui/Avatar';
 import { Back } from '@/components/ui/Back';
 import { Card } from '@/components/ui/Card';
-import { PostDetailCard } from '@/components/ui/PostDetailCard';
 import { getPostsByUserId } from '@/mocks/posts';
 import { getUserByHandle } from '@/mocks/users';
 import { useParams } from '@tanstack/react-router';
@@ -106,7 +106,7 @@ export function Profile() {
 
                 {userPosts.length > 0 ? (
                     userPosts.map((post) => (
-                        <PostDetailCard
+                        <PostCard
                             key={post.id}
                             post={post}
                         />

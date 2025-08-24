@@ -1,7 +1,7 @@
+import { Avatar } from '@/components/ui/Avatar';
 import { getUserById } from '@/mocks';
 import { PostComment as PostCommentType } from '@/types';
 import { Link } from '@tanstack/react-router';
-import { Avatar } from './Avatar';
 
 interface PostCommentProps {
     comment: PostCommentType; // Pass the comment object using PostComment type

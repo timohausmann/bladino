@@ -1,7 +1,7 @@
+import { Avatar } from '@/components/ui/Avatar';
 import { useUserStore } from '@/stores/userStore';
 import { useState } from 'react';
 import { Button, Textarea } from '../form';
-import { Avatar } from './Avatar';
 
 interface PostReplyProps {
     onSubmit: (content: string) => void;

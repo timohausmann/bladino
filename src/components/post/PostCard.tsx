@@ -1,29 +1,27 @@
 import { getUserById } from '@/mocks';
 import { Post, PostComment as PostCommentType } from '@/types';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
-import { Link } from '@tanstack/react-router';
-import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { MessageCircle } from 'react-feather';
-import { Avatar } from './Avatar';
-import { Card } from './Card';
-import { EmojiReaction } from './EmojiReaction';
-import { FilePreview } from './FilePreview';
-import { LinkPreview } from './LinkPreview';
+import { Card } from '../ui/Card';
+import { EmojiReaction } from '../ui/EmojiReaction';
+import { FilePreview } from '../ui/FilePreview';
+import { LinkPreview } from '../ui/LinkPreview';
 import { PostActionButton } from './PostActionButton';
 import { PostComment } from './PostComment';
+import { PostHeader } from './PostHeader';
 import { PostReply } from './PostReply';
 
-interface PostDetailCardProps {
+interface PostCardProps {
     post: Post; // Pass the entire post object
 }
 
 /**
- * PostDetailCard - A card that displays a post with user info and interactions
+ * PostCard - A card that displays a post with user info and interactions
  */
-export function PostDetailCard({
+export function PostCard({
     post,
-}: PostDetailCardProps) {
+}: PostCardProps) {
     // Extract user data from the post
     const user = getUserById(post.userId);
 
@@ -67,60 +65,13 @@ export function PostDetailCard({
         <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${postId}`}>
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
-                <div className="flex items-center gap-3">
-                    <Link
-                        to="/u/$handle"
-                        params={{ handle }}
-                    >
-                        <Avatar
-                            src={avatar}
-                            alt={`${name}'s avatar`}
-                            className="w-12 h-12"
-                        />
-                    </Link>
-                    <div className="flex-1">
-                        <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">
-                            <div className="flex gap-2 items-baseline sm:flex-col">
-                                <Link
-                                    to="/u/$handle"
-                                    params={{ handle }}
-                                    className={clsx([
-                                        "font-bold leading-none text-base",
-                                        "underline decoration-transparent",
-                                        "hover:decoration-current",
-                                        "transition-colors duration-200"
-                                    ])}
-                                >
-                                    {name}
-                                </Link>
-                                <Link
-                                    to="/u/$handle"
-                                    params={{ handle }}
-                                    className={clsx([
-                                        "text-muted-foreground leading-none text-sm",
-                                        "underline decoration-transparent",
-                                        "hover:text-foreground hover:decoration-current",
-                                        "transition-colors duration-200"
-                                    ])}
-                                >
-                                    @{handle}
-                                </Link>
-                            </div>
-                            <Link
-                                to="/post/$id"
-                                params={{ id: postId }}
-                                className={clsx([
-                                    "text-muted-foreground leading-none text-xs sm:text-sm",
-                                    "underline decoration-transparent",
-                                    "hover:text-foreground hover:decoration-current",
-                                    "transition-colors duration-200"
-                                ])}
-                            >
-                                {timestamp}
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+                <PostHeader
+                    handle={handle}
+                    avatar={avatar}
+                    name={name}
+                    postId={postId}
+                    timestamp={timestamp}
+                />
 
                 <div className="text-[17px]">
                     <p>{parsedContent}</p>

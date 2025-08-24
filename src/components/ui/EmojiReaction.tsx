@@ -1,7 +1,7 @@
+import { PostActionButton } from '@/components/post/PostActionButton';
 import * as Popover from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { EmojiPicker } from './EmojiPicker';
-import { PostActionButton } from './PostActionButton';
 
 // Define the props for the EmojiReaction component
 interface EmojiReactionProps {

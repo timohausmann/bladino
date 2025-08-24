@@ -1,5 +1,5 @@
 import { CreatePostToggle } from '@/components/create';
-import { PostDetailCard } from '@/components/ui/PostDetailCard';
+import { PostCard } from '@/components/post/PostCard';
 import { mockPosts } from '@/mocks';
 
 /**
@@ -15,7 +15,7 @@ export function Home() {
                 {/* Display all posts */}
                 <div className="flex flex-col gap-6">
                     {mockPosts.map((post) => (
-                        <PostDetailCard
+                        <PostCard
                             key={post.id}
                             post={post}
                         />

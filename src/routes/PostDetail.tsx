@@ -1,5 +1,5 @@
+import { PostCard } from '@/components/post/PostCard';
 import { Back } from '@/components/ui/Back';
-import { PostDetailCard } from '@/components/ui/PostDetailCard';
 import { mockPosts } from '@/mocks';
 import { useParams } from '@tanstack/react-router';
 
@@ -30,7 +30,7 @@ export function PostDetail() {
         <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-3xl px-4 space-y-4">
                 <Back />
-                <PostDetailCard
+                <PostCard
                     post={post}
                 />
             </div>
