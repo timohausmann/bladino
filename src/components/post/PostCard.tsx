@@ -65,13 +65,7 @@ export function PostCard({
         <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${postId}`}>
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
-                <PostHeader
-                    handle={handle}
-                    avatar={avatar}
-                    name={name}
-                    postId={postId}
-                    timestamp={timestamp}
-                />
+                <PostHeader post={post} />
 
                 <div className="text-[17px]">
                     <p>{parsedContent}</p>

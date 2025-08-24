@@ -1,16 +1,9 @@
+import { mockUsers } from "@/mocks";
 import { User } from "@/types";
 import { create } from "zustand";
 
 // Dummy user data
-const dummyUser: User = {
-  id: "current-user-123",
-  avatar: "https://i.pravatar.cc/150?img=2", // Using existing mock image
-  name: "Jane Smith",
-  handle: "janesmith",
-  bio: "Frontend developer passionate about creating beautiful user experiences. Love React, TypeScript, and clean code.",
-  joinDate: new Date("2023-01-15"),
-  email: "jane.smith@example.com",
-};
+const dummyUser: User = mockUsers[0];
 
 interface UserState {
   // Current user data
