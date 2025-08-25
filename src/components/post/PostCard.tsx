@@ -30,8 +30,8 @@ export function PostCard({
         return null;
     }
 
-    const { avatar, name, handle } = user;
-    const { id: postId, content, timestamp, reactions = {}, comments = [] } = post;
+    const { handle } = user;
+    const { id: postId, content, reactions = {}, comments = [] } = post;
     const [showComments, setShowComments] = useState(false);
 
     // Parse content for links
