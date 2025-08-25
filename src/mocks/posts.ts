@@ -37,6 +37,7 @@ export const mockPosts: Post[] = [
     comments: [
       {
         id: "comment-1-1",
+        parentPostId: "post-1",
         userId: "user-5", // Mike Chen
         content:
           "Congratulations! The website looks amazing. Love the clean design!",
@@ -45,6 +46,7 @@ export const mockPosts: Post[] = [
       },
       {
         id: "comment-1-2",
+        parentPostId: "post-1",
         userId: "user-6", // Sarah Wilson
         content: "This is exactly what I needed for inspiration. Great work!",
         timestamp: "May 25, 2023",
@@ -84,6 +86,7 @@ export const mockPosts: Post[] = [
     comments: [
       {
         id: "comment-2-1",
+        parentPostId: "post-2",
         userId: "user-7", // David Kim
         content:
           "What specific techniques are you using? Would love to learn more!",
@@ -117,6 +120,7 @@ export const mockPosts: Post[] = [
     comments: [
       {
         id: "comment-3-1",
+        parentPostId: "post-3",
         userId: "user-8", // Emma Rodriguez
         content:
           "Great article! The mobile-first approach you mentioned really helped me understand the concept better.",
@@ -125,6 +129,7 @@ export const mockPosts: Post[] = [
       },
       {
         id: "comment-3-2",
+        parentPostId: "post-3",
         userId: "user-9", // Tom Anderson
         content: "Bookmarked this for later. Thanks for sharing your insights!",
         timestamp: "May 23, 2023",
@@ -148,6 +153,7 @@ export const mockPosts: Post[] = [
     comments: [
       {
         id: "comment-4-1",
+        parentPostId: "post-4",
         userId: "user-10", // Lisa Park
         content:
           "Unsplash is my go-to as well! The quality is incredible for free images.",

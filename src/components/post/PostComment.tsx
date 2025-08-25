@@ -2,6 +2,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { getUserById } from '@/mocks';
 import { PostComment as PostCommentType } from '@/types';
 import { Link } from '@tanstack/react-router';
+import { PostContextMenu } from './PostContextMenu';
 
 interface PostCommentProps {
     comment: PostCommentType; // Pass the comment object using PostComment type
@@ -56,6 +57,7 @@ export function PostComment({ comment }: PostCommentProps) {
                 </div>
                 <p className="text-sm text-foreground leading-relaxed">{content}</p>
             </div>
+            <PostContextMenu post={comment} />
         </div>
     );
 }

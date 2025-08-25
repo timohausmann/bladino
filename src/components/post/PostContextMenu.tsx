@@ -1,12 +1,13 @@
 import { useUserStore } from '@/stores/userStore';
-import { Post } from '@/types';
+import { Post, PostComment } from '@/types';
+import { isPostComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'react-feather';
 import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '../ui/popover';
 
 interface PostContextMenuProps {
-    post: Post;
+    post: Post | PostComment;
 }
 
 /**
@@ -18,6 +19,8 @@ export function PostContextMenu({ post }: PostContextMenuProps) {
     const { currentUser } = useUserStore();
     const isOwner = currentUser?.id === post.userId;
 
+    const isComment = isPostComment(post);
+
     const handleReport = () => {
         // TODO: Implement report functionality
         console.log('Report post:', post.id);
@@ -26,7 +29,11 @@ export function PostContextMenu({ post }: PostContextMenuProps) {
 
     const handleCopyLink = () => {
         // TODO: Implement copy link functionality
-        navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
+        if (isComment) {
+            navigator.clipboard.writeText(`${window.location.origin}/post/${post.parentPostId}/comment/${post.id}`);
+        } else {
+            navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
+        }
         setOpen(false);
     };
 
@@ -72,13 +79,13 @@ export function PostContextMenu({ post }: PostContextMenuProps) {
                         <ContextMenuDivider id="divider" />
                         <ContextMenuButton
                             id="edit"
-                            label="Edit Post"
+                            label={isComment ? "Edit Comment" : "Edit Post"}
                             icon={Edit}
                             onClick={handleEdit}
                         />
                         <ContextMenuButton
                             id="delete"
-                            label="Delete Post"
+                            label={isComment ? "Delete Comment" : "Delete Post"}
                             icon={Trash2}
                             onClick={handleDelete}
                             variant="destructive"
