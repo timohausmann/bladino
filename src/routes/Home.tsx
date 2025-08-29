@@ -1,4 +1,4 @@
-import { CreatePostToggle } from '@/components/create';
+import { CreatePost } from '@/components/create';
 import { PostCard } from '@/components/post/PostCard';
 import { mockPosts } from '@/mocks';
 
@@ -9,10 +9,8 @@ export function Home() {
     return (
         <div className="flex-1 py-8">
             <div className="container max-w-3xl mx-auto px-4 flex flex-col gap-8">
-                {/* Create Post Toggle */}
-                <CreatePostToggle />
+                <CreatePost />
 
-                {/* Display all posts */}
                 <div className="flex flex-col gap-6">
                     {mockPosts.map((post) => (
                         <PostCard

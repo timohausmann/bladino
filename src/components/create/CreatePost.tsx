@@ -5,16 +5,10 @@ import { Card } from '../ui/Card';
 import { CreateAddEmoji } from './CreateAddEmoji';
 import { CreateAddMore } from './CreateAddMore';
 
-interface CreatePostProps {
-    open: boolean;
-    setIsOpen: (open: boolean) => void;
-}
-
 /**
- * CreatePost component - integrated into Home page for creating new posts
- * Now supports versatile content creation with text, emojis, files, links, polls, and events
+ * CreatePost component
  */
-export function CreatePost({ open, setIsOpen }: CreatePostProps) {
+export function CreatePost() {
     const [content, setContent] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -40,9 +34,7 @@ export function CreatePost({ open, setIsOpen }: CreatePostProps) {
     return (
         <Card className={clsx(
             'transition-all duration-300 ease-in-out overflow-hidden',
-            open
-                ? 'max-h-[400px] opacity-100'
-                : 'max-h-0 opacity-0 p-0 border-0'
+            'max-h-[400px] opacity-100'
         )}>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 {/* Main text input */}
