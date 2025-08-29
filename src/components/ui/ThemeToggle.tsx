@@ -1,4 +1,4 @@
-import { Moon, Sun } from 'react-feather';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../ThemeProvider';
 import { HeaderButton } from './HeaderButton';
 

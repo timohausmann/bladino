@@ -1,6 +1,6 @@
 import * as Accordion from '@radix-ui/react-accordion';
+import { ChevronDown } from 'lucide-react';
 import { ReactNode } from 'react';
-import { ChevronDown } from 'react-feather';
 import { twMerge } from 'tailwind-merge';
 
 interface AccordionTriggerProps {

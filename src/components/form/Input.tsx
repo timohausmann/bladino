@@ -1,7 +1,7 @@
 
+import { Eye, EyeOff } from "lucide-react";
 import { nanoid } from 'nanoid';
 import { ReactNode, useState } from 'react';
-import { Eye, EyeOff } from "react-feather";
 
 interface InputProps {
     value: string;

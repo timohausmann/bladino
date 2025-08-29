@@ -1,6 +1,6 @@
 import { getLinkPreviewData } from "@/utils/linkPreviewData";
+import { ExternalLink } from "lucide-react";
 import { useMemo } from "react";
-import { ExternalLink } from "react-feather";
 
 interface LinkPreviewProps {
     url: string;

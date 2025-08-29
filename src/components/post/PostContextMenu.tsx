@@ -2,8 +2,8 @@ import { useUserStore } from '@/stores/userStore';
 import { Post, PostComment } from '@/types';
 import { isPostComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
+import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'react-feather';
 import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '../ui/popover';
 
 interface PostContextMenuProps {

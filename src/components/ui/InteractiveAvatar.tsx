@@ -1,8 +1,8 @@
 import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
+import { LogOut, Settings, User } from 'lucide-react';
 import { useState } from 'react';
-import { LogOut, Settings, User } from 'react-feather';
 import { Avatar } from './Avatar';
 import { ContextMenuDivider, ContextMenuLink, PopoverContent } from './popover';
 

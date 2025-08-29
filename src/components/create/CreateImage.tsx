@@ -1,4 +1,4 @@
-import { Camera } from 'react-feather';
+import { Camera } from 'lucide-react';
 
 /**
  * CreateImage component - handles image input for posts

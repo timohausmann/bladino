@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft } from 'react-feather';
+import { ArrowLeft } from 'lucide-react';
 
 /**
  * Back component - provides navigation back to home page

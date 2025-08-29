@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { Icon } from 'react-feather';
+import { LucideIcon } from 'lucide-react';
 
 interface ContextMenuLinkProps {
     id: string;
     to: string;
     label: string;
-    icon?: Icon;
+    icon?: LucideIcon;
     variant?: 'default' | 'destructive';
     disabled?: boolean;
     onClick?: () => void;

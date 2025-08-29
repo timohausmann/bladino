@@ -1,6 +1,6 @@
 import clsx from 'clsx';
+import { Image, Link, Type, X } from 'lucide-react';
 import { useState } from 'react';
-import { Image, Link, Type, X } from 'react-feather';
 import { Button } from '../form';
 import { Card } from '../ui/Card';
 import { HeaderButton } from '../ui/HeaderButton';

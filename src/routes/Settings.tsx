@@ -10,8 +10,8 @@ import { Back } from '@/components/ui/Back';
 import { useUserStore } from '@/stores/userStore';
 import * as Select from '@radix-ui/react-select';
 import { Link } from '@tanstack/react-router';
+import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-import { ChevronDown } from 'react-feather';
 
 /**
  * Settings page with accordion-based settings groups

@@ -1,8 +1,8 @@
 import { getUserById } from '@/mocks';
 import { Post, PostComment as PostCommentType } from '@/types';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
+import { MessageCircle } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { MessageCircle } from 'react-feather';
 import { Card } from '../ui/Card';
 import { EmojiReaction } from '../ui/EmojiReaction';
 import { FilePreview } from '../ui/FilePreview';

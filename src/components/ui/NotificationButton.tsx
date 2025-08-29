@@ -1,7 +1,7 @@
 import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
+import { Bell } from 'lucide-react';
 import { useState } from 'react';
-import { Bell } from 'react-feather';
 import { HeaderButton } from './HeaderButton';
 import { PopoverContent } from './popover';
 

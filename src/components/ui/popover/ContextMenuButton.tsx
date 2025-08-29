@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { Icon } from 'react-feather';
+import { LucideIcon } from 'lucide-react';
 
 interface ContextMenuButtonProps {
     id: string;
     label: string;
-    icon?: Icon;
+    icon?: LucideIcon;
     variant?: 'default' | 'destructive';
     disabled?: boolean;
     onClick: () => void;

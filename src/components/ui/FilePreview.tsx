@@ -1,5 +1,5 @@
 import { PostFile } from "@/types";
-import { File as FileIcon, FileText, Music, Video } from "react-feather";
+import { File as FileIcon, FileText, Music, Video } from "lucide-react";
 
 interface FilePreviewProps {
     files: PostFile[];

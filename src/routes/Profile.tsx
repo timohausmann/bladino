@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { getPostsByUserId } from '@/mocks/posts';
 import { getUserByHandle } from '@/mocks/users';
 import { useParams } from '@tanstack/react-router';
-import { Calendar, UserPlus } from 'react-feather';
+import { Calendar, UserPlus } from 'lucide-react';
 
 /**
  * Profile - User profile page component
