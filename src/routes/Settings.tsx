@@ -17,8 +17,8 @@ import { ChevronDown } from 'react-feather';
  * Settings page with accordion-based settings groups
  */
 export function Settings() {
-    // Get current user from Zustand store
-    const { currentUser } = useUserStore();
+    // Get current user from Zustand store using selective store
+    const currentUser = useUserStore(store => store.currentUser);
 
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');

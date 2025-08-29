@@ -15,7 +15,7 @@ interface InteractiveAvatarProps {
  */
 export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
     const [open, setOpen] = useState(false);
-    const { currentUser } = useUserStore();
+    const currentUser = useUserStore(store => store.currentUser);
 
     const handleMenuClose = () => {
         setOpen(false);

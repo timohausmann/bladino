@@ -1,0 +1,23 @@
+---
+description: Zustand State Management Rules
+globs: "src/**/*.{tsx,ts}"
+alwaysApply: false
+---
+
+- For app-wide states, we use Zustand for React
+- The Zustand stores are defined at `/src/stores`
+- Always use selective stores, that only return the needed data.
+- Always use the same variable names as in the stores
+
+For example:
+Good:
+
+```
+const currentUser = useUserStore(store => store.currentUser);
+```
+
+Bad:
+
+```
+const { currentUser } = useUserStore();
+```

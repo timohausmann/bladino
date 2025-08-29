@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/userStore';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
@@ -6,6 +7,7 @@ import { useEffect } from 'react';
  */
 export function Logout() {
     const navigate = useNavigate();
+    const clearCurrentUser = useUserStore(store => store.clearCurrentUser);
 
     useEffect(() => {
         // TODO: Implement actual logout logic here
@@ -14,11 +16,13 @@ export function Logout() {
         // - Call logout API endpoint
         // - Clear any cached data
 
+        // Clear current user from store
+        clearCurrentUser();
         console.log('User logged out');
 
         // Redirect to login page after logout
         navigate({ to: '/login' });
-    }, [navigate]);
+    }, [navigate, clearCurrentUser]);
 
     return (
         <div className="min-h-screen flex items-center justify-center">

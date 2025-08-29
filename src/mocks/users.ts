@@ -109,3 +109,10 @@ export function getUserById(id: string): User | undefined {
 export function getUserByHandle(handle: string): User | undefined {
   return mockUsers.find((user) => user.handle === handle);
 }
+
+/**
+ * Helper function to get user by email
+ */
+export function getUserByEmail(email: string): User | undefined {
+  return mockUsers.find((user) => user.email === email);
+}

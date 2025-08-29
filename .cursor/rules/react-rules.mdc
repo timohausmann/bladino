@@ -45,13 +45,20 @@ Follow these rules when you write code:
 - Use descriptive variable and function/const names. Also, event functions should be named with a “handle” prefix, like “handleClick” for onClick and “handleKeyDown” for onKeyDown.
 - Implement accessibility features on elements. For example, a tag should have a tabindex=“0”, aria-label, and similar attributes.
 - Use consts instead of functions, for example, “const toggle = () =>”. Also, define a type if possible.
-- Be sparse with comments, the code should be self explainatory.
-- Never add comments to explain a refactor, use the chat for that.
 - Never use `any` type
 - Always use named exports for app code, never default exports
 - Components should be margin-less. Never use margins on a top level element of a component. The parents should always handle the margins.
 - Always import the React hooks themselves, never React (e.g. useState, don't use React.useState).
 - Always use clsx for conditional CSS classes.
 - Always use Links for navigation, not buttons with click handlers. It's more accessible!
-- For components and function arguments, always use a interface, even if we only have one prop!
-- When the tailwind classes get too many (around 8), break them up in logical groups (an array) using clsx. Don't comment the groups, just do it.
+- For components and function arguments, always use a interface instead of inline types, even if we only have one prop!
+- When the tailwind classes get too many (>7), break them up in logical groups (an array) using clsx. Don't comment the groups.
+
+### Comments Philosophy
+
+- **Code should be self-documenting** - prefer descriptive names over comments
+- **Only comment when the 'why' is not obvious from the 'what'**
+- **Comments should explain business logic, not code mechanics**
+- **Never add comments to explain a refactor, use the chat for that**
+- **Avoid obvious comments like "// Set the value" or "// Loop through items"**
+- **Good comment examples: "// Skip validation for admin users" or "// Rate limiting: max 5 requests per minute"**

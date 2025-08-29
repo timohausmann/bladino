@@ -16,8 +16,7 @@ interface UserState {
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
-  // Initial state
-  currentUser: dummyUser, // Start with dummy user for development
+  currentUser: dummyUser,
 
   // Actions
   setCurrentUser: (user: User) => set({ currentUser: user }),

@@ -16,7 +16,7 @@ interface PostContextMenuProps {
 export function PostContextMenu({ post }: PostContextMenuProps) {
 
     const [open, setOpen] = useState(false);
-    const { currentUser } = useUserStore();
+    const currentUser = useUserStore(store => store.currentUser);
     const isOwner = currentUser?.id === post.userId;
 
     const isComment = isPostComment(post);

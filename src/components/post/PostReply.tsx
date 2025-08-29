@@ -19,7 +19,7 @@ export function PostReply({
     maxLength = 280,
 }: PostReplyProps) {
     const [content, setContent] = useState('');
-    const { currentUser } = useUserStore();
+    const currentUser = useUserStore(store => store.currentUser);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
