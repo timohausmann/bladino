@@ -1,8 +1,7 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
-interface HeaderButtonProps {
-    onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+interface HeaderButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon: ReactNode;
     label: string;
     title?: string;
@@ -16,19 +15,20 @@ interface HeaderButtonProps {
  * Supports two variants:
  * - default: Transparent background with hover effects
  * - persistent: Always has background with enhanced hover effects
+ * 
+ * Extends all native button props for compatibility with Radix components
  */
 export function HeaderButton({
-    onClick,
     icon,
     label,
-    title,
     className = '',
     active = false,
-    variant = 'default'
+    variant = 'default',
+    ...buttonProps
 }: HeaderButtonProps) {
     return (
         <button
-            onClick={onClick}
+            {...buttonProps}
             className={clsx(
                 // Base styles
                 'border-none cursor-pointer flex items-center justify-center text-foreground w-10 h-10 rounded-full p-0 transition-colors',
@@ -47,7 +47,6 @@ export function HeaderButton({
                 className
             )}
             aria-label={label}
-            title={title || label}
         >
             {icon}
         </button>
