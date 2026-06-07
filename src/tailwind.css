@@ -23,6 +23,17 @@
   --color-foreground: theme(colors.neutral.50);
   --color-muted: theme(colors.neutral.800);
   --color-muted-foreground: theme(colors.neutral.400);
+  --color-card: rgb(34 34 34 / 100%);
+  --color-card-foreground: theme(colors.neutral.100);
+  --color-card-border: rgb(255 255 255 / 5%);
+}
+
+/* Dark Transparent theme */
+.dark-transparent {
+  --color-background: theme(colors.neutral.900);
+  --color-foreground: theme(colors.neutral.50);
+  --color-muted: theme(colors.neutral.800);
+  --color-muted-foreground: theme(colors.neutral.400);
   --color-card: rgb(255 255 255 / 7.5%);
   --color-card-foreground: theme(colors.neutral.100);
   --color-card-border: rgb(255 255 255 / 10%);

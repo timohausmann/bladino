@@ -51,7 +51,7 @@ export function LinkPreview({
             aria-label={`Visit ${previewData.title || "website"}`}
             tabIndex={0}
         >
-            <div className="flex flex-col overflow-hidden rounded-lg bg-black/5 dark:bg-black/10 transition-all duration-200 hover:bg-black/10 dark:hover:bg-black/20 sm:flex-row">
+            <div className="flex flex-col overflow-hidden rounded-lg bg-black/5 dark:bg-black/20 transition-all duration-200 hover:bg-black/10 dark:hover:bg-black/30 sm:flex-row">
                 {/* Image - Full width on mobile, fixed width on sm+ */}
                 {previewData.image && (
                     <div className="bg-black/10 h-40 w-full flex-shrink-0 overflow-hidden sm:w-1/3 sm:max-w-[240px]">
