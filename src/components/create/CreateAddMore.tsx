@@ -40,12 +40,14 @@ export function CreateAddMore() {
                         label="Add poll"
                         icon={BarChart3}
                         onClick={() => handleSelect('poll')}
+                        disabled
                     />
                     <ContextMenuButton
                         id="add-event"
                         label="Add event"
                         icon={Calendar}
                         onClick={() => handleSelect('event')}
+                        disabled
                     />
                 </PopoverContent>
             </Popover.Portal>

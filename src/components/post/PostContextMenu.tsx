@@ -67,6 +67,7 @@ export function PostContextMenu({ post }: PostContextMenuProps) {
                     label="Report"
                     icon={Flag}
                     onClick={handleReport}
+                    disabled
                 />
                 <ContextMenuButton
                     id="copy-link"
