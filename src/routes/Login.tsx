@@ -1,43 +1,68 @@
-import { getUserByEmail } from '@/mocks/users';
-import { useUserStore } from '@/stores/userStore';
+import { Button } from '@/components/form/Button';
+import { Input } from '@/components/form/Input';
+import { Banner } from '@/components/ui/Banner';
+import { Card } from '@/components/ui/Card';
+import { LoginDocument, useGraphQLMutation } from '@/graphql';
+import { consumeFlashMessage } from '@/lib/flashMessage';
+import { setAuthToken } from '@/stores/authStore';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import { Button } from '../components/form/Button';
-import { Input } from '../components/form/Input';
-import { Card } from '../components/ui/Card';
+import { useEffect, useState } from 'react';
+
+function getLoginErrorMessage(err: Error): string {
+    if (err.message.includes('fetch')) {
+        return 'Could not reach the server.';
+    }
+    return 'Login failed. Please check your credentials.';
+}
+
+type LoginBanner = {
+    message: string;
+    variant: 'positive' | 'negative';
+};
 
 /**
  * Login page - displays a login form with email and password fields
  */
 export function Login() {
     const navigate = useNavigate();
-    const setCurrentUser = useUserStore(store => store.setCurrentUser);
 
     const [formData, setFormData] = useState({
-        email: '',
+        name: '',
         password: ''
     });
-    const [isLoading, setIsLoading] = useState(false);
+    const [banner, setBanner] = useState<LoginBanner | null>(null);
 
-    // Handle form submission
-    const handleSubmit = async (e: React.FormEvent) => {
+    useEffect(() => {
+        if (consumeFlashMessage() === 'loggedOut') {
+            setBanner({
+                message: 'Logout successful, come back soon!',
+                variant: 'positive',
+            });
+        }
+    }, []);
+
+    const loginMutation = useGraphQLMutation(LoginDocument, {
+        onSuccess: (data) => {
+            // TODO. change grapgql return type to String!
+            setAuthToken(data.login!);
+            navigate({ to: '/' });
+        },
+        onError: (err) => {
+            console.error('Login request failed:', err);
+            setBanner({
+                message: getLoginErrorMessage(err),
+                variant: 'negative',
+            });
+        },
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-
-        setTimeout(() => {
-            console.log('Login attempt:', formData);
-
-            const user = getUserByEmail(formData.email);
-            if (user) {
-                setCurrentUser(user);
-                console.log('Login successful:', user.name);
-                navigate({ to: '/' });
-            } else {
-                console.log('Login failed: User not found');
-            }
-
-            setIsLoading(false);
-        }, 1000);
+        setBanner(null);
+        loginMutation.mutate({
+            name: formData.name,
+            password: formData.password,
+        });
     };
 
     // Handle input changes
@@ -50,16 +75,20 @@ export function Login() {
 
     return (
         <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-xl">
-                <Card className="flex flex-col gap-6">
+            <div className="w-full max-w-lg">
+                <Card className="flex flex-col gap-6 p-8">
                     <h1 className="text-2xl font-bold text-foreground text-center">Sign in</h1>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    {banner && (
+                        <Banner message={banner.message} variant={banner.variant} />
+                    )}
+
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                         <Input
                             type="text"
-                            value={formData.email}
-                            onChange={(value) => handleInputChange('email', value)}
-                            placeholder="Email or username"
+                            value={formData.name}
+                            onChange={(value) => handleInputChange('name', value)}
+                            placeholder="Username"
                             required
                         />
 
@@ -69,14 +98,15 @@ export function Login() {
                             onChange={(value) => handleInputChange('password', value)}
                             placeholder="Password"
                             required
+                            showPasswordToggle
                         />
 
                         <div className="flex justify-between items-baseline">
                             <div>
                                 <Button
                                     type="submit"
-                                    loading={isLoading}
-                                    disabled={!formData.email || !formData.password}
+                                    loading={loginMutation.isPending}
+                                    disabled={!formData.name || !formData.password}
                                     className="w-full mt-2"
                                 >
                                     Sign In

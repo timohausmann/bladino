@@ -2,7 +2,18 @@ import { getAuthToken } from "@/stores/authStore";
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { GraphQLClient } from "graphql-request";
 
-const endpoint = import.meta.env.VITE_GRAPHQL_URL ?? "/graphql";
+function resolveGraphQLEndpoint(): string {
+  const configured = import.meta.env.VITE_GRAPHQL_URL ?? "/graphql";
+
+  // graphql-request v7 uses `new URL(url)` internally — relative paths throw without a base.
+  if (/^https?:\/\//.test(configured)) {
+    return configured;
+  }
+
+  return new URL(configured, window.location.origin).href;
+}
+
+const endpoint = resolveGraphQLEndpoint();
 
 export const graphqlClient = new GraphQLClient(endpoint, {
   credentials: "include",

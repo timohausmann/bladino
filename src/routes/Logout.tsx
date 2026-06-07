@@ -1,3 +1,5 @@
+import { setFlashMessage } from '@/lib/flashMessage';
+import { clearAuthToken } from '@/stores/authStore';
 import { useUserStore } from '@/stores/userStore';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
@@ -10,17 +12,12 @@ export function Logout() {
     const clearCurrentUser = useUserStore(store => store.clearCurrentUser);
 
     useEffect(() => {
-        // TODO: Implement actual logout logic here
-        // - Clear authentication tokens
-        // - Clear user data from storage
-        // - Call logout API endpoint
-        // - Clear any cached data
-
-        // Clear current user from store
+        clearAuthToken();
         clearCurrentUser();
         console.log('User logged out');
 
         // Redirect to login page after logout
+        setFlashMessage('loggedOut');
         navigate({ to: '/login' });
     }, [navigate, clearCurrentUser]);
 
