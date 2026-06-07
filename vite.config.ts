@@ -13,6 +13,14 @@ export default defineConfig({
     tailwindcss(),
     analyze && visualizer(),
   ].filter(Boolean) as PluginOption[],
+  server: {
+    proxy: {
+      "/graphql": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

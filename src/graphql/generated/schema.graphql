@@ -1,0 +1,425 @@
+""""""
+type Channel {
+  """"""
+  comments: [Comment]
+
+  """"""
+  dateCreated: Date!
+
+  """"""
+  id: ID!
+
+  """"""
+  lastView: Date
+
+  """"""
+  name: String!
+
+  """"""
+  unreadCount: Int
+}
+
+""""""
+type Comment implements Post {
+  """"""
+  body: String!
+
+  """"""
+  channel: ID!
+
+  """"""
+  children: [Comment]
+
+  """"""
+  dateCreated: Date
+
+  """"""
+  dateEdited: Date
+
+  """"""
+  files: [File]
+
+  """"""
+  id: ID!
+
+  """"""
+  parent: ID
+
+  """"""
+  user: User!
+
+  """"""
+  voteNum: Int
+
+  """"""
+  votes: [Vote]
+
+  """"""
+  weblinks: [Weblink]
+}
+
+""""""
+type CommentFeed {
+  """"""
+  comments: [Comment]!
+
+  """"""
+  cursor: Date!
+}
+
+""""""
+input CommentFilter {
+  """"""
+  channel: ID
+
+  """"""
+  mediaOnly: Boolean
+
+  """"""
+  parent: ID
+}
+
+""""""
+scalar Date
+
+""""""
+type File implements Post {
+  """"""
+  channel: ID
+
+  """"""
+  dateCreated: Date
+
+  """"""
+  dateEdited: Date
+
+  """"""
+  filename: String
+
+  """"""
+  id: ID!
+
+  """"""
+  name: String
+
+  """"""
+  parent: ID
+
+  """"""
+  size: Int
+
+  """"""
+  type: String
+
+  """"""
+  user: User!
+}
+
+""""""
+type Mail {
+  """"""
+  bcc: [String]
+
+  """"""
+  body: String
+
+  """"""
+  cc: [String]
+
+  """"""
+  dateReceived: Date
+
+  """"""
+  dateSent: Date
+
+  """"""
+  folder: String
+
+  """"""
+  from: String
+
+  """"""
+  id: ID!
+
+  """"""
+  subject: String
+
+  """"""
+  to: [String]
+
+  """"""
+  unread: Boolean
+
+  """"""
+  user: User!
+}
+
+""""""
+type Mutation {
+  """"""
+  addChannel(name: String!): Channel!
+
+  """"""
+  addComment(body: String!, channel: ID!, file: ID, parent: ID): Comment!
+
+  """"""
+  addNote(body: String!): Note!
+
+  """"""
+  addUser(name: String!, password: String): User!
+
+  """"""
+  addWeblink(url: String!): Weblink!
+
+  """"""
+  deleteAllMail: Boolean
+
+  """"""
+  deleteChannel(id: ID!): Boolean
+
+  """"""
+  deleteComment(id: ID!): Boolean
+
+  """"""
+  deleteFile(id: ID!): Boolean
+
+  """"""
+  deleteMail(id: ID!): Boolean
+
+  """"""
+  deleteNote(id: ID!): Boolean
+
+  """"""
+  deleteUser(id: ID!): Boolean
+
+  """"""
+  deleteWeblink(id: ID!): Boolean
+
+  """"""
+  login(name: String!, password: String!): String
+
+  """"""
+  loginMagic(token: String!): String
+
+  """"""
+  loginOld(name: String!, password: String!): String
+
+  """"""
+  migrateUser(birthday: Date, email: String, id: ID!, name: String!, password: String!, phone: String, token: String!): Boolean
+
+  """"""
+  readMail(id: ID!): Boolean
+
+  """"""
+  requestMagic(handle: String!): Boolean
+
+  """"""
+  sendEmail(bcc: [String], body: String!, cc: [String], subject: String!, to: [String]!): Boolean
+
+  """"""
+  toggleVote(post: ID!): Int!
+
+  """"""
+  updateChannel(id: ID!, name: String!): Channel!
+
+  """"""
+  updateChannelView(id: ID!): Boolean
+
+  """"""
+  updateComment(body: String!, id: ID!): Comment!
+
+  """"""
+  updateNote(body: String!, id: ID!): Note!
+
+  """"""
+  updatePassword(id: ID!, newpass: String!, oldpass: String!): Boolean
+
+  """"""
+  updateUser(avatar: String, birthday: Date, dateCreated: Date, description: String, email: String, id: ID!, oldid: Int, oldpass: String, phone: String): User!
+
+  """"""
+  updateWeblink(id: ID!, url: String!): Weblink!
+}
+
+""""""
+type Note implements Post {
+  """"""
+  body: String!
+
+  """"""
+  dateCreated: Date
+
+  """"""
+  dateEdited: Date
+
+  """"""
+  id: ID!
+
+  """"""
+  user: User!
+
+  """"""
+  voteNum: Int
+
+  """"""
+  votes: [Vote]
+}
+
+""""""
+interface Post {
+  """"""
+  dateCreated: Date
+
+  """"""
+  dateEdited: Date
+
+  """"""
+  id: ID!
+
+  """"""
+  user: User!
+}
+
+""""""
+type Query {
+  """"""
+  channel(id: ID!): Channel!
+
+  """"""
+  channels: [Channel!]!
+
+  """"""
+  channelsUnread: [Channel!]!
+
+  """"""
+  comment(id: ID!): Comment!
+
+  """"""
+  commentFeed(cursor: Date, filter: CommentFilter!): CommentFeed
+
+  """"""
+  comments(parent: ID!): [Comment!]!
+
+  """"""
+  mail(id: ID!): Mail
+
+  """"""
+  mails(folder: String): [Mail]!
+
+  """"""
+  note(id: ID!): Note!
+
+  """"""
+  notes: [Note!]!
+
+  """"""
+  user(id: ID!): User!
+
+  """"""
+  users: [User!]!
+
+  """"""
+  usersLastAction: [User]
+
+  """"""
+  votes(post: ID!): [Vote!]!
+
+  """"""
+  weblinks: [Weblink!]!
+}
+
+""""""
+type User {
+  """"""
+  avatar: String
+
+  """"""
+  birthday: Date
+
+  """"""
+  dateCreated: Date
+
+  """"""
+  description: String
+
+  """"""
+  email: String
+
+  """"""
+  id: ID!
+
+  """"""
+  lastAction: Date
+
+  """"""
+  mailboxes: [String]
+
+  """"""
+  name: String!
+
+  """"""
+  oldid: Int
+
+  """"""
+  oldpass: String
+
+  """"""
+  password: String
+
+  """"""
+  phone: String
+}
+
+""""""
+type Vote {
+  """"""
+  dateCreated: Date
+
+  """"""
+  id: ID!
+
+  """"""
+  post: Post
+
+  """"""
+  upvote: Int!
+
+  """"""
+  user: User
+}
+
+""""""
+type Weblink {
+  """"""
+  alias: [String]
+
+  """"""
+  dateCreated: Date!
+
+  """"""
+  descr: String
+
+  """"""
+  flags: [String]
+
+  """"""
+  icon: String
+
+  """"""
+  id: ID!
+
+  """"""
+  image: String
+
+  """"""
+  ogtype: String
+
+  """"""
+  title: String
+
+  """"""
+  type: String
+
+  """"""
+  url: String!
+}
