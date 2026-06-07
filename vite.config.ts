@@ -1,12 +1,18 @@
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig, type PluginOption } from "vite";
 import visualizer from "vite-bundle-analyzer";
 
-// https://vitejs.dev/config/
+const analyze = process.env.ANALYZE === "true";
+
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), visualizer()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    analyze && visualizer(),
+  ].filter(Boolean) as PluginOption[],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
