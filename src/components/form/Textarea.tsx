@@ -36,7 +36,7 @@ export function Textarea({
                     className="block text-sm font-medium text-foreground mb-2"
                 >
                     {label}
-                    {required && <span className="text-red-500 ml-1">*</span>}
+                    {required && <span className="text-rose-500 ml-1">*</span>}
                 </label>
             )}
             <textarea

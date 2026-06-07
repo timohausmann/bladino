@@ -26,7 +26,7 @@ export function ContextMenuLink({
     const itemClasses = clsx(
         baseClasses,
         disabled && "text-neutral-400 dark:text-neutral-600 cursor-not-allowed",
-        !disabled && variant === 'destructive' && "text-red-600 dark:text-red-400 hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300",
+        !disabled && variant === 'destructive' && "text-rose-600 dark:text-rose-400 hover:bg-rose-900/20 hover:text-rose-700 dark:hover:text-rose-300",
         !disabled && variant === 'default' && "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
     );
 

@@ -50,7 +50,7 @@ alwaysApply: false
   - Namespace format: `--category-name` (e.g., `--color-blue-500`, `--font-sans`)
   - Access in CSS: `var(--color-blue-500)`
   - Available namespaces:
-    - `--color-*` : Color utilities like `bg-red-500` and `text-sky-300`
+    - `--color-*` : Color utilities like `bg-rose-500` and `text-sky-300`
     - `--font-*` : Font family utilities like `font-sans`
     - `--text-*` : Font size utilities like `text-xl`
     - `--font-weight-*` : Font weight utilities like `font-bold`
@@ -191,7 +191,7 @@ alwaysApply: false
   @import "tailwindcss" prefix(tw);
   ```
 
-  - Results in classes like `tw:flex`, `tw:bg-red-500`, `tw:hover:bg-red-600`
+  - Results in classes like `tw:flex`, `tw:bg-rose-500`, `tw:hover:bg-rose-600`
 
 - **Source detection**:
 
