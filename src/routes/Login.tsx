@@ -43,8 +43,7 @@ export function Login() {
 
     const loginMutation = useGraphQLMutation(LoginDocument, {
         onSuccess: (data) => {
-            // TODO. change grapgql return type to String!
-            setAuthToken(data.login!);
+            setAuthToken(data.login);
             navigate({ to: '/' });
         },
         onError: (err) => {

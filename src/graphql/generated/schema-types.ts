@@ -93,7 +93,7 @@ export type Mutation = {
   deleteNote?: Maybe<Scalars['Boolean']['output']>;
   deleteUser?: Maybe<Scalars['Boolean']['output']>;
   deleteWeblink?: Maybe<Scalars['Boolean']['output']>;
-  login?: Maybe<Scalars['String']['output']>;
+  login: Scalars['String']['output'];
   loginMagic?: Maybe<Scalars['String']['output']>;
   loginOld?: Maybe<Scalars['String']['output']>;
   migrateUser?: Maybe<Scalars['Boolean']['output']>;
