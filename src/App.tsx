@@ -1,9 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Outlet } from '@tanstack/react-router';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Layout } from './components/layout/Layout';
-
-const queryClient = new QueryClient()
+import { queryClient } from './lib/queryClient';
 
 function App() {
     return (

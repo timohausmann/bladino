@@ -301,6 +301,7 @@ export type Query = {
   comment: Comment;
   commentFeed?: Maybe<CommentFeed>;
   comments: Array<Comment>;
+  currentUser: User;
   mail?: Maybe<Mail>;
   mails: Array<Maybe<Mail>>;
   note: Note;

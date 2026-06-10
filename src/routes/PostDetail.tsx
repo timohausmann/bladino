@@ -7,7 +7,7 @@ import { useParams } from '@tanstack/react-router';
  * PostDetail page - displays a single post by ID
  */
 export function PostDetail() {
-    const { id } = useParams({ from: '/post/$id' });
+    const { id } = useParams({ from: '/_authenticated/post/$id' });
 
     // Find the post by ID
     const post = mockPosts.find(p => p.id === id);

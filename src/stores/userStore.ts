@@ -1,27 +1,20 @@
-import { mockUsers } from "@/mocks";
-import { User } from "@/types";
+import type { CurrentUserQuery } from "@/graphql";
 import { create } from "zustand";
 
-// Dummy user data
-const dummyUser: User = mockUsers[0];
+export type CurrentUser = CurrentUserQuery["currentUser"];
 
 interface UserState {
-  // Current user data
-  currentUser: User | null;
-
-  // Actions
-  setCurrentUser: (user: User) => void;
-  updateCurrentUser: (updates: Partial<User>) => void;
+  currentUser: CurrentUser | null;
+  setCurrentUser: (user: CurrentUser) => void;
+  updateCurrentUser: (updates: Partial<CurrentUser>) => void;
   clearCurrentUser: () => void;
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
-  currentUser: dummyUser,
+  currentUser: null,
+  setCurrentUser: (user: CurrentUser) => set({ currentUser: user }),
 
-  // Actions
-  setCurrentUser: (user: User) => set({ currentUser: user }),
-
-  updateCurrentUser: (updates: Partial<User>) => {
+  updateCurrentUser: (updates: Partial<CurrentUser>) => {
     const currentUser = get().currentUser;
     if (currentUser) {
       set({ currentUser: { ...currentUser, ...updates } });

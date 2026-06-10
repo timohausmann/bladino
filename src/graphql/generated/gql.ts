@@ -14,10 +14,10 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}": typeof types.LoginDocument,
+    "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}": typeof types.LoginDocument,
 };
 const documents: Documents = {
-    "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}": types.LoginDocument,
+    "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}": types.LoginDocument,
 };
 
 /**
@@ -37,7 +37,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}"): (typeof documents)["mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}"];
+export function graphql(source: "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}"): (typeof documents)["mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

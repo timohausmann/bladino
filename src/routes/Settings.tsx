@@ -112,7 +112,7 @@ export function Settings() {
                                         <div className="space-y-3">
                                             <Input
                                                 label="Handle"
-                                                value={currentUser ? `@${currentUser.handle}` : '@username'}
+                                                value={currentUser ? `@${currentUser.name}` : '@username'}
                                                 onChange={() => { }}
                                                 placeholder="Enter new handle"
                                                 disabled
@@ -137,7 +137,7 @@ export function Settings() {
                                     Profile information is edited on your profile page.
                                     <Link
                                         to="/u/$handle"
-                                        params={{ handle: currentUser?.handle ?? '' }}
+                                        params={{ handle: currentUser?.name ?? '' }}
                                         className="text-cyan-600 dark:text-cyan-400 hover:underline ml-1"
                                     >
                                         Go to Profile →

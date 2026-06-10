@@ -1,6 +1,6 @@
+import { clearSession } from '@/lib/auth';
 import { setFlashMessage } from '@/lib/flashMessage';
-import { clearAuthToken } from '@/stores/authStore';
-import { useUserStore } from '@/stores/userStore';
+import { queryClient } from '@/lib/queryClient';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
@@ -9,17 +9,12 @@ import { useEffect } from 'react';
  */
 export function Logout() {
     const navigate = useNavigate();
-    const clearCurrentUser = useUserStore(store => store.clearCurrentUser);
 
     useEffect(() => {
-        clearAuthToken();
-        clearCurrentUser();
-        console.log('User logged out');
-
-        // Redirect to login page after logout
+        clearSession(queryClient);
         setFlashMessage('loggedOut');
         navigate({ to: '/login' });
-    }, [navigate, clearCurrentUser]);
+    }, [navigate]);
 
     return (
         <div className="min-h-screen flex items-center justify-center">

@@ -196,7 +196,7 @@ type Mutation {
   deleteWeblink(id: ID!): Boolean
 
   """"""
-  login(name: String!, password: String!): String
+  login(name: String!, password: String!): String!
 
   """"""
   loginMagic(token: String!): String
@@ -299,6 +299,9 @@ type Query {
 
   """"""
   comments(parent: ID!): [Comment!]!
+
+  """"""
+  currentUser: User!
 
   """"""
   mail(id: ID!): Mail

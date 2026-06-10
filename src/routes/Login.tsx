@@ -3,9 +3,11 @@ import { Input } from '@/components/form/Input';
 import { Banner } from '@/components/ui/Banner';
 import { Card } from '@/components/ui/Card';
 import { LoginDocument, useGraphQLMutation } from '@/graphql';
+import { ensureSession, resolveRedirectTarget } from '@/lib/auth';
 import { consumeFlashMessage } from '@/lib/flashMessage';
+import { queryClient } from '@/lib/queryClient';
 import { setAuthToken } from '@/stores/authStore';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
 function getLoginErrorMessage(err: Error): string {
@@ -25,6 +27,7 @@ type LoginBanner = {
  */
 export function Login() {
     const navigate = useNavigate();
+    const { returnTo } = useSearch({ from: '/login' });
 
     const [formData, setFormData] = useState({
         name: '',
@@ -42,9 +45,10 @@ export function Login() {
     }, []);
 
     const loginMutation = useGraphQLMutation(LoginDocument, {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             setAuthToken(data.login);
-            navigate({ to: '/' });
+            await ensureSession(queryClient);
+            navigate({ to: resolveRedirectTarget(returnTo), replace: true });
         },
         onError: (err) => {
             console.error('Login request failed:', err);

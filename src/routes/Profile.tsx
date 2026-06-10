@@ -12,7 +12,7 @@ import { Calendar, UserPlus } from 'lucide-react';
  * Profile - User profile page component
  */
 export function Profile() {
-    const { handle } = useParams({ from: '/u/$handle' });
+    const { handle } = useParams({ from: '/_authenticated/u/$handle' });
 
     // Get user data by handle
     const user = getUserByHandle(handle);

@@ -1,3 +1,14 @@
 mutation Login($name: String!, $password: String!) {
   login(name: $name, password: $password)
 }
+
+query CurrentUser {
+  currentUser {
+    id
+    name
+    avatar
+    email
+    description
+    dateCreated
+  }
+}
