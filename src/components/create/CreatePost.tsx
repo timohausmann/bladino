@@ -1,4 +1,5 @@
 import { PostFile } from '@/types';
+import { fileToPostFile, revokeBlobUrl } from '@/utils/postFileUtils';
 import clsx from 'clsx';
 import { useRef, useState } from 'react';
 import { Button, Textarea } from '../form';
@@ -10,15 +11,6 @@ import { CreateAddMore } from './CreateAddMore';
 /**
  * CreatePost component
  */
-function fileToPostFile(file: File): PostFile {
-    return {
-        id: crypto.randomUUID(),
-        url: URL.createObjectURL(file),
-        filename: file.name,
-        type: file.type,
-        size: file.size,
-    };
-}
 
 export function CreatePost() {
     const [content, setContent] = useState('');
@@ -50,9 +42,7 @@ export function CreatePost() {
     const handleRemoveFile = (fileId: string) => {
         setFiles(prev => {
             const removed = prev.find(f => f.id === fileId);
-            if (removed?.url.startsWith('blob:')) {
-                URL.revokeObjectURL(removed.url);
-            }
+            if (removed) revokeBlobUrl(removed.url);
             return prev.filter(f => f.id !== fileId);
         });
     };

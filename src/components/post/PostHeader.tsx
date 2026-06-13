@@ -7,9 +7,10 @@ import { PostContextMenu } from './PostContextMenu';
 
 interface PostHeaderProps {
     post: Post;
+    onEdit?: () => void;
 }
 
-export function PostHeader({ post }: PostHeaderProps) {
+export function PostHeader({ post, onEdit }: PostHeaderProps) {
 
     // Get user data from the post
     const user = getUserById(post.userId);
@@ -74,7 +75,7 @@ export function PostHeader({ post }: PostHeaderProps) {
                             {post.timestamp}
                         </Link>
 
-                        <PostContextMenu post={post} />
+                        <PostContextMenu post={post} onEdit={onEdit} />
                     </div>
                 </div>
             </div>

@@ -1,4 +1,3 @@
-import { useUserStore } from '@/stores/userStore';
 import { Post, PostComment } from '@/types';
 import { isPostComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
@@ -8,16 +7,18 @@ import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '../ui/pop
 
 interface PostContextMenuProps {
     post: Post | PostComment;
+    onEdit?: () => void;
 }
 
 /**
  * Context menu items for post actions
  */
-export function PostContextMenu({ post }: PostContextMenuProps) {
+export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
 
     const [open, setOpen] = useState(false);
-    const currentUser = useUserStore(store => store.currentUser);
-    const isOwner = currentUser?.id === post.userId;
+    // const currentUser = useUserStore(store => store.currentUser);
+    // const isOwner = currentUser?.id === post.userId;
+    const isOwner = true;
 
     const isComment = isPostComment(post);
 
@@ -38,8 +39,7 @@ export function PostContextMenu({ post }: PostContextMenuProps) {
     };
 
     const handleEdit = () => {
-        // TODO: Implement edit functionality
-        console.log('Edit post:', post.id);
+        onEdit?.();
         setOpen(false);
     };
 

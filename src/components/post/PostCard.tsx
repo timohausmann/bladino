@@ -1,12 +1,13 @@
 import { getUserById } from '@/mocks';
-import { Post, PostComment as PostCommentType } from '@/types';
+import { Post, PostComment as PostCommentType, PostFile } from '@/types';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { MessageCircle } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Card } from '../ui/Card';
 import { EmojiReaction } from '../ui/EmojiReaction';
 import { FilePreview } from '../ui/FilePreview';
 import { LinkPreview } from '../ui/LinkPreview';
+import { EditPostForm } from './EditPostForm';
 import { PostActionButton } from './PostActionButton';
 import { PostComment } from './PostComment';
 import { PostHeader } from './PostHeader';
@@ -31,8 +32,18 @@ export function PostCard({
     }
 
     const { handle } = user;
-    const { id: postId, content, reactions = {}, comments = [] } = post;
+    const { id: postId, reactions = {}, comments = [] } = post;
     const [showComments, setShowComments] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [content, setContent] = useState(post.content);
+    const [files, setFiles] = useState<PostFile[]>(post.files ?? []);
+
+    useEffect(() => {
+        if (!isEditing) {
+            setContent(post.content);
+            setFiles(post.files ?? []);
+        }
+    }, [post, isEditing]);
 
     // Parse content for links
     const parsedContent = useMemo(() => parseTextWithLinks(content), [content]);
@@ -61,21 +72,39 @@ export function PostCard({
         // Don't hide comments when canceling reply
     };
 
+    const handleEditSave = (newContent: string, newFiles: PostFile[]) => {
+        setContent(newContent);
+        setFiles(newFiles);
+        setIsEditing(false);
+        console.log('Edit post:', postId, { content: newContent, files: newFiles });
+    };
+
     return (
         <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${postId}`}>
             <div className="flex flex-col gap-4">
                 {/* User info and timestamp */}
-                <PostHeader post={post} />
+                <PostHeader post={post} onEdit={() => setIsEditing(true)} />
 
-                <div className="text-[17px]">
-                    <p>{parsedContent}</p>
-                </div>
+                {isEditing ? (
+                    <EditPostForm
+                        initialContent={content}
+                        initialFiles={files}
+                        onSave={handleEditSave}
+                        onCancel={() => setIsEditing(false)}
+                    />
+                ) : (
+                    <>
+                        <div className="text-[17px]">
+                            <p>{parsedContent}</p>
+                        </div>
 
-                {/* Link Preview (if there's a URL in the content) */}
-                {firstUrl && <LinkPreview url={firstUrl} />}
+                        {/* Link Preview (if there's a URL in the content) */}
+                        {firstUrl && <LinkPreview url={firstUrl} />}
 
-                {/* File Preview (if there are files) */}
-                {post.files && post.files.length > 0 && <FilePreview files={post.files} />}
+                        {/* File Preview (if there are files) */}
+                        {files.length > 0 && <FilePreview files={files} />}
+                    </>
+                )}
 
                 {/* Divider */}
                 <div className="h-px bg-gray-200 dark:bg-white/14"></div>
