@@ -66,7 +66,7 @@ export function CreatePost() {
             'transition-all duration-300 ease-in-out overflow-hidden',
             'opacity-100'
         )}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                 {/* Main text input */}
                 <Textarea
                     value={content}

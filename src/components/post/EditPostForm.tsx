@@ -80,7 +80,7 @@ export function EditPostForm({
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <Textarea
                 value={content}
                 onChange={setContent}
