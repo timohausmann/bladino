@@ -1,21 +1,60 @@
+import { PostFile } from '@/types';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Textarea } from '../form';
 import { Card } from '../ui/Card';
+import { FilePreview } from '../ui/FilePreview';
 import { CreateAddEmoji } from './CreateAddEmoji';
 import { CreateAddMore } from './CreateAddMore';
 
 /**
  * CreatePost component
  */
+function fileToPostFile(file: File): PostFile {
+    return {
+        id: crypto.randomUUID(),
+        url: URL.createObjectURL(file),
+        filename: file.name,
+        type: file.type,
+        size: file.size,
+    };
+}
+
 export function CreatePost() {
     const [content, setContent] = useState('');
+    const [files, setFiles] = useState<PostFile[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Creating post:', { content });
+        console.log('Creating post:', { content, files });
         // TODO: Implement post creation logic
         setContent(''); // Clear content after submission
+    };
+
+    const handleAddFilesClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = e.target.files;
+        if (!selectedFiles?.length) return;
+
+        const newFiles = Array.from(selectedFiles).map(fileToPostFile);
+        setFiles(prev => [...prev, ...newFiles]);
+
+        // Reset so the same file can be selected again
+        e.target.value = '';
+    };
+
+    const handleRemoveFile = (fileId: string) => {
+        setFiles(prev => {
+            const removed = prev.find(f => f.id === fileId);
+            if (removed?.url.startsWith('blob:')) {
+                URL.revokeObjectURL(removed.url);
+            }
+            return prev.filter(f => f.id !== fileId);
+        });
     };
 
     const handleEmojiSelect = (emoji: string) => {
@@ -29,7 +68,7 @@ export function CreatePost() {
     };
 
     // Check if post can be published (has text or other content)
-    const canPublish = content.trim().length > 0;
+    const canPublish = content.trim().length > 0 || files.length > 0;
 
     return (
         <Card className={clsx(
@@ -47,10 +86,25 @@ export function CreatePost() {
                     className="min-h-[82px]"
                 />
 
+                {files.length > 0 && (
+                    <FilePreview files={files} onRemove={handleRemoveFile} />
+                )}
+
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    aria-hidden
+                    tabIndex={-1}
+                />
+
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <CreateAddEmoji onEmojiSelect={handleEmojiSelect} />
-                        <CreateAddMore />
+                        <CreateAddMore onAddFiles={handleAddFilesClick} />
                     </div>
 
                     <Button

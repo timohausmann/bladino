@@ -4,11 +4,20 @@ import { useState } from "react";
 import { HeaderButton } from "../ui/HeaderButton";
 import { ContextMenuButton, PopoverContent } from "../ui/popover";
 
-export function CreateAddMore() {
+interface CreateAddMoreProps {
+    onAddFiles?: () => void;
+}
+
+export function CreateAddMore({ onAddFiles }: CreateAddMoreProps) {
 
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSelect = (type: string) => {
+        if (type === 'files') {
+            onAddFiles?.();
+            setIsOpen(false);
+            return;
+        }
         console.log('Adding content type:', type);
     };
 
