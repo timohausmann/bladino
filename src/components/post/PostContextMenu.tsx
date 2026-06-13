@@ -3,6 +3,7 @@ import { isPostComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
 import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { ConfirmDialog } from '../ui/alert-dialog';
 import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '../ui/popover';
 
 interface PostContextMenuProps {
@@ -16,6 +17,7 @@ interface PostContextMenuProps {
 export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
 
     const [open, setOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     // const currentUser = useUserStore(store => store.currentUser);
     // const isOwner = currentUser?.id === post.userId;
     const isOwner = true;
@@ -43,13 +45,23 @@ export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
         setOpen(false);
     };
 
-    const handleDelete = () => {
-        // TODO: Implement delete functionality
-        console.log('Delete post:', post.id);
+    const handleDeleteClick = () => {
         setOpen(false);
+        setDeleteOpen(true);
     };
 
+    const handleDeleteConfirm = () => {
+        console.log('Delete post:', post.id);
+        setDeleteOpen(false);
+    };
+
+    const deleteTitle = isComment ? 'Delete comment?' : 'Delete post?';
+    const deleteDescription = isComment
+        ? 'This comment will be permanently removed. This action cannot be undone.'
+        : 'This post will be permanently removed. This action cannot be undone.';
+
     return (
+        <>
         <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
                 <button
@@ -88,7 +100,7 @@ export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
                             id="delete"
                             label={isComment ? "Delete Comment" : "Delete Post"}
                             icon={Trash2}
-                            onClick={handleDelete}
+                            onClick={handleDeleteClick}
                             variant="destructive"
                         />
                     </>
@@ -96,5 +108,17 @@ export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
 
             </PopoverContent>
         </Popover.Root>
+
+        <ConfirmDialog
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            title={deleteTitle}
+            description={deleteDescription}
+            confirmLabel="Delete"
+            cancelLabel="Cancel"
+            onConfirm={handleDeleteConfirm}
+            destructive
+        />
+        </>
     );
 }

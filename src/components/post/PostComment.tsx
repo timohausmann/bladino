@@ -7,7 +7,7 @@ import { EditPostForm } from './EditPostForm';
 import { PostContextMenu } from './PostContextMenu';
 
 interface PostCommentProps {
-    comment: PostCommentType; // Pass the comment object using PostComment type
+    comment: PostCommentType;
 }
 
 /**
