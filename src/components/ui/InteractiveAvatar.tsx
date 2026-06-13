@@ -3,8 +3,8 @@ import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
 import { LogOut, Settings, User } from 'lucide-react';
 import { useState } from 'react';
-import { Avatar } from './Avatar';
-import { ContextMenuDivider, ContextMenuLink, PopoverContent } from './popover';
+import { Avatar } from '@/components/ui/Avatar';
+import { ContextMenuDivider, ContextMenuLink, PopoverContent } from '@/components/ui/popover';
 
 interface InteractiveAvatarProps {
     className?: string;

@@ -3,15 +3,15 @@ import { Post, PostComment as PostCommentType, PostFile } from '@/types';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { MessageCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Card } from '../ui/Card';
-import { EmojiReaction } from '../ui/EmojiReaction';
-import { FilePreview } from '../ui/FilePreview';
-import { LinkPreview } from '../ui/LinkPreview';
-import { EditPostForm } from './EditPostForm';
-import { PostActionButton } from './PostActionButton';
-import { PostComment } from './PostComment';
-import { PostHeader } from './PostHeader';
-import { PostReply } from './PostReply';
+import { Card } from '@/components/ui/Card';
+import { EmojiReaction } from '@/components/ui/EmojiReaction';
+import { FilePreview } from '@/components/ui/FilePreview';
+import { LinkPreview } from '@/components/ui/LinkPreview';
+import { EditPostForm } from '@/components/post/EditPostForm';
+import { PostActionButton } from '@/components/post/PostActionButton';
+import { PostComment } from '@/components/post/PostComment';
+import { PostHeader } from '@/components/post/PostHeader';
+import { PostReply } from '@/components/post/PostReply';
 
 interface PostCardProps {
     post: Post; // Pass the entire post object

@@ -1,8 +1,8 @@
 import * as Popover from '@radix-ui/react-popover';
 import { BarChart3, Calendar, Camera, Link, Plus } from "lucide-react";
 import { useState } from "react";
-import { HeaderButton } from "../ui/HeaderButton";
-import { ContextMenuButton, PopoverContent } from "../ui/popover";
+import { HeaderButton } from '@/components/ui/HeaderButton';
+import { ContextMenuButton, PopoverContent } from '@/components/ui/popover';
 
 interface CreateAddMoreProps {
     onAddFiles?: () => void;

@@ -1,5 +1,5 @@
 
-import { Textarea } from '../form';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface CreateTextProps {
     content: string;

@@ -3,8 +3,8 @@ import { isPostComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
 import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { ConfirmDialog } from '../ui/alert-dialog';
-import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '../ui/popover';
+import { ConfirmDialog } from '@/components/ui/alert-dialog';
+import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '@/components/ui/popover';
 
 interface PostContextMenuProps {
     post: Post | PostComment;

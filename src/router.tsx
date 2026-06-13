@@ -19,6 +19,7 @@ import {
   Profile,
   Settings,
 } from "./routes";
+import { ButtonLab } from "./routes/ButtonLab";
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -104,6 +105,21 @@ const logoutRoute = createRoute({
   component: Logout,
 });
 
+const buttonLabRoute = import.meta.env.DEV
+  ? createRoute({
+      getParentRoute: () => rootRoute,
+      path: "/lab/button",
+      component: ButtonLab,
+    })
+  : null;
+
+const publicRoutes = [
+  loginRoute,
+  forgotPasswordRoute,
+  logoutRoute,
+  ...(buttonLabRoute ? [buttonLabRoute] : []),
+];
+
 const routeTree = rootRoute.addChildren([
   authenticatedRoute.addChildren([
     homeRoute,
@@ -111,9 +127,7 @@ const routeTree = rootRoute.addChildren([
     profileRoute,
     settingsRoute,
   ]),
-  loginRoute,
-  forgotPasswordRoute,
-  logoutRoute,
+  ...publicRoutes,
 ]);
 
 export const router = createRouter({

@@ -2,8 +2,8 @@ import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
 import { Bell } from 'lucide-react';
 import { useState } from 'react';
-import { HeaderButton } from './HeaderButton';
-import { PopoverContent } from './popover';
+import { HeaderButton } from '@/components/ui/HeaderButton';
+import { PopoverContent } from '@/components/ui/popover';
 
 interface Notification {
     id: string;

@@ -1,8 +1,8 @@
 import * as Popover from '@radix-ui/react-popover';
 import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
-import { EmojiPicker } from '../ui/EmojiPicker';
-import { HeaderButton } from '../ui/HeaderButton';
+import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import { HeaderButton } from '@/components/ui/HeaderButton';
 
 interface CreateAddEmojiProps {
     onEmojiSelect: (emoji: string) => void;

@@ -1,4 +1,4 @@
-import { Button } from '@/components/form/Button';
+import { Button } from '@/components/ui/button';
 import { PostCard } from '@/components/post/PostCard';
 import { Avatar } from '@/components/ui/Avatar';
 import { Back } from '@/components/ui/Back';
@@ -76,9 +76,9 @@ export function Profile() {
                         {/* Follow Button */}
                         <Button
                             type="button"
-                            className="flex items-center gap-2"
+                            variant="primary"
+                            iconBefore={<UserPlus size={16} />}
                         >
-                            <UserPlus size={16} />
                             Follow
                         </Button>
                     </div>

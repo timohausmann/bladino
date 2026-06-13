@@ -2,8 +2,8 @@ import { getUserById } from '@/mocks';
 import { Post } from '@/types';
 import { Link } from '@tanstack/react-router';
 import clsx from "clsx";
-import { Avatar } from "../ui/Avatar";
-import { PostContextMenu } from './PostContextMenu';
+import { Avatar } from '@/components/ui/Avatar';
+import { PostContextMenu } from '@/components/post/PostContextMenu';
 
 interface PostHeaderProps {
     post: Post;

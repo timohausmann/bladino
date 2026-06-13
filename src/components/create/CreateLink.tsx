@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Input, Textarea } from '../form';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface CreateLinkProps {
     content: string;

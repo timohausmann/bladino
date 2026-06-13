@@ -1,10 +1,11 @@
 import { PostFile } from '@/types';
 import { fileToPostFile, revokeBlobUrl } from '@/utils/postFileUtils';
 import { useRef, useState } from 'react';
-import { Button, Textarea } from '../form';
-import { FilePreview } from '../ui/FilePreview';
-import { CreateAddEmoji } from '../create/CreateAddEmoji';
-import { CreateAddMore } from '../create/CreateAddMore';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/Textarea';
+import { FilePreview } from '@/components/ui/FilePreview';
+import { CreateAddEmoji } from '@/components/create/CreateAddEmoji';
+import { CreateAddMore } from '@/components/create/CreateAddMore';
 
 interface EditPostFormProps {
     initialContent: string;
@@ -113,10 +114,10 @@ export function EditPostForm({
                 </div>
 
                 <div className="flex gap-2">
-                    <Button type="button" onClick={handleCancel} className="bg-transparent text-foreground hover:bg-black/10 dark:hover:bg-white/10">
+                    <Button type="button" onClick={handleCancel} variant="secondary" appearance="outline">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={!canSave}>
+                    <Button type="submit" disabled={!canSave} variant="primary">
                         {saveLabel}
                     </Button>
                 </div>

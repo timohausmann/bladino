@@ -1,8 +1,8 @@
 import dinoAsset from '@/assets/dino-1.svg';
 import { Link } from '@tanstack/react-router';
-import { InteractiveAvatar } from '../ui/InteractiveAvatar';
-import { NotificationButton } from '../ui/NotificationButton';
-import { ThemeToggle } from '../ui/ThemeToggle';
+import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
+import { NotificationButton } from '@/components/ui/NotificationButton';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 /**
  * Header component with bladino logo and theme toggle

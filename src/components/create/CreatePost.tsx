@@ -2,11 +2,12 @@ import { PostFile } from '@/types';
 import { fileToPostFile, revokeBlobUrl } from '@/utils/postFileUtils';
 import clsx from 'clsx';
 import { useRef, useState } from 'react';
-import { Button, Textarea } from '../form';
-import { Card } from '../ui/Card';
-import { FilePreview } from '../ui/FilePreview';
-import { CreateAddEmoji } from './CreateAddEmoji';
-import { CreateAddMore } from './CreateAddMore';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/Textarea';
+import { Card } from '@/components/ui/Card';
+import { FilePreview } from '@/components/ui/FilePreview';
+import { CreateAddEmoji } from '@/components/create/CreateAddEmoji';
+import { CreateAddMore } from '@/components/create/CreateAddMore';
 
 /**
  * CreatePost component
@@ -100,6 +101,7 @@ export function CreatePost() {
                     <Button
                         disabled={!canPublish}
                         type="submit"
+                        variant="primary"
                     >
                         Publish
                     </Button>

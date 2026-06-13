@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Button } from '../components/form/Button';
-import { Input } from '../components/form/Input';
-import { Card } from '../components/ui/Card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/Input';
+import { Card } from '@/components/ui/Card';
 
 /**
  * Forgot Password page - displays a form with just the email field for password reset
@@ -42,16 +42,6 @@ export function ForgotPassword() {
                             required
                         />
                         <div className="flex justify-between items-baseline">
-                            <div>
-                                <Button
-                                    type="submit"
-                                    loading={isLoading}
-                                    disabled={!email}
-                                    className="w-full mt-2"
-                                >
-                                    Send Reset Link
-                                </Button>
-                            </div>
                             <div className="text-center">
                                 <a
                                     href="/login"
@@ -61,6 +51,17 @@ export function ForgotPassword() {
                                 >
                                     Back to login
                                 </a>
+                            </div>
+                            <div>
+                                <Button
+                                    type="submit"
+                                    variant="primary"
+                                    loading={isLoading}
+                                    disabled={!email}
+                                    className="w-full mt-2"
+                                >
+                                    Send Reset Link
+                                </Button>
                             </div>
                         </div>
                     </form>

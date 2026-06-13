@@ -1,5 +1,5 @@
-import { Button } from '@/components/form/Button';
-import { Input } from '@/components/form/Input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/Input';
 import {
     AccordionContent,
     AccordionItem,
@@ -72,7 +72,7 @@ export function Settings() {
                                                 required
                                                 hint="We'll send a confirmation email to verify your new address."
                                             />
-                                            <Button onClick={handleEmailChange}>
+                                            <Button variant="primary" onClick={handleEmailChange}>
                                                 Update Email
                                             </Button>
                                         </div>
@@ -96,7 +96,7 @@ export function Settings() {
                                                 required
                                                 hint="Password must be at least 8 characters long."
                                             />
-                                            <Button onClick={handlePasswordChange}>
+                                            <Button variant="primary" onClick={handlePasswordChange}>
                                                 Update Password
                                             </Button>
                                         </div>

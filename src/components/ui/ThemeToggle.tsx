@@ -1,6 +1,6 @@
 import { Moon, Sun } from 'lucide-react';
-import { useTheme } from '../ThemeProvider';
-import { HeaderButton } from './HeaderButton';
+import { useTheme } from '@/components/ThemeProvider';
+import { HeaderButton } from '@/components/ui/HeaderButton';
 
 /**
  * ThemeToggle - A button that toggles between light and dark theme

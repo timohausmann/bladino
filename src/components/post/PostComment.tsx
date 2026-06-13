@@ -3,8 +3,8 @@ import { getUserById } from '@/mocks';
 import { PostComment as PostCommentType } from '@/types';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { EditPostForm } from './EditPostForm';
-import { PostContextMenu } from './PostContextMenu';
+import { EditPostForm } from '@/components/post/EditPostForm';
+import { PostContextMenu } from '@/components/post/PostContextMenu';
 
 interface PostCommentProps {
     comment: PostCommentType;

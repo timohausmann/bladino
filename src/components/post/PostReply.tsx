@@ -1,7 +1,8 @@
 import { Avatar } from '@/components/ui/Avatar';
 import { useUserStore } from '@/stores/userStore';
 import { useState } from 'react';
-import { Button, Textarea } from '../form';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface PostReplyProps {
     onSubmit: (content: string) => void;
@@ -60,6 +61,7 @@ export function PostReply({
                     <Button
                         disabled={content.trim().length === 0}
                         type="submit"
+                        variant="primary"
                     >
                         Reply
                     </Button>

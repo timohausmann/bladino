@@ -1,5 +1,5 @@
-import { Button } from '@/components/form/Button';
-import { Input } from '@/components/form/Input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/Input';
 import { Banner } from '@/components/ui/Banner';
 import { Card } from '@/components/ui/Card';
 import { LoginDocument, useGraphQLMutation } from '@/graphql';
@@ -105,16 +105,6 @@ export function Login() {
                         />
 
                         <div className="flex justify-between items-baseline">
-                            <div>
-                                <Button
-                                    type="submit"
-                                    loading={loginMutation.isPending}
-                                    disabled={!formData.name || !formData.password}
-                                    className="w-full mt-2"
-                                >
-                                    Sign In
-                                </Button>
-                            </div>
                             <a
                                 href="/forgot-password"
                                 className="text-muted-foreground hover:text-foreground transition-colors duration-200 underline decoration-transparent hover:decoration-current"
@@ -123,6 +113,17 @@ export function Login() {
                             >
                                 Forgot password?
                             </a>
+                            <div>
+                                <Button
+                                    type="submit"
+                                    variant="primary"
+                                    loading={loginMutation.isPending}
+                                    disabled={!formData.name || !formData.password}
+                                    className="w-full mt-2"
+                                >
+                                    Sign In
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </Card>
