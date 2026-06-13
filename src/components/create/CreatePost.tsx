@@ -73,7 +73,7 @@ export function CreatePost() {
     return (
         <Card className={clsx(
             'transition-all duration-300 ease-in-out overflow-hidden',
-            'max-h-[400px] opacity-100'
+            'opacity-100'
         )}>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 {/* Main text input */}
@@ -83,7 +83,7 @@ export function CreatePost() {
                     placeholder="What's happening?"
                     rows={2}
                     resize="resize-y"
-                    className="min-h-[82px]"
+                    className="min-h-[82px] max-h-[400px]"
                 />
 
                 {files.length > 0 && (
