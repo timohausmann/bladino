@@ -5,6 +5,7 @@ import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/ui/alert-dialog';
 import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '@/components/ui/popover';
+import { toast } from '@/components/ui/toast';
 
 interface PostContextMenuProps {
     post: Post | PostComment;
@@ -31,12 +32,12 @@ export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
     };
 
     const handleCopyLink = () => {
-        // TODO: Implement copy link functionality
         if (isComment) {
             navigator.clipboard.writeText(`${window.location.origin}/post/${post.parentPostId}/comment/${post.id}`);
         } else {
             navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
         }
+        toast('Link copied!');
         setOpen(false);
     };
 
