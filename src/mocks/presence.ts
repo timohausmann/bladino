@@ -8,11 +8,11 @@ interface PresenceMeta {
 }
 
 const presenceByUserId: Record<string, PresenceMeta> = {
-    'user-2': { lastSeen: 'gerade eben', recency: 'fresh', isCurrentUser: true },
-    'user-1': { lastSeen: 'vor 4 h', recency: 'recent' },
-    'user-3': { lastSeen: 'vor 6 h', recency: 'recent' },
-    'user-6': { lastSeen: 'vor 3 W', recency: 'older' },
-    'user-9': { lastSeen: 'vor 2 M.', recency: 'stale' },
+    'user-2': { lastSeen: 'just now', recency: 'fresh', isCurrentUser: true },
+    'user-1': { lastSeen: '4h ago', recency: 'recent' },
+    'user-3': { lastSeen: '6h ago', recency: 'recent' },
+    'user-6': { lastSeen: '3w ago', recency: 'older' },
+    'user-9': { lastSeen: '2mo ago', recency: 'stale' },
 };
 
 const presenceUserIds = Object.keys(presenceByUserId);

@@ -83,6 +83,25 @@
   }
 }
 
+/* Collapsible animations using Radix CSS custom properties */
+@keyframes radixCollapsibleSlideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes radixCollapsibleSlideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
 /* Button animations */
 @keyframes button-shimmer {
   0% {
