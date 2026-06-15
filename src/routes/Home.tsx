@@ -1,6 +1,7 @@
 import { CreatePost } from '@/components/create';
-import { PostCard } from '@/components/post/PostCard';
-import { mockPosts } from '@/mocks';
+import { PostCard } from '@/components/post';
+import { PresenceRail } from '@/components/presence';
+import { mockPosts, mockPresenceEntries } from '@/mocks';
 
 /**
  * Home page component displaying create post form and sample posts
@@ -10,6 +11,8 @@ export function Home() {
         <div className="flex-1 py-8">
             <div className="container max-w-3xl mx-auto px-4 flex flex-col gap-8">
                 <CreatePost />
+
+                <PresenceRail entries={mockPresenceEntries} />
 
                 <div className="flex flex-col gap-6">
                     {mockPosts.map((post) => (
@@ -22,4 +25,4 @@ export function Home() {
             </div>
         </div>
     );
-} 
+}
