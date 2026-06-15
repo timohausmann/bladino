@@ -41,7 +41,7 @@ export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
                     )}
                     aria-label="Open profile menu"
                 >
-                    <Avatar src={currentUser.avatar ?? ''} alt={currentUser.name} className={className} />
+                    <Avatar src={`/avatare/${currentUser.avatar}`} alt={currentUser.name} className={className} />
                 </button>
             </Popover.Trigger>
 
