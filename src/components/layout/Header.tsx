@@ -1,13 +1,25 @@
-import dinoAsset from '@/assets/dino-1.svg';
 import { Link } from '@tanstack/react-router';
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
 import { NotificationButton } from '@/components/ui/NotificationButton';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { useState } from 'react';
+
+
+    const titles = [
+            'trashnet',
+            'dashnet',
+            'nashcat',
+            'freshnet',
+            'da trashnizzle',
+        ]
 
 /**
  * Header component with bladino logo and theme toggle
  */
 export function Header() {
+
+    const [titleIndex] = useState(Math.floor(Math.random() * titles.length));
+    const title = titles[titleIndex];
 
     return (
         <>
@@ -21,11 +33,11 @@ export function Header() {
                             flex items-center gap-3"
                         >
                             <img
-                                src={dinoAsset}
-                                alt="Dinosaur"
-                                className="w-7 h-7"
+                                src="/logo-dashnet.svg"
+                                alt="Dashnet"
+                                className="w-8 h-8"
                             />
-                            bladino
+                            {title}
                         </Link>
 
                         <div className="min-w-1/6 flex items-center justify-end gap-4">
