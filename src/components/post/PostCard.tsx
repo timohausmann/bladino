@@ -1,5 +1,4 @@
-import { getUserById } from '@/mocks';
-import { Post, PostComment as PostCommentType, PostFile } from '@/types';
+import type { Comment, File as ApiFile } from '@/graphql';
 import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { MessageCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,82 +11,67 @@ import { PostActionButton } from '@/components/post/PostActionButton';
 import { PostComment } from '@/components/post/PostComment';
 import { PostHeader } from '@/components/post/PostHeader';
 import { PostReply } from '@/components/post/PostReply';
+import type { LocalDraftFile } from '@/utils/postFileUtils';
 
 interface PostCardProps {
-    post: Post; // Pass the entire post object
+    comment: Comment;
+}
+
+function getCommentFiles(comment: Comment): ApiFile[] {
+    return (comment.files ?? []).filter((file): file is ApiFile => file != null);
+}
+
+function getCommentChildren(comment: Comment): Comment[] {
+    return (comment.children ?? []).filter((child): child is Comment => child != null);
 }
 
 /**
  * PostCard - A card that displays a post with user info and interactions
  */
-export function PostCard({
-    post,
-}: PostCardProps) {
-    // Extract user data from the post
-    const user = getUserById(post.userId);
-
-    if (!user) {
-        console.error(`User not found for post ${post.id}`);
-        return null;
-    }
-
-    const { handle } = user;
-    const { id: postId, reactions = {}, comments = [] } = post;
+export function PostCard({ comment }: PostCardProps) {
+    const { user, id: commentId } = comment;
+    const children = getCommentChildren(comment);
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [content, setContent] = useState(post.content);
-    const [files, setFiles] = useState<PostFile[]>(post.files ?? []);
+    const [body, setBody] = useState(comment.body);
+    const [files, setFiles] = useState<ApiFile[]>(() => getCommentFiles(comment));
 
     useEffect(() => {
         if (!isEditing) {
-            setContent(post.content);
-            setFiles(post.files ?? []);
+            setBody(comment.body);
+            setFiles(getCommentFiles(comment));
         }
-    }, [post, isEditing]);
+    }, [comment, isEditing]);
 
-    // Parse content for links
-    const parsedContent = useMemo(() => parseTextWithLinks(content), [content]);
+    const parsedContent = useMemo(() => parseTextWithLinks(body), [body]);
+    const firstUrl = useMemo(() => extractFirstUrl(body), [body]);
 
-    // Extract the first URL for link preview
-    const firstUrl = useMemo(() => extractFirstUrl(content), [content]);
-
-    // Initialize reactions
-    const initialReactions = useMemo(() => {
-        return reactions;
-    }, [reactions]);
-
-    // Handle emoji reaction - in a real app, this would update the post's reactions
     const handleReaction = (emoji: string) => {
         console.log(`Reacted with: ${emoji}`);
     };
 
-    // Handle reply submission
     const handleReplySubmit = (replyContent: string) => {
         console.log('Reply submitted:', replyContent);
-        // In a real app, this would add the reply to the post
     };
 
-    // Handle reply cancellation
     const handleReplyCancel = () => {
         // Don't hide comments when canceling reply
     };
 
-    const handleEditSave = (newContent: string, newFiles: PostFile[]) => {
-        setContent(newContent);
-        setFiles(newFiles);
+    const handleEditSave = (newContent: string, newFiles: LocalDraftFile[]) => {
+        setBody(newContent);
         setIsEditing(false);
-        console.log('Edit post:', postId, { content: newContent, files: newFiles });
+        console.log('Edit post:', commentId, { body: newContent, files: newFiles });
     };
 
     return (
-        <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${postId}`}>
+        <Card className="flex flex-col gap-6" viewTransitionName={`POST_DETAIL-${commentId}`}>
             <div className="flex flex-col gap-4">
-                {/* User info and timestamp */}
-                <PostHeader post={post} onEdit={() => setIsEditing(true)} />
+                <PostHeader comment={comment} onEdit={() => setIsEditing(true)} />
 
                 {isEditing ? (
                     <EditPostForm
-                        initialContent={content}
+                        initialContent={body}
                         initialFiles={files}
                         onSave={handleEditSave}
                         onCancel={() => setIsEditing(false)}
@@ -98,50 +82,43 @@ export function PostCard({
                             <p>{parsedContent}</p>
                         </div>
 
-                        {/* Link Preview (if there's a URL in the content) */}
                         {firstUrl && <LinkPreview url={firstUrl} />}
 
-                        {/* File Preview (if there are files) */}
                         {files.length > 0 && <FilePreview files={files} />}
                     </>
                 )}
 
-                {/* Divider */}
                 <div className="h-px bg-gray-200 dark:bg-white/14"></div>
 
-                {/* Interaction buttons */}
                 <div className="flex justify-between items-center">
-                    <EmojiReaction reactions={initialReactions} onReaction={handleReaction} />
+                    <EmojiReaction reactions={{}} onReaction={handleReaction} />
                     <PostActionButton
                         icon={<MessageCircle size={18} />}
-                        count={comments?.length || 0}
+                        count={children.length}
                         label="Comments"
                         onClick={() => setShowComments(!showComments)}
                     />
                 </div>
             </div>
 
-            {/* Comments section */}
             {showComments && (
                 <div className="flex flex-col gap-4">
-                    {/* Reply form */}
                     <PostReply
                         onSubmit={handleReplySubmit}
                         onCancel={handleReplyCancel}
-                        placeholder={`Reply to @${handle}...`}
+                        placeholder={`Reply to ${user.name}...`}
                     />
 
-                    {/* Comments list */}
-                    {comments && comments.length > 0 && (
+                    {children.length > 0 && (
                         <div className="space-y-2">
                             <h4 className="text-sm font-medium text-foreground mb-3">
-                                Comments ({comments.length})
+                                Comments ({children.length})
                             </h4>
                             <div className="space-y-0">
-                                {comments.map((comment: PostCommentType, index: number) => (
+                                {children.map((child, index) => (
                                     <PostComment
-                                        key={`${comment.id}-${index}`}
-                                        comment={comment}
+                                        key={`${child.id}-${index}`}
+                                        comment={child}
                                     />
                                 ))}
                             </div>
@@ -151,4 +128,4 @@ export function PostCard({
             )}
         </Card>
     );
-} 
+}

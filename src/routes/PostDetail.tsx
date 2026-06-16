@@ -1,6 +1,6 @@
 import { PostCard } from '@/components/post/PostCard';
 import { Back } from '@/components/ui/Back';
-import { mockPosts } from '@/mocks';
+import { getCommentById } from '@/mocks';
 import { useParams } from '@tanstack/react-router';
 
 /**
@@ -8,11 +8,9 @@ import { useParams } from '@tanstack/react-router';
  */
 export function PostDetail() {
     const { id } = useParams({ from: '/_authenticated/post/$id' });
+    const comment = getCommentById(id);
 
-    // Find the post by ID
-    const post = mockPosts.find(p => p.id === id);
-
-    if (!post) {
+    if (!comment) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
@@ -30,9 +28,7 @@ export function PostDetail() {
         <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-3xl px-4 space-y-4">
                 <Back />
-                <PostCard
-                    post={post}
-                />
+                <PostCard comment={comment} />
             </div>
         </div>
     );

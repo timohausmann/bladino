@@ -26,8 +26,7 @@ function toPresenceEntry(userId: string): PresenceEntry | null {
     return {
         id: `presence-${user.id}`,
         name: user.name,
-        handle: user.handle,
-        avatar: user.avatar,
+        avatar: user.avatar ?? '',
         lastSeen: meta.lastSeen,
         recency: meta.recency,
         isCurrentUser: meta.isCurrentUser,

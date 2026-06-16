@@ -1,5 +1,5 @@
-import { Post, PostComment } from '@/types';
-import { isPostComment } from '@/utils/typePredicates';
+import type { Comment } from '@/graphql';
+import { isReplyComment } from '@/utils/typePredicates';
 import * as Popover from '@radix-ui/react-popover';
 import { Edit, Flag, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -8,34 +8,33 @@ import { ContextMenuButton, ContextMenuDivider, PopoverContent } from '@/compone
 import { toast } from '@/components/ui/toast';
 
 interface PostContextMenuProps {
-    post: Post | PostComment;
+    comment: Comment;
     onEdit?: () => void;
 }
 
 /**
  * Context menu items for post actions
  */
-export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
-
+export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
     const [open, setOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     // const currentUser = useUserStore(store => store.currentUser);
     // const isOwner = currentUser?.id === post.userId;
     const isOwner = true;
-
-    const isComment = isPostComment(post);
+    const isComment = isReplyComment(comment);
 
     const handleReport = () => {
-        // TODO: Implement report functionality
-        console.log('Report post:', post.id);
+        console.log('Report post:', comment.id);
         setOpen(false);
     };
 
     const handleCopyLink = () => {
-        if (isComment) {
-            navigator.clipboard.writeText(`${window.location.origin}/post/${post.parentPostId}/comment/${post.id}`);
+        if (isComment && comment.parent) {
+            navigator.clipboard.writeText(
+                `${window.location.origin}/post/${comment.parent}/comment/${comment.id}`,
+            );
         } else {
-            navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
+            navigator.clipboard.writeText(`${window.location.origin}/post/${comment.id}`);
         }
         toast('Link copied!');
         setOpen(false);
@@ -52,7 +51,7 @@ export function PostContextMenu({ post, onEdit }: PostContextMenuProps) {
     };
 
     const handleDeleteConfirm = () => {
-        console.log('Delete post:', post.id);
+        console.log('Delete post:', comment.id);
         setDeleteOpen(false);
     };
 

@@ -1,5 +1,4 @@
-import { PostFile } from '@/types';
-import { fileToPostFile, revokeBlobUrl } from '@/utils/postFileUtils';
+import { fileToLocalDraft, revokeBlobUrl, type LocalDraftFile } from '@/utils/postFileUtils';
 import clsx from 'clsx';
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,7 @@ import { CreateAddMore } from '@/components/create/CreateAddMore';
 
 export function CreatePost() {
     const [content, setContent] = useState('');
-    const [files, setFiles] = useState<PostFile[]>([]);
+    const [files, setFiles] = useState<LocalDraftFile[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -33,7 +32,7 @@ export function CreatePost() {
         const selectedFiles = e.target.files;
         if (!selectedFiles?.length) return;
 
-        const newFiles = Array.from(selectedFiles).map(fileToPostFile);
+        const newFiles = Array.from(selectedFiles).map(fileToLocalDraft);
         setFiles(prev => [...prev, ...newFiles]);
 
         // Reset so the same file can be selected again

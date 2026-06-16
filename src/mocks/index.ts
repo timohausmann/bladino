@@ -1,3 +1,10 @@
 export { mockPresenceEntries } from "./presence";
-export { mockPosts } from "./posts";
-export { getUserByHandle, getUserById, mockUsers } from "./users";
+export {
+  getCommentById,
+  getCommentsByUserId,
+  getPostById,
+  getPostsByUserId,
+  mockComments,
+  mockPosts,
+} from "./posts";
+export { getUserByEmail, getUserById, getUserByName, mockUsers } from "./users";

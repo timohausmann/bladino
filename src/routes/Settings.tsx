@@ -136,8 +136,8 @@ export function Settings() {
                                 <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                                     Profile information is edited on your profile page.
                                     <Link
-                                        to="/u/$handle"
-                                        params={{ handle: currentUser?.name ?? '' }}
+                                        to="/u/$name"
+                                        params={{ name: currentUser?.name ?? '' }}
                                         className="text-cyan-600 dark:text-cyan-400 hover:underline ml-1"
                                     >
                                         Go to Profile →

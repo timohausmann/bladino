@@ -1,35 +1,29 @@
-import { getUserById } from '@/mocks';
-import { Post } from '@/types';
+import type { Comment } from '@/graphql';
+import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import clsx from "clsx";
 import { Avatar } from '@/components/ui/Avatar';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 
 interface PostHeaderProps {
-    post: Post;
+    comment: Comment;
     onEdit?: () => void;
 }
 
-export function PostHeader({ post, onEdit }: PostHeaderProps) {
-
-    // Get user data from the post
-    const user = getUserById(post.userId);
-    if (!user) {
-        console.error(`User not found for post ${post.id}`);
-        return null;
-    }
-
-    const { avatar, name, handle } = user;
+export function PostHeader({ comment, onEdit }: PostHeaderProps) {
+    const { user } = comment;
+    const handle = 'handle';
+    const showHandle = false;
 
     return (
         <div className="flex items-center gap-3">
             <Link
-                to="/u/$handle"
-                params={{ handle }}
+                to="/u/$name"
+                params={{ name: user.name }}
             >
                 <Avatar
-                    src={avatar}
-                    alt={`${name}'s avatar`}
+                    avatar={user.avatar}
+                    alt={`${user.name}'s avatar`}
                     className="w-12 h-12"
                 />
             </Link>
@@ -37,8 +31,8 @@ export function PostHeader({ post, onEdit }: PostHeaderProps) {
                 <div className="flex justify-between items-baseline gap-2 flex-col sm:flex-row sm:gap-2">
                     <div className="flex gap-2 items-baseline sm:flex-col">
                         <Link
-                            to="/u/$handle"
-                            params={{ handle }}
+                            to="/u/$name"
+                            params={{ name: user.name }}
                             className={clsx([
                                 "font-bold leading-none text-base",
                                 "underline decoration-transparent",
@@ -46,25 +40,27 @@ export function PostHeader({ post, onEdit }: PostHeaderProps) {
                                 "transition-colors duration-200"
                             ])}
                         >
-                            {name}
+                            {user.name}
                         </Link>
-                        <Link
-                            to="/u/$handle"
-                            params={{ handle }}
-                            className={clsx([
-                                "text-muted-foreground leading-none text-sm",
-                                "underline decoration-transparent",
-                                "hover:text-foreground hover:decoration-current",
-                                "transition-colors duration-200"
-                            ])}
-                        >
-                            @{handle}
-                        </Link>
+                        {showHandle && (
+                            <Link
+                                to="/u/$name"
+                                params={{ name: user.name }}
+                                className={clsx([
+                                    "text-muted-foreground leading-none text-sm",
+                                    "underline decoration-transparent",
+                                    "hover:text-foreground hover:decoration-current",
+                                    "transition-colors duration-200"
+                                ])}
+                            >
+                                @{handle}
+                            </Link>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <Link
                             to="/post/$id"
-                            params={{ id: post.id }}
+                            params={{ id: comment.id }}
                             className={clsx([
                                 "text-muted-foreground leading-none text-xs sm:text-sm",
                                 "underline decoration-transparent",
@@ -72,10 +68,10 @@ export function PostHeader({ post, onEdit }: PostHeaderProps) {
                                 "transition-colors duration-200"
                             ])}
                         >
-                            {post.timestamp}
+                            {formatCommentDate(comment.dateCreated)}
                         </Link>
 
-                        <PostContextMenu post={post} onEdit={onEdit} />
+                        <PostContextMenu comment={comment} onEdit={onEdit} />
                     </div>
                 </div>
             </div>

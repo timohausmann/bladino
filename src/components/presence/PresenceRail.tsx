@@ -11,7 +11,6 @@ export type PresenceRecency = 'fresh' | 'recent' | 'older' | 'stale';
 export interface PresenceEntry {
     id: string;
     name: string;
-    handle: string;
     avatar: string;
     lastSeen: string;
     recency?: PresenceRecency;
@@ -34,12 +33,12 @@ const recencyBorderClass: Record<PresenceRecency, string> = {
 };
 
 function PresenceRailItem({ entry }: PresenceRailItemProps) {
-    const { name, handle, avatar, lastSeen, recency = 'recent', isCurrentUser } = entry;
+    const { name, avatar, lastSeen, recency = 'recent', isCurrentUser } = entry;
 
     return (
         <Link
-            to="/u/$handle"
-            params={{ handle }}
+            to="/u/$name"
+            params={{ name }}
             className="flex flex-col items-center shrink-0 w-20 no-underline"
         >
             <div
@@ -51,7 +50,7 @@ function PresenceRailItem({ entry }: PresenceRailItemProps) {
                 ])}
             >
                 <Avatar
-                    src={avatar}
+                    avatar={avatar}
                     alt={`${name}'s avatar`}
                     className="w-12 h-12"
                 />

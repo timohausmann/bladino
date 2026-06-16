@@ -64,7 +64,7 @@ const postRoute = createRoute({
 
 const profileRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/u/$handle",
+  path: "/u/$name",
   component: Profile,
 });
 

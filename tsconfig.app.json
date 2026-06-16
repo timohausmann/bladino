@@ -24,9 +24,7 @@
 
     /* Path mapping */
     "paths": {
-      "@/*": ["./src/*"],
-      "@/types": ["./types"],
-      "@/types/*": ["./types/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]

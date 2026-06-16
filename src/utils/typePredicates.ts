@@ -1,5 +1,5 @@
-import { Post, PostComment } from "@/types";
+import type { Comment } from "@/graphql";
 
-export function isPostComment(post: Post | PostComment): post is PostComment {
-  return "parentPostId" in post;
+export function isReplyComment(comment: Comment): boolean {
+  return comment.parent != null;
 }

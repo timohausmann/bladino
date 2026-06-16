@@ -5,6 +5,7 @@ import { LucideIcon } from 'lucide-react';
 interface ContextMenuLinkProps {
     id: string;
     to: string;
+    params?: Record<string, string>;
     label: string;
     icon?: LucideIcon;
     variant?: 'default' | 'destructive';
@@ -15,6 +16,7 @@ interface ContextMenuLinkProps {
 export function ContextMenuLink({
     id,
     to,
+    params,
     label,
     icon: IconComponent,
     variant = 'default',
@@ -35,6 +37,7 @@ export function ContextMenuLink({
             key={id}
             onClick={onClick}
             to={to}
+            params={params}
             className={itemClasses}
         >
             {IconComponent && <IconComponent size={16} />}

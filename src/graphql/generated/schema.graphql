@@ -25,7 +25,7 @@ type Comment implements Post {
   body: String!
 
   """"""
-  channel: ID!
+  channel: ID
 
   """"""
   children: [Comment]
@@ -160,7 +160,7 @@ type Mutation {
   addChannel(name: String!): Channel!
 
   """"""
-  addComment(body: String!, channel: ID!, file: ID, parent: ID): Comment!
+  addComment(body: String!, channel: ID, file: ID, parent: ID): Comment!
 
   """"""
   addNote(body: String!): Note!

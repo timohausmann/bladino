@@ -1,22 +1,33 @@
+import { resolveAvatarUrl } from "@/utils/avatarUrl";
+
 interface AvatarProps {
-    src: string;
-    alt: string;
-    className?: string;
+  /** Resolved image URL – use for external/mock URLs */
+  src?: string;
+  /** Avatar filename from API – resolved via /avatare/ */
+  avatar?: string | null;
+  alt: string;
+  className?: string;
 }
 
 /**
- * Avatar component - displays a circular avatar image
- * Use Tailwind classes like w-8, w-12, w-16 for sizing
- * Component automatically maintains 1:1 aspect ratio
+ * Avatar component - displays a circular avatar image.
+ * Prefer `avatar` for API filenames; `src` for pre-resolved URLs.
  */
-export function Avatar({ src, alt, className = '' }: AvatarProps) {
+export function Avatar({ src, avatar, alt, className = "" }: AvatarProps) {
+  const resolvedSrc = src ?? resolveAvatarUrl(avatar);
+
+  if (!resolvedSrc) {
     return (
-        <div className={`rounded-full overflow-hidden aspect-square ${className}`}>
-            <img
-                src={src}
-                alt={alt}
-                className="w-full h-full object-cover"
-            />
-        </div>
+      <div
+        className={`rounded-full overflow-hidden aspect-square bg-muted ${className}`}
+        aria-label={alt}
+      />
     );
+  }
+
+  return (
+    <div className={`rounded-full overflow-hidden aspect-square ${className}`}>
+      <img src={resolvedSrc} alt={alt} className="w-full h-full object-cover" />
+    </div>
+  );
 }

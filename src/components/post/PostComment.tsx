@@ -1,89 +1,86 @@
-import { Avatar } from '@/components/ui/Avatar';
-import { getUserById } from '@/mocks';
-import { PostComment as PostCommentType } from '@/types';
+import type { Comment } from '@/graphql';
+import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { Avatar } from '@/components/ui/Avatar';
 import { EditPostForm } from '@/components/post/EditPostForm';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 
 interface PostCommentProps {
-    comment: PostCommentType;
+    comment: Comment;
 }
 
 /**
  * PostComment - Compact comment display component
  */
 export function PostComment({ comment }: PostCommentProps) {
-    // Extract user data from the comment
-    const user = getUserById(comment.userId);
-
-    if (!user) {
-        console.error(`User not found for comment ${comment.id}`);
-        return null;
-    }
-
-    const { avatar, name, handle } = user;
-    const { timestamp } = comment;
+    const { user } = comment;
+    const handle = 'handle';
+    const showHandle = false;
     const [isEditing, setIsEditing] = useState(false);
-    const [content, setContent] = useState(comment.content);
+    const [body, setBody] = useState(comment.body);
 
     useEffect(() => {
         if (!isEditing) {
-            setContent(comment.content);
+            setBody(comment.body);
         }
-    }, [comment.content, isEditing]);
+    }, [comment.body, isEditing]);
 
     const handleEditSave = (newContent: string) => {
-        setContent(newContent);
+        setBody(newContent);
         setIsEditing(false);
-        console.log('Edit comment:', comment.id, { content: newContent });
+        console.log('Edit comment:', comment.id, { body: newContent });
     };
 
     return (
         <div className="flex gap-3 py-3 border-b border-white/10 last:border-b-0">
             <Link
-                to="/u/$handle"
-                params={{ handle }}
-                className="flex-shrink-0 hover:opacity-80 transition-opacity duration-200"
+                to="/u/$name"
+                params={{ name: user.name }}
+                className="shrink-0 hover:opacity-80 transition-opacity duration-200"
             >
                 <Avatar
-                    src={avatar}
-                    alt={`${name}'s avatar`}
+                    avatar={user.avatar}
+                    alt={`${user.name}'s avatar`}
                     className="w-9 h-9"
                 />
             </Link>
             <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 flex-wrap">
                     <Link
-                        to="/u/$handle"
-                        params={{ handle }}
+                        to="/u/$name"
+                        params={{ name: user.name }}
                         className="text-sm font-medium text-foreground hover:underline transition-colors duration-200"
                     >
-                        {name}
+                        {user.name}
                     </Link>
-                    <Link
-                        to="/u/$handle"
-                        params={{ handle }}
-                        className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    >
-                        @{handle}
-                    </Link>
+                    {showHandle && (
+                        <Link
+                            to="/u/$name"
+                            params={{ name: user.name }}
+                            className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
+                        >
+                            @{handle}
+                        </Link>
+                    )}
                     <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-muted-foreground">{timestamp}</span>
+                    <span className="text-xs text-muted-foreground">
+                        {formatCommentDate(comment.dateCreated)}
+                    </span>
                 </div>
                 {isEditing ? (
                     <EditPostForm
-                        initialContent={content}
+                        initialContent={body}
                         onSave={(newContent) => handleEditSave(newContent)}
                         onCancel={() => setIsEditing(false)}
                         allowFiles={false}
                         saveLabel="Save"
                     />
                 ) : (
-                    <p className="text-sm text-foreground leading-relaxed">{content}</p>
+                    <p className="text-sm text-foreground leading-relaxed">{body}</p>
                 )}
             </div>
-            <PostContextMenu post={comment} onEdit={() => setIsEditing(true)} />
+            <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />
         </div>
     );
 }

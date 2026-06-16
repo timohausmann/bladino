@@ -1,0 +1,16 @@
+query CommentFeed($filter: CommentFilter!, $cursor: Date) {
+  commentFeed(filter: $filter, cursor: $cursor) {
+    cursor
+    comments {
+      id
+      body
+      dateCreated
+      dateEdited
+      user {
+        id
+        name
+        avatar
+      }
+    }
+  }
+}

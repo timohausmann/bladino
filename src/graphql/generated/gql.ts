@@ -15,9 +15,11 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 type Documents = {
     "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}": typeof types.LoginDocument,
+    "query CommentFeed($filter: CommentFilter!, $cursor: Date) {\n  commentFeed(filter: $filter, cursor: $cursor) {\n    cursor\n    comments {\n      id\n      body\n      dateCreated\n      dateEdited\n      user {\n        id\n        name\n        avatar\n      }\n    }\n  }\n}": typeof types.CommentFeedDocument,
 };
 const documents: Documents = {
     "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}": types.LoginDocument,
+    "query CommentFeed($filter: CommentFilter!, $cursor: Date) {\n  commentFeed(filter: $filter, cursor: $cursor) {\n    cursor\n    comments {\n      id\n      body\n      dateCreated\n      dateEdited\n      user {\n        id\n        name\n        avatar\n      }\n    }\n  }\n}": types.CommentFeedDocument,
 };
 
 /**
@@ -38,6 +40,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}"): (typeof documents)["mutation Login($name: String!, $password: String!) {\n  login(name: $name, password: $password)\n}\n\nquery CurrentUser {\n  currentUser {\n    id\n    name\n    avatar\n    email\n    description\n    dateCreated\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query CommentFeed($filter: CommentFilter!, $cursor: Date) {\n  commentFeed(filter: $filter, cursor: $cursor) {\n    cursor\n    comments {\n      id\n      body\n      dateCreated\n      dateEdited\n      user {\n        id\n        name\n        avatar\n      }\n    }\n  }\n}"): (typeof documents)["query CommentFeed($filter: CommentFilter!, $cursor: Date) {\n  commentFeed(filter: $filter, cursor: $cursor) {\n    cursor\n    comments {\n      id\n      body\n      dateCreated\n      dateEdited\n      user {\n        id\n        name\n        avatar\n      }\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

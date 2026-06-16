@@ -1,5 +1,5 @@
-import { PostFile } from '@/types';
-import { fileToPostFile, revokeBlobUrl } from '@/utils/postFileUtils';
+import type { File as ApiFile } from '@/graphql';
+import { fileToLocalDraft, revokeBlobUrl, type LocalDraftFile } from '@/utils/postFileUtils';
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/Textarea';
@@ -9,8 +9,8 @@ import { CreateAddMore } from '@/components/create/CreateAddMore';
 
 interface EditPostFormProps {
     initialContent: string;
-    initialFiles?: PostFile[];
-    onSave: (content: string, files: PostFile[]) => void;
+    initialFiles?: Array<ApiFile | LocalDraftFile>;
+    onSave: (content: string, files: LocalDraftFile[]) => void;
     onCancel: () => void;
     /** When false, only text can be edited (e.g. comments) */
     allowFiles?: boolean;
@@ -29,7 +29,7 @@ export function EditPostForm({
     saveLabel = 'Save',
 }: EditPostFormProps) {
     const [content, setContent] = useState(initialContent);
-    const [files, setFiles] = useState<PostFile[]>(() => [...initialFiles]);
+    const [files, setFiles] = useState<Array<ApiFile | LocalDraftFile>>(() => [...initialFiles]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const canSave = content.trim().length > 0 || files.length > 0;
@@ -42,7 +42,7 @@ export function EditPostForm({
         const selectedFiles = e.target.files;
         if (!selectedFiles?.length) return;
 
-        const newFiles = Array.from(selectedFiles).map(fileToPostFile);
+        const newFiles = Array.from(selectedFiles).map(fileToLocalDraft);
         setFiles(prev => [...prev, ...newFiles]);
         e.target.value = '';
     };
@@ -50,7 +50,9 @@ export function EditPostForm({
     const handleRemoveFile = (fileId: string) => {
         setFiles(prev => {
             const removed = prev.find(f => f.id === fileId);
-            if (removed) revokeBlobUrl(removed.url);
+            if (removed && 'url' in removed && removed.url) {
+                revokeBlobUrl(removed.url);
+            }
             return prev.filter(f => f.id !== fileId);
         });
     };
@@ -65,10 +67,11 @@ export function EditPostForm({
     };
 
     const handleCancel = () => {
-        // Revoke blob URLs for newly added files that won't be saved
         const initialIds = new Set(initialFiles.map(f => f.id));
         files.forEach(f => {
-            if (!initialIds.has(f.id)) revokeBlobUrl(f.url);
+            if ('url' in f && f.url && !initialIds.has(f.id)) {
+                revokeBlobUrl(f.url);
+            }
         });
         onCancel();
     };
@@ -76,7 +79,8 @@ export function EditPostForm({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!canSave) return;
-        onSave(content.trim(), files);
+        const draftFiles = files.filter((file): file is LocalDraftFile => 'url' in file && !!file.url);
+        onSave(content.trim(), draftFiles);
     };
 
     return (
