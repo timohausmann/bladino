@@ -322,7 +322,7 @@ type Query {
   users: [User!]!
 
   """"""
-  usersLastAction: [User]
+  usersLastAction: [User!]!
 
   """"""
   votes(post: ID!): [Vote!]!

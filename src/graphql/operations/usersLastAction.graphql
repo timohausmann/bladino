@@ -1,0 +1,8 @@
+query UsersLastAction {
+  usersLastAction {
+    id
+    name
+    avatar
+    lastAction
+  }
+}

@@ -308,7 +308,7 @@ export type Query = {
   notes: Array<Note>;
   user: User;
   users: Array<User>;
-  usersLastAction?: Maybe<Array<Maybe<User>>>;
+  usersLastAction: Array<User>;
   votes: Array<Vote>;
   weblinks: Array<Weblink>;
 };

@@ -1,8 +1,12 @@
 import { CreatePost } from '@/components/create/CreatePost';
 import { PostCard } from '@/components/post';
 import { PresenceRail } from '@/components/presence';
-import { CommentFeedDocument, useGraphQLQuery, type CommentFeedQuery } from '@/graphql';
-import { mockPresenceEntries } from '@/mocks';
+import {
+    CommentFeedDocument,
+    UsersLastActionDocument,
+    useGraphQLQuery,
+    type CommentFeedQuery,
+} from '@/graphql';
 import { useMemo } from 'react';
 
 type FeedComment = NonNullable<
@@ -17,6 +21,8 @@ export function Home() {
         filter: {},
     });
 
+    const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
+
     const comments = useMemo(() => {
         return (data?.commentFeed?.comments ?? []).filter(
             (comment): comment is FeedComment => comment != null,
@@ -28,7 +34,7 @@ export function Home() {
             <div className="container max-w-3xl mx-auto px-4 flex flex-col gap-8">
                 <CreatePost />
 
-                <PresenceRail entries={mockPresenceEntries} />
+                <PresenceRail users={presenceData?.usersLastAction ?? []} />
 
                 <div className="flex flex-col gap-6">
                     {isLoading && (
