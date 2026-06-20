@@ -1,4 +1,5 @@
 import type { UsersLastActionQuery } from '@/graphql';
+import type { ApiDate } from '@/utils/formatDate';
 import type { PresenceEntry } from './PresenceRail';
 
 const MS_HOUR = 60 * 60 * 1000;
@@ -6,17 +7,17 @@ const MS_DAY = 24 * MS_HOUR;
 const MS_WEEK = 7 * MS_DAY;
 const SHOW_TIME_WITHIN_MS = 4 * MS_WEEK;
 
-function parseLastAction(lastAction: unknown): Date | null {
+function parseLastAction(lastAction: ApiDate): Date | null {
     if (!lastAction) {
         return null;
     }
 
-    const parsed = new Date(lastAction as string | number);
+    const parsed = new Date(lastAction);
     return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
 /** Formats lastAction for users seen within the last 4 weeks. */
-export function formatLastSeen(lastAction: unknown): string {
+export function formatLastSeen(lastAction: ApiDate): string {
     const parsed = parseLastAction(lastAction);
     if (!parsed) {
         return '';

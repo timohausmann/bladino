@@ -1,0 +1,18 @@
+query UserProfile($id: ID!) {
+  user(id: $id) {
+    id
+    name
+    avatar
+    description
+    dateCreated
+    lastAction
+    commentCount
+  }
+}
+
+query UserDirectory {
+  users {
+    id
+    name
+  }
+}

@@ -1,10 +1,13 @@
+/** ISO 8601 date string from the GraphQL Date scalar. */
+export type ApiDate = string | null | undefined;
+
 /** Formats API date values for display in post headers and comments. */
-export function formatCommentDate(date: unknown): string {
+export function formatCommentDate(date: ApiDate): string {
   if (!date) {
     return "";
   }
 
-  const parsed = new Date(date as string | number);
+  const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
     return "";
   }
@@ -17,12 +20,12 @@ export function formatCommentDate(date: unknown): string {
 }
 
 /** Formats a join date for profile pages. */
-export function formatJoinDate(date: unknown): string {
+export function formatJoinDate(date: ApiDate): string {
   if (!date) {
     return "";
   }
 
-  const parsed = new Date(date as string | number);
+  const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
     return "";
   }

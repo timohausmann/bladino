@@ -1,5 +1,9 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
+const codegenScalars = {
+  Date: "string", // (ISO 8601)
+} as const;
+
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.CODEGEN_SCHEMA_URL ?? "http://localhost:3001/graphql",
@@ -11,6 +15,7 @@ const config: CodegenConfig = {
       plugins: ["typescript"],
       config: {
         useTypeImports: true,
+        scalars: codegenScalars,
       },
     },
     // Operation documents + operation-specific types (client-preset)
@@ -22,6 +27,7 @@ const config: CodegenConfig = {
       config: {
         useTypeImports: true,
         importTypesFrom: "./schema-types",
+        scalars: codegenScalars,
       },
     },
     // Human-readable schema reference

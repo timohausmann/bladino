@@ -1,24 +1,129 @@
+import { CommentFeed } from '@/components/feed';
+import { formatLastSeen } from '@/components/presence/mapPresenceUsers';
 import { Button } from '@/components/ui/button';
-import { PostCard } from '@/components/post/PostCard';
 import { Avatar } from '@/components/ui/Avatar';
 import { Back } from '@/components/ui/Back';
 import { Card } from '@/components/ui/Card';
-import { getCommentsByUserId } from '@/mocks/posts';
-import { getUserByName } from '@/mocks/users';
-import { formatJoinDate } from '@/utils/formatDate';
+import { CyclingText } from '@/components/ui/CyclingText';
+import {
+    UserDirectoryDocument,
+    UserProfileDocument,
+    useGraphQLQuery,
+} from '@/graphql';
+import { formatJoinDate, type ApiDate } from '@/utils/formatDate';
 import { useParams } from '@tanstack/react-router';
-import { Calendar, UserPlus } from 'lucide-react';
+import { UserPlus, Calendar, Clock, MessageSquare } from 'lucide-react';
+import { useMemo, type ReactNode } from 'react';
+
+/** Formats lastAction for profile; falls back to an absolute date when older than 4 weeks. */
+function formatLastSeenOnline(lastAction: ApiDate): string {
+    const relative = formatLastSeen(lastAction);
+    if (relative) {
+        return relative;
+    }
+
+    if (!lastAction) {
+        return '';
+    }
+
+    const parsed = new Date(lastAction);
+    if (Number.isNaN(parsed.getTime())) {
+        return '';
+    }
+
+    return parsed.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
 
 /**
  * Profile - User profile page component
  */
 export function Profile() {
     const { name: profileName } = useParams({ from: '/_authenticated/u/$name' });
-    const user = getUserByName(profileName);
 
-    if (!user) {
+    const {
+        data: directoryData,
+        isLoading: isLoadingDirectory,
+        isError: isDirectoryError,
+    } = useGraphQLQuery(UserDirectoryDocument);
+
+    const userId = useMemo(
+        () => directoryData?.users.find((user) => user.name === profileName)?.id,
+        [directoryData, profileName],
+    );
+
+    const {
+        data: profileData,
+        isLoading: isLoadingProfile,
+        isError: isProfileError,
+    } = useGraphQLQuery(
+        UserProfileDocument,
+        { id: userId ?? '' },
+        { enabled: Boolean(userId) },
+    );
+
+    const user = profileData?.user;
+    const lastSeen = user?.lastAction ? formatLastSeenOnline(user.lastAction) : '';
+
+    const profileMetaLines = useMemo((): ReactNode[] => {
+        if (!user) {
+            return [];
+        }
+
+        const lines: ReactNode[] = [];
+
+        if (user.commentCount != null) {
+            lines.push(
+                <span key="posts" className="flex items-center gap-2">
+                    <MessageSquare size={16} />
+                    <span>
+                        {user.commentCount === 1
+                            ? '1 post'
+                            : `${user.commentCount} posts`}
+                    </span>
+                </span>,
+            );
+        }
+
+        if (user.dateCreated != null) {
+            lines.push(
+                <span key="joined" className="flex items-center gap-2">
+                    <Calendar size={16} />
+                    <span>Joined {formatJoinDate(user.dateCreated)}</span>
+                </span>,
+            );
+        }
+
+        if (lastSeen) {
+            lines.push(
+                <span key="last-seen" className="flex items-center gap-2">
+                    <Clock size={16} />
+                    <span>Last seen online {lastSeen}</span>
+                </span>,
+            );
+        }
+
+        return lines;
+    }, [user, lastSeen]);
+
+    if (isLoadingDirectory || (userId && isLoadingProfile)) {
         return (
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-8 max-w-3xl">
+                <Back />
+                <Card className="text-center py-12">
+                    <p className="text-muted-foreground">Loading profile…</p>
+                </Card>
+            </div>
+        );
+    }
+
+    if (isDirectoryError || isProfileError || !user) {
+        return (
+            <div className="container mx-auto px-4 py-8 max-w-3xl">
+                <Back />
                 <Card className="text-center py-12">
                     <h1 className="text-2xl font-bold text-foreground mb-4">User Not Found</h1>
                     <p className="text-muted-foreground">The user {profileName} doesn't exist.</p>
@@ -27,7 +132,7 @@ export function Profile() {
         );
     }
 
-    const userComments = getCommentsByUserId(user.id);
+    // NOTE: do not remove.
     const handle = 'handle';
     const showHandle = false;
 
@@ -64,8 +169,9 @@ export function Profile() {
 
                         <Button
                             type="button"
-                            variant="primary"
+                            variant="secondary"
                             iconBefore={<UserPlus size={16} />}
+                            disabled
                         >
                             Follow
                         </Button>
@@ -77,35 +183,18 @@ export function Profile() {
                         </p>
                     )}
 
-                    {user.dateCreated != null && (
-                        <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                            <Calendar size={16} />
-                            <span>Joined {formatJoinDate(user.dateCreated)}</span>
-                        </div>
-                    )}
+                    <CyclingText
+                        items={profileMetaLines}
+                        className="text-muted-foreground text-sm"
+                    />
                 </div>
             </Card>
 
-            <div className="space-y-6">
-                <h2 className="text-xl font-bold text-foreground">
-                    Posts by {user.name}
-                </h2>
-
-                {userComments.length > 0 ? (
-                    userComments.map((comment) => (
-                        <PostCard
-                            key={comment.id}
-                            comment={comment}
-                        />
-                    ))
-                ) : (
-                    <Card className="text-center py-12">
-                        <p className="text-muted-foreground">
-                            {user.name} hasn't posted anything yet.
-                        </p>
-                    </Card>
-                )}
-            </div>
+            <CommentFeed
+                filter={{ user: user.id }}
+                title={`Posts by ${user.name}`}
+                emptyMessage={`${user.name} hasn't posted anything yet.`}
+            />
         </div>
     );
 }

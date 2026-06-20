@@ -7,7 +7,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  Date: { input: unknown; output: unknown; }
+  Date: { input: string; output: string; }
 };
 
 export type Channel = {
@@ -46,6 +46,7 @@ export type CommentFilter = {
   channel?: InputMaybe<Scalars['ID']['input']>;
   mediaOnly?: InputMaybe<Scalars['Boolean']['input']>;
   parent?: InputMaybe<Scalars['ID']['input']>;
+  user?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type File = Post & {
@@ -363,6 +364,7 @@ export type User = {
   __typename?: 'User';
   avatar?: Maybe<Scalars['String']['output']>;
   birthday?: Maybe<Scalars['Date']['output']>;
+  commentCount?: Maybe<Scalars['Int']['output']>;
   dateCreated?: Maybe<Scalars['Date']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
