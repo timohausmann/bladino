@@ -1,0 +1,39 @@
+query Notes {
+  notes {
+    id
+    body
+    dateCreated
+    dateEdited
+  }
+}
+
+query Note($id: ID!) {
+  note(id: $id) {
+    id
+    body
+    dateCreated
+    dateEdited
+  }
+}
+
+mutation AddNote($body: String!) {
+  addNote(body: $body) {
+    id
+    body
+    dateCreated
+    dateEdited
+  }
+}
+
+mutation UpdateNote($id: ID!, $body: String!) {
+  updateNote(id: $id, body: $body) {
+    id
+    body
+    dateCreated
+    dateEdited
+  }
+}
+
+mutation DeleteNote($id: ID!) {
+  deleteNote(id: $id)
+}

@@ -1,5 +1,6 @@
 
 import { nanoid } from 'nanoid';
+import { twMerge } from 'tailwind-merge';
 
 interface TextareaProps {
     value: string;
@@ -9,6 +10,7 @@ interface TextareaProps {
     rows?: number;
     disabled?: boolean;
     className?: string;
+    wrapperClassName?: string;
     label?: string;
     required?: boolean;
     resize?: 'resize-none' | 'resize-y' | 'resize-x' | 'resize';
@@ -21,15 +23,16 @@ export function Textarea({
     maxLength,
     rows = 3,
     disabled = false,
-    className = "",
+    className,
+    wrapperClassName,
     label,
     required = false,
-    resize = "resize-y"
+    resize = "resize-y",
 }: TextareaProps) {
     const textareaId = `textarea-${nanoid()}`;
 
     return (
-        <div className="w-full">
+        <div className={twMerge('w-full', wrapperClassName)}>
             {label && (
                 <label
                     htmlFor={textareaId}
@@ -48,15 +51,15 @@ export function Textarea({
                 rows={rows}
                 disabled={disabled}
                 required={required}
-                className={`
-                    w-full p-4 bg-white/90 border border-solid border-neutral-200 dark:border-neutral-800 dark:bg-black/20 
-                    rounded-lg ${resize} outline-none 
-                    placeholder:text-muted-foreground
-                    transition-colors duration-200
-                    focus:bg-white dark:focus:bg-black/30
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    ${className}
-                `.trim()}
+                className={twMerge(
+                    'w-full p-4 bg-white/90 border border-solid border-neutral-200 dark:border-neutral-800 dark:bg-black/20',
+                    'rounded-lg outline-none placeholder:text-muted-foreground',
+                    'transition-colors duration-200',
+                    'focus:bg-white dark:focus:bg-black/30',
+                    'disabled:opacity-50 disabled:cursor-not-allowed',
+                    resize,
+                    className,
+                )}
                 aria-label={label || placeholder}
                 tabIndex={disabled ? -1 : 0}
             />

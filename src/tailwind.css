@@ -53,6 +53,12 @@
     cursor: pointer;
   }
 
+  html.fixed-viewport,
+  body.fixed-viewport {
+    overflow: hidden;
+    height: 100%;
+  }
+
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {

@@ -14,6 +14,7 @@ import {
   Home,
   Login,
   Logout,
+  Notes,
   NotFound,
   PostDetail,
   Profile,
@@ -74,6 +75,20 @@ const settingsRoute = createRoute({
   component: Settings,
 });
 
+const notesIndexRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: "/notes",
+  component: Notes,
+  staticData: { fixedViewport: true },
+});
+
+const notesDetailRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: "/notes/$id",
+  component: Notes,
+  staticData: { fixedViewport: true },
+});
+
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
@@ -126,6 +141,8 @@ const routeTree = rootRoute.addChildren([
     postRoute,
     profileRoute,
     settingsRoute,
+    notesIndexRoute,
+    notesDetailRoute,
   ]),
   ...publicRoutes,
 ]);
@@ -139,5 +156,9 @@ export const router = createRouter({
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+  }
+
+  interface StaticDataRouteOption {
+    fixedViewport?: boolean;
   }
 }

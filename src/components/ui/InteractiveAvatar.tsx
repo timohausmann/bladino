@@ -1,10 +1,10 @@
 import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
-import { LogOut, Settings, User } from 'lucide-react';
+import { LogOut, Mail, Settings, StickyNote, User } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar } from '@/components/ui/Avatar';
-import { ContextMenuDivider, ContextMenuLink, PopoverContent } from '@/components/ui/popover';
+import { ContextMenuButton, ContextMenuDivider, ContextMenuLink, PopoverContent } from '@/components/ui/popover';
 
 interface InteractiveAvatarProps {
     className?: string;
@@ -47,6 +47,21 @@ export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
 
             <PopoverContent>
                 <ContextMenuLink
+                    id="notes"
+                    label="Notes"
+                    icon={StickyNote}
+                    to="/notes"
+                    onClick={handleMenuClose}
+                />
+                <ContextMenuButton
+                    id="mails"
+                    label="Mails"
+                    icon={Mail}
+                    disabled
+                    onClick={() => {}}
+                />
+                <ContextMenuDivider id="divider-user" />
+                <ContextMenuLink
                     id="profile"
                     label="My Profile"
                     icon={User}
@@ -61,7 +76,7 @@ export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
                     to="/settings"
                     onClick={handleMenuClose}
                 />
-                <ContextMenuDivider id="divider" />
+                <ContextMenuDivider id="divider-logout" />
                 <ContextMenuLink
                     id="logout"
                     label="Logout"
