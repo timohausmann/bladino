@@ -2,7 +2,6 @@ import { CommentFeed } from '@/components/feed';
 import { formatLastSeen } from '@/components/presence/mapPresenceUsers';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/Avatar';
-import { Back } from '@/components/ui/Back';
 import { Card } from '@/components/ui/Card';
 import { CyclingText } from '@/components/ui/CyclingText';
 import {
@@ -111,24 +110,18 @@ export function Profile() {
 
     if (isLoadingDirectory || (userId && isLoadingProfile)) {
         return (
-            <div className="container mx-auto px-4 py-8 max-w-3xl">
-                <Back />
-                <Card className="text-center py-12">
-                    <p className="text-muted-foreground">Loading profile…</p>
-                </Card>
-            </div>
+            <Card className="text-center py-12">
+                <p className="text-muted-foreground">Loading profile…</p>
+            </Card>
         );
     }
 
     if (isDirectoryError || isProfileError || !user) {
         return (
-            <div className="container mx-auto px-4 py-8 max-w-3xl">
-                <Back />
-                <Card className="text-center py-12">
-                    <h1 className="text-2xl font-bold text-foreground mb-4">User Not Found</h1>
-                    <p className="text-muted-foreground">The user {profileName} doesn't exist.</p>
-                </Card>
-            </div>
+            <Card className="text-center py-12">
+                <h1 className="text-2xl font-bold text-foreground mb-4">User Not Found</h1>
+                <p className="text-muted-foreground">The user {profileName} doesn't exist.</p>
+            </Card>
         );
     }
 
@@ -137,10 +130,7 @@ export function Profile() {
     const showHandle = false;
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-3xl">
-
-            <Back />
-
+        <>
             <Card className="relative overflow-hidden mb-6 p-0">
                 <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative">
                     <div className="absolute inset-0 bg-black/20"></div>
@@ -195,6 +185,6 @@ export function Profile() {
                 title={`Posts by ${user.name}`}
                 emptyMessage={`${user.name} hasn't posted anything yet.`}
             />
-        </div>
+        </>
     );
 }

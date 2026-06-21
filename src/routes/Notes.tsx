@@ -1,4 +1,4 @@
-import { SidebarLayout } from '@/components/layout/SidebarLayout';
+import { ContextPanel } from '@/components/layout/ContextPanel';
 import {
     getNextNoteIdAfterDelete,
     NoteEditor,
@@ -12,7 +12,7 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 /**
- * Notes page with sidebar list and main editor area.
+ * Notes page with context panel list and main editor area.
  */
 export function Notes() {
     const { id } = useParams({ strict: false });
@@ -64,30 +64,30 @@ export function Notes() {
     };
 
     return (
-        <div
-            className="flex-1 flex flex-col min-h-0 max-w-5xl mx-auto w-full h-full border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden bg-white/80 dark:bg-neutral-900/50 shadow-sm"
-        >
-            <SidebarLayout className="flex-1 min-h-0 h-full" sidebar={
-                <>
+        <div className="flex flex-1 min-h-0 h-full">
+            <ContextPanel
+                header={
                     <NotesSidebarToolbar
                         onCreate={handleCreate}
                         isCreating={addNote.isPending}
                     />
-                    <NotesSidebarList
-                        notes={notes}
-                        selectedId={selectedId}
-                        isLoading={isLoading}
-                        onSelect={handleSelect}
-                    />
-                </>
-            }
-        >
-            {selectedId ? (
-                <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
-            ) : (
-                <NotesEmptyState />
-            )}
-        </SidebarLayout>
+                }
+            >
+                <NotesSidebarList
+                    notes={notes}
+                    selectedId={selectedId}
+                    isLoading={isLoading}
+                    onSelect={handleSelect}
+                />
+            </ContextPanel>
+
+            <div className="flex-1 flex flex-col min-w-0 min-h-0">
+                {selectedId ? (
+                    <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
+                ) : (
+                    <NotesEmptyState />
+                )}
+            </div>
         </div>
     );
 }

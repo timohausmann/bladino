@@ -6,23 +6,22 @@ import {
     AccordionRoot,
     AccordionTrigger
 } from '@/components/ui/accordion';
-import { Back } from '@/components/ui/Back';
+import { useTheme } from '@/components/ThemeProvider';
 import { useUserStore } from '@/stores/userStore';
 import * as Select from '@radix-ui/react-select';
 import { Link } from '@tanstack/react-router';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 /**
  * Settings page with accordion-based settings groups
  */
 export function Settings() {
-    // Get current user from Zustand store using selective store
     const currentUser = useUserStore(store => store.currentUser);
+    const { theme, setTheme } = useTheme();
 
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [theme, setTheme] = useState('dark');
 
     const handleEmailChange = () => {
         // TODO: Implement email change logic
@@ -35,12 +34,8 @@ export function Settings() {
     };
 
     return (
-        <div className="min-h-screen pt-8">
-            <div className="max-w-3xl mx-auto px-4 space-y-4">
-
-                <Back />
-
-                <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+        <>
+            <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
                     <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-6">
                         Settings
                     </h1>
@@ -181,9 +176,9 @@ export function Settings() {
                                                         <div className="absolute right-2 w-2 h-2 bg-cyan-500 rounded-full" />
                                                     )}
                                                 </Select.Item>
-                                                <Select.Item value="auto" className="relative flex items-center px-3 py-2 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded cursor-pointer">
+                                                <Select.Item value="system" className="relative flex items-center px-3 py-2 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded cursor-pointer">
                                                     <Select.ItemText>Automatic</Select.ItemText>
-                                                    {theme === 'auto' && (
+                                                    {theme === 'system' && (
                                                         <div className="absolute right-2 w-2 h-2 bg-cyan-500 rounded-full" />
                                                     )}
                                                 </Select.Item>
@@ -193,9 +188,18 @@ export function Settings() {
                                 </Select.Root>
                             </div>
                         </div>
+
+                        <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4">
+                            <Link
+                                to="/logout"
+                                className="inline-flex items-center gap-2 text-sm font-medium text-rose-600 transition-colors hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300"
+                            >
+                                <LogOut size={16} aria-hidden />
+                                Logout
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+        </>
     );
 }

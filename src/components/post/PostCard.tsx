@@ -3,6 +3,7 @@ import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { MessageCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Card } from '@/components/ui/Card';
+import { Divider } from '@/components/ui/Divider';
 import { EmojiReaction } from '@/components/ui/EmojiReaction';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { LinkPreview } from '@/components/ui/LinkPreview';
@@ -88,7 +89,7 @@ export function PostCard({ comment }: PostCardProps) {
                     </>
                 )}
 
-                <div className="h-px bg-gray-200 dark:bg-white/14"></div>
+                <Divider />
 
                 <div className="flex justify-between items-center">
                     <EmojiReaction reactions={{}} onReaction={handleReaction} />

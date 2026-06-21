@@ -10,14 +10,12 @@ export function Home() {
     const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
 
     return (
-        <div className="flex-1 py-8">
-            <div className="container max-w-3xl mx-auto px-4 flex flex-col gap-8">
-                <CreatePost />
+        <>
+            <CreatePost />
 
-                <PresenceRail users={presenceData?.usersLastAction ?? []} />
+            <PresenceRail users={presenceData?.usersLastAction ?? []} />
 
-                <CommentFeed filter={{}} />
-            </div>
-        </div>
+            <CommentFeed filter={{}} />
+        </>
     );
 }

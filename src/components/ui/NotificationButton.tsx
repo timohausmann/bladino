@@ -1,8 +1,12 @@
+import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
+import {
+    navRailLabelClassName,
+    navRailRowClassName,
+} from '@/components/layout/navRailLayout';
 import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
 import { Bell } from 'lucide-react';
 import { useState } from 'react';
-import { HeaderButton } from '@/components/ui/HeaderButton';
 import { PopoverContent } from '@/components/ui/popover';
 
 interface Notification {
@@ -15,13 +19,39 @@ interface Notification {
 interface NotificationButtonProps {
     count?: number;
     notifications?: Notification[];
-    onClick?: () => void;
+    expanded?: boolean;
+}
+
+function formatCount(count: number): string {
+    return count > 99 ? '99+' : String(count);
+}
+
+function CountBadge({ count, className }: { count: number; className?: string }) {
+    if (count <= 0) {
+        return null;
+    }
+
+    return (
+        <span
+            className={clsx(
+                'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-0.5',
+                'bg-cyan-300 text-[10px] font-medium tabular-nums text-black text-shadow-2xs',
+                className,
+            )}
+        >
+            {formatCount(count)}
+        </span>
+    );
 }
 
 /**
- * Notification button with badge showing notification count
+ * Notifications entry — shared icon column row, opens a popover on click.
  */
-export function NotificationButton({ count = 0, notifications = [] }: NotificationButtonProps) {
+export function NotificationButton({
+    count = 0,
+    notifications = [],
+    expanded = false,
+}: NotificationButtonProps) {
     const [open, setOpen] = useState(false);
 
     const handleNotificationClick = () => {
@@ -31,20 +61,26 @@ export function NotificationButton({ count = 0, notifications = [] }: Notificati
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
-                <div className="relative">
-                    <HeaderButton
-                        onClick={() => setOpen(!open)}
-                        icon={<Bell size={18} />}
-                        label="Notifications"
-                    />
-                    {count > 0 && (
-                        <div className="absolute top-0 right-0 min-w-4 px-1 h-4 bg-cyan-500 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-medium text-white">
-                                {count > 99 ? '99+' : count}
+                <button
+                    type="button"
+                    className={navRailRowClassName({ active: open })}
+                    aria-label="Notifications"
+                >
+                    <NavRailIconTrack className="relative">
+                        <Bell size={20} aria-hidden className="shrink-0" />
+                        {!expanded && count > 0 ? (
+                            <span className="pointer-events-none absolute -top-1 right-1">
+                                <CountBadge count={count} className="min-w-4 h-4 px-1 text-[10px]" />
                             </span>
-                        </div>
-                    )}
-                </div>
+                        ) : null}
+                    </NavRailIconTrack>
+                    {expanded ? (
+                        <>
+                            <span className={navRailLabelClassName}>Notifications</span>
+                            <CountBadge count={count} className="mr-2" />
+                        </>
+                    ) : null}
+                </button>
             </Popover.Trigger>
 
             <PopoverContent width="w-80">
@@ -66,27 +102,27 @@ export function NotificationButton({ count = 0, notifications = [] }: Notificati
                                 key={notification.id}
                                 onClick={handleNotificationClick}
                                 className={clsx(
-                                    "flex items-center gap-3 px-3 p-2 rounded-lg transition-colors cursor-pointer",
+                                    'flex cursor-pointer items-center gap-3 rounded-lg p-2 px-3 transition-colors',
                                     notification.isNew
-                                        ? "bg-neutral-50 dark:bg-neutral-800 hover:bg-cyan-100 dark:hover:bg-neutral-700"
-                                        : "hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                        ? 'bg-neutral-50 hover:bg-cyan-100 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                                        : 'hover:bg-neutral-100 dark:hover:bg-neutral-700',
                                 )}
                             >
-                                <div className="flex-1 min-w-0">
+                                <div className="min-w-0 flex-1">
                                     <p className="text-sm text-neutral-900 dark:text-neutral-100">
                                         {notification.message}
                                     </p>
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                    <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                                         {notification.timestamp}
                                     </p>
                                 </div>
                                 {notification.isNew && (
-                                    <div className="w-2 h-2 bg-cyan-500 rounded-full flex-shrink-0" />
+                                    <div className="h-2 w-2 shrink-0 rounded-full bg-cyan-500" />
                                 )}
                             </div>
                         ))
                     ) : (
-                        <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+                        <div className="py-8 text-center text-neutral-500 dark:text-neutral-400">
                             <Bell size={24} className="mx-auto mb-2 opacity-50" />
                             <p className="text-sm">No notifications yet</p>
                         </div>

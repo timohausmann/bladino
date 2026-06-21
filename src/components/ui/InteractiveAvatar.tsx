@@ -1,94 +1,51 @@
+import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
+import {
+    navRailLabelClassName,
+    navRailRowClassName,
+} from '@/components/layout/navRailLayout';
 import { useUserStore } from '@/stores/userStore';
-import * as Popover from '@radix-ui/react-popover';
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { LogOut, Mail, Settings, StickyNote, User } from 'lucide-react';
-import { useState } from 'react';
 import { Avatar } from '@/components/ui/Avatar';
-import { ContextMenuButton, ContextMenuDivider, ContextMenuLink, PopoverContent } from '@/components/ui/popover';
 
 interface InteractiveAvatarProps {
     className?: string;
+    showName?: boolean;
 }
 
 /**
- * Interactive avatar with popover menu for profile actions
+ * Profile link for the nav rail — avatar (+ optional name) links to the current user's profile.
  */
-export function InteractiveAvatar({ className }: InteractiveAvatarProps) {
-    const [open, setOpen] = useState(false);
+export function InteractiveAvatar({ className, showName = false }: InteractiveAvatarProps) {
     const currentUser = useUserStore(store => store.currentUser);
 
-    const handleMenuClose = () => {
-        setOpen(false);
-    };
-
-    // Don't render if no user is authenticated
     if (!currentUser) {
         return null;
     }
 
-    const handleLogout = () => {
-        // TODO: Implement logout functionality
-        console.log('Logout clicked');
-    };
+    const inactiveClassName = navRailRowClassName();
+    const activeClassName = navRailRowClassName({ active: true });
 
     return (
-        <Popover.Root open={open} onOpenChange={setOpen}>
-            <Popover.Trigger asChild>
-                <button
-                    className={clsx(
-                        'rounded-full transition-all duration-200',
-                        open && 'ring-2 ring-cyan-500 dark:ring-white/90'
-                    )}
-                    aria-label="Open profile menu"
-                >
-                    <Avatar avatar={currentUser.avatar} alt={currentUser.name} className={className} />
-                </button>
-            </Popover.Trigger>
-
-            <PopoverContent>
-                <ContextMenuLink
-                    id="notes"
-                    label="Notes"
-                    icon={StickyNote}
-                    to="/notes"
-                    onClick={handleMenuClose}
+        <Link
+            to="/u/$name"
+            params={{ name: currentUser.name }}
+            title={showName ? undefined : currentUser.name}
+            aria-label={`Profile: ${currentUser.name}`}
+            className={inactiveClassName}
+            activeProps={{ className: activeClassName }}
+            inactiveProps={{ className: inactiveClassName }}
+        >
+            <NavRailIconTrack>
+                <Avatar
+                    avatar={currentUser.avatar}
+                    alt={currentUser.name}
+                    className={clsx('h-8 w-8 shrink-0', className)}
                 />
-                <ContextMenuButton
-                    id="mails"
-                    label="Mails"
-                    icon={Mail}
-                    disabled
-                    onClick={() => {}}
-                />
-                <ContextMenuDivider id="divider-user" />
-                <ContextMenuLink
-                    id="profile"
-                    label="My Profile"
-                    icon={User}
-                    to="/u/$name"
-                    params={{ name: currentUser.name }}
-                    onClick={handleMenuClose}
-                />
-                <ContextMenuLink
-                    id="settings"
-                    label="Settings"
-                    icon={Settings}
-                    to="/settings"
-                    onClick={handleMenuClose}
-                />
-                <ContextMenuDivider id="divider-logout" />
-                <ContextMenuLink
-                    id="logout"
-                    label="Logout"
-                    icon={LogOut}
-                    to="/logout"
-                    onClick={() => {
-                        handleLogout();
-                        handleMenuClose();
-                    }}
-                    variant="destructive"
-                />
-            </PopoverContent>
-        </Popover.Root>
+            </NavRailIconTrack>
+            {showName ? (
+                <span className={navRailLabelClassName}>{currentUser.name}</span>
+            ) : null}
+        </Link>
     );
 }

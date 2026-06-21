@@ -79,14 +79,14 @@ const notesIndexRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: "/notes",
   component: Notes,
-  staticData: { fixedViewport: true },
+  staticData: { fixedViewport: true, layoutMode: "masterDetail" },
 });
 
 const notesDetailRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: "/notes/$id",
   component: Notes,
-  staticData: { fixedViewport: true },
+  staticData: { fixedViewport: true, layoutMode: "masterDetail" },
 });
 
 const loginRoute = createRoute({
@@ -160,5 +160,6 @@ declare module "@tanstack/react-router" {
 
   interface StaticDataRouteOption {
     fixedViewport?: boolean;
+    layoutMode?: "feed" | "masterDetail" | "fullWidth";
   }
 }

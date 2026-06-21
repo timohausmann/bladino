@@ -1,7 +1,11 @@
 import clsx from 'clsx';
-import { useMatches } from '@tanstack/react-router';
 import { useEffect } from 'react';
-import { Header } from '@/components/layout/Header';
+import { NavRail } from '@/components/layout/NavRail';
+import {
+    useFixedViewport,
+    useIsAuthenticatedShell,
+    useLayoutMode,
+} from '@/components/layout/useAppShell';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -12,19 +16,12 @@ interface LayoutProps {
     fixedViewport?: boolean;
 }
 
-function useFixedViewport(enabled?: boolean): boolean {
-    const matches = useMatches();
-    const fromRoute = matches.some(
-        match => (match.staticData as { fixedViewport?: boolean } | undefined)?.fixedViewport,
-    );
-
-    return enabled ?? fromRoute;
-}
-
 /**
- * Main layout component with header and flexible content area.
+ * App shell: optional nav rail for authenticated routes + flexible content area.
  */
 export function Layout({ children, fixedViewport: fixedViewportProp }: LayoutProps) {
+    const showNavRail = useIsAuthenticatedShell();
+    const layoutMode = useLayoutMode();
     const fixedViewport = useFixedViewport(fixedViewportProp);
 
     useEffect(() => {
@@ -43,21 +40,31 @@ export function Layout({ children, fixedViewport: fixedViewportProp }: LayoutPro
         };
     }, [fixedViewport]);
 
+    const shellClasses = clsx(
+        showNavRail
+            ? 'flex flex-row h-dvh min-h-dvh overflow-hidden'
+            : clsx('flex flex-col', fixedViewport ? 'h-dvh overflow-hidden' : 'min-h-screen'),
+    );
+
+    const mainClasses = clsx(
+        'flex-1 flex flex-col min-h-0 min-w-0 p-4',
+        fixedViewport ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden',
+    );
+
+    const feedWrapperClasses = clsx(
+        'flex-1 w-full mx-auto max-w-3xl flex flex-col gap-8 py-4',
+        fixedViewport ? 'min-h-0 overflow-auto' : '',
+    );
+
     return (
-        <div
-            className={clsx(
-                'flex flex-col',
-                fixedViewport ? 'h-dvh overflow-hidden' : 'min-h-screen',
-            )}
-        >
-            <Header />
-            <main
-                className={clsx(
-                    'flex-1 flex flex-col min-h-0',
-                    fixedViewport ? 'overflow-hidden pt-28 px-4 pb-6' : 'py-28',
+        <div className={shellClasses}>
+            {showNavRail ? <NavRail /> : null}
+            <main className={mainClasses}>
+                {layoutMode === 'feed' ? (
+                    <div className={feedWrapperClasses}>{children}</div>
+                ) : (
+                    <div className="flex flex-1 flex-col min-h-0">{children}</div>
                 )}
-            >
-                {children}
             </main>
         </div>
     );
