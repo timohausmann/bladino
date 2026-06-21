@@ -1,5 +1,5 @@
 import { PostCard } from '@/components/post/PostCard';
-import { getCommentById } from '@/mocks';
+import { CommentDocument, useGraphQLQuery, type Comment } from '@/graphql';
 import { useParams } from '@tanstack/react-router';
 
 /**
@@ -7,9 +7,20 @@ import { useParams } from '@tanstack/react-router';
  */
 export function PostDetail() {
     const { id } = useParams({ from: '/_authenticated/post/$id' });
-    const comment = getCommentById(id);
 
-    if (!comment) {
+    const { data, isLoading, isError } = useGraphQLQuery(CommentDocument, { id });
+
+    if (isLoading) {
+        return (
+            <div className="text-center py-12">
+                <p className="text-muted-foreground">Loading post…</p>
+            </div>
+        );
+    }
+
+    const comment = data?.comment;
+
+    if (isError || !comment) {
         return (
             <div className="text-center py-12">
                 <h1 className="text-2xl font-bold text-foreground mb-2">Post Not Found</h1>
@@ -18,5 +29,5 @@ export function PostDetail() {
         );
     }
 
-    return <PostCard comment={comment} />;
+    return <PostCard comment={comment as Comment} />;
 }

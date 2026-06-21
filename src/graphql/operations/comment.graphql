@@ -1,0 +1,32 @@
+query Comment($id: ID!) {
+  comment(id: $id) {
+    id
+    body
+    dateCreated
+    dateEdited
+    parent
+    user {
+      id
+      name
+      avatar
+    }
+    files {
+      id
+      filename
+      name
+      type
+      size
+    }
+    children {
+      id
+      body
+      dateCreated
+      parent
+      user {
+        id
+        name
+        avatar
+      }
+    }
+  }
+}
