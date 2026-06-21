@@ -1,5 +1,7 @@
 import { PostCard } from '@/components/post/PostCard';
-import { CommentDocument, useGraphQLQuery, type Comment } from '@/graphql';
+import { ResourceError } from '@/components/ui/ResourceError';
+import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
+import { CommentDocument, getGraphQLErrorMessage, useGraphQLQuery, type Comment } from '@/graphql';
 import { useParams } from '@tanstack/react-router';
 
 /**
@@ -8,9 +10,9 @@ import { useParams } from '@tanstack/react-router';
 export function PostDetail() {
     const { id } = useParams({ from: '/_authenticated/post/$id' });
 
-    const { data, isLoading, isError } = useGraphQLQuery(CommentDocument, { id });
+    const { data, isPending, isError, error } = useGraphQLQuery(CommentDocument, { id });
 
-    if (isLoading) {
+    if (isPending) {
         return (
             <div className="text-center py-12">
                 <p className="text-muted-foreground">Loading post…</p>
@@ -18,15 +20,14 @@ export function PostDetail() {
         );
     }
 
+    if (isError) {
+        return <ResourceError resource="post" message={getGraphQLErrorMessage(error)} />;
+    }
+
     const comment = data?.comment;
 
-    if (isError || !comment) {
-        return (
-            <div className="text-center py-12">
-                <h1 className="text-2xl font-bold text-foreground mb-2">Post Not Found</h1>
-                <p className="text-muted-foreground">The post you're looking for doesn't exist.</p>
-            </div>
-        );
+    if (!comment) {
+        return <ResourceNotFound resource="post" />;
     }
 
     return <PostCard comment={comment as Comment} />;

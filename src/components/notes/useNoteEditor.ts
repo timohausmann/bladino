@@ -17,7 +17,7 @@ export function useNoteEditor(
 ) {
     const queryClient = useQueryClient();
 
-    const { data, isLoading } = useGraphQLQuery(NoteDocument, { id: noteId });
+    const { data, isPending, isError } = useGraphQLQuery(NoteDocument, { id: noteId });
     const updateNote = useGraphQLMutation(UpdateNoteDocument);
     const deleteNote = useGraphQLMutation(DeleteNoteDocument);
 
@@ -80,7 +80,8 @@ export function useNoteEditor(
         saveStatus,
         deleteOpen,
         setDeleteOpen,
-        isLoading,
+        isLoading: isPending,
+        isError,
         note,
         handleChange,
         handleEmojiSelect,

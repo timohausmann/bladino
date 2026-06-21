@@ -22,14 +22,14 @@ export type LoginMutation = { login: string };
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { currentUser: { id: string, name: string, avatar: string | null, email: string | null, description: string | null, dateCreated: string | null } };
+export type CurrentUserQuery = { currentUser: { id: string, name: string, avatar: string | null, email: string | null, description: string | null, dateCreated: string | null } | null };
 
 export type CommentQueryVariables = Exact<{
   id: string | number;
 }>;
 
 
-export type CommentQuery = { comment: { id: string, body: string, dateCreated: string | null, dateEdited: string | null, parent: string | null, user: { id: string, name: string, avatar: string | null }, files: Array<{ id: string, filename: string | null, name: string | null, type: string | null, size: number | null } | null> | null, children: Array<{ id: string, body: string, dateCreated: string | null, parent: string | null, user: { id: string, name: string, avatar: string | null } } | null> | null } };
+export type CommentQuery = { comment: { id: string, body: string, dateCreated: string | null, dateEdited: string | null, parent: string | null, user: { id: string, name: string, avatar: string | null }, files: Array<{ id: string, filename: string | null, name: string | null, type: string | null, size: number | null } | null> | null, children: Array<{ id: string, body: string, dateCreated: string | null, parent: string | null, user: { id: string, name: string, avatar: string | null } } | null> | null } | null };
 
 export type CommentFeedQueryVariables = Exact<{
   filter: CommentFilter;
@@ -49,7 +49,7 @@ export type NoteQueryVariables = Exact<{
 }>;
 
 
-export type NoteQuery = { note: { id: string, body: string, dateCreated: string | null, dateEdited: string | null } };
+export type NoteQuery = { note: { id: string, body: string, dateCreated: string | null, dateEdited: string | null } | null };
 
 export type AddNoteMutationVariables = Exact<{
   body: string;
@@ -78,7 +78,7 @@ export type UserProfileQueryVariables = Exact<{
 }>;
 
 
-export type UserProfileQuery = { user: { id: string, name: string, avatar: string | null, description: string | null, dateCreated: string | null, lastAction: string | null, commentCount: number | null } };
+export type UserProfileQuery = { user: { id: string, name: string, avatar: string | null, description: string | null, dateCreated: string | null, lastAction: string | null, commentCount: number | null } | null };
 
 export type UserDirectoryQueryVariables = Exact<{ [key: string]: never; }>;
 

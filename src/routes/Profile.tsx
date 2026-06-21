@@ -3,6 +3,8 @@ import { formatLastSeen } from '@/components/presence/mapPresenceUsers';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
+import { ResourceError } from '@/components/ui/ResourceError';
+import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import { CyclingText } from '@/components/ui/CyclingText';
 import {
     UserDirectoryDocument,
@@ -116,13 +118,12 @@ export function Profile() {
         );
     }
 
-    if (isDirectoryError || isProfileError || !user) {
-        return (
-            <Card className="text-center py-12">
-                <h1 className="text-2xl font-bold text-foreground mb-4">User Not Found</h1>
-                <p className="text-muted-foreground">The user {profileName} doesn't exist.</p>
-            </Card>
-        );
+    if (isDirectoryError || isProfileError) {
+        return <ResourceError resource="user" />;
+    }
+
+    if (!userId || !user) {
+        return <ResourceNotFound resource="user" detail={profileName} />;
     }
 
     // NOTE: do not remove.

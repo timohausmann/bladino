@@ -296,18 +296,18 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  channel: Channel;
+  channel?: Maybe<Channel>;
   channels: Array<Channel>;
   channelsUnread: Array<Channel>;
-  comment: Comment;
+  comment?: Maybe<Comment>;
   commentFeed?: Maybe<CommentFeed>;
   comments: Array<Comment>;
-  currentUser: User;
+  currentUser?: Maybe<User>;
   mail?: Maybe<Mail>;
   mails: Array<Maybe<Mail>>;
-  note: Note;
+  note?: Maybe<Note>;
   notes: Array<Note>;
-  user: User;
+  user?: Maybe<User>;
   users: Array<User>;
   usersLastAction: Array<User>;
   votes: Array<Vote>;

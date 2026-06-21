@@ -1,7 +1,7 @@
 import type { CurrentUserQuery } from "@/graphql";
 import { create } from "zustand";
 
-export type CurrentUser = CurrentUserQuery["currentUser"];
+export type CurrentUser = NonNullable<CurrentUserQuery["currentUser"]>;
 
 interface UserState {
   currentUser: CurrentUser | null;

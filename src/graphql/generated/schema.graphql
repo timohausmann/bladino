@@ -286,7 +286,7 @@ interface Post {
 """"""
 type Query {
   """"""
-  channel(id: ID!): Channel!
+  channel(id: ID!): Channel
 
   """"""
   channels: [Channel!]!
@@ -295,7 +295,7 @@ type Query {
   channelsUnread: [Channel!]!
 
   """"""
-  comment(id: ID!): Comment!
+  comment(id: ID!): Comment
 
   """"""
   commentFeed(cursor: Date, filter: CommentFilter!): CommentFeed
@@ -304,7 +304,7 @@ type Query {
   comments(parent: ID!): [Comment!]!
 
   """"""
-  currentUser: User!
+  currentUser: User
 
   """"""
   mail(id: ID!): Mail
@@ -313,13 +313,13 @@ type Query {
   mails(folder: String): [Mail]!
 
   """"""
-  note(id: ID!): Note!
+  note(id: ID!): Note
 
   """"""
   notes: [Note!]!
 
   """"""
-  user(id: ID!): User!
+  user(id: ID!): User
 
   """"""
   users: [User!]!

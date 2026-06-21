@@ -1,4 +1,6 @@
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
+import { ResourceError } from '@/components/ui/ResourceError';
+import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import { Textarea } from '@/components/ui/Textarea';
 import { NoteEditorToolbar } from '@/components/notes/NoteEditorToolbar';
 import { useNoteEditor } from '@/components/notes/useNoteEditor';
@@ -15,6 +17,7 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
         deleteOpen,
         setDeleteOpen,
         isLoading,
+        isError,
         note,
         handleChange,
         handleEmojiSelect,
@@ -29,11 +32,21 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
         );
     }
 
+    if (isError) {
+        return (
+            <ResourceError
+                resource="note"
+                className="flex-1 flex flex-col items-center justify-center"
+            />
+        );
+    }
+
     if (!note) {
         return (
-            <div className="flex-1 flex items-center justify-center text-neutral-500 dark:text-neutral-400 text-sm">
-                Note not found
-            </div>
+            <ResourceNotFound
+                resource="note"
+                className="flex-1 flex flex-col items-center justify-center"
+            />
         );
     }
 

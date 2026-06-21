@@ -50,6 +50,11 @@ export async function ensureSession(
     });
 
     const user = data.currentUser;
+    if (!user) {
+      clearSession(queryClient);
+      return null;
+    }
+
     useUserStore.getState().setCurrentUser(user);
     return user;
   } catch {
