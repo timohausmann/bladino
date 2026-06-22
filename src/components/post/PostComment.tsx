@@ -3,6 +3,7 @@ import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { Avatar } from '@/components/ui/Avatar';
+import { CommentBody } from '@/components/post/CommentBody';
 import { EditPostForm } from '@/components/post/EditPostForm';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 
@@ -77,7 +78,11 @@ export function PostComment({ comment }: PostCommentProps) {
                         saveLabel="Save"
                     />
                 ) : (
-                    <p className="text-sm text-foreground leading-relaxed">{body}</p>
+                    <CommentBody
+                        body={body}
+                        weblinks={comment.weblinks}
+                        className="text-sm text-foreground leading-relaxed"
+                    />
                 )}
             </div>
             <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />

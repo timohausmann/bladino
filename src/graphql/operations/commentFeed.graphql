@@ -1,3 +1,5 @@
+#import "./fragments/weblink.graphql"
+
 query CommentFeed($filter: CommentFilter!, $cursor: Date) {
   commentFeed(filter: $filter, cursor: $cursor) {
     cursor
@@ -10,6 +12,9 @@ query CommentFeed($filter: CommentFilter!, $cursor: Date) {
         id
         name
         avatar
+      }
+      weblinks {
+        ...WeblinkFields
       }
     }
   }

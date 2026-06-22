@@ -1,4 +1,13 @@
+import type { Weblink } from '@/graphql';
+import { LinkPreview } from '@/components/ui/LinkPreview';
 import React from 'react';
+
+interface WeblinkMatch {
+    start: number;
+    end: number;
+    alias: string;
+    weblink: Weblink;
+}
 
 /**
  * Maximum length for displayed URLs
@@ -83,4 +92,138 @@ export function parseTextWithLinks(text: string): React.ReactNode[] {
 export function extractFirstUrl(text: string): string | null {
     const match = text.match(URL_REGEX);
     return match ? match[0] : null;
-} 
+}
+
+/**
+ * Splits plain text into nodes, turning newline characters into <br /> elements.
+ */
+function renderTextWithLineBreaks(text: string, keyPrefix: string): React.ReactNode[] {
+    if (!text) {
+        return [];
+    }
+
+    const lines = text.split('\n');
+    const nodes: React.ReactNode[] = [];
+
+    lines.forEach((line, index) => {
+        if (index > 0) {
+            nodes.push(<br key={`${keyPrefix}-br-${index}`} />);
+        }
+        if (line) {
+            nodes.push(line);
+        }
+    });
+
+    return nodes;
+}
+
+/** Collects non-overlapping weblink alias matches ordered by position in the body. */
+function collectWeblinkMatches(
+    body: string,
+    weblinks?: Array<Weblink | null> | null,
+): WeblinkMatch[] {
+    const matches: WeblinkMatch[] = [];
+
+    for (const weblink of weblinks ?? []) {
+        if (!weblink) {
+            continue;
+        }
+
+        for (const alias of weblink.alias ?? []) {
+            if (!alias) {
+                continue;
+            }
+
+            let searchFrom = 0;
+            while (searchFrom < body.length) {
+                const index = body.indexOf(alias, searchFrom);
+                if (index === -1) {
+                    break;
+                }
+
+                matches.push({
+                    start: index,
+                    end: index + alias.length,
+                    alias,
+                    weblink,
+                });
+                searchFrom = index + alias.length;
+            }
+        }
+    }
+
+    matches.sort((a, b) => {
+        if (a.start !== b.start) {
+            return a.start - b.start;
+        }
+        return b.end - b.start - (a.end - a.start);
+    });
+
+    const nonOverlapping: WeblinkMatch[] = [];
+    let lastIndex = 0;
+
+    for (const match of matches) {
+        if (match.start >= lastIndex) {
+            nonOverlapping.push(match);
+            lastIndex = match.end;
+        }
+    }
+
+    return nonOverlapping;
+}
+
+/**
+ * Parses comment body text into React nodes, replacing weblink aliases with LinkPreview cards.
+ * @param body Comment text
+ * @param weblinks Weblink metadata from the API (matched by alias strings in body)
+ */
+export function parseCommentBody(
+    body: string,
+    weblinks?: Array<Weblink | null> | null,
+): React.ReactNode[] {
+    if (!body) {
+        return [];
+    }
+
+    const matches = collectWeblinkMatches(body, weblinks);
+
+    if (matches.length === 0) {
+        return renderTextWithLineBreaks(body, 'text');
+    }
+
+    const nodes: React.ReactNode[] = [];
+    let lastIndex = 0;
+
+    matches.forEach((match, index) => {
+        if (match.start > lastIndex) {
+            nodes.push(
+                ...renderTextWithLineBreaks(
+                    body.slice(lastIndex, match.start),
+                    `text-${lastIndex}`,
+                ),
+            );
+        }
+
+        const { weblink, alias } = match;
+        nodes.push(
+            <LinkPreview
+                key={`preview-${match.start}-${index}`}
+                url={weblink.url || alias}
+                title={weblink.title ?? undefined}
+                description={weblink.descr ?? undefined}
+                image={weblink.image ?? undefined}
+                icon={weblink.icon ?? undefined}
+            />,
+        );
+
+        lastIndex = match.end;
+    });
+
+    if (lastIndex < body.length) {
+        nodes.push(
+            ...renderTextWithLineBreaks(body.slice(lastIndex), `text-${lastIndex}`),
+        );
+    }
+
+    return nodes;
+}

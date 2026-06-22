@@ -1,46 +1,35 @@
-import { getLinkPreviewData } from "@/utils/linkPreviewData";
-import { ExternalLink } from "lucide-react";
-import { useMemo } from "react";
+import { AsyncImage } from '@/components/ui/AsyncImage';
+import { ExternalLink } from 'lucide-react';
+import { useMemo } from 'react';
 
 interface LinkPreviewProps {
     url: string;
     title?: string;
     description?: string;
     image?: string;
-    siteName?: string;
+    icon?: string;
 }
 
 /**
- * LinkPreview - A component that displays a preview of a linked website
- * Uses mock data from our linkPreviewData utility
- * On tablets and larger screens (sm breakpoint), displays image and content in a single row
+ * LinkPreview - Displays a weblink card using metadata from the API.
+ * On tablets and larger screens (sm breakpoint), displays image and content in a single row.
  */
 export function LinkPreview({
     url,
     title,
     description,
     image,
-    siteName,
+    icon,
 }: LinkPreviewProps) {
-    // Get preview data for the URL using our mock service
-    const previewData = useMemo(() => {
-        const data = getLinkPreviewData(url);
-        return {
-            title: title || data.title,
-            description: description || data.description,
-            image: image || data.image,
-            siteName: siteName || data.siteName,
-        };
-    }, [url, title, description, image, siteName]);
-
-    // Extract domain for display
     const domain = useMemo(() => {
         try {
-            return new URL(url).hostname.replace("www.", "");
-        } catch (e) {
-            return "website";
+            return new URL(url).hostname.replace('www.', '');
+        } catch {
+            return url;
         }
     }, [url]);
+
+    const displayTitle = title || domain;
 
     return (
         <a
@@ -48,38 +37,39 @@ export function LinkPreview({
             target="_blank"
             rel="noopener noreferrer"
             className="block text-inherit no-underline"
-            aria-label={`Visit ${previewData.title || "website"}`}
+            aria-label={`Visit ${displayTitle}`}
             tabIndex={0}
         >
-            <div className="flex flex-col overflow-hidden rounded-lg bg-black/5 dark:bg-black/20 transition-all duration-200 hover:bg-black/10 dark:hover:bg-black/30 sm:flex-row">
-                {/* Image - Full width on mobile, fixed width on sm+ */}
-                {previewData.image && (
-                    <div className="bg-black/10 h-40 w-full flex-shrink-0 overflow-hidden sm:w-1/3 sm:max-w-[240px]">
-                        <img
-                            src={previewData.image}
-                            alt={previewData.title || "Link preview image"}
-                            className="h-full w-full object-cover"
-                        />
-                    </div>
+            <div className="flex flex-col overflow-hidden rounded-lg bg-black/5 transition-all duration-200 hover:bg-black/10 dark:bg-black/20 dark:hover:bg-black/30 sm:flex-row">
+                {image && (
+                    <AsyncImage
+                        src={image}
+                        alt={displayTitle}
+                        className="h-40 w-full flex-shrink-0 bg-black/10 sm:w-1/3 sm:max-w-[240px]"
+                    />
                 )}
 
-                {/* Content - Takes remaining space */}
                 <div className="flex-grow p-3 sm:p-4">
-                    {/* Site info */}
                     <div className="text-muted-foreground mb-2 flex items-center text-sm">
-                        <span>{previewData.siteName || domain}</span>
+                        {icon && (
+                            <img
+                                src={icon}
+                                alt=""
+                                aria-hidden
+                                className="mr-1.5 h-4 w-4 flex-shrink-0 rounded-sm object-contain"
+                            />
+                        )}
+                        <span>{domain}</span>
                         <ExternalLink size={14} className="ml-1.5" />
                     </div>
 
-                    {/* Title */}
                     <h3 className="text-foreground m-0 mb-2 text-base leading-tight font-semibold">
-                        {previewData.title}
+                        {displayTitle}
                     </h3>
 
-                    {/* Description */}
-                    {previewData.description && (
+                    {description && (
                         <p className="text-muted-foreground m-0 line-clamp-2 text-sm leading-normal">
-                            {previewData.description}
+                            {description}
                         </p>
                     )}
                 </div>

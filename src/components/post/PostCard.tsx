@@ -1,12 +1,11 @@
 import type { Comment, File as ApiFile } from '@/graphql';
-import { extractFirstUrl, parseTextWithLinks } from '@/utils/textUtils';
 import { MessageCircle } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Divider } from '@/components/ui/Divider';
 import { EmojiReaction } from '@/components/ui/EmojiReaction';
 import { FilePreview } from '@/components/ui/FilePreview';
-import { LinkPreview } from '@/components/ui/LinkPreview';
+import { CommentBody } from '@/components/post/CommentBody';
 import { EditPostForm } from '@/components/post/EditPostForm';
 import { PostActionButton } from '@/components/post/PostActionButton';
 import { PostComment } from '@/components/post/PostComment';
@@ -44,9 +43,6 @@ export function PostCard({ comment }: PostCardProps) {
         }
     }, [comment, isEditing]);
 
-    const parsedContent = useMemo(() => parseTextWithLinks(body), [body]);
-    const firstUrl = useMemo(() => extractFirstUrl(body), [body]);
-
     const handleReaction = (emoji: string) => {
         console.log(`Reacted with: ${emoji}`);
     };
@@ -79,11 +75,10 @@ export function PostCard({ comment }: PostCardProps) {
                     />
                 ) : (
                     <>
-                        <div className="text-[17px]">
-                            <p>{parsedContent}</p>
-                        </div>
-
-                        {firstUrl && <LinkPreview url={firstUrl} />}
+                        <CommentBody
+                            body={body}
+                            weblinks={comment.weblinks}
+                        />
 
                         {files.length > 0 && <FilePreview files={files} />}
                     </>

@@ -1,0 +1,9 @@
+fragment WeblinkFields on Weblink {
+  id
+  url
+  alias
+  title
+  descr
+  image
+  icon
+}

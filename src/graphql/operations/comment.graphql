@@ -1,3 +1,5 @@
+#import "./fragments/weblink.graphql"
+
 query Comment($id: ID!) {
   comment(id: $id) {
     id
@@ -17,6 +19,9 @@ query Comment($id: ID!) {
       type
       size
     }
+    weblinks {
+      ...WeblinkFields
+    }
     children {
       id
       body
@@ -26,6 +31,9 @@ query Comment($id: ID!) {
         id
         name
         avatar
+      }
+      weblinks {
+        ...WeblinkFields
       }
     }
   }
