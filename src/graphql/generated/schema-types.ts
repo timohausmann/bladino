@@ -12,7 +12,6 @@ export type Scalars = {
 
 export type Channel = {
   __typename?: 'Channel';
-  comments?: Maybe<Array<Maybe<Comment>>>;
   dateCreated: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
   lastView?: Maybe<Scalars['Date']['output']>;

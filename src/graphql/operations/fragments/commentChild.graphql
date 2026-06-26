@@ -1,0 +1,16 @@
+#import "./weblink.graphql"
+
+fragment CommentChildFields on Comment {
+  id
+  body
+  dateCreated
+  parent
+  user {
+    id
+    name
+    avatar
+  }
+  weblinks {
+    ...WeblinkFields
+  }
+}

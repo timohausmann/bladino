@@ -1,4 +1,5 @@
 #import "./fragments/weblink.graphql"
+#import "./fragments/commentChild.graphql"
 
 mutation AddComment($body: String, $channel: ID, $files: [ID!], $parent: ID) {
   addComment(body: $body, channel: $channel, files: $files, parent: $parent) {
@@ -36,18 +37,7 @@ query Comment($id: ID!) {
       ...WeblinkFields
     }
     children {
-      id
-      body
-      dateCreated
-      parent
-      user {
-        id
-        name
-        avatar
-      }
-      weblinks {
-        ...WeblinkFields
-      }
+      ...CommentChildFields
     }
   }
 }

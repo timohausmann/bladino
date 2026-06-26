@@ -1,4 +1,5 @@
 #import "./fragments/weblink.graphql"
+#import "./fragments/commentChild.graphql"
 
 query CommentFeed($filter: CommentFilter!, $cursor: Date) {
   commentFeed(filter: $filter, cursor: $cursor) {
@@ -22,6 +23,9 @@ query CommentFeed($filter: CommentFilter!, $cursor: Date) {
       }
       weblinks {
         ...WeblinkFields
+      }
+      children {
+        ...CommentChildFields
       }
     }
   }
