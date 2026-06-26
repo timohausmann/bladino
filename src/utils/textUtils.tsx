@@ -3,10 +3,10 @@ import { LinkPreview } from '@/components/ui/LinkPreview';
 import React from 'react';
 
 interface WeblinkMatch {
-    start: number;
-    end: number;
-    alias: string;
-    weblink: Weblink;
+  start: number;
+  end: number;
+  alias: string;
+  weblink: Weblink;
 }
 
 /**
@@ -25,13 +25,13 @@ const URL_REGEX = /(https?:\/\/[^\s]+)/g;
  * @returns Truncated URL with ellipsis if needed
  */
 export function truncateUrl(url: string): string {
-    if (url.length <= MAX_URL_LENGTH) {
-        return url;
-    }
+  if (url.length <= MAX_URL_LENGTH) {
+    return url;
+  }
 
-    // Keep protocol and some of the domain
-    const firstPart = url.substring(0, MAX_URL_LENGTH - 3);
-    return `${firstPart}...`;
+  // Keep protocol and some of the domain
+  const firstPart = url.substring(0, MAX_URL_LENGTH - 3);
+  return `${firstPart}...`;
 }
 
 /**
@@ -40,48 +40,48 @@ export function truncateUrl(url: string): string {
  * @returns An array of React nodes (strings and link elements)
  */
 export function parseTextWithLinks(text: string): React.ReactNode[] {
-    if (!text) return [];
+  if (!text) return [];
 
-    const result: React.ReactNode[] = [];
-    let lastIndex = 0;
-    let match;
+  const result: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
 
-    // Reset the regex before using it with exec
-    URL_REGEX.lastIndex = 0;
+  // Reset the regex before using it with exec
+  URL_REGEX.lastIndex = 0;
 
-    // Find each URL match and process the text before and including the URL
-    while ((match = URL_REGEX.exec(text)) !== null) {
-        const url = match[0];
-        const matchIndex = match.index;
+  // Find each URL match and process the text before and including the URL
+  while ((match = URL_REGEX.exec(text)) !== null) {
+    const url = match[0];
+    const matchIndex = match.index;
 
-        // Add the text before the URL
-        if (matchIndex > lastIndex) {
-            result.push(text.substring(lastIndex, matchIndex));
-        }
-
-        // Add the URL as a link element
-        result.push(
-            <a
-                key={`link-${matchIndex}`}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="break-words text-cyan-400"
-            >
-                {truncateUrl(url)}
-            </a>
-        );
-
-        // Update the last index to after this URL
-        lastIndex = matchIndex + url.length;
+    // Add the text before the URL
+    if (matchIndex > lastIndex) {
+      result.push(text.substring(lastIndex, matchIndex));
     }
 
-    // Add any remaining text after the last URL
-    if (lastIndex < text.length) {
-        result.push(text.substring(lastIndex));
-    }
+    // Add the URL as a link element
+    result.push(
+      <a
+        key={`link-${matchIndex}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="break-words text-cyan-400"
+      >
+        {truncateUrl(url)}
+      </a>,
+    );
 
-    return result;
+    // Update the last index to after this URL
+    lastIndex = matchIndex + url.length;
+  }
+
+  // Add any remaining text after the last URL
+  if (lastIndex < text.length) {
+    result.push(text.substring(lastIndex));
+  }
+
+  return result;
 }
 
 /**
@@ -90,86 +90,89 @@ export function parseTextWithLinks(text: string): React.ReactNode[] {
  * @returns The first URL found or null if none
  */
 export function extractFirstUrl(text: string): string | null {
-    const match = text.match(URL_REGEX);
-    return match ? match[0] : null;
+  const match = text.match(URL_REGEX);
+  return match ? match[0] : null;
 }
 
 /**
  * Splits plain text into nodes, turning newline characters into <br /> elements.
  */
-function renderTextWithLineBreaks(text: string, keyPrefix: string): React.ReactNode[] {
-    if (!text) {
-        return [];
+function renderTextWithLineBreaks(
+  text: string,
+  keyPrefix: string,
+): React.ReactNode[] {
+  if (!text) {
+    return [];
+  }
+
+  const lines = text.split('\n');
+  const nodes: React.ReactNode[] = [];
+
+  lines.forEach((line, index) => {
+    if (index > 0) {
+      nodes.push(<br key={`${keyPrefix}-br-${index}`} />);
     }
+    if (line) {
+      nodes.push(line);
+    }
+  });
 
-    const lines = text.split('\n');
-    const nodes: React.ReactNode[] = [];
-
-    lines.forEach((line, index) => {
-        if (index > 0) {
-            nodes.push(<br key={`${keyPrefix}-br-${index}`} />);
-        }
-        if (line) {
-            nodes.push(line);
-        }
-    });
-
-    return nodes;
+  return nodes;
 }
 
 /** Collects non-overlapping weblink alias matches ordered by position in the body. */
 function collectWeblinkMatches(
-    body: string,
-    weblinks?: Array<Weblink | null> | null,
+  body: string,
+  weblinks?: Array<Weblink | null> | null,
 ): WeblinkMatch[] {
-    const matches: WeblinkMatch[] = [];
+  const matches: WeblinkMatch[] = [];
 
-    for (const weblink of weblinks ?? []) {
-        if (!weblink) {
-            continue;
-        }
-
-        for (const alias of weblink.alias ?? []) {
-            if (!alias) {
-                continue;
-            }
-
-            let searchFrom = 0;
-            while (searchFrom < body.length) {
-                const index = body.indexOf(alias, searchFrom);
-                if (index === -1) {
-                    break;
-                }
-
-                matches.push({
-                    start: index,
-                    end: index + alias.length,
-                    alias,
-                    weblink,
-                });
-                searchFrom = index + alias.length;
-            }
-        }
+  for (const weblink of weblinks ?? []) {
+    if (!weblink) {
+      continue;
     }
 
-    matches.sort((a, b) => {
-        if (a.start !== b.start) {
-            return a.start - b.start;
-        }
-        return b.end - b.start - (a.end - a.start);
-    });
+    for (const alias of weblink.alias ?? []) {
+      if (!alias) {
+        continue;
+      }
 
-    const nonOverlapping: WeblinkMatch[] = [];
-    let lastIndex = 0;
-
-    for (const match of matches) {
-        if (match.start >= lastIndex) {
-            nonOverlapping.push(match);
-            lastIndex = match.end;
+      let searchFrom = 0;
+      while (searchFrom < body.length) {
+        const index = body.indexOf(alias, searchFrom);
+        if (index === -1) {
+          break;
         }
+
+        matches.push({
+          start: index,
+          end: index + alias.length,
+          alias,
+          weblink,
+        });
+        searchFrom = index + alias.length;
+      }
     }
+  }
 
-    return nonOverlapping;
+  matches.sort((a, b) => {
+    if (a.start !== b.start) {
+      return a.start - b.start;
+    }
+    return b.end - b.start - (a.end - a.start);
+  });
+
+  const nonOverlapping: WeblinkMatch[] = [];
+  let lastIndex = 0;
+
+  for (const match of matches) {
+    if (match.start >= lastIndex) {
+      nonOverlapping.push(match);
+      lastIndex = match.end;
+    }
+  }
+
+  return nonOverlapping;
 }
 
 /**
@@ -178,52 +181,52 @@ function collectWeblinkMatches(
  * @param weblinks Weblink metadata from the API (matched by alias strings in body)
  */
 export function parseCommentBody(
-    body: string,
-    weblinks?: Array<Weblink | null> | null,
+  body: string,
+  weblinks?: Array<Weblink | null> | null,
 ): React.ReactNode[] {
-    if (!body) {
-        return [];
+  if (!body) {
+    return [];
+  }
+
+  const matches = collectWeblinkMatches(body, weblinks);
+
+  if (matches.length === 0) {
+    return renderTextWithLineBreaks(body, 'text');
+  }
+
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+
+  matches.forEach((match, index) => {
+    if (match.start > lastIndex) {
+      nodes.push(
+        ...renderTextWithLineBreaks(
+          body.slice(lastIndex, match.start),
+          `text-${lastIndex}`,
+        ),
+      );
     }
 
-    const matches = collectWeblinkMatches(body, weblinks);
+    const { weblink, alias } = match;
+    nodes.push(
+      <LinkPreview
+        key={`preview-${match.start}-${index}`}
+        url={weblink.url || alias}
+        title={weblink.title ?? undefined}
+        description={weblink.descr ?? undefined}
+        image={weblink.image ?? undefined}
+        icon={weblink.icon ?? undefined}
+      />,
+    );
 
-    if (matches.length === 0) {
-        return renderTextWithLineBreaks(body, 'text');
-    }
+    lastIndex = match.end;
+  });
 
-    const nodes: React.ReactNode[] = [];
-    let lastIndex = 0;
+  if (lastIndex < body.length) {
+    nodes.push(
+      ...renderTextWithLineBreaks(body.slice(lastIndex), `text-${lastIndex}`),
+    );
+  }
 
-    matches.forEach((match, index) => {
-        if (match.start > lastIndex) {
-            nodes.push(
-                ...renderTextWithLineBreaks(
-                    body.slice(lastIndex, match.start),
-                    `text-${lastIndex}`,
-                ),
-            );
-        }
-
-        const { weblink, alias } = match;
-        nodes.push(
-            <LinkPreview
-                key={`preview-${match.start}-${index}`}
-                url={weblink.url || alias}
-                title={weblink.title ?? undefined}
-                description={weblink.descr ?? undefined}
-                image={weblink.image ?? undefined}
-                icon={weblink.icon ?? undefined}
-            />,
-        );
-
-        lastIndex = match.end;
-    });
-
-    if (lastIndex < body.length) {
-        nodes.push(
-            ...renderTextWithLineBreaks(body.slice(lastIndex), `text-${lastIndex}`),
-        );
-    }
-
-    return nodes;
+  return nodes;
 }

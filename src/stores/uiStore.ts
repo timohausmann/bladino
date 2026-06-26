@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface UiState {
   isPresenceRailOpen: boolean;
@@ -19,9 +19,8 @@ export const useUiStore = create<UiState>()(
         set({ isPresenceRailOpen: !get().isPresenceRailOpen }),
       isNavRailExpanded: true,
       setNavRailExpanded: (expanded) => set({ isNavRailExpanded: expanded }),
-      toggleNavRail: () =>
-        set({ isNavRailExpanded: !get().isNavRailExpanded }),
+      toggleNavRail: () => set({ isNavRailExpanded: !get().isNavRailExpanded }),
     }),
-    { name: "bladino.ui" },
+    { name: 'bladino.ui' },
   ),
 );

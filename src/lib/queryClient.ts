@@ -1,5 +1,5 @@
-import { isRetryableGraphQLError } from "@/graphql/errors";
-import { QueryClient } from "@tanstack/react-query";
+import { isRetryableGraphQLError } from '@/graphql/errors';
+import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

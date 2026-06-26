@@ -2,40 +2,45 @@ import clsx from 'clsx';
 import { LucideIcon } from 'lucide-react';
 
 interface ContextMenuButtonProps {
-    id: string;
-    label: string;
-    icon?: LucideIcon;
-    variant?: 'default' | 'destructive';
-    disabled?: boolean;
-    onClick: () => void;
+  id: string;
+  label: string;
+  icon?: LucideIcon;
+  variant?: 'default' | 'destructive';
+  disabled?: boolean;
+  onClick: () => void;
 }
 
 export function ContextMenuButton({
-    id,
-    label,
-    icon: IconComponent,
-    variant = 'default',
-    disabled = false,
-    onClick
+  id,
+  label,
+  icon: IconComponent,
+  variant = 'default',
+  disabled = false,
+  onClick,
 }: ContextMenuButtonProps) {
-    const baseClasses = "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors duration-150";
+  const baseClasses =
+    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors duration-150';
 
-    const itemClasses = clsx(
-        baseClasses,
-        disabled && "text-neutral-400 dark:text-neutral-600 cursor-not-allowed",
-        !disabled && variant === 'destructive' && "text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-800 dark:hover:text-rose-200",
-        !disabled && variant === 'default' && "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
-    );
+  const itemClasses = clsx(
+    baseClasses,
+    disabled && 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed',
+    !disabled &&
+      variant === 'destructive' &&
+      'text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-800 dark:hover:text-rose-200',
+    !disabled &&
+      variant === 'default' &&
+      'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100',
+  );
 
-    return (
-        <button
-            key={id}
-            onClick={onClick}
-            className={itemClasses}
-            disabled={disabled}
-        >
-            {IconComponent && <IconComponent size={16} />}
-            {label}
-        </button>
-    );
+  return (
+    <button
+      key={id}
+      onClick={onClick}
+      className={itemClasses}
+      disabled={disabled}
+    >
+      {IconComponent && <IconComponent size={16} />}
+      {label}
+    </button>
+  );
 }

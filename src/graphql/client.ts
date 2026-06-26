@@ -1,9 +1,9 @@
-import { getAuthToken } from "@/stores/authStore";
-import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
-import { GraphQLClient } from "graphql-request";
+import { getAuthToken } from '@/stores/authStore';
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { GraphQLClient } from 'graphql-request';
 
 function resolveGraphQLEndpoint(): string {
-  const configured = import.meta.env.VITE_GRAPHQL_URL ?? "/graphql";
+  const configured = import.meta.env.VITE_GRAPHQL_URL ?? '/graphql';
 
   // graphql-request v7 uses `new URL(url)` internally — relative paths throw without a base.
   if (/^https?:\/\//.test(configured)) {
@@ -16,7 +16,7 @@ function resolveGraphQLEndpoint(): string {
 const endpoint = resolveGraphQLEndpoint();
 
 export const graphqlClient = new GraphQLClient(endpoint, {
-  credentials: "include",
+  credentials: 'include',
 });
 
 function authHeaders(): Record<string, string> {

@@ -1,7 +1,7 @@
-const AUTH_TOKEN_KEY = "bladino.authToken";
+const AUTH_TOKEN_KEY = 'bladino.authToken';
 
 let authToken: string | null =
-  typeof window !== "undefined" ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
+  typeof window !== 'undefined' ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
 
 export function getAuthToken(): string | null {
   return authToken;

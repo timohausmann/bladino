@@ -5,7 +5,7 @@ import { EmojiPicker } from '@/components/ui/EmojiPicker';
 import { HeaderButton } from '@/components/ui/HeaderButton';
 
 interface CreateAddEmojiProps {
-    onEmojiSelect: (emoji: string) => void;
+  onEmojiSelect: (emoji: string) => void;
 }
 
 /**
@@ -13,30 +13,26 @@ interface CreateAddEmojiProps {
  * Based on the working EmojiReaction pattern
  */
 export function CreateAddEmoji({ onEmojiSelect }: CreateAddEmojiProps) {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-            <Popover.Trigger asChild>
-                <HeaderButton
-                    icon={<SmilePlus size={20} />}
-                    label="Add emoji"
-                    variant="persistent"
-                />
-            </Popover.Trigger>
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <HeaderButton
+          icon={<SmilePlus size={20} />}
+          label="Add emoji"
+          variant="persistent"
+        />
+      </Popover.Trigger>
 
-            <Popover.Portal>
-                <Popover.Content
-                    className="z-50"
-                    sideOffset={8}
-                    align="start"
-                >
-                    <EmojiPicker
-                        onEmojiSelect={onEmojiSelect}
-                        onClose={() => setIsOpen(false)}
-                    />
-                </Popover.Content>
-            </Popover.Portal>
-        </Popover.Root>
-    );
+      <Popover.Portal>
+        <Popover.Content className="z-50" sideOffset={8} align="start">
+          <EmojiPicker
+            onEmojiSelect={onEmojiSelect}
+            onClose={() => setIsOpen(false)}
+          />
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
 }

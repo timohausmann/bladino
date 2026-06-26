@@ -9,9 +9,9 @@
  * sessionStorage fits redirect flashes: clean URL, tab-scoped, survives SPA
  * navigation, auto-cleared on tab close. Stores one message at a time.
  */
-const FLASH_KEY = "bladino.flash";
+const FLASH_KEY = 'bladino.flash';
 
-export type FlashMessage = "loggedOut";
+export type FlashMessage = 'loggedOut';
 
 export function setFlashMessage(message: FlashMessage): void {
   sessionStorage.setItem(FLASH_KEY, message);

@@ -1,4 +1,4 @@
-import { resolveAvatarUrl } from "@/utils/avatarUrl";
+import { resolveAvatarUrl } from '@/utils/avatarUrl';
 
 interface AvatarProps {
   /** Resolved image URL – use for external/mock URLs */
@@ -13,21 +13,21 @@ interface AvatarProps {
  * Avatar component - displays a circular avatar image.
  * Prefer `avatar` for API filenames; `src` for pre-resolved URLs.
  */
-export function Avatar({ src, avatar, alt, className = "" }: AvatarProps) {
+export function Avatar({ src, avatar, alt, className = '' }: AvatarProps) {
   const resolvedSrc = src ?? resolveAvatarUrl(avatar);
 
   if (!resolvedSrc) {
     return (
       <div
-        className={`rounded-full overflow-hidden aspect-square bg-muted ${className}`}
+        className={`bg-muted aspect-square overflow-hidden rounded-full ${className}`}
         aria-label={alt}
       />
     );
   }
 
   return (
-    <div className={`rounded-full overflow-hidden aspect-square ${className}`}>
-      <img src={resolvedSrc} alt={alt} className="w-full h-full object-cover" />
+    <div className={`aspect-square overflow-hidden rounded-full ${className}`}>
+      <img src={resolvedSrc} alt={alt} className="h-full w-full object-cover" />
     </div>
   );
 }

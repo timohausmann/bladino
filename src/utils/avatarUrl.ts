@@ -1,4 +1,4 @@
-const AVATAR_BASE_PATH = "/avatare";
+const AVATAR_BASE_PATH = '/avatare';
 
 /**
  * Resolves an avatar filename from the API to a browser URL.
@@ -9,7 +9,11 @@ export function resolveAvatarUrl(avatar?: string | null): string | undefined {
     return undefined;
   }
 
-  if (avatar.startsWith("/") || avatar.startsWith("http://") || avatar.startsWith("https://")) {
+  if (
+    avatar.startsWith('/') ||
+    avatar.startsWith('http://') ||
+    avatar.startsWith('https://')
+  ) {
     return avatar;
   }
 

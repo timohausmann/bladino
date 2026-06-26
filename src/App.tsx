@@ -6,16 +6,16 @@ import { Toaster } from '@/components/ui/toast';
 import { queryClient } from './lib/queryClient';
 
 function App() {
-    return (
-        <ThemeProvider>
-            <QueryClientProvider client={queryClient}>
-                <Layout>
-                    <Outlet />
-                </Layout>
-                <Toaster />
-            </QueryClientProvider>
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <Layout>
+          <Outlet />
+        </Layout>
+        <Toaster />
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;

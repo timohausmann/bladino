@@ -7,15 +7,15 @@ import { UsersLastActionDocument, useGraphQLQuery } from '@/graphql';
  * Home page component displaying create post form and live feed posts
  */
 export function Home() {
-    const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
+  const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
 
-    return (
-        <>
-            <CreatePost />
+  return (
+    <>
+      <CreatePost />
 
-            <PresenceRail users={presenceData?.usersLastAction ?? []} />
+      <PresenceRail users={presenceData?.usersLastAction ?? []} />
 
-            <CommentFeed filter={{}} />
-        </>
-    );
+      <CommentFeed filter={{}} />
+    </>
+  );
 }

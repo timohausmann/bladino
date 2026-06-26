@@ -1,4 +1,4 @@
-export { mockPresenceEntries } from "./presence";
+export { mockPresenceEntries } from './presence';
 export {
   getCommentById,
   getCommentsByUserId,
@@ -6,5 +6,5 @@ export {
   getPostsByUserId,
   mockComments,
   mockPosts,
-} from "./posts";
-export { getUserByEmail, getUserById, getUserByName, mockUsers } from "./users";
+} from './posts';
+export { getUserByEmail, getUserById, getUserByName, mockUsers } from './users';

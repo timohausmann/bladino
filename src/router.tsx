@@ -4,11 +4,11 @@ import {
   createRouter,
   Outlet,
   redirect,
-} from "@tanstack/react-router";
-import type { QueryClient } from "@tanstack/react-query";
-import App from "./App";
-import { ensureSession, resolveRedirectTarget } from "./lib/auth";
-import { queryClient } from "./lib/queryClient";
+} from '@tanstack/react-router';
+import type { QueryClient } from '@tanstack/react-query';
+import App from './App';
+import { ensureSession, resolveRedirectTarget } from './lib/auth';
+import { queryClient } from './lib/queryClient';
 import {
   ForgotPassword,
   Home,
@@ -19,8 +19,8 @@ import {
   PostDetail,
   Profile,
   Settings,
-} from "./routes";
-import { ButtonLab } from "./routes/ButtonLab";
+} from './routes';
+import { ButtonLab } from './routes/ButtonLab';
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -37,12 +37,12 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
 
 const authenticatedRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: "_authenticated",
+  id: '_authenticated',
   beforeLoad: async ({ context, location }) => {
     const user = await ensureSession(context.queryClient);
     if (!user) {
       throw redirect({
-        to: "/login",
+        to: '/login',
         search: { returnTo: location.pathname + location.searchStr },
       });
     }
@@ -53,48 +53,47 @@ const authenticatedRoute = createRoute({
 
 const homeRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/",
+  path: '/',
   component: Home,
 });
 
 const postRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/post/$id",
+  path: '/post/$id',
   component: PostDetail,
 });
 
 const profileRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/u/$name",
+  path: '/u/$name',
   component: Profile,
 });
 
 const settingsRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/settings",
+  path: '/settings',
   component: Settings,
 });
 
 const notesIndexRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/notes",
+  path: '/notes',
   component: Notes,
-  staticData: { fixedViewport: true, layoutMode: "masterDetail" },
+  staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
 const notesDetailRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
-  path: "/notes/$id",
+  path: '/notes/$id',
   component: Notes,
-  staticData: { fixedViewport: true, layoutMode: "masterDetail" },
+  staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/login",
+  path: '/login',
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
-    returnTo:
-      typeof search.returnTo === "string" ? search.returnTo : undefined,
+    returnTo: typeof search.returnTo === 'string' ? search.returnTo : undefined,
   }),
   beforeLoad: async ({ context, search }) => {
     const user = await ensureSession(context.queryClient);
@@ -110,20 +109,20 @@ const loginRoute = createRoute({
 
 const forgotPasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/forgot-password",
+  path: '/forgot-password',
   component: ForgotPassword,
 });
 
 const logoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/logout",
+  path: '/logout',
   component: Logout,
 });
 
 const buttonLabRoute = import.meta.env.DEV
   ? createRoute({
       getParentRoute: () => rootRoute,
-      path: "/lab/button",
+      path: '/lab/button',
       component: ButtonLab,
     })
   : null;
@@ -153,13 +152,13 @@ export const router = createRouter({
   defaultViewTransition: true,
 });
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
   }
 
   interface StaticDataRouteOption {
     fixedViewport?: boolean;
-    layoutMode?: "feed" | "masterDetail" | "fullWidth";
+    layoutMode?: 'feed' | 'masterDetail' | 'fullWidth';
   }
 }

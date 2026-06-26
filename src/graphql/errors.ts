@@ -1,4 +1,4 @@
-import { ClientError } from "graphql-request";
+import { ClientError } from 'graphql-request';
 
 /** GraphQL response returned an errors array (graphql-request throws ClientError). */
 export function isGraphQLClientError(error: unknown): error is ClientError {
@@ -12,7 +12,7 @@ export function getGraphQLErrorMessage(error: unknown): string | undefined {
   }
 
   const message = error.response.errors?.[0]?.message;
-  return typeof message === "string" ? message : undefined;
+  return typeof message === 'string' ? message : undefined;
 }
 
 /**

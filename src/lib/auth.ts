@@ -1,25 +1,25 @@
-import { CurrentUserDocument } from "@/graphql";
-import { requestGraphQL } from "@/graphql/client";
-import { clearAuthToken, getAuthToken } from "@/stores/authStore";
-import { useUserStore, type CurrentUser } from "@/stores/userStore";
-import type { QueryClient } from "@tanstack/react-query";
+import { CurrentUserDocument } from '@/graphql';
+import { requestGraphQL } from '@/graphql/client';
+import { clearAuthToken, getAuthToken } from '@/stores/authStore';
+import { useUserStore, type CurrentUser } from '@/stores/userStore';
+import type { QueryClient } from '@tanstack/react-query';
 
-export const CURRENT_USER_QUERY_KEY = ["CurrentUser"] as const;
+export const CURRENT_USER_QUERY_KEY = ['CurrentUser'] as const;
 
 const SESSION_STALE_TIME_MS = 5 * 60 * 1000;
 
 /** Resolves a post-login redirect target to a same-origin path. */
 export function resolveRedirectTarget(redirect: unknown): string {
-  if (typeof redirect !== "string" || redirect.length === 0) {
-    return "/";
+  if (typeof redirect !== 'string' || redirect.length === 0) {
+    return '/';
   }
 
   try {
     const url = new URL(redirect, window.location.origin);
-    if (url.origin !== window.location.origin) return "/";
+    if (url.origin !== window.location.origin) return '/';
     return `${url.pathname}${url.search}${url.hash}`;
   } catch {
-    return redirect.startsWith("/") ? redirect : "/";
+    return redirect.startsWith('/') ? redirect : '/';
   }
 }
 

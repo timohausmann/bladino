@@ -1,13 +1,17 @@
-import { headerButtonVariants, type HeaderButtonVariant } from '@/components/ui/headerButtonVariants';
+import {
+  headerButtonVariants,
+  type HeaderButtonVariant,
+} from '@/components/ui/headerButtonVariants';
 import { ReactNode } from 'react';
 
-interface HeaderButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    icon: ReactNode;
-    label: string;
-    title?: string;
-    className?: string;
-    active?: boolean;
-    variant?: HeaderButtonVariant;
+interface HeaderButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: ReactNode;
+  label: string;
+  title?: string;
+  className?: string;
+  active?: boolean;
+  variant?: HeaderButtonVariant;
 }
 
 /**
@@ -19,24 +23,24 @@ interface HeaderButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
  * - dangerous: rose accent for destructive actions
  */
 export function HeaderButton({
-    icon,
-    label,
-    className = '',
-    active = false,
-    variant = 'default',
-    disabled = false,
-    tabIndex,
-    ...buttonProps
+  icon,
+  label,
+  className = '',
+  active = false,
+  variant = 'default',
+  disabled = false,
+  tabIndex,
+  ...buttonProps
 }: HeaderButtonProps) {
-    return (
-        <button
-            {...buttonProps}
-            disabled={disabled}
-            tabIndex={disabled ? -1 : tabIndex ?? 0}
-            className={headerButtonVariants({ variant, active, disabled, className })}
-            aria-label={label}
-        >
-            {icon}
-        </button>
-    );
+  return (
+    <button
+      {...buttonProps}
+      disabled={disabled}
+      tabIndex={disabled ? -1 : (tabIndex ?? 0)}
+      className={headerButtonVariants({ variant, active, disabled, className })}
+      aria-label={label}
+    >
+      {icon}
+    </button>
+  );
 }

@@ -1,4 +1,4 @@
-import { getAuthToken } from "@/stores/authStore";
+import { getAuthToken } from '@/stores/authStore';
 
 export interface UploadFileOptions {
   channel?: string;
@@ -10,7 +10,7 @@ interface UploadResponse {
 }
 
 function resolveUploadUrl(): string {
-  const configured = import.meta.env.VITE_UPLOAD_URL ?? "/upload";
+  const configured = import.meta.env.VITE_UPLOAD_URL ?? '/upload';
 
   if (/^https?:\/\//.test(configured)) {
     return configured;
@@ -25,14 +25,14 @@ export async function uploadFile(
   options: UploadFileOptions = {},
 ): Promise<string> {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append('file', file);
 
   if (options.channel) {
-    formData.append("channel", options.channel);
+    formData.append('channel', options.channel);
   }
 
   if (options.parent) {
-    formData.append("parent", options.parent);
+    formData.append('parent', options.parent);
   }
 
   const headers: Record<string, string> = {};
@@ -42,10 +42,10 @@ export async function uploadFile(
   }
 
   const response = await fetch(resolveUploadUrl(), {
-    method: "POST",
+    method: 'POST',
     body: formData,
     headers,
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -54,7 +54,7 @@ export async function uploadFile(
 
   const data = (await response.json()) as UploadResponse;
   if (!data.id) {
-    throw new Error("Upload response missing file id");
+    throw new Error('Upload response missing file id');
   }
 
   return data.id;
