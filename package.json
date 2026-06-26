@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css}\" \"*.{ts,js}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css}\" \"*.{ts,js}\"",
     "preview": "vite preview",
     "analyze": "ANALYZE=true npm run build",
     "codegen": "graphql-codegen --config codegen.ts",
