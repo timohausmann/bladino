@@ -81,6 +81,10 @@ export type Mail = {
 export type Mutation = {
   __typename?: 'Mutation';
   addChannel: Channel;
+  /**
+   * Creates a comment. Requires body and/or files (MAX_FILES, excess IDs are silently dropped).
+   * body is trimmed; whitespace-only counts as no body.
+   */
   addComment: Comment;
   addNote: Note;
   addUser: User;
@@ -103,6 +107,20 @@ export type Mutation = {
   toggleVote: Scalars['Int']['output'];
   updateChannel: Channel;
   updateChannelView?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   * Partial update with replace semantics for files.
+   *
+   * body:
+   * - omitted → body unchanged
+   * - "" or whitespace → body cleared (undefined)
+   *
+   * files:
+   * - omitted → files unchanged
+   * - [id1, id2] → replaces the full file list; removed files are deleted from disk
+   * - [] → removes all files (only valid if body remains)
+   *
+   * A comment must always have body and/or at least one file after the update.
+   */
   updateComment: Comment;
   updateNote: Note;
   updatePassword?: Maybe<Scalars['Boolean']['output']>;

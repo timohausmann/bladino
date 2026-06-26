@@ -1,28 +1,20 @@
-import type { Comment, File as ApiFile } from '@/graphql';
+import type { Comment } from '@/graphql';
+import { getCommentChildren, getCommentFiles } from '@/utils/commentUtils';
 import { MessageCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Divider } from '@/components/ui/Divider';
 import { EmojiReaction } from '@/components/ui/EmojiReaction';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { CommentBody } from '@/components/post/CommentBody';
-import { EditPostForm } from '@/components/post/EditPostForm';
+import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { PostActionButton } from '@/components/post/PostActionButton';
 import { PostComment } from '@/components/post/PostComment';
 import { PostHeader } from '@/components/post/PostHeader';
 import { PostReply } from '@/components/post/PostReply';
-import type { LocalDraftFile } from '@/utils/postFileUtils';
 
 interface PostCardProps {
     comment: Comment;
-}
-
-function getCommentFiles(comment: Comment): ApiFile[] {
-    return (comment.files ?? []).filter((file): file is ApiFile => file != null);
-}
-
-function getCommentChildren(comment: Comment): Comment[] {
-    return (comment.children ?? []).filter((child): child is Comment => child != null);
 }
 
 /**
@@ -31,34 +23,12 @@ function getCommentChildren(comment: Comment): Comment[] {
 export function PostCard({ comment }: PostCardProps) {
     const { user, id: commentId } = comment;
     const children = getCommentChildren(comment);
+    const files = getCommentFiles(comment);
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [body, setBody] = useState(comment.body);
-    const [files, setFiles] = useState<ApiFile[]>(() => getCommentFiles(comment));
-
-    useEffect(() => {
-        if (!isEditing) {
-            setBody(comment.body);
-            setFiles(getCommentFiles(comment));
-        }
-    }, [comment, isEditing]);
 
     const handleReaction = (emoji: string) => {
         console.log(`Reacted with: ${emoji}`);
-    };
-
-    const handleReplySubmit = (replyContent: string) => {
-        console.log('Reply submitted:', replyContent);
-    };
-
-    const handleReplyCancel = () => {
-        // Don't hide comments when canceling reply
-    };
-
-    const handleEditSave = (newContent: string, newFiles: LocalDraftFile[]) => {
-        setBody(newContent);
-        setIsEditing(false);
-        console.log('Edit post:', commentId, { body: newContent, files: newFiles });
     };
 
     return (
@@ -67,16 +37,22 @@ export function PostCard({ comment }: PostCardProps) {
                 <PostHeader comment={comment} onEdit={() => setIsEditing(true)} />
 
                 {isEditing ? (
-                    <EditPostForm
-                        initialContent={body ?? ''}
+                    <CommentComposerForm
+                        mode="edit"
+                        layout="card"
+                        commentId={commentId}
+                        channel={comment.channel ?? undefined}
+                        initialContent={comment.body ?? ''}
                         initialFiles={files}
-                        onSave={handleEditSave}
+                        showCancel
                         onCancel={() => setIsEditing(false)}
+                        onSuccess={() => setIsEditing(false)}
+                        errorMessage="Failed to update post"
                     />
                 ) : (
                     <>
                         <CommentBody
-                            body={body}
+                            body={comment.body}
                             weblinks={comment.weblinks}
                         />
 
@@ -100,14 +76,14 @@ export function PostCard({ comment }: PostCardProps) {
             {showComments && (
                 <div className="flex flex-col gap-4">
                     <PostReply
-                        onSubmit={handleReplySubmit}
-                        onCancel={handleReplyCancel}
+                        parentId={commentId}
+                        channel={comment.channel ?? undefined}
                         placeholder={`Reply to ${user.name}...`}
                     />
 
                     {children.length > 0 && (
                         <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-foreground mb-3">
+                            <h4 className="text-xs tracking-wide uppercase text-muted-foreground">
                                 Comments ({children.length})
                             </h4>
                             <div className="space-y-0">
@@ -115,6 +91,7 @@ export function PostCard({ comment }: PostCardProps) {
                                     <PostComment
                                         key={`${child.id}-${index}`}
                                         comment={child}
+                                        channel={comment.channel ?? undefined}
                                     />
                                 ))}
                             </div>

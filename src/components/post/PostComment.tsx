@@ -1,37 +1,28 @@
 import type { Comment } from '@/graphql';
+import { getCommentFiles } from '@/utils/commentUtils';
 import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Avatar } from '@/components/ui/Avatar';
 import { CommentBody } from '@/components/post/CommentBody';
-import { EditPostForm } from '@/components/post/EditPostForm';
+import { CommentComposerForm } from '@/components/post/CommentComposerForm';
+import { FilePreview } from '@/components/ui/FilePreview';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 
 interface PostCommentProps {
     comment: Comment;
+    channel?: string;
 }
 
 /**
  * PostComment - Compact comment display component
  */
-export function PostComment({ comment }: PostCommentProps) {
+export function PostComment({ comment, channel }: PostCommentProps) {
     const { user } = comment;
+    const files = getCommentFiles(comment);
     const handle = 'handle';
     const showHandle = false;
     const [isEditing, setIsEditing] = useState(false);
-    const [body, setBody] = useState(comment.body);
-
-    useEffect(() => {
-        if (!isEditing) {
-            setBody(comment.body);
-        }
-    }, [comment.body, isEditing]);
-
-    const handleEditSave = (newContent: string) => {
-        setBody(newContent);
-        setIsEditing(false);
-        console.log('Edit comment:', comment.id, { body: newContent });
-    };
 
     return (
         <div className="flex gap-3 py-3 border-b border-white/10 last:border-b-0">
@@ -70,19 +61,31 @@ export function PostComment({ comment }: PostCommentProps) {
                     </span>
                 </div>
                 {isEditing ? (
-                    <EditPostForm
-                        initialContent={body ?? ''}
-                        onSave={(newContent) => handleEditSave(newContent)}
+                    <CommentComposerForm
+                        mode="edit"
+                        layout="reply"
+                        commentId={comment.id}
+                        channel={channel}
+                        parent={comment.parent ?? undefined}
+                        initialContent={comment.body ?? ''}
+                        initialFiles={files}
+                        placeholder="Edit reply..."
+                        showCancel
                         onCancel={() => setIsEditing(false)}
-                        allowFiles={false}
-                        saveLabel="Save"
+                        onSuccess={() => setIsEditing(false)}
+                        errorMessage="Failed to update reply"
                     />
                 ) : (
-                    <CommentBody
-                        body={body}
-                        weblinks={comment.weblinks}
-                        className="text-sm text-foreground leading-relaxed"
-                    />
+                    <>
+                        <CommentBody
+                            body={comment.body}
+                            weblinks={comment.weblinks}
+                            className="text-sm text-foreground leading-relaxed"
+                        />
+                        {files.length > 0 && (
+                            <FilePreview files={files} />
+                        )}
+                    </>
                 )}
             </div>
             <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />

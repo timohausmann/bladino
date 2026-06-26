@@ -14,6 +14,20 @@ mutation AddComment($body: String, $channel: ID, $files: [ID!], $parent: ID) {
   }
 }
 
+mutation UpdateComment($id: ID!, $body: String, $files: [ID!]) {
+  updateComment(id: $id, body: $body, files: $files) {
+    id
+    body
+    files {
+      id
+      filename
+      name
+      type
+      size
+    }
+  }
+}
+
 query Comment($id: ID!) {
   comment(id: $id) {
     id
@@ -21,6 +35,7 @@ query Comment($id: ID!) {
     dateCreated
     dateEdited
     parent
+    channel
     user {
       id
       name

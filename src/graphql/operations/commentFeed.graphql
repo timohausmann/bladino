@@ -9,6 +9,7 @@ query CommentFeed($filter: CommentFilter!, $cursor: Date) {
       body
       dateCreated
       dateEdited
+      channel
       user {
         id
         name

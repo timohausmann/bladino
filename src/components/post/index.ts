@@ -1,4 +1,4 @@
-export { EditPostForm } from "./EditPostForm";
+export { CommentComposerForm } from "./CommentComposerForm";
 export { PostActionButton } from "./PostActionButton";
 export { PostCard } from "./PostCard";
 export { PostComment } from "./PostComment";
