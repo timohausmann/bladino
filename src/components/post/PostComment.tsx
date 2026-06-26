@@ -76,14 +76,15 @@ export function PostComment({ comment, channel }: PostCommentProps) {
             errorMessage="Failed to update reply"
           />
         ) : (
-          <>
+          <div className="flex flex-col gap-3">
             <CommentBody
               body={comment.body}
               weblinks={comment.weblinks}
+              linkPreviewVariant="compact"
               className="text-foreground text-sm leading-relaxed"
             />
             {files.length > 0 && <FilePreview files={files} />}
-          </>
+          </div>
         )}
       </div>
       <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />

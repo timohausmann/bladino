@@ -1,5 +1,8 @@
 import type { Weblink } from '@/graphql';
-import { LinkPreview } from '@/components/ui/LinkPreview';
+import {
+  LinkPreview,
+  type LinkPreviewVariant,
+} from '@/components/ui/LinkPreview';
 import React from 'react';
 
 interface WeblinkMatch {
@@ -120,6 +123,25 @@ function renderTextWithLineBreaks(
   return nodes;
 }
 
+/** Removes trailing newlines before an adjacent LinkPreview. */
+function trimTextBeforeLink(text: string): string {
+  return text.replace(/\n+$/, '');
+}
+
+/** Removes leading newlines after an adjacent LinkPreview. */
+function trimTextAfterLink(text: string): string {
+  return text.replace(/^\n+/, '');
+}
+
+/** Renders a text block as a single flex child, preserving internal line breaks. */
+function renderTextSegment(text: string, key: string): React.ReactNode {
+  return (
+    <span key={key} className="whitespace-pre-wrap">
+      {text}
+    </span>
+  );
+}
+
 /** Collects non-overlapping weblink alias matches ordered by position in the body. */
 function collectWeblinkMatches(
   body: string,
@@ -183,6 +205,7 @@ function collectWeblinkMatches(
 export function parseCommentBody(
   body: string,
   weblinks?: Array<Weblink | null> | null,
+  linkPreviewVariant: LinkPreviewVariant = 'default',
 ): React.ReactNode[] {
   if (!body) {
     return [];
@@ -199,12 +222,17 @@ export function parseCommentBody(
 
   matches.forEach((match, index) => {
     if (match.start > lastIndex) {
-      nodes.push(
-        ...renderTextWithLineBreaks(
-          body.slice(lastIndex, match.start),
-          `text-${lastIndex}`,
-        ),
-      );
+      let segment = body.slice(lastIndex, match.start);
+
+      if (lastIndex > 0) {
+        segment = trimTextAfterLink(segment);
+      }
+
+      segment = trimTextBeforeLink(segment);
+
+      if (segment) {
+        nodes.push(renderTextSegment(segment, `text-${lastIndex}`));
+      }
     }
 
     const { weblink, alias } = match;
@@ -216,6 +244,7 @@ export function parseCommentBody(
         description={weblink.descr ?? undefined}
         image={weblink.image ?? undefined}
         icon={weblink.icon ?? undefined}
+        variant={linkPreviewVariant}
       />,
     );
 
@@ -223,9 +252,11 @@ export function parseCommentBody(
   });
 
   if (lastIndex < body.length) {
-    nodes.push(
-      ...renderTextWithLineBreaks(body.slice(lastIndex), `text-${lastIndex}`),
-    );
+    const segment = trimTextAfterLink(body.slice(lastIndex));
+
+    if (segment) {
+      nodes.push(renderTextSegment(segment, `text-${lastIndex}`));
+    }
   }
 
   return nodes;
