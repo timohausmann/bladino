@@ -1,6 +1,14 @@
 import type { Comment } from '@/graphql';
+import {
+  DeleteCommentDocument,
+  getGraphQLErrorMessage,
+  useGraphQLMutation,
+} from '@/graphql';
 import { isReplyComment } from '@/utils/typePredicates';
+import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMatch, useNavigate } from '@tanstack/react-router';
 import {
   Edit,
   Flag,
@@ -28,10 +36,18 @@ interface PostContextMenuProps {
 export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  // const currentUser = useUserStore(store => store.currentUser);
-  // const isOwner = currentUser?.id === post.userId;
-  const isOwner = true;
+  const [isDeleting, setIsDeleting] = useState(false);
+  const currentUser = useUserStore((store) => store.currentUser);
+  const isOwner = currentUser?.id === comment.user.id;
   const isComment = isReplyComment(comment);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const postDetailMatch = useMatch({
+    from: '/_authenticated/post/$id',
+    shouldThrow: false,
+  });
+
+  const { mutateAsync: deleteComment } = useGraphQLMutation(DeleteCommentDocument);
 
   const handleReport = () => {
     console.log('Report post:', comment.id);
@@ -62,9 +78,45 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
     setDeleteOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    console.log('Delete post:', comment.id);
-    setDeleteOpen(false);
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+
+    try {
+      await deleteComment({ id: comment.id });
+
+      await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      await queryClient.invalidateQueries({
+        queryKey: ['Comment', { id: comment.id }],
+      });
+
+      if (comment.parent) {
+        await queryClient.invalidateQueries({
+          queryKey: ['Comment', { id: comment.parent }],
+        });
+      }
+
+      toast(
+        isComment
+          ? 'Comment deleted successfully!'
+          : 'Post deleted successfully!',
+      );
+
+      setDeleteOpen(false);
+
+      if (
+        !isComment &&
+        postDetailMatch?.params.id === String(comment.id)
+      ) {
+        void navigate({ to: '/' });
+      }
+    } catch (error) {
+      const message =
+        getGraphQLErrorMessage(error) ??
+        (error instanceof Error ? error.message : 'Failed to delete');
+      toast(message);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const deleteTitle = isComment ? 'Delete comment?' : 'Delete post?';
@@ -122,12 +174,17 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
 
       <ConfirmDialog
         open={deleteOpen}
-        onOpenChange={setDeleteOpen}
+        onOpenChange={(nextOpen) => {
+          // Block dismiss (Escape/outside click) while the delete request is in flight.
+          if (!isDeleting) {
+            setDeleteOpen(nextOpen);
+          }
+        }}
         title={deleteTitle}
         description={deleteDescription}
-        confirmLabel="Delete"
+        confirmLabel={isDeleting ? 'Deleting…' : 'Delete'}
         cancelLabel="Cancel"
-        onConfirm={handleDeleteConfirm}
+        onConfirm={() => void handleDeleteConfirm()}
         destructive
       />
     </>

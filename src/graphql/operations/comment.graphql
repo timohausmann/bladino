@@ -28,6 +28,10 @@ mutation UpdateComment($id: ID!, $body: String, $files: [ID!]) {
   }
 }
 
+mutation DeleteComment($id: ID!) {
+  deleteComment(id: $id)
+}
+
 query Comment($id: ID!) {
   comment(id: $id) {
     id
