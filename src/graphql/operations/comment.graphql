@@ -1,5 +1,18 @@
 #import "./fragments/weblink.graphql"
 
+mutation AddComment($body: String, $channel: ID, $files: [ID!], $parent: ID) {
+  addComment(body: $body, channel: $channel, files: $files, parent: $parent) {
+    id
+    body
+    dateCreated
+    files {
+      id
+      filename
+      type
+    }
+  }
+}
+
 query Comment($id: ID!) {
   comment(id: $id) {
     id

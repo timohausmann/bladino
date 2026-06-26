@@ -22,7 +22,7 @@ export type Channel = {
 
 export type Comment = Post & {
   __typename?: 'Comment';
-  body: Scalars['String']['output'];
+  body?: Maybe<Scalars['String']['output']>;
   channel?: Maybe<Scalars['ID']['output']>;
   children?: Maybe<Array<Maybe<Comment>>>;
   dateCreated?: Maybe<Scalars['Date']['output']>;
@@ -118,9 +118,9 @@ export type MutationAddChannelArgs = {
 
 
 export type MutationAddCommentArgs = {
-  body: Scalars['String']['input'];
+  body?: InputMaybe<Scalars['String']['input']>;
   channel?: InputMaybe<Scalars['ID']['input']>;
-  file?: InputMaybe<Scalars['ID']['input']>;
+  files?: InputMaybe<Array<Scalars['ID']['input']>>;
   parent?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -240,7 +240,8 @@ export type MutationUpdateChannelViewArgs = {
 
 
 export type MutationUpdateCommentArgs = {
-  body: Scalars['String']['input'];
+  body?: InputMaybe<Scalars['String']['input']>;
+  files?: InputMaybe<Array<Scalars['ID']['input']>>;
   id: Scalars['ID']['input'];
 };
 

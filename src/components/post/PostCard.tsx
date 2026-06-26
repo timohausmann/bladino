@@ -68,7 +68,7 @@ export function PostCard({ comment }: PostCardProps) {
 
                 {isEditing ? (
                     <EditPostForm
-                        initialContent={body}
+                        initialContent={body ?? ''}
                         initialFiles={files}
                         onSave={handleEditSave}
                         onCancel={() => setIsEditing(false)}

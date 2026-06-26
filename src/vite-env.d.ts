@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_GRAPHQL_URL: string;
+  readonly VITE_UPLOAD_URL: string;
 }
 
 interface ImportMeta {

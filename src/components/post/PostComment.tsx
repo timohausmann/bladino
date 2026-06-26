@@ -71,7 +71,7 @@ export function PostComment({ comment }: PostCommentProps) {
                 </div>
                 {isEditing ? (
                     <EditPostForm
-                        initialContent={body}
+                        initialContent={body ?? ''}
                         onSave={(newContent) => handleEditSave(newContent)}
                         onCancel={() => setIsEditing(false)}
                         allowFiles={false}

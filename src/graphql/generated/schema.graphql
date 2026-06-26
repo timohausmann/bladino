@@ -22,7 +22,7 @@ type Channel {
 """"""
 type Comment implements Post {
   """"""
-  body: String!
+  body: String
 
   """"""
   channel: ID
@@ -163,7 +163,7 @@ type Mutation {
   addChannel(name: String!): Channel!
 
   """"""
-  addComment(body: String!, channel: ID, file: ID, parent: ID): Comment!
+  addComment(body: String, channel: ID, files: [ID!], parent: ID): Comment!
 
   """"""
   addNote(body: String!): Note!
@@ -229,7 +229,7 @@ type Mutation {
   updateChannelView(id: ID!): Boolean
 
   """"""
-  updateComment(body: String!, id: ID!): Comment!
+  updateComment(body: String, files: [ID!], id: ID!): Comment!
 
   """"""
   updateNote(body: String!, id: ID!): Note!

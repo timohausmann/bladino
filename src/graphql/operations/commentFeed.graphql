@@ -13,6 +13,13 @@ query CommentFeed($filter: CommentFilter!, $cursor: Date) {
         name
         avatar
       }
+      files {
+        id
+        filename
+        name
+        type
+        size
+      }
       weblinks {
         ...WeblinkFields
       }

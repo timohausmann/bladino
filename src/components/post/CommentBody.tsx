@@ -4,7 +4,7 @@ import { parseCommentBody } from '@/utils/textUtils';
 import { useMemo } from 'react';
 
 interface CommentBodyProps {
-    body: string;
+    body?: string | null;
     weblinks?: Array<Weblink | null> | null;
     className?: string;
 }
@@ -15,7 +15,7 @@ interface CommentBodyProps {
  */
 export function CommentBody({ body, weblinks, className }: CommentBodyProps) {
     const content = useMemo(
-        () => parseCommentBody(body, weblinks),
+        () => (body ? parseCommentBody(body, weblinks) : null),
         [body, weblinks],
     );
 
