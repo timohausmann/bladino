@@ -20,12 +20,18 @@ export const navRailLabelClassName =
 interface NavRailRowOptions {
   active?: boolean;
   disabled?: boolean;
+  noHover?: boolean;
   /** Compact square icon button (40×40) instead of a full-width row. */
   iconOnly?: boolean;
 }
 
 export function navRailRowClassName(options?: NavRailRowOptions) {
-  const { active = false, disabled = false, iconOnly = false } = options ?? {};
+  const {
+    active = false,
+    disabled = false,
+    iconOnly = false,
+    noHover = false,
+  } = options ?? {};
 
   return clsx(
     'flex h-10 items-center rounded-xl transition-colors duration-150',
@@ -33,14 +39,12 @@ export function navRailRowClassName(options?: NavRailRowOptions) {
     disabled && 'pointer-events-none cursor-not-allowed opacity-40',
     !disabled &&
       'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-    !disabled &&
+    !noHover &&
+      !disabled &&
       !active &&
-      'hover:bg-neutral-100/90 dark:hover:bg-neutral-800/70',
+      'hover:bg-black/10 dark:hover:bg-white/10',
     active &&
       !disabled &&
-      'bg-neutral-200/95 text-neutral-900 dark:bg-neutral-800/95 dark:text-neutral-100',
+      'bg-black/5 text-black dark:bg-white/5 dark:text-white',
   );
 }
-
-/** @deprecated use navRailIconColumnClassName */
-export const navRailIconTrackClassName = navRailIconColumnClassName;

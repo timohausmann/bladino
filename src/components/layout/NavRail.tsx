@@ -63,13 +63,14 @@ export function NavRail() {
         'sticky top-0 flex h-dvh min-h-dvh shrink-0 flex-col',
         'border-r border-neutral-200 dark:border-neutral-800',
         'bg-white/50 backdrop-blur-sm dark:bg-black/10',
+        'transition-[width] duration-300 ease-in-out',
         expanded ? NAV_RAIL_EXPANDED_WIDTH : NAV_RAIL_COLLAPSED_WIDTH,
       )}
     >
       {/* Header */}
       <div className={clsx('shrink-0 py-3', navRailSectionClassName)}>
         <div className="flex flex-col gap-1">
-          <div className={navRailRowClassName()}>
+          <div className={navRailRowClassName({ noHover: true })}>
             <NavRailIconTrack>
               <Link to="/" aria-label="Home">
                 <img
@@ -118,7 +119,6 @@ export function NavRail() {
             </button>
           ) : null}
         </div>
-        <Divider className="mt-2 mb-0" />
       </div>
 
       {/* Primary navigation */}
