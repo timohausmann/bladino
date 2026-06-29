@@ -1,3 +1,5 @@
+import { handleExpiredSession, notifyUnauthorized } from '@/lib/expiredSession';
+import { isTokenExpiredError, isUnauthorizedError } from './apiError';
 import { getAuthToken } from '@/stores/authStore';
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { GraphQLClient } from 'graphql-request';
@@ -24,9 +26,22 @@ function authHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-export function requestGraphQL<TResult, TVariables extends object>(
+export async function requestGraphQL<TResult, TVariables extends object>(
   document: TypedDocumentNode<TResult, TVariables>,
   variables?: TVariables,
 ): Promise<TResult> {
-  return graphqlClient.request<TResult>(document, variables, authHeaders());
+  try {
+    return await graphqlClient.request<TResult>(
+      document,
+      variables,
+      authHeaders(),
+    );
+  } catch (error) {
+    if (isTokenExpiredError(error)) {
+      handleExpiredSession();
+    } else if (isUnauthorizedError(error)) {
+      notifyUnauthorized();
+    }
+    throw error;
+  }
 }

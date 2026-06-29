@@ -1,8 +1,8 @@
-import { CurrentUserDocument } from '@/graphql';
+import { CurrentUserDocument } from '@/graphql/generated/graphql';
 import { requestGraphQL } from '@/graphql/client';
+import { queryClient } from '@/lib/queryClient';
 import { clearAuthToken, getAuthToken } from '@/stores/authStore';
 import { useUserStore, type CurrentUser } from '@/stores/userStore';
-import type { QueryClient } from '@tanstack/react-query';
 
 export const CURRENT_USER_QUERY_KEY = ['CurrentUser'] as const;
 
@@ -24,7 +24,7 @@ export function resolveRedirectTarget(redirect: unknown): string {
 }
 
 /** Clears token, user store, and cached session query. */
-export function clearSession(queryClient: QueryClient): void {
+export function clearSession(): void {
   clearAuthToken();
   useUserStore.getState().clearCurrentUser();
   queryClient.removeQueries({ queryKey: CURRENT_USER_QUERY_KEY });
@@ -34,9 +34,7 @@ export function clearSession(queryClient: QueryClient): void {
  * Validates the auth token against the API and hydrates the user store.
  * Returns null when there is no valid session.
  */
-export async function ensureSession(
-  queryClient: QueryClient,
-): Promise<CurrentUser | null> {
+export async function ensureSession(): Promise<CurrentUser | null> {
   if (!getAuthToken()) {
     useUserStore.getState().clearCurrentUser();
     return null;
@@ -51,14 +49,14 @@ export async function ensureSession(
 
     const user = data.currentUser;
     if (!user) {
-      clearSession(queryClient);
+      clearSession();
       return null;
     }
 
     useUserStore.getState().setCurrentUser(user);
     return user;
   } catch {
-    clearSession(queryClient);
+    clearSession();
     return null;
   }
 }

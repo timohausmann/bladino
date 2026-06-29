@@ -4,8 +4,8 @@ import { Banner } from '@/components/ui/Banner';
 import { Card } from '@/components/ui/Card';
 import { LoginDocument, useGraphQLMutation } from '@/graphql';
 import { ensureSession, resolveRedirectTarget } from '@/lib/auth';
-import { consumeFlashMessage } from '@/lib/flashMessage';
-import { queryClient } from '@/lib/queryClient';
+import { resetExpiredSessionGuard } from '@/lib/expiredSession';
+import { consumeFlashMessage, type FlashMessage } from '@/lib/flashMessage';
 import { setAuthToken } from '@/stores/authStore';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
@@ -22,6 +22,17 @@ type LoginBanner = {
   variant: 'positive' | 'negative';
 };
 
+const FLASH_BANNERS: Record<FlashMessage, LoginBanner> = {
+  loggedOut: {
+    message: 'Logout successful, come back soon!',
+    variant: 'positive',
+  },
+  sessionExpired: {
+    message: 'Session expired. Please login again.',
+    variant: 'negative',
+  },
+};
+
 /**
  * Login page - displays a login form with email and password fields
  */
@@ -36,18 +47,17 @@ export function Login() {
   const [banner, setBanner] = useState<LoginBanner | null>(null);
 
   useEffect(() => {
-    if (consumeFlashMessage() === 'loggedOut') {
-      setBanner({
-        message: 'Logout successful, come back soon!',
-        variant: 'positive',
-      });
+    const flash = consumeFlashMessage();
+    if (flash) {
+      setBanner(FLASH_BANNERS[flash]);
     }
   }, []);
 
   const loginMutation = useGraphQLMutation(LoginDocument, {
     onSuccess: async (data) => {
+      resetExpiredSessionGuard();
       setAuthToken(data.login);
-      await ensureSession(queryClient);
+      await ensureSession();
       navigate({ to: resolveRedirectTarget(returnTo), replace: true });
     },
     onError: (err) => {

@@ -11,7 +11,7 @@
  */
 const FLASH_KEY = 'bladino.flash';
 
-export type FlashMessage = 'loggedOut';
+export type FlashMessage = 'loggedOut' | 'sessionExpired';
 
 export function setFlashMessage(message: FlashMessage): void {
   sessionStorage.setItem(FLASH_KEY, message);

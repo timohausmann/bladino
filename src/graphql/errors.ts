@@ -5,7 +5,7 @@ export function isGraphQLClientError(error: unknown): error is ClientError {
   return error instanceof ClientError;
 }
 
-/** First GraphQL error message from a failed request, if available. */
+/** First GraphQL field error message, when the server returned a GraphQL errors array. */
 export function getGraphQLErrorMessage(error: unknown): string | undefined {
   if (!isGraphQLClientError(error)) {
     return undefined;

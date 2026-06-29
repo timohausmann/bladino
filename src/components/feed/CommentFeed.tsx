@@ -1,4 +1,5 @@
 import { PostCard } from '@/components/post';
+import { Banner } from '@/components/ui/Banner';
 import type { Comment, CommentFeedQuery, CommentFilter } from '@/graphql';
 import { useEffect, useMemo, useRef } from 'react';
 import { useCommentFeed } from './useCommentFeed';
@@ -28,7 +29,6 @@ export function CommentFeed({
     data,
     isLoading,
     isError,
-    error,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -79,10 +79,11 @@ export function CommentFeed({
         )}
 
         {isError && (
-          <p className="text-destructive py-8 text-center">
-            Failed to load feed
-            {error instanceof Error ? `: ${error.message}` : '.'}
-          </p>
+          <Banner
+            message="Failed to load feed."
+            variant="negative"
+            className="mx-auto max-w-lg"
+          />
         )}
 
         {!isLoading && !isError && comments.length === 0 && (

@@ -1,6 +1,5 @@
 import { clearSession } from '@/lib/auth';
 import { setFlashMessage } from '@/lib/flashMessage';
-import { queryClient } from '@/lib/queryClient';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
@@ -11,7 +10,7 @@ export function Logout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    clearSession(queryClient);
+    clearSession();
     setFlashMessage('loggedOut');
     navigate({ to: '/login' });
   }, [navigate]);

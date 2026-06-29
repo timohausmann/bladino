@@ -38,8 +38,8 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
 const authenticatedRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: '_authenticated',
-  beforeLoad: async ({ context, location }) => {
-    const user = await ensureSession(context.queryClient);
+  beforeLoad: async ({ location }) => {
+    const user = await ensureSession();
     if (!user) {
       throw redirect({
         to: '/login',
@@ -95,8 +95,8 @@ const loginRoute = createRoute({
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
     returnTo: typeof search.returnTo === 'string' ? search.returnTo : undefined,
   }),
-  beforeLoad: async ({ context, search }) => {
-    const user = await ensureSession(context.queryClient);
+  beforeLoad: async ({ search }) => {
+    const user = await ensureSession();
     if (user) {
       throw redirect({
         to: resolveRedirectTarget(search.returnTo),
