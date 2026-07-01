@@ -8,6 +8,7 @@ import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
+import { PostLikes } from '@/components/post/PostLikes';
 
 interface PostCommentProps {
   comment: Comment;
@@ -38,27 +39,31 @@ export function PostComment({ comment, channel }: PostCommentProps) {
         />
       </Link>
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-baseline gap-2">
-          <Link
-            to="/u/$name"
-            params={{ name: user.name }}
-            className="text-foreground text-sm font-medium transition-colors duration-200 hover:underline"
-          >
-            {user.name}
-          </Link>
-          {showHandle && (
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-baseline gap-2">
             <Link
               to="/u/$name"
               params={{ name: user.name }}
-              className="text-muted-foreground hover:text-foreground text-xs transition-colors duration-200"
+              className="text-foreground text-sm font-medium transition-colors duration-200 hover:underline"
             >
-              @{handle}
+              {user.name}
             </Link>
-          )}
-          <span className="text-muted-foreground text-xs">•</span>
-          <span className="text-muted-foreground text-xs">
-            {formatCommentDate(comment.dateCreated)}
-          </span>
+            {showHandle && (
+              <Link
+                to="/u/$name"
+                params={{ name: user.name }}
+                className="text-muted-foreground hover:text-foreground text-xs transition-colors duration-200"
+              >
+                @{handle}
+              </Link>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="text-muted-foreground text-xs">
+              {formatCommentDate(comment.dateCreated)}
+            </span>
+            <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />
+          </div>
         </div>
         {isEditing ? (
           <CommentComposerForm
@@ -84,10 +89,10 @@ export function PostComment({ comment, channel }: PostCommentProps) {
               className="text-foreground text-sm leading-relaxed"
             />
             {files.length > 0 && <FilePreview files={files} />}
+            <PostLikes comment={comment} />
           </div>
         )}
       </div>
-      <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />
     </div>
   );
 }

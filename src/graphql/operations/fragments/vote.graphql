@@ -1,0 +1,8 @@
+fragment VoteFields on Vote {
+  id
+  user {
+    id
+    name
+    avatar
+  }
+}

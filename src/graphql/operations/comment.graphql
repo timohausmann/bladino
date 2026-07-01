@@ -1,4 +1,5 @@
 #import "./fragments/weblink.graphql"
+#import "./fragments/vote.graphql"
 #import "./fragments/commentChild.graphql"
 
 mutation AddComment($body: String, $channel: ID, $files: [ID!], $parent: ID) {
@@ -32,6 +33,10 @@ mutation DeleteComment($id: ID!) {
   deleteComment(id: $id)
 }
 
+mutation ToggleVote($post: ID!) {
+  toggleVote(post: $post)
+}
+
 query Comment($id: ID!) {
   comment(id: $id) {
     id
@@ -40,6 +45,10 @@ query Comment($id: ID!) {
     dateEdited
     parent
     channel
+    voteNum
+    votes {
+      ...VoteFields
+    }
     user {
       id
       name

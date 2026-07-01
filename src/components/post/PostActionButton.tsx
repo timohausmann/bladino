@@ -6,6 +6,7 @@ interface PostActionButtonProps {
   label: string;
   onClick: () => void;
   className?: string;
+  hideCount?: boolean;
 }
 
 /**
@@ -17,6 +18,7 @@ export function PostActionButton({
   label,
   onClick,
   className = '',
+  hideCount = false,
 }: PostActionButtonProps) {
   return (
     <button
@@ -27,7 +29,7 @@ export function PostActionButton({
       tabIndex={0}
     >
       {icon}
-      <span className="text-sm font-medium">{count}</span>
+      {!hideCount ? <span className="text-sm font-medium">{count}</span> : null}
     </button>
   );
 }

@@ -4,13 +4,13 @@ import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Divider } from '@/components/ui/Divider';
-import { EmojiReaction } from '@/components/ui/EmojiReaction';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { PostActionButton } from '@/components/post/PostActionButton';
 import { PostComment } from '@/components/post/PostComment';
 import { PostHeader } from '@/components/post/PostHeader';
+import { PostLikes } from '@/components/post/PostLikes';
 import { PostReply } from '@/components/post/PostReply';
 
 interface PostCardProps {
@@ -26,10 +26,6 @@ export function PostCard({ comment }: PostCardProps) {
   const files = getCommentFiles(comment);
   const [showComments, setShowComments] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleReaction = (emoji: string) => {
-    console.log(`Reacted with: ${emoji}`);
-  };
 
   return (
     <Card
@@ -63,7 +59,7 @@ export function PostCard({ comment }: PostCardProps) {
         <Divider />
 
         <div className="flex items-center justify-between">
-          <EmojiReaction reactions={{}} onReaction={handleReaction} />
+          <PostLikes comment={comment} />
           <PostActionButton
             icon={<MessageCircle size={18} />}
             count={children.length}

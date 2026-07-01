@@ -1,10 +1,15 @@
 #import "./weblink.graphql"
+#import "./vote.graphql"
 
 fragment CommentChildFields on Comment {
   id
   body
   dateCreated
   parent
+  voteNum
+  votes {
+    ...VoteFields
+  }
   user {
     id
     name

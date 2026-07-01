@@ -67,7 +67,6 @@ export function PostHeader({ comment, onEdit }: PostHeaderProps) {
             >
               {formatCommentDate(comment.dateCreated)}
             </Link>
-
             <PostContextMenu comment={comment} onEdit={onEdit} />
           </div>
         </div>
