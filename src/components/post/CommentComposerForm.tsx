@@ -18,6 +18,8 @@ export interface CommentComposerFormProps extends UseCommentComposerOptions {
   submitLabel?: string;
   showCancel?: boolean;
   onCancel?: () => void;
+  /** Rendered inline to the left of the submit button. */
+  beforeSubmit?: React.ReactNode;
 }
 
 /**
@@ -37,6 +39,7 @@ export function CommentComposerForm({
   onCancel,
   onSuccess,
   errorMessage,
+  beforeSubmit,
 }: CommentComposerFormProps) {
   const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
@@ -124,7 +127,8 @@ export function CommentComposerForm({
           <CreateAddMore onAddFiles={composer.handleAddFilesClick} />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {beforeSubmit}
           {showCancel && (
             <Button
               type="button"

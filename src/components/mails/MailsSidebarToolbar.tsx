@@ -1,10 +1,10 @@
 import type { MailFolder } from '@/components/mails/types';
 import { MAIL_FOLDERS } from '@/components/mails/types';
 import { HeaderButton } from '@/components/ui/HeaderButton';
-import * as Select from '@radix-ui/react-select';
+import { InlineSelect } from '@/components/ui/InlineSelect';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import clsx from 'clsx';
-import { ChevronDown, Plus, RefreshCw } from 'lucide-react';
+import { Plus, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface MailsSidebarToolbarProps {
@@ -40,34 +40,15 @@ export function MailsSidebarToolbar({
           disabled={isSending}
         />
       </Toolbar.Button>
-      <Select.Root value={folder} onValueChange={onFolderChange}>
-        <Select.Trigger
-          className="flex w-auto shrink-0 items-center justify-between gap-1 rounded-lg bg-neutral-100 px-2 py-1.5 text-sm font-medium text-neutral-900 transition-colors outline-none hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
-          aria-label={t('mail:folderLabel')}
-        >
-          <Select.Value />
-          <Select.Icon>
-            <ChevronDown size={14} className="shrink-0 text-neutral-500" />
-          </Select.Icon>
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Content className="z-50 overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
-            <Select.Viewport className="p-1">
-              {MAIL_FOLDERS.map((option) => (
-                <Select.Item
-                  key={option}
-                  value={option}
-                  className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-900 outline-none select-none data-[highlighted]:bg-neutral-100 dark:text-neutral-100 dark:data-[highlighted]:bg-neutral-800"
-                >
-                  <Select.ItemText>
-                    {t(`mail:folders.${option}`)}
-                  </Select.ItemText>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+      <InlineSelect
+        value={folder}
+        onValueChange={onFolderChange}
+        options={MAIL_FOLDERS.map((option) => ({
+          value: option,
+          label: t(`mail:folders.${option}`),
+        }))}
+        ariaLabel={t('mail:folderLabel')}
+      />
       <div className="ml-auto">
         <Toolbar.Button asChild>
           <HeaderButton

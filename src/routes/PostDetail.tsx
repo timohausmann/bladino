@@ -1,4 +1,5 @@
 import { PostCard } from '@/components/post/PostCard';
+import { PostPostedIn } from '@/components/post/PostPostedIn';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import {
@@ -41,5 +42,10 @@ export function PostDetail() {
     return <ResourceNotFound resource="post" />;
   }
 
-  return <PostCard comment={comment as Comment} />;
+  return (
+    <div className="flex flex-col gap-2">
+      <PostCard comment={comment as Comment} />
+      {comment.channel ? <PostPostedIn channelId={comment.channel} /> : null}
+    </div>
+  );
 }
