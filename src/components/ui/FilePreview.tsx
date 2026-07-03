@@ -36,6 +36,13 @@ function getPreviewUrl(file: PreviewFile | LocalDraftFile): string | undefined {
   return resolveFileUrl(file.filename);
 }
 
+function isImageType(type?: string | null): boolean {
+  return type?.startsWith('image/') ?? false;
+}
+
+/** Max height for 1–2 image posts, relative to viewport. */
+const IMAGE_POST_MAX_HEIGHT = 'max-h-[55dvh]';
+
 /**
  * FilePreview - A component that displays files in a horizontally scrollable layout
  * Images are displayed as thumbnails, other files show generic icons with metadata
@@ -46,8 +53,6 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
   if (!files || files.length === 0) {
     return null;
   }
-
-  const isImage = (type?: string | null) => type?.startsWith('image/');
 
   const formatFileSize = (bytes?: number | null) => {
     if (!bytes) return t('common:unknownSize');
@@ -74,10 +79,21 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
     return <FileIcon size={32} className="text-cyan-500" />;
   };
 
+  const allImages = files.every((file) => isImageType(file.type));
+  const isImagePost = allImages && files.length <= 2;
   const fitsWithoutScroll = files.length <= 3;
 
-  const previewClassName =
-    'relative min-w-0 aspect-3/2 bg-black/20 rounded-lg overflow-hidden transition-all duration-200';
+  const previewClassName = twMerge(
+    'relative min-w-0 bg-black/20 rounded-lg overflow-hidden transition-all duration-200',
+    isImagePost
+      ? twMerge('w-full', IMAGE_POST_MAX_HEIGHT)
+      : 'aspect-3/2',
+  );
+
+  const imageClassName = twMerge(
+    'w-full object-contain',
+    isImagePost ? IMAGE_POST_MAX_HEIGHT : 'h-full',
+  );
 
   return (
     <ScrollArea
@@ -88,9 +104,13 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
       <div
         className={twMerge(
           'grid gap-3',
-          fitsWithoutScroll
-            ? 'w-full grid-cols-2 md:grid-cols-3'
-            : 'w-max min-w-full auto-cols-[calc((100cqi-0.75rem)/2)] grid-flow-col md:auto-cols-[calc((100cqi-1.5rem)/3)]',
+          isImagePost
+            ? files.length === 1
+              ? 'w-full grid-cols-1'
+              : 'w-full grid-cols-2'
+            : fitsWithoutScroll
+              ? 'w-full grid-cols-2 md:grid-cols-3'
+              : 'w-max min-w-full auto-cols-[calc((100cqi-0.75rem)/2)] grid-flow-col md:auto-cols-[calc((100cqi-1.5rem)/3)]',
         )}
       >
         {files.map((file) => {
@@ -98,12 +118,12 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
           const previewUrl = getPreviewUrl(file);
 
           const previewContent =
-            isImage(file.type) && previewUrl ? (
-              <div className="h-full w-full">
+            isImageType(file.type) && previewUrl ? (
+              <div className="flex w-full justify-center">
                 <img
                   src={previewUrl}
                   alt={displayName}
-                  className="h-full w-full object-contain"
+                  className={imageClassName}
                 />
               </div>
             ) : (
