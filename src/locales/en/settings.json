@@ -1,28 +1,28 @@
 {
   "title": "Settings",
-  "account": {
-    "title": "Account Settings",
-    "description": "Manage your account preferences and security settings.",
-    "changeEmail": {
-      "trigger": "Change Email Address",
-      "label": "New Email Address",
-      "placeholder": "Enter new email address",
-      "hint": "We'll send a confirmation email to verify your new address.",
-      "submit": "Update Email"
-    },
-    "changePassword": {
-      "trigger": "Change Password",
-      "label": "New Password",
-      "placeholder": "Enter new password",
-      "hint": "Password must be at least 8 characters long.",
-      "submit": "Update Password"
-    },
-    "changeHandle": {
-      "trigger": "Change Handle",
-      "label": "Handle",
-      "placeholder": "Enter new handle",
-      "hint": "Handle changes are currently locked. Contact support if you need to change your handle."
-    }
+  "nav": {
+    "general": "General",
+    "account": "Account",
+    "display": "Appearance",
+    "password": "Change Password"
+  },
+  "display": {
+    "title": "Appearance",
+    "description": "Language, theme, and other display preferences."
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "label": "New Password",
+    "placeholder": "Enter new password",
+    "hint": "Password must be at least 8 characters long.",
+    "confirmWithCurrent": "Confirm with current password",
+    "currentLabel": "Current Password",
+    "currentPlaceholder": "Enter current password",
+    "submit": "Change Password",
+    "validationTooShort": "Password must be at least 8 characters long.",
+    "success": "Password changed successfully.",
+    "error": "Could not change password.",
+    "errorTransport": "Connection to server failed. Please try again."
   },
   "profile": {
     "title": "Profile Settings",

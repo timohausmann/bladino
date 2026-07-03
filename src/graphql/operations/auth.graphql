@@ -2,6 +2,10 @@ mutation Login($name: String!, $password: String!) {
   login(name: $name, password: $password)
 }
 
+mutation UpdatePassword($id: ID!, $newpass: String!, $oldpass: String!) {
+  updatePassword(id: $id, newpass: $newpass, oldpass: $oldpass)
+}
+
 query CurrentUser {
   currentUser {
     id

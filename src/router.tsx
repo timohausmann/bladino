@@ -19,7 +19,9 @@ import {
   NotFound,
   PostDetail,
   Profile,
-  Settings,
+  SettingsAppearance,
+  SettingsLayout,
+  SettingsPassword,
 } from './routes';
 import { ButtonLab } from './routes/ButtonLab';
 
@@ -75,10 +77,47 @@ const profileRoute = createRoute({
   component: Profile,
 });
 
-const settingsRoute = createRoute({
+const settingsLayoutRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/settings',
-  component: Settings,
+  component: SettingsLayout,
+  staticData: { fixedViewport: true, layoutMode: 'fullWidth' },
+});
+
+const settingsIndexRoute = createRoute({
+  getParentRoute: () => settingsLayoutRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: '/settings/appearance' });
+  },
+});
+
+const settingsAppearanceRoute = createRoute({
+  getParentRoute: () => settingsLayoutRoute,
+  path: '/appearance',
+  component: SettingsAppearance,
+});
+
+const settingsLanguageRedirectRoute = createRoute({
+  getParentRoute: () => settingsLayoutRoute,
+  path: '/language',
+  beforeLoad: () => {
+    throw redirect({ to: '/settings/appearance' });
+  },
+});
+
+const settingsThemeRedirectRoute = createRoute({
+  getParentRoute: () => settingsLayoutRoute,
+  path: '/theme',
+  beforeLoad: () => {
+    throw redirect({ to: '/settings/appearance' });
+  },
+});
+
+const settingsPasswordRoute = createRoute({
+  getParentRoute: () => settingsLayoutRoute,
+  path: '/password',
+  component: SettingsPassword,
 });
 
 const notesIndexRoute = createRoute({
@@ -175,7 +214,13 @@ const routeTree = rootRoute.addChildren([
     homeRoute,
     postRoute,
     profileRoute,
-    settingsRoute,
+    settingsLayoutRoute.addChildren([
+      settingsIndexRoute,
+      settingsAppearanceRoute,
+      settingsLanguageRedirectRoute,
+      settingsThemeRedirectRoute,
+      settingsPasswordRoute,
+    ]),
     notesIndexRoute,
     notesDetailRoute,
     mailsIndexRoute,

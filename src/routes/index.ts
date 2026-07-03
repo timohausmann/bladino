@@ -7,4 +7,8 @@ export { Notes } from './Notes';
 export { NotFound } from './NotFound';
 export { PostDetail } from './PostDetail';
 export { Profile } from './Profile';
-export { Settings } from './Settings';
+export {
+  SettingsAppearance,
+  SettingsLayout,
+  SettingsPassword,
+} from './settings';
