@@ -5,6 +5,23 @@ export function isGraphQLClientError(error: unknown): error is ClientError {
   return error instanceof ClientError;
 }
 
+/**
+ * Network or proxy failures where the API did not return a usable GraphQL response
+ * (e.g. backend down, Vite proxy 502 Bad Gateway, "Failed to fetch").
+ */
+export function isTransportError(error: unknown): boolean {
+  if (error instanceof TypeError) {
+    return true;
+  }
+
+  if (!isGraphQLClientError(error)) {
+    return false;
+  }
+
+  const { status } = error.response;
+  return status >= 500 || status === 0;
+}
+
 /** First GraphQL field error message, when the server returned a GraphQL errors array. */
 export function getGraphQLErrorMessage(error: unknown): string | undefined {
   if (!isGraphQLClientError(error)) {

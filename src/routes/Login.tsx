@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/Input';
 import { Banner } from '@/components/ui/Banner';
 import { Card } from '@/components/ui/Card';
-import { LoginDocument, useGraphQLMutation } from '@/graphql';
+import { isTransportError, LoginDocument, useGraphQLMutation } from '@/graphql';
 import { ensureSession, resolveRedirectTarget } from '@/lib/auth';
 import { resetExpiredSessionGuard } from '@/lib/expiredSession';
 import { consumeFlashMessage, type FlashMessage } from '@/lib/flashMessage';
@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 
 function getLoginErrorMessage(err: Error): string {
-  if (err.message.includes('fetch')) {
-    return 'Could not reach the server.';
+  if (isTransportError(err)) {
+    return 'Could not reach the server. Please try again later.';
   }
   return 'Login failed. Please check your credentials.';
 }

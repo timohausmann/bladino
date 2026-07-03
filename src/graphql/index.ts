@@ -3,6 +3,7 @@ export {
   getGraphQLErrorMessage,
   isGraphQLClientError,
   isRetryableGraphQLError,
+  isTransportError,
 } from './errors';
 export { useGraphQLMutation, useGraphQLQuery } from './hooks';
 export * from './generated/graphql';
