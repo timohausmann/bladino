@@ -1,4 +1,5 @@
 export { Channels } from './Channels';
+export { Dashboard } from './Dashboard';
 export { ForgotPassword } from './ForgotPassword';
 export { Home } from './Home';
 export { Login } from './Login';

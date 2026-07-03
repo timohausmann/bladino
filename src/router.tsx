@@ -12,6 +12,7 @@ import { queryClient } from './lib/queryClient';
 import {
   Channels,
   ForgotPassword,
+  Dashboard,
   Home,
   Login,
   Logout,
@@ -60,10 +61,26 @@ const authenticatedRoute = createRoute({
   component: () => <Outlet />,
 });
 
-const homeRoute = createRoute({
+const dashboardRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/',
+  component: Dashboard,
+  staticData: { fixedViewport: true, layoutMode: 'fullWidth' },
+});
+
+const feedRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/feed',
   component: Home,
+  staticData: { layoutMode: 'feed' },
+});
+
+const dashboardRedirectRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/dashboard',
+  beforeLoad: () => {
+    throw redirect({ to: '/' });
+  },
 });
 
 const postRoute = createRoute({
@@ -224,7 +241,9 @@ const publicRoutes = [
 
 const routeTree = rootRoute.addChildren([
   authenticatedRoute.addChildren([
-    homeRoute,
+    dashboardRoute,
+    feedRoute,
+    dashboardRedirectRoute,
     postRoute,
     profileRoute,
     settingsLayoutRoute.addChildren([

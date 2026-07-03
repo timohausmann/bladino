@@ -9,9 +9,15 @@ import { PostContextMenu } from '@/components/post/PostContextMenu';
 interface PostHeaderProps {
   comment: Comment;
   onEdit?: () => void;
+  /** Hide the ⋯ menu (e.g. dashboard preview cards). */
+  showContextMenu?: boolean;
 }
 
-export function PostHeader({ comment, onEdit }: PostHeaderProps) {
+export function PostHeader({
+  comment,
+  onEdit,
+  showContextMenu = true,
+}: PostHeaderProps) {
   const { t } = useTranslation();
   const { user } = comment;
   const handle = 'handle';
@@ -69,7 +75,9 @@ export function PostHeader({ comment, onEdit }: PostHeaderProps) {
             >
               {formatCommentDate(comment.dateCreated)}
             </Link>
-            <PostContextMenu comment={comment} onEdit={onEdit} />
+            {showContextMenu && (
+              <PostContextMenu comment={comment} onEdit={onEdit} />
+            )}
           </div>
         </div>
       </div>

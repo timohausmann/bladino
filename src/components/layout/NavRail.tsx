@@ -21,10 +21,11 @@ import {
   ChevronDown,
   Compass,
   Hash,
-  Home,
+  LayoutDashboard,
   Mail,
   PanelLeftOpen,
   PanelLeftClose,
+  Rss,
   Settings,
   StickyNote,
 } from 'lucide-react';
@@ -73,7 +74,7 @@ export function NavRail() {
         <div className="flex flex-col gap-1">
           <div className={navRailRowClassName({ noHover: true })}>
             {expanded ? (
-              <Link to="/" aria-label={t('navigation:home')}>
+              <Link to="/" aria-label={t('navigation:dashboard')}>
                 <AnimatedLogo
                   className="mx-2 block min-w-4 shrink-0"
                   logoHeight="2rem"
@@ -81,7 +82,7 @@ export function NavRail() {
               </Link>
             ) : (
               <NavRailIconTrack>
-                <Link to="/" aria-label={t('navigation:home')}>
+                <Link to="/" aria-label={t('navigation:dashboard')}>
                   <img
                     src="/icon-trashnet-2026.svg"
                     alt="trashnet"
@@ -96,7 +97,8 @@ export function NavRail() {
                 onClick={toggleNavRail}
                 className={clsx(
                   'ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
-                  'text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800/80',
+                  'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
+                  'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
                   'transition-colors duration-150',
                 )}
                 aria-label={t('navigation:collapseNavigation')}
@@ -130,10 +132,16 @@ export function NavRail() {
       >
         <NavRailLink
           to="/"
-          label={t('navigation:home')}
-          icon={Home}
+          label={t('navigation:dashboard')}
+          icon={LayoutDashboard}
           expanded={expanded}
           exact
+        />
+        <NavRailLink
+          to="/feed"
+          label={t('navigation:feed')}
+          icon={Rss}
+          expanded={expanded}
         />
         <NotificationButton
           count={2}
@@ -229,7 +237,7 @@ function NavRailChannels({ expanded }: { expanded: boolean }) {
         <ChevronDown
           size={16}
           aria-hidden
-          className="mr-0.5 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180"
+          className="mr-2 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180"
         />
       </Collapsible.Trigger>
       <Collapsible.Content className="flex flex-col gap-0.5 pr-0.5 pb-1 pl-11">

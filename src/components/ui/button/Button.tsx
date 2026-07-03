@@ -6,6 +6,7 @@ import {
   buttonVariants,
   type ButtonAppearance,
   type ButtonEffect,
+  type ButtonSize,
   type ButtonVariant,
 } from '@/components/ui/button/buttonVariants';
 
@@ -15,6 +16,7 @@ export interface ButtonProps
   variant?: ButtonVariant;
   appearance?: ButtonAppearance;
   effect?: ButtonEffect;
+  size?: ButtonSize;
   iconBefore?: React.ReactNode;
   iconAfter?: React.ReactNode;
   loading?: boolean;
@@ -34,6 +36,7 @@ export function Button({
   variant = 'primary',
   appearance = 'filled',
   effect: effectProp,
+  size = 'default',
   iconBefore,
   iconAfter,
   disabled = false,
@@ -128,7 +131,7 @@ export function Button({
       onFocus={handleFocus}
       onBlur={handleBlur}
       className={twMerge(
-        buttonVariants({ variant, appearance, loading }),
+        buttonVariants({ variant, appearance, loading, size }),
         className,
       )}
       {...rest}
@@ -160,7 +163,12 @@ export function Button({
           className="absolute inset-0 z-10 flex items-center justify-center"
           aria-hidden
         >
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/25 border-t-current" />
+          <span
+            className={twMerge(
+              'animate-spin rounded-full border-2 border-current/25 border-t-current',
+              size === 'sm' ? 'h-3 w-3' : 'h-4 w-4',
+            )}
+          />
         </span>
       )}
     </button>

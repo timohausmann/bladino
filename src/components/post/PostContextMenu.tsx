@@ -104,7 +104,7 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
       setDeleteOpen(false);
 
       if (!isComment && postDetailMatch?.params.id === String(comment.id)) {
-        void navigate({ to: '/' });
+        void navigate({ to: '/feed' });
       }
     } catch (error) {
       const message =

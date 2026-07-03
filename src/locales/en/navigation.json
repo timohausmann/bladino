@@ -1,5 +1,6 @@
 {
-  "home": "Home",
+  "feed": "Feed",
+  "dashboard": "Dashboard",
   "explore": "Explore",
   "channels": "Channels",
   "notes": "Notes",

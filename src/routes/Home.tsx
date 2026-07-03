@@ -1,19 +1,13 @@
 import { CreatePost } from '@/components/create/CreatePost';
 import { CommentFeed } from '@/components/feed';
-import { PresenceRail } from '@/components/presence';
-import { UsersLastActionDocument, useGraphQLQuery } from '@/graphql';
 
 /**
- * Home page component displaying create post form and live feed posts
+ * Feed page with create post form and live posts.
  */
 export function Home() {
-  const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
-
   return (
     <>
       <CreatePost />
-
-      <PresenceRail users={presenceData?.usersLastAction ?? []} />
 
       <CommentFeed filter={{}} />
     </>

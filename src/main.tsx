@@ -2,6 +2,8 @@ import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './i18n';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 import { registerExpiredSessionRedirect } from './lib/expiredSession';
 import { queryClient } from './lib/queryClient';
 import { router } from './router';

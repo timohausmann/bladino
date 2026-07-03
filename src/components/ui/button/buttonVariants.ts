@@ -3,11 +3,12 @@ import { tv } from 'tailwind-variants';
 export type ButtonVariant = 'primary' | 'secondary' | 'dangerous';
 export type ButtonAppearance = 'filled' | 'outline';
 export type ButtonEffect = 'none' | 'glow';
+export type ButtonSize = 'default' | 'sm';
 
 export const buttonVariants = tv({
   base: [
     'relative inline-flex items-center justify-center gap-2 overflow-hidden',
-    'btn-corner-squircle px-6 py-2 font-medium',
+    'btn-corner-squircle font-medium',
     'border border-transparent',
     'transition-[transform,background-color,border-color,color,opacity,box-shadow] duration-300 ease-out',
     'cursor-pointer select-none',
@@ -16,6 +17,10 @@ export const buttonVariants = tv({
     'disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100',
   ],
   variants: {
+    size: {
+      default: 'px-6 py-2',
+      sm: 'px-2 py-1 text-xs',
+    },
     variant: {
       primary: '',
       secondary: '',
@@ -90,5 +95,6 @@ export const buttonVariants = tv({
     variant: 'primary',
     appearance: 'filled',
     loading: false,
+    size: 'default',
   },
 });
