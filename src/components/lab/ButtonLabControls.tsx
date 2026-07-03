@@ -5,17 +5,13 @@ import {
   type ButtonVariant,
 } from '@/components/ui/button';
 import { Send, Trash2, UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const VARIANTS: ButtonVariant[] = ['primary', 'secondary', 'dangerous'];
 const APPEARANCES: ButtonAppearance[] = ['filled', 'outline'];
 const EFFECTS: ButtonEffect[] = ['none', 'glow'];
 
-const ICON_OPTIONS = [
-  { id: 'none', label: 'None', icon: null },
-  { id: 'send', label: 'Send', icon: <Send size={16} /> },
-  { id: 'trash', label: 'Trash', icon: <Trash2 size={16} /> },
-  { id: 'user', label: 'UserPlus', icon: <UserPlus size={16} /> },
-] as const;
+const ICON_OPTION_IDS = ['none', 'send', 'trash', 'user'] as const;
 
 export interface ButtonLabState {
   variant: ButtonVariant;
@@ -24,7 +20,7 @@ export interface ButtonLabState {
   loading: boolean;
   disabled: boolean;
   label: string;
-  iconId: (typeof ICON_OPTIONS)[number]['id'];
+  iconId: (typeof ICON_OPTION_IDS)[number];
 }
 
 interface ButtonLabControlsProps {
@@ -85,42 +81,76 @@ function ToggleField({
   );
 }
 
+function useIconOptions() {
+  const { t } = useTranslation();
+
+  return [
+    {
+      id: 'none' as const,
+      label: t('common:buttonLab.icons.none'),
+      icon: null,
+    },
+    {
+      id: 'send' as const,
+      label: t('common:buttonLab.icons.send'),
+      icon: <Send size={16} />,
+    },
+    {
+      id: 'trash' as const,
+      label: t('common:buttonLab.icons.trash'),
+      icon: <Trash2 size={16} />,
+    },
+    {
+      id: 'user' as const,
+      label: t('common:buttonLab.icons.user'),
+      icon: <UserPlus size={16} />,
+    },
+  ];
+}
+
 export function ButtonLabControls({ state, onChange }: ButtonLabControlsProps) {
+  const { t } = useTranslation();
+  const iconOptions = useIconOptions();
   const selectedIcon =
-    ICON_OPTIONS.find((o) => o.id === state.iconId)?.icon ?? null;
+    iconOptions.find((option) => option.id === state.iconId)?.icon ?? null;
 
   return (
     <div className="bg-card space-y-6 rounded-xl border border-black/10 p-6 dark:border-white/10">
-      <h2 className="text-lg font-semibold">Live Controls</h2>
+      <h2 className="text-lg font-semibold">
+        {t('common:buttonLab.liveControls')}
+      </h2>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <SelectField
-          label="Variant"
+          label={t('common:buttonLab.variant')}
           value={state.variant}
           options={VARIANTS.map((v) => ({ value: v, label: v }))}
           onChange={(v) => onChange({ variant: v })}
         />
         <SelectField
-          label="Appearance"
+          label={t('common:buttonLab.appearance')}
           value={state.appearance}
           options={APPEARANCES.map((a) => ({ value: a, label: a }))}
           onChange={(a) => onChange({ appearance: a })}
         />
         <SelectField
-          label="Effect"
+          label={t('common:buttonLab.effect')}
           value={state.effect}
           options={EFFECTS.map((e) => ({ value: e, label: e }))}
           onChange={(e) => onChange({ effect: e })}
         />
         <SelectField
-          label="Icon"
+          label={t('common:buttonLab.icon')}
           value={state.iconId}
-          options={ICON_OPTIONS.map((o) => ({ value: o.id, label: o.label }))}
+          options={iconOptions.map((option) => ({
+            value: option.id,
+            label: option.label,
+          }))}
           onChange={(id) => onChange({ iconId: id })}
         />
         <label className="flex flex-col gap-1 text-sm sm:col-span-2">
           <span className="text-muted-foreground text-xs tracking-wide uppercase">
-            Label
+            {t('common:buttonLab.label')}
           </span>
           <input
             type="text"
@@ -133,12 +163,12 @@ export function ButtonLabControls({ state, onChange }: ButtonLabControlsProps) {
 
       <div className="flex flex-wrap gap-4">
         <ToggleField
-          label="Loading"
+          label={t('common:buttonLab.loading')}
           checked={state.loading}
           onChange={(loading) => onChange({ loading })}
         />
         <ToggleField
-          label="Disabled"
+          label={t('common:buttonLab.disabled')}
           checked={state.disabled}
           onChange={(disabled) => onChange({ disabled })}
         />
@@ -161,14 +191,20 @@ export function ButtonLabControls({ state, onChange }: ButtonLabControlsProps) {
 }
 
 export function ButtonVariantMatrix() {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-card space-y-4 rounded-xl border border-black/10 p-6 dark:border-white/10">
-      <h2 className="text-lg font-semibold">Variant Matrix</h2>
+      <h2 className="text-lg font-semibold">
+        {t('common:buttonLab.variantMatrix')}
+      </h2>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="text-muted-foreground border-b border-black/10 dark:border-white/10">
-              <th className="py-2 pr-4 font-medium">Variant</th>
+              <th className="py-2 pr-4 font-medium">
+                {t('common:buttonLab.variant')}
+              </th>
               {APPEARANCES.map((a) => (
                 <th key={a} className="px-2 py-2 font-medium capitalize">
                   {a}
@@ -191,7 +227,7 @@ export function ButtonVariantMatrix() {
                         appearance={appearance}
                         className="w-full"
                       >
-                        Default
+                        {t('common:buttonLab.default')}
                       </Button>
                       <Button
                         variant={variant}
@@ -199,7 +235,7 @@ export function ButtonVariantMatrix() {
                         disabled
                         className="w-full"
                       >
-                        Disabled
+                        {t('common:buttonLab.disabled')}
                       </Button>
                       <Button
                         variant={variant}
@@ -207,7 +243,7 @@ export function ButtonVariantMatrix() {
                         loading
                         className="w-full"
                       >
-                        Loading
+                        {t('common:buttonLab.loading')}
                       </Button>
                     </div>
                   </td>
@@ -222,31 +258,35 @@ export function ButtonVariantMatrix() {
 }
 
 export function ButtonExperimentZone() {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-card space-y-4 rounded-xl border border-black/10 p-6 dark:border-white/10">
-      <h2 className="text-lg font-semibold">Experiment Zone</h2>
+      <h2 className="text-lg font-semibold">
+        {t('common:buttonLab.experimentZone')}
+      </h2>
       <p className="text-muted-foreground text-sm">
-        Isolated effect showcases — hover to see the glow animation.
+        {t('common:buttonLab.experimentDescription')}
       </p>
       <div className="flex flex-wrap gap-4">
         <Button variant="primary" effect="glow">
-          Glow only
+          {t('common:buttonLab.glowOnly')}
         </Button>
         <Button variant="primary" effect="none">
-          No effect
+          {t('common:buttonLab.noEffect')}
         </Button>
         <Button variant="dangerous" effect="glow" appearance="outline">
-          Danger outline
+          {t('common:buttonLab.dangerOutline')}
         </Button>
         <Button variant="primary" loading>
-          Shimmer loading
+          {t('common:buttonLab.shimmerLoading')}
         </Button>
         <Button
           variant="primary"
           iconBefore={<Send size={16} />}
           iconAfter={<Send size={16} className="rotate-180" />}
         >
-          Both icons
+          {t('common:buttonLab.bothIcons')}
         </Button>
       </div>
     </div>

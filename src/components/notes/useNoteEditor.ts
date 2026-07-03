@@ -11,6 +11,7 @@ import {
   type NoteSaveStatus,
 } from '@/components/notes/types';
 import { toast } from '@/components/ui/toast';
+import i18n from '@/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -80,7 +81,7 @@ export function useNoteEditor(
       await deleteNote.mutateAsync({ id: noteId });
       await queryClient.invalidateQueries({ queryKey: ['Notes'] });
       onDeleted?.(noteId);
-      toast('Note deleted');
+      toast(i18n.t('notes:deletedToast'));
     } catch {
       setSaveStatus('error');
     }

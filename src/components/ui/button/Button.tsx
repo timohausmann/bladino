@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import { ButtonGlow, getGlowRadius } from '@/components/ui/button/ButtonGlow';
 import {
@@ -47,6 +48,7 @@ export function Button({
   onBlur,
   ...rest
 }: ButtonProps) {
+  const { t } = useTranslation();
   const [glowActive, setGlowActive] = useState(false);
   const [glowPos, setGlowPos] = useState({ x: 0, y: 0, radius: 72 });
 
@@ -108,7 +110,7 @@ export function Button({
       ? children
       : typeof rest['aria-label'] === 'string'
         ? rest['aria-label']
-        : 'Button';
+        : t('common:button');
 
   return (
     <button

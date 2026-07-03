@@ -1,0 +1,10 @@
+{
+  "community": "Community",
+  "expand": "Community ausklappen",
+  "collapse": "Community einklappen",
+  "justNow": "gerade eben",
+  "minutesAgo": "vor {{count}} Min.",
+  "hoursAgo": "vor {{count}} Std.",
+  "daysAgo": "vor {{count}} T.",
+  "weeksAgo": "vor {{count}} Wo."
+}

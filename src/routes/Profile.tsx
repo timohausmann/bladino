@@ -15,6 +15,7 @@ import { formatJoinDate, type ApiDate } from '@/utils/formatDate';
 import { useParams } from '@tanstack/react-router';
 import { UserPlus, Calendar, Clock, MessageSquare } from 'lucide-react';
 import { useMemo, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /** Formats lastAction for profile; falls back to an absolute date when older than 4 weeks. */
 function formatLastSeenOnline(lastAction: ApiDate): string {
@@ -32,17 +33,14 @@ function formatLastSeenOnline(lastAction: ApiDate): string {
     return '';
   }
 
-  return parsed.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  return formatJoinDate(lastAction);
 }
 
 /**
  * Profile - User profile page component
  */
 export function Profile() {
+  const { t } = useTranslation();
   const { name: profileName } = useParams({ from: '/_authenticated/u/$name' });
 
   const {
@@ -82,9 +80,7 @@ export function Profile() {
       lines.push(
         <span key="posts" className="flex items-center gap-2">
           <MessageSquare size={16} />
-          <span>
-            {user.commentCount === 1 ? '1 post' : `${user.commentCount} posts`}
-          </span>
+          <span>{t('profile:postCount', { count: user.commentCount })}</span>
         </span>,
       );
     }
@@ -93,7 +89,11 @@ export function Profile() {
       lines.push(
         <span key="joined" className="flex items-center gap-2">
           <Calendar size={16} />
-          <span>Joined {formatJoinDate(user.dateCreated)}</span>
+          <span>
+            {t('profile:joined', {
+              date: formatJoinDate(user.dateCreated),
+            })}
+          </span>
         </span>,
       );
     }
@@ -102,18 +102,18 @@ export function Profile() {
       lines.push(
         <span key="last-seen" className="flex items-center gap-2">
           <Clock size={16} />
-          <span>Last seen online {lastSeen}</span>
+          <span>{t('profile:lastSeenOnline', { time: lastSeen })}</span>
         </span>,
       );
     }
 
     return lines;
-  }, [user, lastSeen]);
+  }, [user, lastSeen, t]);
 
   if (isLoadingDirectory || (userId && isLoadingProfile)) {
     return (
       <Card className="py-12 text-center">
-        <p className="text-muted-foreground">Loading profile…</p>
+        <p className="text-muted-foreground">{t('profile:loading')}</p>
       </Card>
     );
   }
@@ -126,7 +126,6 @@ export function Profile() {
     return <ResourceNotFound resource="user" detail={profileName} />;
   }
 
-  // NOTE: do not remove.
   const handle = 'handle';
   const showHandle = false;
 
@@ -140,7 +139,7 @@ export function Profile() {
         <div className="relative -mt-16 mb-4 ml-6">
           <Avatar
             avatar={user.avatar}
-            alt={`${user.name}'s avatar`}
+            alt={t('common:userAvatar', { name: user.name })}
             className="border-background h-32 w-32 border-2"
           />
         </div>
@@ -162,7 +161,7 @@ export function Profile() {
               iconBefore={<UserPlus size={16} />}
               disabled
             >
-              Follow
+              {t('profile:follow')}
             </Button>
           </div>
 
@@ -181,8 +180,8 @@ export function Profile() {
 
       <CommentFeed
         filter={{ user: user.id }}
-        title={`Posts by ${user.name}`}
-        emptyMessage={`${user.name} hasn't posted anything yet.`}
+        title={t('profile:postsBy', { name: user.name })}
+        emptyMessage={t('profile:emptyPosts', { name: user.name })}
       />
     </>
   );

@@ -1,6 +1,7 @@
 import { AsyncImage } from '@/components/ui/AsyncImage';
 import { ExternalLink } from 'lucide-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { tv } from 'tailwind-variants';
 
 export type LinkPreviewVariant = 'default' | 'compact';
@@ -60,6 +61,7 @@ export function LinkPreview({
   icon,
   variant = 'default',
 }: LinkPreviewProps) {
+  const { t } = useTranslation();
   const domain = useMemo(() => {
     try {
       return new URL(url).hostname.replace('www.', '');
@@ -79,7 +81,7 @@ export function LinkPreview({
       target="_blank"
       rel="noopener noreferrer"
       className="block text-inherit no-underline"
-      aria-label={`Visit ${displayTitle}`}
+      aria-label={t('common:visitLink', { title: displayTitle })}
       tabIndex={0}
     >
       <div className={styles.card()}>

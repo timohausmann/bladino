@@ -1,0 +1,10 @@
+{
+  "loading": "Loading profile…",
+  "postCount_one": "{{count}} post",
+  "postCount_other": "{{count}} posts",
+  "joined": "Joined {{date}}",
+  "lastSeenOnline": "Last seen online {{time}}",
+  "follow": "Follow",
+  "postsBy": "Posts by {{name}}",
+  "emptyPosts": "{{name}} hasn't posted anything yet."
+}

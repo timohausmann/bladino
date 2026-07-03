@@ -1,26 +1,7 @@
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 type ResourceKind = 'post' | 'user' | 'note' | 'mail';
-
-const RESOURCE_COPY: Record<ResourceKind, { title: string; fallback: string }> =
-  {
-    post: {
-      title: 'Could not load post',
-      fallback: 'Something went wrong while loading this post.',
-    },
-    user: {
-      title: 'Could not load profile',
-      fallback: 'Something went wrong while loading this profile.',
-    },
-    note: {
-      title: 'Could not load note',
-      fallback: 'Something went wrong while loading this note.',
-    },
-    mail: {
-      title: 'Could not load mail',
-      fallback: 'Something went wrong while loading this mail.',
-    },
-  };
 
 interface ResourceErrorProps {
   resource: ResourceKind;
@@ -37,12 +18,16 @@ export function ResourceError({
   message,
   className,
 }: ResourceErrorProps) {
-  const { title, fallback } = RESOURCE_COPY[resource];
+  const { t } = useTranslation();
 
   return (
     <div className={clsx('py-12 text-center', className)}>
-      <h1 className="text-foreground mb-2 text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground">{message ?? fallback}</p>
+      <h1 className="text-foreground mb-2 text-2xl font-bold">
+        {t(`errors:load.${resource}.title`)}
+      </h1>
+      <p className="text-muted-foreground">
+        {message ?? t(`errors:load.${resource}.fallback`)}
+      </p>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import * as Popover from '@radix-ui/react-popover';
 import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EmojiPicker } from '@/components/ui/EmojiPicker';
 import { HeaderButton } from '@/components/ui/HeaderButton';
 
@@ -13,6 +14,7 @@ interface CreateAddEmojiProps {
  * Based on the working EmojiReaction pattern
  */
 export function CreateAddEmoji({ onEmojiSelect }: CreateAddEmojiProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,7 +22,7 @@ export function CreateAddEmoji({ onEmojiSelect }: CreateAddEmojiProps) {
       <Popover.Trigger asChild>
         <HeaderButton
           icon={<SmilePlus size={20} />}
-          label="Add emoji"
+          label={t('posts:addEmoji')}
           variant="persistent"
         />
       </Popover.Trigger>

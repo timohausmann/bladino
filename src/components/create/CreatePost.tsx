@@ -1,5 +1,6 @@
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 
 export interface CreatePostProps {
@@ -11,6 +12,8 @@ export interface CreatePostProps {
  * CreatePost component
  */
 export function CreatePost({ channel, parent }: CreatePostProps) {
+  const { t } = useTranslation();
+
   return (
     <Card
       className={clsx(
@@ -23,8 +26,8 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
         layout="card"
         channel={channel}
         parent={parent}
-        submitLabel="Publish"
-        errorMessage="Failed to publish post"
+        submitLabel={t('posts:publish')}
+        errorMessage={t('errors:publishFailed')}
       />
     </Card>
   );

@@ -7,6 +7,7 @@ import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { mapUsersToPresenceEntries } from './mapPresenceUsers';
 
 export type PresenceRecency = 'fresh' | 'recent' | 'older' | 'stale';
@@ -29,6 +30,7 @@ interface PresenceRailItemProps {
 }
 
 function PresenceRailItem({ entry }: PresenceRailItemProps) {
+  const { t } = useTranslation();
   const { name, avatar, lastSeen } = entry;
 
   return (
@@ -39,7 +41,7 @@ function PresenceRailItem({ entry }: PresenceRailItemProps) {
     >
       <Avatar
         avatar={avatar}
-        alt={`${name}'s avatar`}
+        alt={t('common:userAvatar', { name })}
         className="mb-2 h-12 w-12"
       />
 
@@ -59,10 +61,14 @@ function PresenceRailItem({ entry }: PresenceRailItemProps) {
 }
 
 export function PresenceRail({ users = [] }: PresenceRailProps) {
+  const { t, i18n } = useTranslation();
   const isPresenceRailOpen = useUiStore((store) => store.isPresenceRailOpen);
   const setPresenceRailOpen = useUiStore((store) => store.setPresenceRailOpen);
 
-  const entries = useMemo(() => mapUsersToPresenceEntries(users), [users]);
+  const entries = useMemo(
+    () => mapUsersToPresenceEntries(users),
+    [users, i18n.language],
+  );
 
   if (entries.length === 0) return null;
 
@@ -80,10 +86,12 @@ export function PresenceRail({ users = [] }: PresenceRailProps) {
               'cursor-pointer text-left',
             ])}
             aria-label={
-              isPresenceRailOpen ? 'Collapse community' : 'Expand community'
+              isPresenceRailOpen ? t('presence:collapse') : t('presence:expand')
             }
           >
-            <h2 className="text-foreground text-sm font-semibold">Community</h2>
+            <h2 className="text-foreground text-sm font-semibold">
+              {t('presence:community')}
+            </h2>
 
             <span className="flex shrink-0 items-center gap-2">
               <ChevronDown

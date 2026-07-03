@@ -4,6 +4,7 @@ import { resolveFileUrl } from '@/utils/fileUrl';
 import { File as FileIcon, FileText, Music, Video, X } from 'lucide-react';
 import type { LocalDraftFile } from '@/utils/postFileUtils';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 type PreviewFile = Pick<
   ApiFile,
@@ -40,6 +41,8 @@ function getPreviewUrl(file: PreviewFile | LocalDraftFile): string | undefined {
  * Images are displayed as thumbnails, other files show generic icons with metadata
  */
 export function FilePreview({ files, onRemove }: FilePreviewProps) {
+  const { t } = useTranslation();
+
   if (!files || files.length === 0) {
     return null;
   }
@@ -47,7 +50,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
   const isImage = (type?: string | null) => type?.startsWith('image/');
 
   const formatFileSize = (bytes?: number | null) => {
-    if (!bytes) return 'Unknown size';
+    if (!bytes) return t('common:unknownSize');
 
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -71,7 +74,6 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
     return <FileIcon size={32} className="text-cyan-500" />;
   };
 
-  // Grid columns account for gap-3, so three cards fit without fractional overflow.
   const fitsWithoutScroll = files.length <= 3;
 
   const previewClassName =
@@ -80,7 +82,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
   return (
     <ScrollArea
       orientation="horizontal"
-      label="File attachments"
+      label={t('common:fileAttachments')}
       className="@container w-full"
     >
       <div
@@ -126,7 +128,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                     type="button"
                     onClick={() => onRemove(file.id)}
                     className="absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80"
-                    aria-label={`Remove ${displayName}`}
+                    aria-label={t('common:removeFile', { name: displayName })}
                   >
                     <X size={14} />
                   </button>
@@ -137,7 +139,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block h-full w-full hover:bg-black/30"
-                  aria-label={`Open ${displayName}`}
+                  aria-label={t('common:openFile', { name: displayName })}
                   tabIndex={0}
                 >
                   {previewContent}

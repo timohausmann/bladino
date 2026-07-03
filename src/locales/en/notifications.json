@@ -1,0 +1,12 @@
+{
+  "title": "Notifications",
+  "newCount": "{{count}} new",
+  "empty": "No notifications yet",
+  "mock": {
+    "likedPost": "{{name}} liked your post",
+    "newComment": "New comment on your post",
+    "newFollower": "You have a new follower",
+    "minutesAgo": "{{count}} minutes ago",
+    "hourAgo": "1 hour ago"
+  }
+}

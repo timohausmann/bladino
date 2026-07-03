@@ -26,27 +26,7 @@ import {
   Settings,
   StickyNote,
 } from 'lucide-react';
-
-const MOCK_NOTIFICATIONS = [
-  {
-    id: '1',
-    message: 'Jane Smith liked your post',
-    isNew: true,
-    timestamp: '2 minutes ago',
-  },
-  {
-    id: '2',
-    message: 'New comment on your post',
-    isNew: true,
-    timestamp: '5 minutes ago',
-  },
-  {
-    id: '3',
-    message: 'You have a new follower',
-    isNew: false,
-    timestamp: '1 hour ago',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 const MOCK_CHANNELS = ['allgemein', 'projekte', 'memes'];
 
@@ -54,6 +34,27 @@ const MOCK_CHANNELS = ['allgemein', 'projekte', 'memes'];
  * Persistent left navigation rail for authenticated routes.
  */
 export function NavRail() {
+  const { t } = useTranslation();
+  const mockNotifications = [
+    {
+      id: '1',
+      message: t('notifications:mock.likedPost', { name: 'Jane Smith' }),
+      isNew: true,
+      timestamp: t('notifications:mock.minutesAgo', { count: 2 }),
+    },
+    {
+      id: '2',
+      message: t('notifications:mock.newComment'),
+      isNew: true,
+      timestamp: t('notifications:mock.minutesAgo', { count: 5 }),
+    },
+    {
+      id: '3',
+      message: t('notifications:mock.newFollower'),
+      isNew: false,
+      timestamp: t('notifications:mock.hourAgo'),
+    },
+  ];
   const expanded = useUiStore((store) => store.isNavRailExpanded);
   const toggleNavRail = useUiStore((store) => store.toggleNavRail);
 
@@ -72,7 +73,7 @@ export function NavRail() {
         <div className="flex flex-col gap-1">
           <div className={navRailRowClassName({ noHover: true })}>
             {expanded ? (
-              <Link to="/" aria-label="Home">
+              <Link to="/" aria-label={t('navigation:home')}>
                 <img
                   src="/logo-trashnet-2026.svg"
                   alt="trashnet"
@@ -81,7 +82,7 @@ export function NavRail() {
               </Link>
             ) : (
               <NavRailIconTrack>
-                <Link to="/" aria-label="Home">
+                <Link to="/" aria-label={t('navigation:home')}>
                   <img
                     src="/icon-trashnet-2026.svg"
                     alt="trashnet"
@@ -99,7 +100,7 @@ export function NavRail() {
                   'text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800/80',
                   'transition-colors duration-150',
                 )}
-                aria-label="Collapse navigation"
+                aria-label={t('navigation:collapseNavigation')}
               >
                 <PanelLeftClose size={18} />
               </button>
@@ -111,7 +112,7 @@ export function NavRail() {
               type="button"
               onClick={toggleNavRail}
               className={navRailRowClassName()}
-              aria-label="Expand navigation"
+              aria-label={t('navigation:expandNavigation')}
             >
               <NavRailIconTrack>
                 <PanelLeftOpen size={18} />
@@ -130,19 +131,19 @@ export function NavRail() {
       >
         <NavRailLink
           to="/"
-          label="Home"
+          label={t('navigation:home')}
           icon={Home}
           expanded={expanded}
           exact
         />
         <NotificationButton
           count={2}
-          notifications={MOCK_NOTIFICATIONS}
+          notifications={mockNotifications}
           expanded={expanded}
         />
         <NavRailLink
           to="/explore"
-          label="Explore"
+          label={t('navigation:explore')}
           icon={Compass}
           expanded={expanded}
           disabled
@@ -160,13 +161,13 @@ export function NavRail() {
         <Divider className="mt-0 mb-1" />
         <NavRailLink
           to="/notes"
-          label="Notizen"
+          label={t('navigation:notes')}
           icon={StickyNote}
           expanded={expanded}
         />
         <NavRailLink
           to="/mails"
-          label="E-Mail"
+          label={t('navigation:mail')}
           icon={Mail}
           expanded={expanded}
         />
@@ -176,13 +177,17 @@ export function NavRail() {
             <div className="min-w-0 flex-1">
               <InteractiveAvatar showName />
             </div>
-            <NavRailIconLink to="/settings" label="Settings" icon={Settings} />
+            <NavRailIconLink
+              to="/settings"
+              label={t('navigation:settings')}
+              icon={Settings}
+            />
           </div>
         ) : (
           <>
             <NavRailLink
               to="/settings"
-              label="Settings"
+              label={t('navigation:settings')}
               icon={Settings}
               expanded={false}
             />
@@ -195,11 +200,13 @@ export function NavRail() {
 }
 
 function NavRailChannels({ expanded }: { expanded: boolean }) {
+  const { t } = useTranslation();
+
   if (!expanded) {
     return (
       <NavRailLink
         to="/channels"
-        label="Channels"
+        label={t('navigation:channels')}
         icon={Hash}
         expanded={false}
         disabled
@@ -213,7 +220,9 @@ function NavRailChannels({ expanded }: { expanded: boolean }) {
         <NavRailIconTrack>
           <Hash size={20} aria-hidden className="shrink-0" />
         </NavRailIconTrack>
-        <span className={navRailLabelClassName}>Channels</span>
+        <span className={navRailLabelClassName}>
+          {t('navigation:channels')}
+        </span>
         <ChevronDown
           size={16}
           aria-hidden

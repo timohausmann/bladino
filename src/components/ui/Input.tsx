@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface InputProps {
   value: string;
@@ -29,6 +30,7 @@ export function Input({
   hint,
   showPasswordToggle = false,
 }: InputProps) {
+  const { t } = useTranslation();
   const inputId = `input-${nanoid()}`;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -68,7 +70,11 @@ export function Input({
             type="button"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
             className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 p-1 transition-colors"
-            aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+            aria-label={
+              isPasswordVisible
+                ? t('common:hidePassword')
+                : t('common:showPassword')
+            }
             tabIndex={0}
           >
             {isPasswordVisible ? (

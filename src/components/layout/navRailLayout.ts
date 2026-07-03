@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 /** Outer rail width when collapsed (60px). */
 export const NAV_RAIL_COLLAPSED_WIDTH = 'w-[3.75rem]';
-export const NAV_RAIL_EXPANDED_WIDTH = 'w-56';
+export const NAV_RAIL_EXPANDED_WIDTH = 'w-64';
 
 /** Section padding — keeps item backgrounds off the rail edges in both states. */
 export const navRailSectionClassName = 'px-2';

@@ -1,3 +1,4 @@
+import i18n from '@/i18n';
 import type { UsersLastActionQuery } from '@/graphql';
 import type { ApiDate } from '@/utils/formatDate';
 import type { PresenceEntry } from './PresenceRail';
@@ -30,19 +31,25 @@ export function formatLastSeen(lastAction: ApiDate): string {
 
   const ageSec = Math.max(0, Math.floor(ageMs / 1000));
 
-  if (ageSec < 60) return 'just now';
+  if (ageSec < 60) return i18n.t('presence:justNow');
 
   const ageMin = Math.floor(ageSec / 60);
-  if (ageMin < 60) return `${ageMin}m ago`;
+  if (ageMin < 60) {
+    return i18n.t('presence:minutesAgo', { count: ageMin });
+  }
 
   const ageHours = Math.floor(ageMin / 60);
-  if (ageHours < 24) return `${ageHours}h ago`;
+  if (ageHours < 24) {
+    return i18n.t('presence:hoursAgo', { count: ageHours });
+  }
 
   const ageDays = Math.floor(ageHours / 24);
-  if (ageDays < 7) return `${ageDays}d ago`;
+  if (ageDays < 7) {
+    return i18n.t('presence:daysAgo', { count: ageDays });
+  }
 
   const ageWeeks = Math.floor(ageDays / 7);
-  return `${ageWeeks}w ago`;
+  return i18n.t('presence:weeksAgo', { count: ageWeeks });
 }
 
 export function mapUsersToPresenceEntries(

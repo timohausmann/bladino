@@ -1,5 +1,12 @@
+import i18n from '@/i18n';
+import { normalizeLanguage } from '@/i18n/config';
+
 /** ISO 8601 date string from the GraphQL Date scalar. */
 export type ApiDate = string | null | undefined;
+
+function getDateLocale(): string {
+  return normalizeLanguage(i18n.language) === 'de' ? 'de-DE' : 'en-US';
+}
 
 /** Formats API date values for display in post headers and comments. */
 export function formatCommentDate(date: ApiDate): string {
@@ -12,7 +19,7 @@ export function formatCommentDate(date: ApiDate): string {
     return '';
   }
 
-  return parsed.toLocaleDateString('en-US', {
+  return parsed.toLocaleDateString(getDateLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -30,7 +37,7 @@ export function formatJoinDate(date: ApiDate): string {
     return '';
   }
 
-  return parsed.toLocaleDateString('en-US', {
+  return parsed.toLocaleDateString(getDateLocale(), {
     year: 'numeric',
     month: 'long',
   });

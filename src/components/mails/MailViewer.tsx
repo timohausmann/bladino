@@ -2,6 +2,7 @@ import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import { MailDocument, useGraphQLQuery } from '@/graphql';
 import { formatCommentDate } from '@/utils/formatDate';
+import { useTranslation } from 'react-i18next';
 
 interface MailViewerProps {
   mailId: string;
@@ -16,21 +17,22 @@ function formatAddressList(
   return filtered && filtered.length > 0 ? filtered.join(', ') : null;
 }
 
-function mailSubject(subject?: string | null): string {
-  const trimmed = subject?.trim();
-  return trimmed ? trimmed : '(No subject)';
-}
-
 export function MailViewer({ mailId }: MailViewerProps) {
+  const { t } = useTranslation();
   const { data, isLoading, isError } = useGraphQLQuery(MailDocument, {
     id: mailId,
   });
   const mail = data?.mail;
 
+  const mailSubject = (subject?: string | null): string => {
+    const trimmed = subject?.trim();
+    return trimmed ? trimmed : t('mail:noSubject');
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-1 items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
-        Loading mail…
+        {t('mail:loading')}
       </div>
     );
   }
@@ -68,7 +70,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           {mail.from && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">
-                From
+                {t('mail:from')}
               </dt>
               <dd className="min-w-0 wrap-break-word">{mail.from}</dd>
             </div>
@@ -76,7 +78,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           {to && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">
-                To
+                {t('mail:to')}
               </dt>
               <dd className="min-w-0 wrap-break-word">{to}</dd>
             </div>
@@ -84,7 +86,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           {cc && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">
-                Cc
+                {t('mail:cc')}
               </dt>
               <dd className="min-w-0 wrap-break-word">{cc}</dd>
             </div>
@@ -92,7 +94,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           {bcc && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">
-                Bcc
+                {t('mail:bcc')}
               </dt>
               <dd className="min-w-0 wrap-break-word">{bcc}</dd>
             </div>
@@ -100,7 +102,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           {date && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">
-                Date
+                {t('mail:date')}
               </dt>
               <dd>{date}</dd>
             </div>
@@ -115,7 +117,7 @@ export function MailViewer({ mailId }: MailViewerProps) {
           </pre>
         ) : (
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            This mail has no body.
+            {t('mail:emptyBody')}
           </p>
         )}
       </div>

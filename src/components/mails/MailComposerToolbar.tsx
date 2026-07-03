@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import * as Toolbar from '@radix-ui/react-toolbar';
+import { useTranslation } from 'react-i18next';
 
 interface MailComposerToolbarProps {
   onCancel: () => void;
@@ -14,10 +15,12 @@ export function MailComposerToolbar({
   canSend = false,
   isSending = false,
 }: MailComposerToolbarProps) {
+  const { t } = useTranslation();
+
   return (
     <Toolbar.Root
       className="flex shrink-0 items-center gap-4 border-b border-neutral-200 px-4 py-3 dark:border-neutral-800"
-      aria-label="Compose mail actions"
+      aria-label={t('mail:composeActions')}
     >
       <Toolbar.Button asChild>
         <Button
@@ -29,7 +32,7 @@ export function MailComposerToolbar({
           onClick={onCancel}
           disabled={isSending}
         >
-          Cancel
+          {t('common:cancel')}
         </Button>
       </Toolbar.Button>
       <Toolbar.Button asChild className="ml-auto">
@@ -42,7 +45,7 @@ export function MailComposerToolbar({
           loading={isSending}
           disabled={!canSend || isSending}
         >
-          Send
+          {t('mail:send')}
         </Button>
       </Toolbar.Button>
     </Toolbar.Root>

@@ -9,6 +9,7 @@ import {
   useGraphQLMutation,
 } from '@/graphql';
 import { toast } from '@/components/ui/toast';
+import i18n from '@/i18n';
 import {
   type ComposerFile,
   fileToLocalDraft,
@@ -44,7 +45,8 @@ function trimBody(body?: string | null): string {
   return body?.trim() ?? '';
 }
 
-const FILE_LIMIT_TOAST = `You can only attach up to ${MAX_COMMENT_FILES} files.`;
+const FILE_LIMIT_TOAST = () =>
+  i18n.t('posts:fileLimitToast', { max: MAX_COMMENT_FILES });
 
 export function useCommentComposer({
   mode,
@@ -54,7 +56,7 @@ export function useCommentComposer({
   initialContent = '',
   initialFiles = [],
   onSuccess,
-  errorMessage = 'Failed to save',
+  errorMessage = i18n.t('errors:saveFailed'),
 }: UseCommentComposerOptions) {
   const [initial] = useState<InitialSnapshot>(() => ({
     content: initialContent,
@@ -80,7 +82,7 @@ export function useCommentComposer({
 
   const handleAddFilesClick = () => {
     if (files.length >= MAX_COMMENT_FILES) {
-      toast(FILE_LIMIT_TOAST);
+      toast(FILE_LIMIT_TOAST());
       return;
     }
     fileInputRef.current?.click();
@@ -94,7 +96,7 @@ export function useCommentComposer({
     const room = MAX_COMMENT_FILES - files.length;
 
     if (room <= 0) {
-      toast(FILE_LIMIT_TOAST);
+      toast(FILE_LIMIT_TOAST());
       revokeDraftFiles(newFiles);
       e.target.value = '';
       return;
@@ -104,7 +106,7 @@ export function useCommentComposer({
     const rejected = newFiles.slice(room);
 
     if (rejected.length > 0) {
-      toast(FILE_LIMIT_TOAST);
+      toast(FILE_LIMIT_TOAST());
       revokeDraftFiles(rejected);
     }
 

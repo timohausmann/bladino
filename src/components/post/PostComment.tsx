@@ -3,6 +3,7 @@ import { getCommentFiles } from '@/utils/commentUtils';
 import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
@@ -19,6 +20,7 @@ interface PostCommentProps {
  * PostComment - Compact comment display component
  */
 export function PostComment({ comment, channel }: PostCommentProps) {
+  const { t } = useTranslation();
   const { user } = comment;
   const files = getCommentFiles(comment);
   const handle = 'handle';
@@ -34,7 +36,7 @@ export function PostComment({ comment, channel }: PostCommentProps) {
       >
         <Avatar
           avatar={user.avatar}
-          alt={`${user.name}'s avatar`}
+          alt={t('common:userAvatar', { name: user.name })}
           className="h-9 w-9"
         />
       </Link>
@@ -62,7 +64,10 @@ export function PostComment({ comment, channel }: PostCommentProps) {
             <span className="text-muted-foreground text-xs">
               {formatCommentDate(comment.dateCreated)}
             </span>
-            <PostContextMenu comment={comment} onEdit={() => setIsEditing(true)} />
+            <PostContextMenu
+              comment={comment}
+              onEdit={() => setIsEditing(true)}
+            />
           </div>
         </div>
         {isEditing ? (
@@ -74,11 +79,11 @@ export function PostComment({ comment, channel }: PostCommentProps) {
             parent={comment.parent ?? undefined}
             initialContent={comment.body ?? ''}
             initialFiles={files}
-            placeholder="Edit reply..."
+            placeholder={t('posts:editReplyPlaceholder')}
             showCancel
             onCancel={() => setIsEditing(false)}
             onSuccess={() => setIsEditing(false)}
-            errorMessage="Failed to update reply"
+            errorMessage={t('errors:updateReplyFailed')}
           />
         ) : (
           <div className="flex flex-col gap-3">

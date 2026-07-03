@@ -17,6 +17,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from '@/components/ui/alert-dialog';
 import {
   ContextMenuButton,
@@ -34,6 +35,7 @@ interface PostContextMenuProps {
  * Context menu items for post actions
  */
 export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -47,7 +49,9 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
     shouldThrow: false,
   });
 
-  const { mutateAsync: deleteComment } = useGraphQLMutation(DeleteCommentDocument);
+  const { mutateAsync: deleteComment } = useGraphQLMutation(
+    DeleteCommentDocument,
+  );
 
   const handleReport = () => {
     console.log('Report post:', comment.id);
@@ -64,7 +68,7 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
         `${window.location.origin}/post/${comment.id}`,
       );
     }
-    toast('Link copied!');
+    toast(t('posts:linkCopied'));
     setOpen(false);
   };
 
@@ -95,34 +99,29 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
         });
       }
 
-      toast(
-        isComment
-          ? 'Comment deleted successfully!'
-          : 'Post deleted successfully!',
-      );
+      toast(isComment ? t('posts:commentDeleted') : t('posts:postDeleted'));
 
       setDeleteOpen(false);
 
-      if (
-        !isComment &&
-        postDetailMatch?.params.id === String(comment.id)
-      ) {
+      if (!isComment && postDetailMatch?.params.id === String(comment.id)) {
         void navigate({ to: '/' });
       }
     } catch (error) {
       const message =
         getGraphQLErrorMessage(error) ??
-        (error instanceof Error ? error.message : 'Failed to delete');
+        (error instanceof Error ? error.message : t('errors:deleteFailed'));
       toast(message);
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const deleteTitle = isComment ? 'Delete comment?' : 'Delete post?';
+  const deleteTitle = isComment
+    ? t('posts:deleteCommentTitle')
+    : t('posts:deletePostTitle');
   const deleteDescription = isComment
-    ? 'This comment will be permanently removed. This action cannot be undone.'
-    : 'This post will be permanently removed. This action cannot be undone.';
+    ? t('posts:deleteCommentDescription')
+    : t('posts:deletePostDescription');
 
   return (
     <>
@@ -130,8 +129,8 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
         <Popover.Trigger asChild>
           <button
             className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-0 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
-            aria-label="Post options"
-            title="More options"
+            aria-label={t('posts:postOptions')}
+            title={t('posts:moreOptions')}
           >
             <MoreVertical size={16} />
           </button>
@@ -140,14 +139,14 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
         <PopoverContent>
           <ContextMenuButton
             id="report"
-            label="Report"
+            label={t('posts:report')}
             icon={Flag}
             onClick={handleReport}
             disabled
           />
           <ContextMenuButton
             id="copy-link"
-            label="Copy Link"
+            label={t('posts:copyLink')}
             icon={LinkIcon}
             onClick={handleCopyLink}
           />
@@ -156,13 +155,15 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
               <ContextMenuDivider id="divider" />
               <ContextMenuButton
                 id="edit"
-                label={isComment ? 'Edit Comment' : 'Edit Post'}
+                label={isComment ? t('posts:editComment') : t('posts:editPost')}
                 icon={Edit}
                 onClick={handleEdit}
               />
               <ContextMenuButton
                 id="delete"
-                label={isComment ? 'Delete Comment' : 'Delete Post'}
+                label={
+                  isComment ? t('posts:deleteComment') : t('posts:deletePost')
+                }
                 icon={Trash2}
                 onClick={handleDeleteClick}
                 variant="destructive"
@@ -175,15 +176,14 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
       <ConfirmDialog
         open={deleteOpen}
         onOpenChange={(nextOpen) => {
-          // Block dismiss (Escape/outside click) while the delete request is in flight.
           if (!isDeleting) {
             setDeleteOpen(nextOpen);
           }
         }}
         title={deleteTitle}
         description={deleteDescription}
-        confirmLabel={isDeleting ? 'Deleting…' : 'Delete'}
-        cancelLabel="Cancel"
+        confirmLabel={isDeleting ? t('common:deleting') : t('common:delete')}
+        cancelLabel={t('common:cancel')}
         onConfirm={() => void handleDeleteConfirm()}
         destructive
       />

@@ -1,0 +1,21 @@
+{
+  "empty": "Noch keine Notizen. Erstelle eine mit dem +-Button.",
+  "loadingList": "Notizen werden geladen…",
+  "listLabel": "Notizen",
+  "listActions": "Notizen-Listenaktionen",
+  "newNote": "Neue Notiz",
+  "search": "Notizen suchen",
+  "sort": "Notizen sortieren",
+  "loading": "Notiz wird geladen…",
+  "editorPlaceholder": "Los schreiben…",
+  "deleteTitle": "Notiz löschen",
+  "deleteDescription": "Diese Notiz wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "delete": "Notiz löschen",
+  "actions": "Notiz-Aktionen",
+  "saving": "Wird gespeichert…",
+  "saved": "Gespeichert",
+  "saveFailed": "Speichern fehlgeschlagen",
+  "deletedToast": "Notiz gelöscht",
+  "untitled": "Ohne Titel",
+  "editedMeta": "Bearbeitet {{date}}"
+}

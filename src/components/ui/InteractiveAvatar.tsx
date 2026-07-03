@@ -6,6 +6,7 @@ import {
 import { useUserStore } from '@/stores/userStore';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 
 interface InteractiveAvatarProps {
@@ -20,6 +21,7 @@ export function InteractiveAvatar({
   className,
   showName = false,
 }: InteractiveAvatarProps) {
+  const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
 
   if (!currentUser) {
@@ -34,7 +36,7 @@ export function InteractiveAvatar({
       to="/u/$name"
       params={{ name: currentUser.name }}
       title={showName ? undefined : currentUser.name}
-      aria-label={`Profile: ${currentUser.name}`}
+      aria-label={t('common:profileLink', { name: currentUser.name })}
       className={inactiveClassName}
       activeProps={{ className: activeClassName }}
       inactiveProps={{ className: inactiveClassName }}

@@ -1,7 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 export function MailsEmptyState() {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-1 items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
-      Select a mail to read.
+      {t('mail:selectToRead')}
     </div>
   );
 }

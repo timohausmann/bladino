@@ -1,4 +1,5 @@
 import { Textarea } from '@/components/ui/Textarea';
+import { useTranslation } from 'react-i18next';
 
 interface CreateTextProps {
   content: string;
@@ -11,11 +12,13 @@ export function CreateText({
   onContentChange,
   maxLength = 280,
 }: CreateTextProps) {
+  const { t } = useTranslation();
+
   return (
     <Textarea
       value={content}
       onChange={onContentChange}
-      placeholder="What's happening?"
+      placeholder={t('posts:composerPlaceholder')}
       maxLength={maxLength}
     />
   );

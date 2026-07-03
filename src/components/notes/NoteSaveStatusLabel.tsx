@@ -1,18 +1,21 @@
 import clsx from 'clsx';
 import type { NoteSaveStatus } from '@/components/notes/types';
+import { useTranslation } from 'react-i18next';
 
 interface NoteSaveStatusLabelProps {
   status: NoteSaveStatus;
 }
 
 export function NoteSaveStatusLabel({ status }: NoteSaveStatusLabelProps) {
+  const { t } = useTranslation();
+
   const label =
     status === 'saving' || status === 'pending'
-      ? 'Saving…'
+      ? t('notes:saving')
       : status === 'saved'
-        ? 'Saved'
+        ? t('notes:saved')
         : status === 'error'
-          ? 'Could not save'
+          ? t('notes:saveFailed')
           : null;
 
   if (!label) {

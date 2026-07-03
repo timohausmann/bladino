@@ -1,0 +1,21 @@
+{
+  "empty": "No notes yet. Create one with the + button.",
+  "loadingList": "Loading notes…",
+  "listLabel": "Notes",
+  "listActions": "Notes list actions",
+  "newNote": "New note",
+  "search": "Search notes",
+  "sort": "Sort notes",
+  "loading": "Loading note…",
+  "editorPlaceholder": "Start writing…",
+  "deleteTitle": "Delete note",
+  "deleteDescription": "This note will be permanently deleted. This action cannot be undone.",
+  "delete": "Delete note",
+  "actions": "Note actions",
+  "saving": "Saving…",
+  "saved": "Saved",
+  "saveFailed": "Could not save",
+  "deletedToast": "Note deleted",
+  "untitled": "Untitled",
+  "editedMeta": "Edited {{date}}"
+}

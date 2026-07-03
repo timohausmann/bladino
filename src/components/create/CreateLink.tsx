@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 
@@ -13,6 +14,7 @@ export function CreateLink({
   onContentChange,
   maxLength = 280,
 }: CreateLinkProps) {
+  const { t } = useTranslation();
   const [linkUrl, setLinkUrl] = useState('');
 
   return (
@@ -21,12 +23,12 @@ export function CreateLink({
         type="url"
         value={linkUrl}
         onChange={setLinkUrl}
-        placeholder="https://..."
+        placeholder={t('posts:linkUrlPlaceholder')}
       />
       <Textarea
         value={content}
         onChange={onContentChange}
-        placeholder="Comment (optional)"
+        placeholder={t('posts:linkCommentPlaceholder')}
         maxLength={maxLength}
       />
     </div>

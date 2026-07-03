@@ -1,4 +1,5 @@
 import { EmojiPicker as FrimoussePicker } from 'frimousse';
+import { useTranslation } from 'react-i18next';
 
 interface EmojiPickerProps {
   onEmojiSelect: (emoji: string) => void;
@@ -6,6 +7,8 @@ interface EmojiPickerProps {
 }
 
 export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
+  const { t } = useTranslation();
+
   return (
     <FrimoussePicker.Root
       className="isolate flex h-[368px] w-fit flex-col rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900"
@@ -17,10 +20,10 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
       <FrimoussePicker.Search className="z-10 mx-2 mt-2 appearance-none rounded-md bg-neutral-100 px-2.5 py-2 text-sm dark:bg-neutral-800" />
       <FrimoussePicker.Viewport className="relative flex-1 outline-hidden">
         <FrimoussePicker.Loading className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
-          Loading…
+          {t('common:loading')}
         </FrimoussePicker.Loading>
         <FrimoussePicker.Empty className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
-          No emoji found.
+          {t('common:noEmojiFound')}
         </FrimoussePicker.Empty>
         <FrimoussePicker.List
           className="pb-1.5 select-none"

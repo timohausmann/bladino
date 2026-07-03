@@ -1,4 +1,5 @@
 import { toast } from '@/components/ui/toast';
+import i18n from '@/i18n';
 import { clearSession } from '@/lib/auth';
 import { setFlashMessage } from '@/lib/flashMessage';
 
@@ -50,7 +51,7 @@ export function notifyUnauthorized(): void {
     return;
   }
   unauthorizedNotified = true;
-  toast('Unauthorized.');
+  toast(i18n.t('errors:unauthorized'));
   window.setTimeout(() => {
     unauthorizedNotified = false;
   }, UNAUTHORIZED_TOAST_COOLDOWN_MS);

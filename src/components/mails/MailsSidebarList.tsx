@@ -1,6 +1,7 @@
 import type { MailFolder } from '@/components/mails/types';
 import { List, ListItem } from '@/components/ui/list';
 import { formatCommentDate } from '@/utils/formatDate';
+import { useTranslation } from 'react-i18next';
 
 interface MailsSidebarListMail {
   id: string;
@@ -20,22 +21,6 @@ interface MailsSidebarListProps {
   onSelect: (mailId: string) => void;
 }
 
-function mailListTitle(subject?: string | null): string {
-  const trimmed = subject?.trim();
-  return trimmed ? trimmed : '(No subject)';
-}
-
-function mailListMeta(mail: MailsSidebarListMail, folder: MailFolder): string {
-  const counterpart =
-    folder === 'inbox'
-      ? mail.from?.trim() || 'Unknown sender'
-      : mail.to?.filter(Boolean).join(', ') || 'Unknown recipient';
-  const date = formatCommentDate(
-    folder === 'inbox' ? mail.dateReceived : mail.dateSent,
-  );
-  return date ? `${counterpart} · ${date}` : counterpart;
-}
-
 export function MailsSidebarList({
   mails,
   folder,
@@ -43,10 +28,31 @@ export function MailsSidebarList({
   isLoading = false,
   onSelect,
 }: MailsSidebarListProps) {
+  const { t } = useTranslation();
+
+  const mailListTitle = (subject?: string | null): string => {
+    const trimmed = subject?.trim();
+    return trimmed ? trimmed : t('mail:noSubject');
+  };
+
+  const mailListMeta = (
+    mail: MailsSidebarListMail,
+    mailFolder: MailFolder,
+  ): string => {
+    const counterpart =
+      mailFolder === 'inbox'
+        ? mail.from?.trim() || t('mail:unknownSender')
+        : mail.to?.filter(Boolean).join(', ') || t('mail:unknownRecipient');
+    const date = formatCommentDate(
+      mailFolder === 'inbox' ? mail.dateReceived : mail.dateSent,
+    );
+    return date ? `${counterpart} · ${date}` : counterpart;
+  };
+
   if (isLoading) {
     return (
       <div className="p-4 text-sm text-neutral-500 dark:text-neutral-400">
-        Loading mails…
+        {t('mail:loadingList')}
       </div>
     );
   }
@@ -54,13 +60,13 @@ export function MailsSidebarList({
   if (mails.length === 0) {
     return (
       <div className="p-4 text-sm text-neutral-500 dark:text-neutral-400">
-        No mails in this folder.
+        {t('mail:emptyFolder')}
       </div>
     );
   }
 
   return (
-    <List label="Mails">
+    <List label={t('mail:listLabel')}>
       {mails.map((mail) => (
         <ListItem
           key={mail.id}

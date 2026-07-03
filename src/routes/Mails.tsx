@@ -12,11 +12,13 @@ import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { MailsDocument, useGraphQLQuery } from '@/graphql';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Mails page with context panel list, read-only viewer, and compose mode.
  */
 export function Mails() {
+  const { t } = useTranslation();
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
@@ -178,9 +180,9 @@ export function Mails() {
             setPendingAction(null);
           }
         }}
-        title="Discard draft?"
-        description="You have unsaved changes in this message. Discard them?"
-        confirmLabel="Discard"
+        title={t('mail:discardDraftTitle')}
+        description={t('mail:discardDraftDescription')}
+        confirmLabel={t('common:discard')}
         destructive
         onConfirm={handleDiscardConfirm}
       />

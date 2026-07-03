@@ -1,0 +1,12 @@
+{
+  "title": "Benachrichtigungen",
+  "newCount": "{{count}} neu",
+  "empty": "Noch keine Benachrichtigungen",
+  "mock": {
+    "likedPost": "{{name}} hat deinen Beitrag geliked",
+    "newComment": "Neuer Kommentar zu deinem Beitrag",
+    "newFollower": "Du hast einen neuen Follower",
+    "minutesAgo": "vor {{count}} Minuten",
+    "hourAgo": "vor 1 Stunde"
+  }
+}

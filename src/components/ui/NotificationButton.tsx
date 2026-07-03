@@ -7,6 +7,7 @@ import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
 import { Bell } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PopoverContent } from '@/components/ui/popover';
 
 interface Notification {
@@ -58,6 +59,7 @@ export function NotificationButton({
   notifications = [],
   expanded = false,
 }: NotificationButtonProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const handleNotificationClick = () => {
@@ -70,7 +72,7 @@ export function NotificationButton({
         <button
           type="button"
           className={navRailRowClassName({ active: open })}
-          aria-label="Notifications"
+          aria-label={t('notifications:title')}
         >
           <NavRailIconTrack className="relative">
             <Bell size={20} aria-hidden className="shrink-0" />
@@ -85,7 +87,9 @@ export function NotificationButton({
           </NavRailIconTrack>
           {expanded ? (
             <>
-              <span className={navRailLabelClassName}>Notifications</span>
+              <span className={navRailLabelClassName}>
+                {t('notifications:title')}
+              </span>
               <CountBadge count={count} className="mr-2" />
             </>
           ) : null}
@@ -95,11 +99,11 @@ export function NotificationButton({
       <PopoverContent width="w-80">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            Notifications
+            {t('notifications:title')}
           </h3>
           {count > 0 && (
             <span className="text-sm text-neutral-500 dark:text-neutral-400">
-              {count} new
+              {t('notifications:newCount', { count })}
             </span>
           )}
         </div>
@@ -133,7 +137,7 @@ export function NotificationButton({
           ) : (
             <div className="py-8 text-center text-neutral-500 dark:text-neutral-400">
               <Bell size={24} className="mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No notifications yet</p>
+              <p className="text-sm">{t('notifications:empty')}</p>
             </div>
           )}
         </div>

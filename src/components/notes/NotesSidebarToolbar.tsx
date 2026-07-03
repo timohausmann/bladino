@@ -1,6 +1,7 @@
 import { HeaderButton } from '@/components/ui/HeaderButton';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { ArrowDownAZ, Plus, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface NotesSidebarToolbarProps {
   onCreate: () => void;
@@ -11,15 +12,17 @@ export function NotesSidebarToolbar({
   onCreate,
   isCreating = false,
 }: NotesSidebarToolbarProps) {
+  const { t } = useTranslation();
+
   return (
     <Toolbar.Root
       className="flex shrink-0 items-center gap-1 border-b border-neutral-200 p-2 dark:border-neutral-800"
-      aria-label="Notes list actions"
+      aria-label={t('notes:listActions')}
     >
       <Toolbar.Button asChild>
         <HeaderButton
           icon={<Plus size={18} />}
-          label="New note"
+          label={t('notes:newNote')}
           variant="persistent"
           onClick={onCreate}
           disabled={isCreating}
@@ -29,7 +32,7 @@ export function NotesSidebarToolbar({
         <Toolbar.Button asChild disabled>
           <HeaderButton
             icon={<Search size={18} />}
-            label="Search notes"
+            label={t('notes:search')}
             variant="default"
             disabled
           />
@@ -37,7 +40,7 @@ export function NotesSidebarToolbar({
         <Toolbar.Button asChild disabled>
           <HeaderButton
             icon={<ArrowDownAZ size={18} />}
-            label="Sort notes"
+            label={t('notes:sort')}
             variant="default"
             disabled
           />

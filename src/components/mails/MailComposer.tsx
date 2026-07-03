@@ -4,6 +4,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface MailComposerProps {
   to: string;
@@ -92,6 +93,7 @@ export function MailComposer({
   onCancel,
   onSend,
 }: MailComposerProps) {
+  const { t } = useTranslation();
   const [ccBccOpen, setCcBccOpen] = useState(false);
   const hasCcBcc = Boolean(cc.trim() || bcc.trim());
 
@@ -106,7 +108,7 @@ export function MailComposer({
 
       <form
         className="flex min-h-0 flex-1 flex-col gap-1.5 p-4"
-        aria-label="Compose mail"
+        aria-label={t('mail:composeLabel')}
         onSubmit={(event) => event.preventDefault()}
       >
         <ComposerSection>
@@ -117,7 +119,7 @@ export function MailComposer({
                 name="to"
                 value={to}
                 onChange={onToChange}
-                placeholder="To"
+                placeholder={t('mail:to')}
                 autoComplete="email"
               />
               <Collapsible.Trigger asChild>
@@ -129,9 +131,11 @@ export function MailComposer({
                       ? 'text-cyan-700 hover:bg-cyan-500/10 dark:text-cyan-400 dark:hover:bg-cyan-500/15'
                       : 'text-neutral-500 hover:bg-black/5 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-200',
                   )}
-                  aria-label={ccBccOpen ? 'Hide Cc and Bcc' : 'Show Cc and Bcc'}
+                  aria-label={
+                    ccBccOpen ? t('mail:hideCcBcc') : t('mail:showCcBcc')
+                  }
                 >
-                  Cc/Bcc
+                  {t('mail:ccBccToggle')}
                   <ChevronDown
                     size={14}
                     className={clsx(
@@ -157,7 +161,7 @@ export function MailComposer({
                 name="cc"
                 value={cc}
                 onChange={onCcChange}
-                placeholder="Cc"
+                placeholder={t('mail:cc')}
                 autoComplete="email"
               />
               <ComposerInput
@@ -165,7 +169,7 @@ export function MailComposer({
                 name="bcc"
                 value={bcc}
                 onChange={onBccChange}
-                placeholder="Bcc"
+                placeholder={t('mail:bcc')}
                 autoComplete="email"
                 className="border-t border-neutral-200 dark:border-neutral-800"
               />
@@ -179,7 +183,7 @@ export function MailComposer({
             name="subject"
             value={subject}
             onChange={onSubjectChange}
-            placeholder="Subject"
+            placeholder={t('mail:subject')}
             autoComplete="off"
           />
         </ComposerSection>
@@ -191,7 +195,7 @@ export function MailComposer({
               name="body"
               value={body}
               onChange={onBodyChange}
-              placeholder="Write your message…"
+              placeholder={t('mail:bodyPlaceholder')}
               autoComplete="off"
               resize="resize-none"
               wrapperClassName="flex min-h-0 flex-1 flex-col"

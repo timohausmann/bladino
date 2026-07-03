@@ -9,35 +9,24 @@ import { consumeFlashMessage, type FlashMessage } from '@/lib/flashMessage';
 import { setAuthToken } from '@/stores/authStore';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
-
-function getLoginErrorMessage(err: Error): string {
-  if (isTransportError(err)) {
-    return 'Could not reach the server. Please try again later.';
-  }
-  return 'Login failed. Please check your credentials.';
-}
 
 type LoginBanner = {
   message: string;
   variant: 'positive' | 'negative';
 };
 
-const FLASH_BANNERS: Record<FlashMessage, LoginBanner> = {
-  loggedOut: {
-    message: 'Logout successful, come back soon!',
-    variant: 'positive',
-  },
-  sessionExpired: {
-    message: 'Session expired. Please login again.',
-    variant: 'negative',
-  },
+const FLASH_BANNER_KEYS: Record<FlashMessage, string> = {
+  loggedOut: 'auth:flashLoggedOut',
+  sessionExpired: 'auth:flashSessionExpired',
 };
 
 /**
  * Login page - displays a login form with email and password fields
  */
 export function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { returnTo } = useSearch({ from: '/login' });
 
@@ -50,9 +39,12 @@ export function Login() {
   useEffect(() => {
     const flash = consumeFlashMessage();
     if (flash) {
-      setBanner(FLASH_BANNERS[flash]);
+      setBanner({
+        message: t(FLASH_BANNER_KEYS[flash]),
+        variant: flash === 'loggedOut' ? 'positive' : 'negative',
+      });
     }
-  }, []);
+  }, [t]);
 
   const loginMutation = useGraphQLMutation(LoginDocument, {
     onSuccess: async (data) => {
@@ -64,7 +56,9 @@ export function Login() {
     onError: (err) => {
       console.error('Login request failed:', err);
       setBanner({
-        message: getLoginErrorMessage(err),
+        message: isTransportError(err)
+          ? t('auth:errorTransport')
+          : t('auth:errorLoginFailed'),
         variant: 'negative',
       });
     },
@@ -97,7 +91,7 @@ export function Login() {
         />
         <Card className="flex flex-col gap-6 p-8">
           <h1 className="text-foreground text-center text-2xl font-bold">
-            Sign in
+            {t('auth:signIn')}
           </h1>
 
           {banner && (
@@ -109,7 +103,7 @@ export function Login() {
               type="text"
               value={formData.name}
               onChange={(value) => handleInputChange('name', value)}
-              placeholder="Username"
+              placeholder={t('auth:username')}
               required
             />
 
@@ -117,7 +111,7 @@ export function Login() {
               type="password"
               value={formData.password}
               onChange={(value) => handleInputChange('password', value)}
-              placeholder="Password"
+              placeholder={t('auth:password')}
               required
               showPasswordToggle
             />
@@ -127,9 +121,9 @@ export function Login() {
                 href="/forgot-password"
                 className="text-muted-foreground hover:text-foreground underline decoration-transparent transition-colors duration-200 hover:decoration-current"
                 tabIndex={0}
-                aria-label="Forgot password"
+                aria-label={t('auth:forgotPassword')}
               >
-                Forgot password?
+                {t('auth:forgotPassword')}
               </a>
               <div>
                 <Button
@@ -139,7 +133,7 @@ export function Login() {
                   disabled={!formData.name || !formData.password}
                   className="mt-2 w-full"
                 >
-                  Sign In
+                  {t('auth:signInButton')}
                 </Button>
               </div>
             </div>

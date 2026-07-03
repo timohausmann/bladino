@@ -1,4 +1,5 @@
 import { Moon, Sun } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ThemeProvider';
 import { HeaderButton } from '@/components/ui/HeaderButton';
 
@@ -6,9 +7,9 @@ import { HeaderButton } from '@/components/ui/HeaderButton';
  * ThemeToggle - A button that toggles between light and dark theme
  */
 export function ThemeToggle() {
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
 
-  // Toggle between light and dark themes
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
@@ -17,7 +18,11 @@ export function ThemeToggle() {
     <HeaderButton
       onClick={toggleTheme}
       icon={theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-      label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+      label={
+        theme === 'dark'
+          ? t('settings:theme.switchToLight')
+          : t('settings:theme.switchToDark')
+      }
     />
   );
 }

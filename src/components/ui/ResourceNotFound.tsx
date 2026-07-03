@@ -1,31 +1,7 @@
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 type ResourceKind = 'post' | 'user' | 'note' | 'mail';
-
-const RESOURCE_COPY: Record<
-  ResourceKind,
-  { title: string; description: (detail?: string) => string }
-> = {
-  post: {
-    title: 'Post Not Found',
-    description: () => "The post you're looking for doesn't exist.",
-  },
-  user: {
-    title: 'User Not Found',
-    description: (detail) =>
-      detail
-        ? `The user ${detail} doesn't exist.`
-        : "The user you're looking for doesn't exist.",
-  },
-  note: {
-    title: 'Note Not Found',
-    description: () => "The note you're looking for doesn't exist.",
-  },
-  mail: {
-    title: 'Mail Not Found',
-    description: () => "The mail you're looking for doesn't exist.",
-  },
-};
 
 interface ResourceNotFoundProps {
   resource: ResourceKind;
@@ -42,12 +18,19 @@ export function ResourceNotFound({
   detail,
   className,
 }: ResourceNotFoundProps) {
-  const { title, description } = RESOURCE_COPY[resource];
+  const { t } = useTranslation();
+
+  const description =
+    resource === 'user' && detail
+      ? t('errors:notFound.user.descriptionWithName', { name: detail })
+      : t(`errors:notFound.${resource}.description`);
 
   return (
     <div className={clsx('py-12 text-center', className)}>
-      <h1 className="text-foreground mb-2 text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground">{description(detail)}</p>
+      <h1 className="text-foreground mb-2 text-2xl font-bold">
+        {t(`errors:notFound.${resource}.title`)}
+      </h1>
+      <p className="text-muted-foreground">{description}</p>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Comment } from '@/graphql';
 import { getCommentChildren, getCommentFiles } from '@/utils/commentUtils';
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Divider } from '@/components/ui/Divider';
 import { FilePreview } from '@/components/ui/FilePreview';
@@ -21,6 +22,7 @@ interface PostCardProps {
  * PostCard - A card that displays a post with user info and interactions
  */
 export function PostCard({ comment }: PostCardProps) {
+  const { t } = useTranslation();
   const { user, id: commentId } = comment;
   const children = getCommentChildren(comment);
   const files = getCommentFiles(comment);
@@ -46,7 +48,7 @@ export function PostCard({ comment }: PostCardProps) {
             showCancel
             onCancel={() => setIsEditing(false)}
             onSuccess={() => setIsEditing(false)}
-            errorMessage="Failed to update post"
+            errorMessage={t('errors:updatePostFailed')}
           />
         ) : (
           <>
@@ -63,7 +65,7 @@ export function PostCard({ comment }: PostCardProps) {
           <PostActionButton
             icon={<MessageCircle size={18} />}
             count={children.length}
-            label="Comments"
+            label={t('posts:comments')}
             onClick={() => setShowComments(!showComments)}
           />
         </div>
@@ -74,13 +76,13 @@ export function PostCard({ comment }: PostCardProps) {
           <PostReply
             parentId={commentId}
             channel={comment.channel ?? undefined}
-            placeholder={`Reply to ${user.name}...`}
+            placeholder={t('posts:replyToPlaceholder', { name: user.name })}
           />
 
           {children.length > 0 && (
             <div className="space-y-2">
               <h4 className="text-muted-foreground text-xs tracking-wide uppercase">
-                Comments ({children.length})
+                {t('posts:commentsHeading', { count: children.length })}
               </h4>
               <div className="space-y-0">
                 {children.map((child, index) => (

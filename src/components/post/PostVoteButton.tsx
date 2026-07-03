@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PostActionButton } from '@/components/post/PostActionButton';
 import { toast } from '@/components/ui/toast';
 import clsx from 'clsx';
@@ -61,6 +62,7 @@ function hasCurrentUserVoted(
  * PostVoteButton - Heart button to like/unlike a post or reply
  */
 export function PostVoteButton({ comment }: PostVoteButtonProps) {
+  const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
   const queryClient = useQueryClient();
   const { mutateAsync: toggleVote, isPending } =
@@ -96,7 +98,7 @@ export function PostVoteButton({ comment }: PostVoteButtonProps) {
     } catch (error) {
       const message =
         getGraphQLErrorMessage(error) ??
-        (error instanceof Error ? error.message : 'Failed to update like');
+        (error instanceof Error ? error.message : t('errors:likeFailed'));
       toast(message);
     }
   };
@@ -112,7 +114,7 @@ export function PostVoteButton({ comment }: PostVoteButtonProps) {
       }
       count={voteCount}
       hideCount={voteCount === 0}
-      label={hasVoted ? 'Unlike post' : 'Like post'}
+      label={hasVoted ? t('posts:unlikePost') : t('posts:likePost')}
       className="hover:bg-black/5 hover:shadow-none dark:hover:bg-black/10"
       onClick={() => void handleClick()}
     />

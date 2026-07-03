@@ -1,0 +1,52 @@
+{
+  "pageNotFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht."
+  },
+  "unauthorized": "Nicht autorisiert.",
+  "feedLoadFailed": "Feed konnte nicht geladen werden.",
+  "publishFailed": "Beitrag konnte nicht veröffentlicht werden",
+  "saveFailed": "Speichern fehlgeschlagen",
+  "replyFailed": "Antwort konnte nicht gesendet werden",
+  "updatePostFailed": "Beitrag konnte nicht aktualisiert werden",
+  "updateReplyFailed": "Antwort konnte nicht aktualisiert werden",
+  "likeFailed": "Like konnte nicht aktualisiert werden",
+  "deleteFailed": "Löschen fehlgeschlagen",
+  "load": {
+    "post": {
+      "title": "Beitrag konnte nicht geladen werden",
+      "fallback": "Beim Laden dieses Beitrags ist etwas schiefgelaufen."
+    },
+    "user": {
+      "title": "Profil konnte nicht geladen werden",
+      "fallback": "Beim Laden dieses Profils ist etwas schiefgelaufen."
+    },
+    "note": {
+      "title": "Notiz konnte nicht geladen werden",
+      "fallback": "Beim Laden dieser Notiz ist etwas schiefgelaufen."
+    },
+    "mail": {
+      "title": "E-Mail konnte nicht geladen werden",
+      "fallback": "Beim Laden dieser E-Mail ist etwas schiefgelaufen."
+    }
+  },
+  "notFound": {
+    "post": {
+      "title": "Beitrag nicht gefunden",
+      "description": "Der gesuchte Beitrag existiert nicht."
+    },
+    "user": {
+      "title": "Benutzer nicht gefunden",
+      "description": "Der gesuchte Benutzer existiert nicht.",
+      "descriptionWithName": "Der Benutzer {{name}} existiert nicht."
+    },
+    "note": {
+      "title": "Notiz nicht gefunden",
+      "description": "Die gesuchte Notiz existiert nicht."
+    },
+    "mail": {
+      "title": "E-Mail nicht gefunden",
+      "description": "Die gesuchte E-Mail existiert nicht."
+    }
+  }
+}

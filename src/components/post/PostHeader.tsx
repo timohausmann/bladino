@@ -2,6 +2,7 @@ import type { Comment } from '@/graphql';
 import { formatCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 
@@ -11,6 +12,7 @@ interface PostHeaderProps {
 }
 
 export function PostHeader({ comment, onEdit }: PostHeaderProps) {
+  const { t } = useTranslation();
   const { user } = comment;
   const handle = 'handle';
   const showHandle = false;
@@ -20,7 +22,7 @@ export function PostHeader({ comment, onEdit }: PostHeaderProps) {
       <Link to="/u/$name" params={{ name: user.name }}>
         <Avatar
           avatar={user.avatar}
-          alt={`${user.name}'s avatar`}
+          alt={t('common:userAvatar', { name: user.name })}
           className="h-12 w-12"
         />
       </Link>

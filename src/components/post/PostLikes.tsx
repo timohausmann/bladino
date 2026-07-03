@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { PostVoteButton } from '@/components/post/PostVoteButton';
@@ -19,27 +20,39 @@ interface PostLikesProps {
 function getDisplayName(
   user: LikeUser,
   currentUserId: string | undefined,
+  youLabel: string,
 ): string {
-  return user.id === currentUserId ? 'you' : user.name;
+  return user.id === currentUserId ? youLabel : user.name;
 }
 
 function getLikedByText(
   users: LikeUser[],
   currentUserId: string | undefined,
+  t: (key: string, options?: Record<string, unknown>) => string,
 ): string | null {
   if (users.length === 0) {
     return null;
   }
 
+  const youLabel = t('common:youDative');
+
   if (users.length === 1) {
-    return `Liked by ${getDisplayName(users[0], currentUserId)}`;
+    return t('posts:likedByOne', {
+      name: getDisplayName(users[0], currentUserId, youLabel),
+    });
   }
 
   if (users.length === 2) {
-    return `Liked by ${getDisplayName(users[0], currentUserId)} and ${getDisplayName(users[1], currentUserId)}`;
+    return t('posts:likedByTwo', {
+      name1: getDisplayName(users[0], currentUserId, youLabel),
+      name2: getDisplayName(users[1], currentUserId, youLabel),
+    });
   }
 
-  return `Liked by ${getDisplayName(users[0], currentUserId)} and ${users.length - 1} others`;
+  return t('posts:likedByMany', {
+    name: getDisplayName(users[0], currentUserId, youLabel),
+    count: users.length - 1,
+  });
 }
 
 function getUniqueVoteUsers(
@@ -85,6 +98,8 @@ function LikesDialog({
   onOpenChange: (open: boolean) => void;
   users: LikeUser[];
 }) {
+  const { t } = useTranslation();
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -98,20 +113,23 @@ function LikesDialog({
         >
           <div className="mb-4 flex items-center justify-between gap-4">
             <Dialog.Title className="text-foreground text-lg font-semibold">
-              Likes
+              {t('posts:likesTitle')}
             </Dialog.Title>
             <Dialog.Close asChild>
               <button
                 type="button"
                 className="text-muted-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full transition-colors"
-                aria-label="Close likes dialog"
+                aria-label={t('posts:closeLikesDialog')}
               >
                 <X size={16} />
               </button>
             </Dialog.Close>
           </div>
 
-          <ScrollArea className="max-h-80 pr-3" label="Likes list">
+          <ScrollArea
+            className="max-h-80 pr-3"
+            label={t('posts:likesListLabel')}
+          >
             <div className="flex flex-col gap-2">
               {users.map((user) => (
                 <Link
@@ -122,7 +140,7 @@ function LikesDialog({
                 >
                   <Avatar
                     avatar={user.avatar}
-                    alt={`${user.name}'s avatar`}
+                    alt={t('common:userAvatar', { name: user.name })}
                     className="h-9 w-9"
                   />
                   <span className="text-foreground text-sm font-medium">
@@ -142,6 +160,7 @@ function LikesDialog({
  * PostLikes - Separated controls for toggling a like vs. viewing all likes.
  */
 export function PostLikes({ comment }: PostLikesProps) {
+  const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const currentUser = useUserStore((store) => store.currentUser);
   const currentUserId = currentUser?.id;
@@ -149,7 +168,7 @@ export function PostLikes({ comment }: PostLikesProps) {
     () => getUniqueVoteUsers(comment.votes, currentUserId),
     [comment.votes, currentUserId],
   );
-  const likedByText = getLikedByText(users, currentUserId);
+  const likedByText = getLikedByText(users, currentUserId, t);
 
   return (
     <>

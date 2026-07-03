@@ -10,6 +10,7 @@ import { FilePreview } from '@/components/ui/FilePreview';
 import { Textarea } from '@/components/ui/Textarea';
 import { useUserStore } from '@/stores/userStore';
 import { MAX_COMMENT_FILES } from '@/utils/postFileUtils';
+import { useTranslation } from 'react-i18next';
 
 export interface CommentComposerFormProps extends UseCommentComposerOptions {
   layout: 'card' | 'reply';
@@ -30,13 +31,14 @@ export function CommentComposerForm({
   parent,
   initialContent,
   initialFiles,
-  placeholder = "What's happening?",
-  submitLabel = mode === 'edit' ? 'Save' : 'Publish',
+  placeholder,
+  submitLabel,
   showCancel,
   onCancel,
   onSuccess,
   errorMessage,
 }: CommentComposerFormProps) {
+  const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
   const composer = useCommentComposer({
     mode,
@@ -50,12 +52,15 @@ export function CommentComposerForm({
   });
 
   const isReply = layout === 'reply';
+  const resolvedPlaceholder = placeholder ?? t('posts:composerPlaceholder');
+  const resolvedSubmitLabel =
+    submitLabel ?? (mode === 'edit' ? t('common:save') : t('posts:publish'));
 
   const textarea = (
     <Textarea
       value={composer.content}
       onChange={composer.setContent}
-      placeholder={placeholder}
+      placeholder={resolvedPlaceholder}
       rows={isReply ? 1 : 2}
       resize="resize-y"
       className={isReply ? 'min-h-14' : 'max-h-[400px] min-h-[82px]'}
@@ -67,7 +72,10 @@ export function CommentComposerForm({
     composer.files.length > 0 ? (
       <div className="flex flex-col gap-2">
         <p className="text-muted-foreground text-xs tracking-wide uppercase">
-          Attachments ({composer.files.length}/{MAX_COMMENT_FILES})
+          {t('posts:attachmentsLabel', {
+            count: composer.files.length,
+            max: MAX_COMMENT_FILES,
+          })}
         </p>
         <FilePreview
           files={composer.files}
@@ -89,7 +97,7 @@ export function CommentComposerForm({
         <div className="flex gap-3">
           <Avatar
             avatar={currentUser?.avatar}
-            alt={currentUser?.name ?? 'Your avatar'}
+            alt={t('common:yourAvatar')}
             className="mt-2 h-10 w-10 shrink-0"
           />
           <div className="flex min-w-0 flex-1 flex-col gap-2">{mainFields}</div>
@@ -128,7 +136,7 @@ export function CommentComposerForm({
               appearance="outline"
               disabled={composer.isSubmitting}
             >
-              Cancel
+              {t('common:cancel')}
             </Button>
           )}
           <Button
@@ -137,7 +145,7 @@ export function CommentComposerForm({
             variant="primary"
             loading={composer.isSubmitting}
           >
-            {submitLabel}
+            {resolvedSubmitLabel}
           </Button>
         </div>
       </div>

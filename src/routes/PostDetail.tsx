@@ -8,11 +8,13 @@ import {
   type Comment,
 } from '@/graphql';
 import { useParams } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 /**
  * PostDetail page - displays a single post by ID
  */
 export function PostDetail() {
+  const { t } = useTranslation();
   const { id } = useParams({ from: '/_authenticated/post/$id' });
 
   const { data, isPending, isError, error } = useGraphQLQuery(CommentDocument, {
@@ -22,7 +24,7 @@ export function PostDetail() {
   if (isPending) {
     return (
       <div className="py-12 text-center">
-        <p className="text-muted-foreground">Loading post…</p>
+        <p className="text-muted-foreground">{t('posts:loading')}</p>
       </div>
     );
   }

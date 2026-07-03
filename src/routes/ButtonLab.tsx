@@ -5,19 +5,21 @@ import {
   type ButtonLabState,
 } from '@/components/lab/ButtonLabControls';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * DEV-only playground for Button variants, effects, and interactions.
  * Route: /lab/button
  */
 export function ButtonLab() {
+  const { t } = useTranslation();
   const [state, setState] = useState<ButtonLabState>({
     variant: 'primary',
     appearance: 'filled',
     effect: 'glow',
     loading: false,
     disabled: false,
-    label: 'Click me',
+    label: t('common:buttonLab.defaultLabel'),
     iconId: 'send',
   });
 
@@ -26,11 +28,11 @@ export function ButtonLab() {
       <div className="mx-auto max-w-5xl space-y-8">
         <header className="space-y-2">
           <p className="text-sm font-medium tracking-wide text-cyan-500 uppercase">
-            Dev only
+            {t('common:devOnly')}
           </p>
-          <h1 className="text-3xl font-bold">Button Lab</h1>
+          <h1 className="text-3xl font-bold">{t('common:buttonLab.title')}</h1>
           <p className="text-muted-foreground">
-            Experiment with variants, appearances, glow, and loading states.
+            {t('common:buttonLab.description')}
           </p>
         </header>
 
