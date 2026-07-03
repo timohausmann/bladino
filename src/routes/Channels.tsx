@@ -1,5 +1,5 @@
 import { CreatePost } from '@/components/create/CreatePost';
-import { CommentFeed } from '@/components/feed';
+import { CommentFeed, FeedStreamHeader } from '@/components/feed';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import {
@@ -69,9 +69,7 @@ export function Channels() {
 
   return (
     <>
-      <header className="mb-4">
-        <h1 className="text-foreground text-2xl font-bold">#{channel.name}</h1>
-      </header>
+      <FeedStreamHeader>#{channel.name}</FeedStreamHeader>
 
       <CreatePost channel={id} />
 

@@ -18,6 +18,7 @@ import {
   Logout,
   Mails,
   Notes,
+  Notifications,
   NotFound,
   PostDetail,
   Profile,
@@ -73,6 +74,12 @@ const feedRoute = createRoute({
   path: '/feed',
   component: Home,
   staticData: { layoutMode: 'feed' },
+});
+
+const notificationsRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/notifications',
+  component: Notifications,
 });
 
 const dashboardRedirectRoute = createRoute({
@@ -243,6 +250,7 @@ const routeTree = rootRoute.addChildren([
   authenticatedRoute.addChildren([
     dashboardRoute,
     feedRoute,
+    notificationsRoute,
     dashboardRedirectRoute,
     postRoute,
     profileRoute,

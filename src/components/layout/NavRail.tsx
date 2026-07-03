@@ -1,6 +1,10 @@
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Divider } from '@/components/ui/Divider';
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
+import {
+  getMockNotifications,
+  getUnreadNotificationCount,
+} from '@/lib/mockNotifications';
 import { NotificationButton } from '@/components/ui/NotificationButton';
 import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
 import { NavRailIconLink } from '@/components/layout/NavRailIconLink';
@@ -36,26 +40,9 @@ import { useTranslation } from 'react-i18next';
  */
 export function NavRail() {
   const { t } = useTranslation();
-  const mockNotifications = [
-    {
-      id: '1',
-      message: t('notifications:mock.likedPost', { name: 'Jane Smith' }),
-      isNew: true,
-      timestamp: t('notifications:mock.minutesAgo', { count: 2 }),
-    },
-    {
-      id: '2',
-      message: t('notifications:mock.newComment'),
-      isNew: true,
-      timestamp: t('notifications:mock.minutesAgo', { count: 5 }),
-    },
-    {
-      id: '3',
-      message: t('notifications:mock.newFollower'),
-      isNew: false,
-      timestamp: t('notifications:mock.hourAgo'),
-    },
-  ];
+  const unreadNotificationCount = getUnreadNotificationCount(
+    getMockNotifications(t),
+  );
   const expanded = useUiStore((store) => store.isNavRailExpanded);
   const toggleNavRail = useUiStore((store) => store.toggleNavRail);
 
@@ -144,8 +131,7 @@ export function NavRail() {
           expanded={expanded}
         />
         <NotificationButton
-          count={2}
-          notifications={mockNotifications}
+          count={unreadNotificationCount}
           expanded={expanded}
         />
         <NavRailLink
