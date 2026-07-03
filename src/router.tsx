@@ -10,6 +10,7 @@ import App from './App';
 import { ensureSession, resolveRedirectTarget } from './lib/auth';
 import { queryClient } from './lib/queryClient';
 import {
+  Channels,
   ForgotPassword,
   Home,
   Login,
@@ -120,6 +121,18 @@ const settingsPasswordRoute = createRoute({
   component: SettingsPassword,
 });
 
+const channelsIndexRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/channels',
+  component: Channels,
+});
+
+const channelsDetailRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/channels/$id',
+  component: Channels,
+});
+
 const notesIndexRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/notes',
@@ -221,6 +234,8 @@ const routeTree = rootRoute.addChildren([
       settingsThemeRedirectRoute,
       settingsPasswordRoute,
     ]),
+    channelsIndexRoute,
+    channelsDetailRoute,
     notesIndexRoute,
     notesDetailRoute,
     mailsIndexRoute,

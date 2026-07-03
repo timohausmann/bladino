@@ -12,6 +12,7 @@ import {
   navRailRowClassName,
   navRailSectionClassName,
 } from '@/components/layout/navRailLayout';
+import { ChannelsDocument, useGraphQLQuery } from '@/graphql';
 import { useUiStore } from '@/stores/uiStore';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { Link } from '@tanstack/react-router';
@@ -28,8 +29,6 @@ import {
   StickyNote,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
-const MOCK_CHANNELS = ['allgemein', 'projekte', 'memes'];
 
 /**
  * Persistent left navigation rail for authenticated routes.
@@ -201,6 +200,8 @@ export function NavRail() {
 
 function NavRailChannels({ expanded }: { expanded: boolean }) {
   const { t } = useTranslation();
+  const { data, isLoading } = useGraphQLQuery(ChannelsDocument);
+  const channels = data?.channels ?? [];
 
   if (!expanded) {
     return (
@@ -209,13 +210,15 @@ function NavRailChannels({ expanded }: { expanded: boolean }) {
         label={t('navigation:channels')}
         icon={Hash}
         expanded={false}
-        disabled
       />
     );
   }
 
   return (
-    <Collapsible.Root defaultOpen={false} className="flex flex-col gap-1">
+    <Collapsible.Root
+      defaultOpen={channels.length > 0}
+      className="flex flex-col gap-1"
+    >
       <Collapsible.Trigger className={clsx(navRailRowClassName(), 'group')}>
         <NavRailIconTrack>
           <Hash size={20} aria-hidden className="shrink-0" />
@@ -230,14 +233,42 @@ function NavRailChannels({ expanded }: { expanded: boolean }) {
         />
       </Collapsible.Trigger>
       <Collapsible.Content className="flex flex-col gap-0.5 pr-0.5 pb-1 pl-11">
-        {MOCK_CHANNELS.map((channel) => (
-          <div
-            key={channel}
-            className="cursor-not-allowed rounded-lg px-2 py-2 text-sm text-neutral-400 dark:text-neutral-600"
-          >
-            <span className="truncate">#{channel}</span>
-          </div>
-        ))}
+        {isLoading ? (
+          <p className="px-2 py-2 text-sm text-neutral-400 dark:text-neutral-600">
+            {t('channels:loading')}
+          </p>
+        ) : channels.length === 0 ? (
+          <p className="px-2 py-2 text-sm text-neutral-400 dark:text-neutral-600">
+            {t('channels:empty')}
+          </p>
+        ) : (
+          channels.map((channel) => (
+            <Link
+              key={channel.id}
+              to="/channels/$id"
+              params={{ id: channel.id }}
+              title={`#${channel.name}`}
+              className={clsx(
+                'flex items-center gap-2 rounded-lg px-2 py-2 text-sm transition-colors duration-150',
+                'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
+                'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
+              )}
+              activeProps={{
+                className: clsx(
+                  'flex items-center gap-2 rounded-lg px-2 py-2 text-sm transition-colors duration-150',
+                  'bg-black/5 text-black dark:bg-white/5 dark:text-white',
+                ),
+              }}
+            >
+              <span className="min-w-0 flex-1 truncate">#{channel.name}</span>
+              {channel.unreadCount != null && channel.unreadCount > 0 ? (
+                <span className="bg-primary text-primary-foreground shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium">
+                  {channel.unreadCount}
+                </span>
+              ) : null}
+            </Link>
+          ))
+        )}
       </Collapsible.Content>
     </Collapsible.Root>
   );

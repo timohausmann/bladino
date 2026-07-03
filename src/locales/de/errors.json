@@ -28,6 +28,10 @@
     "mail": {
       "title": "E-Mail konnte nicht geladen werden",
       "fallback": "Beim Laden dieser E-Mail ist etwas schiefgelaufen."
+    },
+    "channel": {
+      "title": "Kanal konnte nicht geladen werden",
+      "fallback": "Beim Laden dieses Kanals ist etwas schiefgelaufen."
     }
   },
   "notFound": {
@@ -47,6 +51,10 @@
     "mail": {
       "title": "E-Mail nicht gefunden",
       "description": "Die gesuchte E-Mail existiert nicht."
+    },
+    "channel": {
+      "title": "Kanal nicht gefunden",
+      "description": "Der gesuchte Kanal existiert nicht."
     }
   }
 }

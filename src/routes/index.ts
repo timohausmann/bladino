@@ -1,3 +1,4 @@
+export { Channels } from './Channels';
 export { ForgotPassword } from './ForgotPassword';
 export { Home } from './Home';
 export { Login } from './Login';

@@ -28,6 +28,10 @@
     "mail": {
       "title": "Could not load mail",
       "fallback": "Something went wrong while loading this mail."
+    },
+    "channel": {
+      "title": "Could not load channel",
+      "fallback": "Something went wrong while loading this channel."
     }
   },
   "notFound": {
@@ -47,6 +51,10 @@
     "mail": {
       "title": "Mail Not Found",
       "description": "The mail you're looking for doesn't exist."
+    },
+    "channel": {
+      "title": "Channel Not Found",
+      "description": "The channel you're looking for doesn't exist."
     }
   }
 }

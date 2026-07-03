@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-type ResourceKind = 'post' | 'user' | 'note' | 'mail';
+type ResourceKind = 'post' | 'user' | 'note' | 'mail' | 'channel';
 
 interface ResourceErrorProps {
   resource: ResourceKind;

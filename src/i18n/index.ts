@@ -9,6 +9,7 @@ import enNavigation from '@/locales/en/navigation.json';
 import enNotes from '@/locales/en/notes.json';
 import enNotifications from '@/locales/en/notifications.json';
 import enPosts from '@/locales/en/posts.json';
+import enChannels from '@/locales/en/channels.json';
 import enPresence from '@/locales/en/presence.json';
 import enProfile from '@/locales/en/profile.json';
 import enSettings from '@/locales/en/settings.json';
@@ -20,6 +21,7 @@ import deNavigation from '@/locales/de/navigation.json';
 import deNotes from '@/locales/de/notes.json';
 import deNotifications from '@/locales/de/notifications.json';
 import dePosts from '@/locales/de/posts.json';
+import deChannels from '@/locales/de/channels.json';
 import dePresence from '@/locales/de/presence.json';
 import deProfile from '@/locales/de/profile.json';
 import deSettings from '@/locales/de/settings.json';
@@ -56,6 +58,7 @@ const namespaces = [
   'profile',
   'notifications',
   'presence',
+  'channels',
 ] as const;
 
 void i18n.use(initReactI18next).init({
@@ -72,6 +75,7 @@ void i18n.use(initReactI18next).init({
       profile: enProfile,
       notifications: enNotifications,
       presence: enPresence,
+      channels: enChannels,
     },
     de: {
       common: deCommon,
@@ -85,6 +89,7 @@ void i18n.use(initReactI18next).init({
       profile: deProfile,
       notifications: deNotifications,
       presence: dePresence,
+      channels: deChannels,
     },
   },
   lng: getInitialLanguage(),
