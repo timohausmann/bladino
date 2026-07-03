@@ -9,6 +9,7 @@ import { consumeFlashMessage, type FlashMessage } from '@/lib/flashMessage';
 import { setAuthToken } from '@/stores/authStore';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 
 function getLoginErrorMessage(err: Error): string {
   if (err.message.includes('fetch')) {
@@ -89,6 +90,11 @@ export function Login() {
   return (
     <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-lg">
+        <AnimatedLogo
+          className="mx-auto mb-4 block shrink-0"
+          logoHeight="4rem"
+          padding={42}
+        />
         <Card className="flex flex-col gap-6 p-8">
           <h1 className="text-foreground text-center text-2xl font-bold">
             Sign in

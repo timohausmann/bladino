@@ -1,0 +1,22 @@
+.logo {
+    --fill-teal: #00e0d9;
+    --fill-cyan: #00fff7;
+    --fill-cyan-alt: #00fff6;
+    --stroke-color: white;
+    --stroke-opacity: 0;
+    --stroke-width: 2px;
+}
+
+.path {
+    stroke: var(--stroke-color);
+    stroke-opacity: var(--stroke-opacity);
+    stroke-width: var(--stroke-width);
+}
+
+.fillTeal {
+    fill: var(--fill-teal);
+}
+
+.fillCyan {
+    fill: var(--fill-cyan);
+}

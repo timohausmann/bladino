@@ -71,25 +71,25 @@ export function NavRail() {
       <div className={clsx('shrink-0 py-3', navRailSectionClassName)}>
         <div className="flex flex-col gap-1">
           <div className={navRailRowClassName({ noHover: true })}>
-            <NavRailIconTrack>
+            {expanded ? (
               <Link to="/" aria-label="Home">
                 <img
-                  src="/logo-dashnet.svg"
-                  alt=""
-                  className="block h-8 w-8 shrink-0"
+                  src="/logo-trashnet-2026.svg"
+                  alt="trashnet"
+                  className="mx-2 block h-8 w-auto min-w-4 shrink-0"
                 />
               </Link>
-            </NavRailIconTrack>
-            {expanded ? (
-              <span
-                className={clsx(
-                  navRailLabelClassName,
-                  'font-monospace text-foreground text-base font-bold tracking-tighter',
-                )}
-              >
-                dashnet
-              </span>
-            ) : null}
+            ) : (
+              <NavRailIconTrack>
+                <Link to="/" aria-label="Home">
+                  <img
+                    src="/icon-trashnet-2026.svg"
+                    alt="trashnet"
+                    className="block h-8 w-8 shrink-0"
+                  />
+                </Link>
+              </NavRailIconTrack>
+            )}
             {expanded ? (
               <button
                 type="button"
