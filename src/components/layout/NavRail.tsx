@@ -1,3 +1,4 @@
+import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Divider } from '@/components/ui/Divider';
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
 import { NotificationButton } from '@/components/ui/NotificationButton';
@@ -74,10 +75,9 @@ export function NavRail() {
           <div className={navRailRowClassName({ noHover: true })}>
             {expanded ? (
               <Link to="/" aria-label={t('navigation:home')}>
-                <img
-                  src="/logo-trashnet-2026.svg"
-                  alt="trashnet"
-                  className="mx-2 block h-8 w-auto min-w-4 shrink-0"
+                <AnimatedLogo
+                  className="mx-2 block min-w-4 shrink-0"
+                  logoHeight="2rem"
                 />
               </Link>
             ) : (
