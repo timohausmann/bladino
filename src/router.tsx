@@ -14,6 +14,7 @@ import {
   Home,
   Login,
   Logout,
+  Mails,
   Notes,
   NotFound,
   PostDetail,
@@ -28,6 +29,11 @@ export interface RouterContext {
 
 type LoginSearch = {
   returnTo?: string;
+};
+
+type MailsSearch = {
+  folder?: 'inbox' | 'outbox';
+  compose?: boolean;
 };
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -89,6 +95,36 @@ const notesDetailRoute = createRoute({
   staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
+const mailsIndexRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/mails',
+  validateSearch: (search: Record<string, unknown>): MailsSearch => ({
+    folder:
+      search.folder === 'outbox' || search.folder === 'inbox'
+        ? search.folder
+        : undefined,
+    compose:
+      search.compose === true || search.compose === 'true' ? true : undefined,
+  }),
+  component: Mails,
+  staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
+});
+
+const mailsDetailRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/mails/$id',
+  validateSearch: (search: Record<string, unknown>): MailsSearch => ({
+    folder:
+      search.folder === 'outbox' || search.folder === 'inbox'
+        ? search.folder
+        : undefined,
+    compose:
+      search.compose === true || search.compose === 'true' ? true : undefined,
+  }),
+  component: Mails,
+  staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
+});
+
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/login',
@@ -142,6 +178,8 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     notesIndexRoute,
     notesDetailRoute,
+    mailsIndexRoute,
+    mailsDetailRoute,
   ]),
   ...publicRoutes,
 ]);

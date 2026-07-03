@@ -1,0 +1,38 @@
+query Mails($folder: String) {
+  mails(folder: $folder) {
+    id
+    subject
+    from
+    to
+    dateReceived
+    dateSent
+    unread
+    folder
+  }
+}
+
+query Mail($id: ID!) {
+  mail(id: $id) {
+    id
+    subject
+    from
+    to
+    cc
+    bcc
+    body
+    dateReceived
+    dateSent
+    unread
+    folder
+  }
+}
+
+mutation SendEmail(
+  $to: [String]!
+  $subject: String!
+  $body: String!
+  $cc: [String]
+  $bcc: [String]
+) {
+  sendEmail(to: $to, subject: $subject, body: $body, cc: $cc, bcc: $bcc)
+}

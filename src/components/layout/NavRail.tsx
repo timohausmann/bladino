@@ -165,11 +165,10 @@ export function NavRail() {
           expanded={expanded}
         />
         <NavRailLink
-          to="/email"
+          to="/mails"
           label="E-Mail"
           icon={Mail}
           expanded={expanded}
-          disabled
         />
         <Divider className="my-1" />
         {expanded ? (

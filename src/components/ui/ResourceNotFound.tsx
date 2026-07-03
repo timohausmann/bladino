@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-type ResourceKind = 'post' | 'user' | 'note';
+type ResourceKind = 'post' | 'user' | 'note' | 'mail';
 
 const RESOURCE_COPY: Record<
   ResourceKind,
@@ -21,6 +21,10 @@ const RESOURCE_COPY: Record<
     title: 'Note Not Found',
     description: () => "The note you're looking for doesn't exist.",
   },
+  mail: {
+    title: 'Mail Not Found',
+    description: () => "The mail you're looking for doesn't exist.",
+  },
 };
 
 interface ResourceNotFoundProps {
@@ -31,7 +35,7 @@ interface ResourceNotFoundProps {
 }
 
 /**
- * Centered not-found state for a missing resource (post, user, note).
+ * Centered not-found state for a missing resource (post, user, note, mail).
  */
 export function ResourceNotFound({
   resource,

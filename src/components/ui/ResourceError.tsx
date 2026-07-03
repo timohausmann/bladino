@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-type ResourceKind = 'post' | 'user' | 'note';
+type ResourceKind = 'post' | 'user' | 'note' | 'mail';
 
 const RESOURCE_COPY: Record<ResourceKind, { title: string; fallback: string }> =
   {
@@ -16,6 +16,10 @@ const RESOURCE_COPY: Record<ResourceKind, { title: string; fallback: string }> =
       title: 'Could not load note',
       fallback: 'Something went wrong while loading this note.',
     },
+    mail: {
+      title: 'Could not load mail',
+      fallback: 'Something went wrong while loading this mail.',
+    },
   };
 
 interface ResourceErrorProps {
@@ -26,7 +30,7 @@ interface ResourceErrorProps {
 }
 
 /**
- * Centered load-error state for a resource fetch failure (post, user, note).
+ * Centered load-error state for a resource fetch failure (post, user, note, mail).
  */
 export function ResourceError({
   resource,

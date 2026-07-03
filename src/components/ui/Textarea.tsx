@@ -2,6 +2,8 @@ import { nanoid } from 'nanoid';
 import { twMerge } from 'tailwind-merge';
 
 interface TextareaProps {
+  id?: string;
+  name?: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -13,9 +15,12 @@ interface TextareaProps {
   label?: string;
   required?: boolean;
   resize?: 'resize-none' | 'resize-y' | 'resize-x' | 'resize';
+  autoComplete?: string;
 }
 
 export function Textarea({
+  id,
+  name,
   value,
   onChange,
   placeholder = '',
@@ -27,8 +32,9 @@ export function Textarea({
   label,
   required = false,
   resize = 'resize-y',
+  autoComplete,
 }: TextareaProps) {
-  const textareaId = `textarea-${nanoid()}`;
+  const textareaId = id ?? `textarea-${nanoid()}`;
 
   return (
     <div className={twMerge('w-full', wrapperClassName)}>
@@ -43,6 +49,7 @@ export function Textarea({
       )}
       <textarea
         id={textareaId}
+        name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -50,6 +57,7 @@ export function Textarea({
         rows={rows}
         disabled={disabled}
         required={required}
+        autoComplete={autoComplete}
         className={twMerge(
           'w-full border border-solid border-neutral-200 bg-white/90 p-4 dark:border-neutral-800 dark:bg-black/20',
           'placeholder:text-muted-foreground rounded-lg outline-none',
