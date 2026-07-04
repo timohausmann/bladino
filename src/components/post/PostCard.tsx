@@ -4,7 +4,6 @@ import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
-import { Divider } from '@/components/ui/Divider';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
@@ -19,22 +18,22 @@ interface PostCardProps {
 }
 
 /**
- * PostCard - A card that displays a post with user info and interactions
+ * PostCard - Main post and each comment as its own card, stacked with minimal gaps.
  */
 export function PostCard({ comment }: PostCardProps) {
   const { t } = useTranslation();
-  const { user, id: commentId } = comment;
+  const { id: commentId } = comment;
   const children = getCommentChildren(comment);
   const files = getCommentFiles(comment);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <Card
-      className="flex flex-col gap-6"
-      viewTransitionName={`POST_DETAIL-${commentId}`}
-    >
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-1">
+      <Card
+        className="flex flex-col gap-4"
+        viewTransitionName={`POST_DETAIL-${commentId}`}
+      >
         <PostHeader comment={comment} onEdit={() => setIsEditing(true)} />
 
         {isEditing ? (
@@ -58,8 +57,6 @@ export function PostCard({ comment }: PostCardProps) {
           </>
         )}
 
-        <Divider />
-
         <div className="flex items-center justify-between">
           <PostLikes comment={comment} />
           <PostActionButton
@@ -69,34 +66,26 @@ export function PostCard({ comment }: PostCardProps) {
             onClick={() => setShowComments(!showComments)}
           />
         </div>
-      </div>
+      </Card>
 
       {showComments && (
-        <div className="flex flex-col gap-4">
-          <PostReply
-            parentId={commentId}
-            channel={comment.channel ?? undefined}
-            placeholder={t('posts:replyToPlaceholder', { name: user.name })}
-          />
+        <div className="ml-6 flex flex-col gap-1">
+          {children.map((child, index) => (
+            <PostComment
+              key={`${child.id}-${index}`}
+              comment={child}
+              channel={comment.channel ?? undefined}
+            />
+          ))}
 
-          {children.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-muted-foreground text-xs tracking-wide uppercase">
-                {t('posts:commentsHeading', { count: children.length })}
-              </h4>
-              <div className="space-y-0">
-                {children.map((child, index) => (
-                  <PostComment
-                    key={`${child.id}-${index}`}
-                    comment={child}
-                    channel={comment.channel ?? undefined}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <Card>
+            <PostReply
+              parentId={commentId}
+              channel={comment.channel ?? undefined}
+            />
+          </Card>
         </div>
       )}
-    </Card>
+    </div>
   );
 }

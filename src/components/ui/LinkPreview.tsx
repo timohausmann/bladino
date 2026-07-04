@@ -9,9 +9,9 @@ export type LinkPreviewVariant = 'default' | 'compact';
 const linkPreview = tv({
   slots: {
     card: [
-      'flex flex-col overflow-hidden rounded-lg bg-black/5',
-      'transition-all duration-200 hover:bg-black/10',
-      'sm:flex-row dark:bg-black/20 dark:hover:bg-black/30',
+      'flex flex-col overflow-hidden rounded-lg',
+      'transition-all duration-200',
+      'sm:flex-row',
     ],
     image: 'h-40 w-full flex-shrink-0 bg-black/10 sm:w-1/3 sm:max-w-[240px]',
     content: 'flex-grow p-3 sm:p-4',
@@ -34,9 +34,23 @@ const linkPreview = tv({
         description: 'text-xs',
       },
     },
+    hasImage: {
+      true: {
+        card: 'bg-black/5 hover:bg-black/10 dark:bg-black/20 dark:hover:bg-black/30',
+      },
+      false: {
+        card: [
+          'border border-solid border-neutral-200/60 bg-transparent',
+          'hover:border-neutral-300/80 hover:bg-black/[0.03]',
+          'dark:border-white/10 dark:bg-transparent',
+          'dark:hover:border-white/20 dark:hover:bg-white/[0.03]',
+        ],
+      },
+    },
   },
   defaultVariants: {
     variant: 'default',
+    hasImage: true,
   },
 });
 
@@ -71,7 +85,7 @@ export function LinkPreview({
   }, [url]);
 
   const displayTitle = title || domain;
-  const styles = linkPreview({ variant });
+  const styles = linkPreview({ variant, hasImage: Boolean(image) });
   const externalLinkSize = variant === 'compact' ? 12 : 14;
   const externalLinkClass = variant === 'compact' ? 'ml-1' : 'ml-1.5';
 

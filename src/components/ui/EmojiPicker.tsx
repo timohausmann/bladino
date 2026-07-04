@@ -11,18 +11,18 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
 
   return (
     <FrimoussePicker.Root
-      className="isolate flex h-[368px] w-fit flex-col rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900"
+      className="isolate flex h-[368px] w-fit flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
       onEmojiSelect={(emoji) => {
         onEmojiSelect(emoji.emoji);
         onClose();
       }}
     >
-      <FrimoussePicker.Search className="z-10 mx-2 mt-2 appearance-none rounded-md bg-neutral-100 px-2.5 py-2 text-sm dark:bg-neutral-800" />
+      <FrimoussePicker.Search className="z-10 mx-2 mt-2 appearance-none rounded-md bg-neutral-100 px-2.5 py-2 text-sm text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100" />
       <FrimoussePicker.Viewport className="relative flex-1 outline-hidden">
-        <FrimoussePicker.Loading className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
+        <FrimoussePicker.Loading className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-400">
           {t('common:loading')}
         </FrimoussePicker.Loading>
-        <FrimoussePicker.Empty className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500">
+        <FrimoussePicker.Empty className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-400">
           {t('common:noEmojiFound')}
         </FrimoussePicker.Empty>
         <FrimoussePicker.List
@@ -30,7 +30,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
           components={{
             CategoryHeader: ({ category, ...props }) => (
               <div
-                className="bg-white px-3 pt-3 pb-1.5 text-xs font-medium text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400"
+                className="bg-white px-3 pt-3 pb-1.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
                 {...props}
               >
                 {category.label}
@@ -43,7 +43,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
             ),
             Emoji: ({ emoji, ...props }) => (
               <button
-                className="flex size-8 items-center justify-center rounded-md text-lg data-[active]:bg-neutral-100 dark:data-[active]:bg-neutral-800"
+                className="flex size-8 items-center justify-center rounded-md text-lg hover:bg-neutral-100 data-[active]:bg-neutral-100 dark:hover:bg-neutral-700 dark:data-[active]:bg-neutral-700"
                 {...props}
               >
                 {emoji.emoji}

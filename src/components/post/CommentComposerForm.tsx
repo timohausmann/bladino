@@ -1,16 +1,23 @@
+import { CreateAddAttachment } from '@/components/create/CreateAddAttachment';
 import { CreateAddEmoji } from '@/components/create/CreateAddEmoji';
-import { CreateAddMore } from '@/components/create/CreateAddMore';
 import {
   useCommentComposer,
   type UseCommentComposerOptions,
 } from '@/components/post/useCommentComposer';
-import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/button';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { Textarea } from '@/components/ui/Textarea';
-import { useUserStore } from '@/stores/userStore';
 import { MAX_COMMENT_FILES } from '@/utils/postFileUtils';
+import { Send } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
+
+const REPLY_TEXTAREA_CLASS =
+  'min-h-14 max-h-[400px] overflow-y-auto pt-[14px] pb-2 leading-normal';
+
+/** Paperclip always visible; emoji picker from md breakpoint. */
+const COMPOSER_END_ADORNMENT_SLOTS = { base: 1, md: 2 } as const;
 
 export interface CommentComposerFormProps extends UseCommentComposerOptions {
   layout: 'card' | 'reply';
@@ -18,8 +25,8 @@ export interface CommentComposerFormProps extends UseCommentComposerOptions {
   submitLabel?: string;
   showCancel?: boolean;
   onCancel?: () => void;
-  /** Rendered inline to the left of the submit button. */
-  beforeSubmit?: React.ReactNode;
+  /** Rendered on the left of the card footer row (e.g. channel picker). */
+  leadingActions?: React.ReactNode;
 }
 
 /**
@@ -39,10 +46,9 @@ export function CommentComposerForm({
   onCancel,
   onSuccess,
   errorMessage,
-  beforeSubmit,
+  leadingActions,
 }: CommentComposerFormProps) {
   const { t } = useTranslation();
-  const currentUser = useUserStore((store) => store.currentUser);
   const composer = useCommentComposer({
     mode,
     commentId,
@@ -55,19 +61,51 @@ export function CommentComposerForm({
   });
 
   const isReply = layout === 'reply';
+  const [replyFocused, setReplyFocused] = useState(false);
   const resolvedPlaceholder = placeholder ?? t('posts:composerPlaceholder');
   const resolvedSubmitLabel =
     submitLabel ?? (mode === 'edit' ? t('common:save') : t('posts:publish'));
+  const showReplySend =
+    replyFocused ||
+    composer.content.trim().length > 0 ||
+    composer.files.length > 0;
+
+  const inlineActions = (
+    <>
+      <span className="hidden md:contents">
+        <CreateAddEmoji
+          onEmojiSelect={composer.handleEmojiSelect}
+          shape="soft"
+        />
+      </span>
+      <CreateAddAttachment
+        onAddFiles={composer.handleAddFilesClick}
+        disabled={composer.isSubmitting}
+        shape="soft"
+      />
+    </>
+  );
 
   const textarea = (
     <Textarea
       value={composer.content}
       onChange={composer.setContent}
       placeholder={resolvedPlaceholder}
-      rows={isReply ? 1 : 2}
-      resize="resize-y"
-      className={isReply ? 'min-h-14' : 'max-h-[400px] min-h-[82px]'}
+      rows={1}
+      autoGrow
+      variant={isReply ? 'ghost' : 'default'}
+      endAdornmentReveal={isReply ? 'focus-or-filled' : 'always'}
+      wrapperClassName={isReply ? 'min-w-0 flex-1' : undefined}
+      className={
+        isReply
+          ? REPLY_TEXTAREA_CLASS
+          : 'max-h-[400px] min-h-[82px] overflow-y-auto py-3 leading-normal'
+      }
+      endAdornment={inlineActions}
+      endAdornmentSlotCounts={COMPOSER_END_ADORNMENT_SLOTS}
       disabled={composer.isSubmitting}
+      onFocus={isReply ? () => setReplyFocused(true) : undefined}
+      onBlur={isReply ? () => setReplyFocused(false) : undefined}
     />
   );
 
@@ -87,26 +125,77 @@ export function CommentComposerForm({
       </div>
     ) : null;
 
-  const mainFields = (
-    <>
-      {textarea}
-      {attachments}
-    </>
+  const formSubmit = (
+    <Button
+      disabled={!composer.canSubmit}
+      type="submit"
+      variant="primary"
+      loading={composer.isSubmitting}
+    >
+      {resolvedSubmitLabel}
+    </Button>
   );
+
+  const replySend = (
+    <Button
+      type="submit"
+      variant="secondary"
+      effect="none"
+      disabled={!composer.canSubmit}
+      loading={composer.isSubmitting}
+      aria-label={resolvedSubmitLabel}
+      className="mt-2 h-10 w-10 shrink-0 !rounded-full !p-0"
+      iconBefore={<Send size={18} />}
+    >
+      <span className="sr-only">{resolvedSubmitLabel}</span>
+    </Button>
+  );
+
+  const cancelButton = showCancel ? (
+    <Button
+      type="button"
+      onClick={() => {
+        composer.handleCancel();
+        onCancel?.();
+      }}
+      variant="secondary"
+      appearance="outline"
+      disabled={composer.isSubmitting}
+    >
+      {t('common:cancel')}
+    </Button>
+  ) : null;
 
   return (
     <form onSubmit={composer.handleSubmit} className="flex flex-col gap-2">
       {isReply ? (
-        <div className="flex gap-3">
-          <Avatar
-            avatar={currentUser?.avatar}
-            alt={t('common:yourAvatar')}
-            className="mt-2 h-10 w-10 shrink-0"
-          />
-          <div className="flex min-w-0 flex-1 flex-col gap-2">{mainFields}</div>
+        <div className="flex min-w-0 flex-col gap-2">
+          <div className="flex min-w-0 items-start gap-2">
+            {textarea}
+            {mode === 'create' ? (
+              <div
+                className={twMerge(
+                  'shrink-0 overflow-hidden transition-all duration-200',
+                  showReplySend ? 'w-10 opacity-100' : 'w-0 opacity-0',
+                )}
+              >
+                {replySend}
+              </div>
+            ) : null}
+          </div>
+          {attachments}
+          {mode === 'edit' && (
+            <div className="flex items-center justify-end gap-2">
+              {cancelButton}
+              {formSubmit}
+            </div>
+          )}
         </div>
       ) : (
-        mainFields
+        <>
+          {textarea}
+          {attachments}
+        </>
       )}
 
       <input
@@ -121,38 +210,15 @@ export function CommentComposerForm({
         disabled={composer.isSubmitting}
       />
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <CreateAddEmoji onEmojiSelect={composer.handleEmojiSelect} />
-          <CreateAddMore onAddFiles={composer.handleAddFilesClick} />
+      {!isReply && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center">{leadingActions}</div>
+          <div className="flex shrink-0 items-center gap-2">
+            {cancelButton}
+            {formSubmit}
+          </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          {beforeSubmit}
-          {showCancel && (
-            <Button
-              type="button"
-              onClick={() => {
-                composer.handleCancel();
-                onCancel?.();
-              }}
-              variant="secondary"
-              appearance="outline"
-              disabled={composer.isSubmitting}
-            >
-              {t('common:cancel')}
-            </Button>
-          )}
-          <Button
-            disabled={!composer.canSubmit}
-            type="submit"
-            variant="primary"
-            loading={composer.isSubmitting}
-          >
-            {resolvedSubmitLabel}
-          </Button>
-        </div>
-      </div>
+      )}
     </form>
   );
 }

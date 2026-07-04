@@ -1,13 +1,18 @@
 import { tv } from 'tailwind-variants';
 
 export type HeaderButtonVariant = 'default' | 'persistent' | 'dangerous';
+export type HeaderButtonShape = 'round' | 'soft';
 
 export const headerButtonVariants = tv({
   base: [
-    'border-none flex items-center justify-center w-10 h-10 rounded-full p-0 transition-colors',
+    'border-none flex items-center justify-center w-10 h-10 p-0 transition-colors',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   ],
   variants: {
+    shape: {
+      round: 'rounded-full',
+      soft: 'rounded-lg',
+    },
     variant: {
       default: [
         'cursor-pointer text-foreground bg-transparent',
@@ -69,6 +74,7 @@ export const headerButtonVariants = tv({
   ],
   defaultVariants: {
     variant: 'default',
+    shape: 'round',
     active: false,
     disabled: false,
   },

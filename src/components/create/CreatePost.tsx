@@ -33,7 +33,7 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
         parent={parent}
         submitLabel={t('posts:publish')}
         errorMessage={t('errors:publishFailed')}
-        beforeSubmit={
+        leadingActions={
           channel ? undefined : (
             <CreatePostChannelField
               value={selectedChannel}

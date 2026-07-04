@@ -220,6 +220,7 @@ export function useCommentComposer({
   return {
     content,
     setContent,
+    trimmedBody,
     files,
     isSubmitting,
     canSubmit,

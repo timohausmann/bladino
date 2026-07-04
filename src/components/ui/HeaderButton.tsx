@@ -1,5 +1,6 @@
 import {
   headerButtonVariants,
+  type HeaderButtonShape,
   type HeaderButtonVariant,
 } from '@/components/ui/headerButtonVariants';
 import { ReactNode } from 'react';
@@ -12,6 +13,7 @@ interface HeaderButtonProps
   className?: string;
   active?: boolean;
   variant?: HeaderButtonVariant;
+  shape?: HeaderButtonShape;
 }
 
 /**
@@ -28,6 +30,7 @@ export function HeaderButton({
   className = '',
   active = false,
   variant = 'default',
+  shape = 'round',
   disabled = false,
   tabIndex,
   ...buttonProps
@@ -37,7 +40,13 @@ export function HeaderButton({
       {...buttonProps}
       disabled={disabled}
       tabIndex={disabled ? -1 : (tabIndex ?? 0)}
-      className={headerButtonVariants({ variant, active, disabled, className })}
+      className={headerButtonVariants({
+        variant,
+        shape,
+        active,
+        disabled,
+        className,
+      })}
       aria-label={label}
     >
       {icon}

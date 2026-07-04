@@ -17,6 +17,8 @@ interface FilePreviewProps {
   files: Array<PreviewFile | LocalDraftFile>;
   /** When provided, shows a remove button on each preview (e.g. during post creation) */
   onRemove?: (fileId: string) => void;
+  /** Tile layout for every file; skips full-width gallery for 1–2 images. */
+  compact?: boolean;
 }
 
 function getDisplayName(file: PreviewFile | LocalDraftFile): string {
@@ -47,7 +49,11 @@ const IMAGE_POST_MAX_HEIGHT = 'max-h-[55dvh]';
  * FilePreview - A component that displays files in a horizontally scrollable layout
  * Images are displayed as thumbnails, other files show generic icons with metadata
  */
-export function FilePreview({ files, onRemove }: FilePreviewProps) {
+export function FilePreview({
+  files,
+  onRemove,
+  compact = false,
+}: FilePreviewProps) {
   const { t } = useTranslation();
 
   if (!files || files.length === 0) {
@@ -80,14 +86,12 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
   };
 
   const allImages = files.every((file) => isImageType(file.type));
-  const isImagePost = allImages && files.length <= 2;
+  const isImagePost = !compact && allImages && files.length <= 2;
   const fitsWithoutScroll = files.length <= 3;
 
   const previewClassName = twMerge(
     'relative min-w-0 bg-black/20 rounded-lg overflow-hidden transition-all duration-200',
-    isImagePost
-      ? twMerge('w-full', IMAGE_POST_MAX_HEIGHT)
-      : 'aspect-3/2',
+    isImagePost ? twMerge('w-full', IMAGE_POST_MAX_HEIGHT) : 'aspect-3/2',
   );
 
   const imageClassName = twMerge(

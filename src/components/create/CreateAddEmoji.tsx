@@ -3,17 +3,29 @@ import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import type {
+  HeaderButtonShape,
+  HeaderButtonVariant,
+} from '@/components/ui/headerButtonVariants';
 import { HeaderButton } from '@/components/ui/HeaderButton';
 
 interface CreateAddEmojiProps {
   onEmojiSelect: (emoji: string) => void;
+  variant?: HeaderButtonVariant;
+  shape?: HeaderButtonShape;
+  className?: string;
 }
 
 /**
  * CreateAddEmoji - A simple component for adding emojis to posts during creation
  * Based on the working EmojiReaction pattern
  */
-export function CreateAddEmoji({ onEmojiSelect }: CreateAddEmojiProps) {
+export function CreateAddEmoji({
+  onEmojiSelect,
+  variant = 'default',
+  shape = 'round',
+  className,
+}: CreateAddEmojiProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +35,9 @@ export function CreateAddEmoji({ onEmojiSelect }: CreateAddEmojiProps) {
         <HeaderButton
           icon={<SmilePlus size={20} />}
           label={t('posts:addEmoji')}
-          variant="persistent"
+          variant={variant}
+          shape={shape}
+          className={className}
         />
       </Popover.Trigger>
 
