@@ -3,7 +3,7 @@ import { resolveAvatarUrl } from '@/utils/avatarUrl';
 interface AvatarProps {
   /** Resolved image URL – use for external/mock URLs */
   src?: string;
-  /** Avatar filename from API – resolved via /avatare/ */
+  /** Avatar filename from API – resolved via VITE_AVATAR_URL */
   avatar?: string | null;
   alt: string;
   className?: string;
