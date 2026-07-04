@@ -8,7 +8,7 @@ import {
   normalizeLanguage,
   type SupportedLanguage,
 } from './config';
-import { I18N_NAMESPACES, loadLanguageBundles } from './loadLanguageBundles';
+import { loadLanguageBundles } from './loadLanguageBundles';
 
 export {
   FALLBACK_LANGUAGE,
@@ -36,8 +36,8 @@ export async function ensureLanguageLoaded(language: SupportedLanguage) {
   if (loadedLanguages.has(language)) return;
 
   const bundles = await loadLanguageBundles(language);
-  for (const namespace of I18N_NAMESPACES) {
-    i18n.addResourceBundle(language, namespace, bundles[namespace], true, true);
+  for (const [namespace, bundle] of Object.entries(bundles)) {
+    i18n.addResourceBundle(language, namespace, bundle, true, true);
   }
   loadedLanguages.add(language);
 }
@@ -55,7 +55,7 @@ export function initI18n() {
         lng: language,
         fallbackLng: FALLBACK_LANGUAGE,
         defaultNS: 'common',
-        ns: [...I18N_NAMESPACES],
+        ns: Object.keys(bundles),
         interpolation: {
           escapeValue: false,
         },
