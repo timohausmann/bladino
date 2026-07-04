@@ -1,1 +1,5 @@
-export { AnimatedLogo, type AnimatedLogoProps } from './AnimatedLogo';
+export {
+  AnimatedLogo,
+  type AnimatedLogoOverlays,
+  type AnimatedLogoProps,
+} from './AnimatedLogo';

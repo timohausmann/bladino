@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import styles from './AnimatedLogo.module.css';
+import type { AnimatedLogoOverlays } from './AnimatedLogoMotionPaths';
 import {
   DEFAULT_INNER_DELAY_MAX_S,
   DEFAULT_LOGO_HEIGHT,
@@ -24,8 +25,17 @@ import { useLogoPathAnimation } from './useLogoPathAnimation';
 
 const AnimatedLogoMotionPaths = lazy(() => import('./AnimatedLogoMotionPaths'));
 
+export type { AnimatedLogoOverlays };
+
 export type AnimatedLogoProps = {
+  /** Master switch for motion (respects prefers-reduced-motion). */
   animate?: boolean;
+  /** Baseline idle wobble — the default resting animation. */
+  idle?: boolean;
+  /** One-time scatter/spring entry on mount. */
+  entry?: boolean;
+  /** Overlay animations layered on top of idle/rest (e.g. scale pulse). */
+  overlays?: AnimatedLogoOverlays;
   className?: string;
   /** CSS height of the logo artwork (excluding viewBox padding). */
   logoHeight?: number | string;
@@ -39,9 +49,9 @@ export type AnimatedLogoProps = {
   yFactor?: number;
   /** Max initial rotation in degrees around each path's own center. 0 = no rotation. */
   rotateMax?: number;
-  /** Max stagger delay for center paths vs outer paths, in seconds. */
+  /** Max random entry stagger delay in seconds. */
   innerDelayMax?: number;
-  /** Initial scale of each path (e.g. 0.8 = starts 20% smaller). */
+  /** Initial scale of each path during entry (e.g. 0.8 = starts 20% smaller). */
   scaleFrom?: number;
 };
 
@@ -137,6 +147,9 @@ function StaticLogoPaths({ paths }: { paths: LogoPath[] }) {
 
 export const AnimatedLogo = ({
   animate: animateEnabled = true,
+  idle: idleEnabled = true,
+  entry: entryEnabled = true,
+  overlays = {},
   className,
   logoHeight = DEFAULT_LOGO_HEIGHT,
   totalHeight,
@@ -161,26 +174,41 @@ export const AnimatedLogo = ({
     yFactor,
     rotateMax,
     innerDelayMax,
+    scaleFrom,
   });
 
   const playAnimation = shouldAnimate && ready;
 
-  // Preload motion when animation is enabled.
+  const [motionLoaded, setMotionLoaded] = useState(!shouldAnimate);
   useEffect(() => {
-    if (shouldAnimate) void import('./AnimatedLogoMotionPaths');
+    if (!shouldAnimate) {
+      setMotionLoaded(true);
+      return;
+    }
+    let cancelled = false;
+    setMotionLoaded(false);
+    void import('./AnimatedLogoMotionPaths').then(() => {
+      if (!cancelled) setMotionLoaded(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [shouldAnimate]);
 
-  const [animState, setAnimState] = useState<'hidden' | 'visible' | 'idle'>(
-    'hidden',
-  );
+  const showAnimatedPaths = ready && (!shouldAnimate || motionLoaded);
+
+  const [entryComplete, setEntryComplete] = useState(!entryEnabled);
   useEffect(() => {
-    if (!playAnimation) return;
-    setAnimState('visible');
+    if (!playAnimation || !entryEnabled) {
+      setEntryComplete(!entryEnabled);
+      return;
+    }
+    setEntryComplete(false);
     // Give entry animation time to fully settle: max stagger + spring duration.
     const ms = (innerDelayMax + 0.8) * 1000;
-    const t = setTimeout(() => setAnimState('idle'), ms);
+    const t = setTimeout(() => setEntryComplete(true), ms);
     return () => clearTimeout(t);
-  }, [playAnimation, innerDelayMax]);
+  }, [playAnimation, entryEnabled, innerDelayMax]);
 
   const resolvedTotalHeight = resolveCssSize(
     totalHeight ?? resolveTotalHeight(logoHeight, padding),
@@ -208,6 +236,10 @@ export const AnimatedLogo = ({
         {/*
          * Animated paths — appear once centers are measured.
          *
+         * Two motion layers per path:
+         *   1. Entry — one-time scatter/spring (hidden → visible)
+         *   2. Resting — baseline idle wobble + optional overlays (e.g. scale)
+         *
          * Transform structure guarantees rotation around each path's own center:
          *   outer <g> positions the SVG pivot at (cx, cy)
          *   motion.g animates x/y/rotate relative to that pivot
@@ -215,16 +247,18 @@ export const AnimatedLogo = ({
          *
          * Motion's x/y are in CSS display pixels, independent of SVG user units.
          */}
-        {ready &&
+        {showAnimatedPaths &&
           (shouldAnimate ? (
-            <Suspense fallback={<StaticLogoPaths paths={LOGO_PATHS} />}>
+            <Suspense fallback={null}>
               <AnimatedLogoMotionPaths
                 paths={LOGO_PATHS}
                 centers={centers}
                 customs={customs}
-                scaleFrom={scaleFrom}
                 shouldAnimate={shouldAnimate}
-                animState={animState}
+                entry={entryEnabled}
+                entryComplete={entryComplete}
+                idle={idleEnabled}
+                overlays={overlays}
               />
             </Suspense>
           ) : (

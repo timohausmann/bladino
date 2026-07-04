@@ -5,8 +5,6 @@ import {
   measureCenter,
   REST_ANIMATION,
   ZERO_CENTER,
-  LOGO_VIEWBOX_WIDTH,
-  LOGO_VIEWBOX_HEIGHT,
   type PathCenter,
   type PathAnimationCustom,
 } from './logoPathTransforms';
@@ -18,12 +16,10 @@ type Opts = {
   yFactor: number;
   rotateMax: number;
   innerDelayMax: number;
+  scaleFrom: number;
 };
 
 type State = { centers: PathCenter[]; customs: PathAnimationCustom[] };
-
-const LOGO_CX = LOGO_VIEWBOX_WIDTH / 2;
-const LOGO_CY = LOGO_VIEWBOX_HEIGHT / 2;
 
 export function useLogoPathAnimation({
   enabled,
@@ -32,6 +28,7 @@ export function useLogoPathAnimation({
   yFactor,
   rotateMax,
   innerDelayMax,
+  scaleFrom,
 }: Opts) {
   const refs = useRef<(SVGPathElement | null)[]>([]);
   const [state, setState] = useState<State | null>(null);
@@ -41,24 +38,28 @@ export function useLogoPathAnimation({
       p ? measureCenter(p) : ZERO_CENTER,
     );
 
-    const distances = centers.map((c) =>
-      Math.hypot(c.cx - LOGO_CX, c.cy - LOGO_CY),
-    );
-    const maxDist = Math.max(...distances, 1);
-
     const customs = enabled
-      ? centers.map((_, i) =>
-          createAnimation(distances[i] / maxDist, {
+      ? centers.map(() =>
+          createAnimation({
             offsetMax,
             yFactor,
             rotateMax,
             innerDelayMax,
+            scaleFrom,
           }),
         )
       : Array.from({ length: pathCount }, () => REST_ANIMATION);
 
     setState({ centers, customs });
-  }, [enabled, pathCount, offsetMax, yFactor, rotateMax, innerDelayMax]);
+  }, [
+    enabled,
+    pathCount,
+    offsetMax,
+    yFactor,
+    rotateMax,
+    innerDelayMax,
+    scaleFrom,
+  ]);
 
   const setRef = (i: number) => (el: SVGPathElement | null) => {
     refs.current[i] = el;

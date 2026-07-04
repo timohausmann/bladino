@@ -19,8 +19,10 @@ export type PathAnimationCustom = {
   y: number;
   /** Start rotation in degrees. 0 when rotateMax is 0. */
   rotate: number;
-  /** Stagger delay in seconds. */
+  /** Random entry stagger delay in seconds. */
   delay: number;
+  /** Per-path entry start scale (1 = full size). */
+  entryScale: number;
   /** Parameters for the continuous idle wobble after assembly. */
   idle: IdleParams;
 };
@@ -36,14 +38,15 @@ export const DEFAULT_OFFSET_MAX = 20;
 export const DEFAULT_Y_FACTOR = 0.33;
 /** Max initial rotation in degrees. */
 export const DEFAULT_ROTATE_MAX = 20;
-/** Max extra delay for center paths (seconds). */
-export const DEFAULT_INNER_DELAY_MAX_S = 0.2;
+/** Max random entry stagger delay in seconds. */
+export const DEFAULT_INNER_DELAY_MAX_S = 0.55;
 
 export const REST_ANIMATION: PathAnimationCustom = {
   x: 0,
   y: 0,
   rotate: 0,
   delay: 0,
+  entryScale: 1,
   idle: { x: 0, y: 0, rotate: 0, duration: 3 },
 };
 export const ZERO_CENTER: PathCenter = { cx: 0, cy: 0 };
@@ -74,24 +77,21 @@ export function measureCenter(path: SVGPathElement): PathCenter {
   return { cx: b.x + b.width / 2, cy: b.y + b.height / 2 };
 }
 
-export function createAnimation(
-  /** 0 = logo center, 1 = outermost edge. Controls stagger delay. */
-  distanceFraction: number,
-  opts: {
-    offsetMax: number;
-    yFactor: number;
-    rotateMax: number;
-    innerDelayMax: number;
-  },
-): PathAnimationCustom {
-  const { offsetMax, yFactor, rotateMax, innerDelayMax } = opts;
+export function createAnimation(opts: {
+  offsetMax: number;
+  yFactor: number;
+  rotateMax: number;
+  innerDelayMax: number;
+  scaleFrom: number;
+}): PathAnimationCustom {
+  const { offsetMax, yFactor, rotateMax, innerDelayMax, scaleFrom } = opts;
+  const withScale = scaleFrom !== 1;
   return {
     x: sign() * rand(0, offsetMax),
     y: yFactor === 0 ? 0 : sign() * rand(0, offsetMax * yFactor),
     rotate: rotateMax === 0 ? 0 : rand(-rotateMax, rotateMax),
-    // Outer paths start first, inner paths wait longer.
-    delay: (1 - distanceFraction) * innerDelayMax,
-    // Idle wobble — unique per path so they drift out of sync.
+    delay: rand(0, innerDelayMax),
+    entryScale: withScale ? rand(0.12, scaleFrom) : 1,
     idle: {
       x: rand(0.8, 2.5),
       y: rand(0.3, 1.0),
