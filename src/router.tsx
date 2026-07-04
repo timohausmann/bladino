@@ -2,6 +2,7 @@ import {
   createRootRouteWithContext,
   createRoute,
   createRouter,
+  lazyRouteComponent,
   Outlet,
   redirect,
 } from '@tanstack/react-router';
@@ -9,24 +10,6 @@ import type { QueryClient } from '@tanstack/react-query';
 import App from './App';
 import { ensureSession, resolveRedirectTarget } from './lib/auth';
 import { queryClient } from './lib/queryClient';
-import {
-  Channels,
-  ForgotPassword,
-  Dashboard,
-  Home,
-  Login,
-  Logout,
-  Mails,
-  Notes,
-  Notifications,
-  NotFound,
-  PostDetail,
-  Profile,
-  SettingsAppearance,
-  SettingsLayout,
-  SettingsPassword,
-} from './routes';
-import { ButtonLab } from './routes/ButtonLab';
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -43,7 +26,10 @@ type MailsSearch = {
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: App,
-  notFoundComponent: NotFound,
+  notFoundComponent: lazyRouteComponent(
+    () => import('./routes/NotFound'),
+    'NotFound',
+  ),
 });
 
 const authenticatedRoute = createRoute({
@@ -65,21 +51,27 @@ const authenticatedRoute = createRoute({
 const dashboardRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/',
-  component: Dashboard,
+  component: lazyRouteComponent(
+    () => import('./routes/Dashboard'),
+    'Dashboard',
+  ),
   staticData: { fixedViewport: true, layoutMode: 'fullWidth' },
 });
 
 const feedRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/feed',
-  component: Home,
+  component: lazyRouteComponent(() => import('./routes/Home'), 'Home'),
   staticData: { layoutMode: 'feed' },
 });
 
 const notificationsRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/notifications',
-  component: Notifications,
+  component: lazyRouteComponent(
+    () => import('./routes/Notifications'),
+    'Notifications',
+  ),
 });
 
 const dashboardRedirectRoute = createRoute({
@@ -93,19 +85,25 @@ const dashboardRedirectRoute = createRoute({
 const postRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/post/$id',
-  component: PostDetail,
+  component: lazyRouteComponent(
+    () => import('./routes/PostDetail'),
+    'PostDetail',
+  ),
 });
 
 const profileRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/u/$name',
-  component: Profile,
+  component: lazyRouteComponent(() => import('./routes/Profile'), 'Profile'),
 });
 
 const settingsLayoutRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/settings',
-  component: SettingsLayout,
+  component: lazyRouteComponent(
+    () => import('./routes/settings/SettingsLayout'),
+    'SettingsLayout',
+  ),
   staticData: { fixedViewport: true, layoutMode: 'fullWidth' },
 });
 
@@ -120,7 +118,10 @@ const settingsIndexRoute = createRoute({
 const settingsAppearanceRoute = createRoute({
   getParentRoute: () => settingsLayoutRoute,
   path: '/appearance',
-  component: SettingsAppearance,
+  component: lazyRouteComponent(
+    () => import('./routes/settings/SettingsAppearance'),
+    'SettingsAppearance',
+  ),
 });
 
 const settingsLanguageRedirectRoute = createRoute({
@@ -142,32 +143,35 @@ const settingsThemeRedirectRoute = createRoute({
 const settingsPasswordRoute = createRoute({
   getParentRoute: () => settingsLayoutRoute,
   path: '/password',
-  component: SettingsPassword,
+  component: lazyRouteComponent(
+    () => import('./routes/settings/SettingsPassword'),
+    'SettingsPassword',
+  ),
 });
 
 const channelsIndexRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/channels',
-  component: Channels,
+  component: lazyRouteComponent(() => import('./routes/Channels'), 'Channels'),
 });
 
 const channelsDetailRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/channels/$id',
-  component: Channels,
+  component: lazyRouteComponent(() => import('./routes/Channels'), 'Channels'),
 });
 
 const notesIndexRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/notes',
-  component: Notes,
+  component: lazyRouteComponent(() => import('./routes/Notes'), 'Notes'),
   staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
 const notesDetailRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/notes/$id',
-  component: Notes,
+  component: lazyRouteComponent(() => import('./routes/Notes'), 'Notes'),
   staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
@@ -182,7 +186,7 @@ const mailsIndexRoute = createRoute({
     compose:
       search.compose === true || search.compose === 'true' ? true : undefined,
   }),
-  component: Mails,
+  component: lazyRouteComponent(() => import('./routes/Mails'), 'Mails'),
   staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
@@ -197,7 +201,7 @@ const mailsDetailRoute = createRoute({
     compose:
       search.compose === true || search.compose === 'true' ? true : undefined,
   }),
-  component: Mails,
+  component: lazyRouteComponent(() => import('./routes/Mails'), 'Mails'),
   staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
@@ -216,26 +220,32 @@ const loginRoute = createRoute({
       });
     }
   },
-  component: Login,
+  component: lazyRouteComponent(() => import('./routes/Login'), 'Login'),
 });
 
 const forgotPasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/forgot-password',
-  component: ForgotPassword,
+  component: lazyRouteComponent(
+    () => import('./routes/ForgotPassword'),
+    'ForgotPassword',
+  ),
 });
 
 const logoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/logout',
-  component: Logout,
+  component: lazyRouteComponent(() => import('./routes/Logout'), 'Logout'),
 });
 
 const buttonLabRoute = import.meta.env.DEV
   ? createRoute({
       getParentRoute: () => rootRoute,
       path: '/lab/button',
-      component: ButtonLab,
+      component: lazyRouteComponent(
+        () => import('./routes/ButtonLab'),
+        'ButtonLab',
+      ),
     })
   : null;
 

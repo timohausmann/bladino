@@ -2,7 +2,7 @@ import { PostActionButton } from '@/components/post/PostActionButton';
 import * as Popover from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import { LazyEmojiPicker } from '@/components/ui/LazyEmojiPicker';
 
 interface EmojiReactionProps {
   reactions: { [key: string]: number };
@@ -75,7 +75,7 @@ export function EmojiReaction({ reactions, onReaction }: EmojiReactionProps) {
 
           <Popover.Portal>
             <Popover.Content className="z-50" sideOffset={8} align="start">
-              <EmojiPicker
+              <LazyEmojiPicker
                 onEmojiSelect={handleEmojiSelect}
                 onClose={() => setEmojiPickerOpen(false)}
               />

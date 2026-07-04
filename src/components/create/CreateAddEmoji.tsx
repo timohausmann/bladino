@@ -2,7 +2,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import { LazyEmojiPicker } from '@/components/ui/LazyEmojiPicker';
 import type {
   HeaderButtonShape,
   HeaderButtonVariant,
@@ -43,7 +43,7 @@ export function CreateAddEmoji({
 
       <Popover.Portal>
         <Popover.Content className="z-50" sideOffset={8} align="start">
-          <EmojiPicker
+          <LazyEmojiPicker
             onEmojiSelect={onEmojiSelect}
             onClose={() => setIsOpen(false)}
           />

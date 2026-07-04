@@ -1,3 +1,6 @@
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
 import { DashboardGrid } from '@/components/dashboard';
 import { UsersLastActionDocument, useGraphQLQuery } from '@/graphql';
 import { useTranslation } from 'react-i18next';

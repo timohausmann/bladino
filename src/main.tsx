@@ -1,9 +1,7 @@
 import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './i18n';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
+import { initI18n } from './i18n';
 import { registerExpiredSessionRedirect } from './lib/expiredSession';
 import { queryClient } from './lib/queryClient';
 import { router } from './router';
@@ -21,8 +19,10 @@ registerExpiredSessionRedirect(() => {
   });
 });
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} context={{ queryClient }} />
-  </StrictMode>,
-);
+void initI18n().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <RouterProvider router={router} context={{ queryClient }} />
+    </StrictMode>,
+  );
+});
