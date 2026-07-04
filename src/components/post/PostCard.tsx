@@ -78,7 +78,7 @@ export function PostCard({ comment }: PostCardProps) {
             />
           ))}
 
-          <Card>
+          <Card className="p-2">
             <PostReply
               parentId={commentId}
               channel={comment.channel ?? undefined}

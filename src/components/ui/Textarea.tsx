@@ -133,10 +133,10 @@ export function Textarea({
           'disabled:cursor-not-allowed disabled:opacity-50',
           isGhost
             ? twMerge(
-                'border border-transparent bg-transparent px-0 py-2',
+                'border border-transparent bg-transparent px-3 py-2',
                 'dark:border-transparent dark:bg-transparent',
                 isGhostActive &&
-                  'border-neutral-200 bg-white/90 px-3 dark:border-neutral-800 dark:bg-black/20',
+                  'border-neutral-200 bg-white/90 dark:border-neutral-800 dark:bg-black/20',
                 isGhostActive && 'focus:bg-white dark:focus:bg-black/30',
               )
             : twMerge(
