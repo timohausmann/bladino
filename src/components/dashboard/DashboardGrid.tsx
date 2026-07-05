@@ -27,6 +27,7 @@ import ReactGridLayout, {
 import { noCompactor, verticalCompactor } from 'react-grid-layout/core';
 import clsx from 'clsx';
 import { DashboardGridBackground } from './DashboardGridBackground';
+import styles from './DashboardGrid.module.css';
 import { computeDashboardGridMetrics } from './dashboardGridMetrics';
 import {
   DASHBOARD_BREAKPOINTS,
@@ -269,7 +270,7 @@ export function DashboardGrid({
             onDragStart={onDragStart}
             onDrag={onDrag}
             onDragStop={onDragStop}
-            className="dashboard-grid"
+            className={styles.grid}
           >
             {children}
           </ReactGridLayout>

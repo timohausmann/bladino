@@ -1,4 +1,5 @@
 import * as Popover from '@radix-ui/react-popover';
+import { panelStyles } from '@/components/ui/panel';
 import { twMerge } from 'tailwind-merge';
 
 interface PopoverContentProps {
@@ -19,7 +20,13 @@ export function PopoverContent({
   return (
     <Popover.Portal>
       <Popover.Content
-        className={twMerge('panel-surface z-50', width, 'p-2', className)}
+        className={twMerge(
+          panelStyles.surface,
+          panelStyles.content,
+          'z-50 p-2',
+          width,
+          className,
+        )}
         sideOffset={8}
         align="end"
       >

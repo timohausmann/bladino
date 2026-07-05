@@ -1,5 +1,7 @@
+import { panelStyles } from '@/components/ui/panel';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDown } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 interface SettingsSelectOption<T extends string> {
   value: T;
@@ -37,7 +39,9 @@ export function SettingsSelectField<T extends string>({
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="panel-surface">
+          <Select.Content
+            className={twMerge(panelStyles.surface, panelStyles.selectContent)}
+          >
             <Select.Viewport className="p-1">
               {options.map((option) => (
                 <Select.Item

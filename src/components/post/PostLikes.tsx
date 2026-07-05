@@ -7,6 +7,7 @@ import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
+import { panelStyles } from '@/components/ui/panel';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { PostVoteButton } from '@/components/post/PostVoteButton';
 
@@ -103,11 +104,17 @@ function LikesDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="dialog-overlay fixed inset-0 z-50 bg-black/10 backdrop-blur-sm" />
+        <Dialog.Overlay
+          className={clsx(
+            panelStyles.overlay,
+            'fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
+          )}
+        />
         <Dialog.Content
           className={clsx(
             'fixed top-1/2 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md',
-            'dialog-content -translate-x-1/2 -translate-y-1/2 rounded-xl border border-neutral-200',
+            panelStyles.content,
+            '-translate-x-1/2 -translate-y-1/2 rounded-xl border border-neutral-200',
             'bg-white p-6 shadow-xl focus:outline-none dark:border-neutral-700 dark:bg-neutral-900',
           )}
         >

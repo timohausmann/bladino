@@ -1,4 +1,6 @@
+import { panelStyles } from '@/components/ui/panel';
 import { lazy, Suspense, type ComponentProps } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 const EmojiPickerPanel = lazy(() =>
   import('./EmojiPicker').then((module) => ({ default: module.EmojiPicker })),
@@ -14,7 +16,11 @@ export function LazyEmojiPicker(props: EmojiPickerProps) {
     <Suspense
       fallback={
         <div
-          className="flex h-[368px] w-64 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
+          className={twMerge(
+            panelStyles.surface,
+            panelStyles.content,
+            'flex h-[368px] w-64 items-center justify-center',
+          )}
           aria-hidden
         />
       }

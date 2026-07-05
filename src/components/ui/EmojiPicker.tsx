@@ -1,3 +1,4 @@
+import { panelStyles } from '@/components/ui/panel';
 import { EmojiPicker as FrimoussePicker } from 'frimousse';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +14,8 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
   return (
     <FrimoussePicker.Root
       className={twMerge(
-        'panel-surface',
+        panelStyles.surface,
+        panelStyles.content,
         'isolate flex h-[368px] w-fit flex-col',
       )}
       onEmojiSelect={(emoji) => {

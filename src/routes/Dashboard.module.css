@@ -1,0 +1,8 @@
+.dragFaded :global(.react-grid-item.react-draggable-dragging) {
+  opacity: 0.45;
+}
+
+:global(main).dragging,
+:global(main).dragging > div {
+  overflow: visible !important;
+}

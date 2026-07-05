@@ -1,3 +1,4 @@
+import { panelStyles } from '@/components/ui/panel';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -18,7 +19,8 @@ export function AlertDialogOverlay({ className }: AlertDialogOverlayProps) {
   return (
     <AlertDialogPrimitive.Overlay
       className={twMerge(
-        'dialog-overlay fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
+        panelStyles.overlay,
+        'fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
         className,
       )}
     />
@@ -41,7 +43,9 @@ export function AlertDialogContent({
       <AlertDialogPrimitive.Content
         className={twMerge(
           'fixed top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2',
-          'dialog-content panel-surface z-50 p-6 focus:outline-none',
+          panelStyles.surface,
+          panelStyles.content,
+          'z-50 p-6 focus:outline-none',
           className,
         )}
       >

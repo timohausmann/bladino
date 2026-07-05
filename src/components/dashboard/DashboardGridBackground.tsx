@@ -1,6 +1,7 @@
 import { DASHBOARD_MARGIN } from '@/stores/dashboardStore';
 import { calcGridCellDimensions } from 'react-grid-layout/core';
 import { useMemo } from 'react';
+import styles from './DashboardGrid.module.css';
 
 interface DashboardGridBackgroundProps {
   width: number;
@@ -58,17 +59,14 @@ export function DashboardGridBackground({
   if (width <= 0 || rowCount <= 0) return null;
 
   return (
-    <svg
-      className="dashboard-grid-background pointer-events-none absolute inset-0 h-full w-full"
-      aria-hidden
-    >
+    <svg className={styles.background} aria-hidden>
       {dots.map((dot) => (
         <circle
           key={dot.key}
           cx={dot.x}
           cy={dot.y}
           r={1.5}
-          className="dashboard-grid-background-dot"
+          className={styles.dot}
         />
       ))}
     </svg>

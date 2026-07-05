@@ -6,6 +6,7 @@ import { useDashboardWidgetDrag } from '@/components/dashboard/useDashboardWidge
 import { UsersLastActionDocument, useGraphQLQuery } from '@/graphql';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
+import styles from './Dashboard.module.css';
 
 export function Dashboard() {
   const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
@@ -19,16 +20,16 @@ export function Dashboard() {
       return;
     }
 
-    main.classList.toggle('dashboard-dragging', drag.draggingId !== null);
+    main.classList.toggle(styles.dragging, drag.draggingId !== null);
 
-    return () => main.classList.remove('dashboard-dragging');
+    return () => main.classList.remove(styles.dragging);
   }, [drag.draggingId]);
 
   return (
     <div
       className={clsx(
         'relative -m-4 flex min-h-0 flex-1 flex-col',
-        drag.fadeWidget && 'dashboard-drag-faded',
+        drag.fadeWidget && styles.dragFaded,
       )}
     >
       <header className="flex shrink-0 justify-end px-4 pt-4 pb-2">

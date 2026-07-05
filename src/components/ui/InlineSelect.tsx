@@ -1,3 +1,4 @@
+import { panelStyles } from '@/components/ui/panel';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
@@ -76,7 +77,13 @@ export function InlineSelect<T extends string = string>({
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className="panel-surface z-50">
+        <Select.Content
+          className={twMerge(
+            panelStyles.surface,
+            panelStyles.selectContent,
+            'z-50',
+          )}
+        >
           <Select.Viewport className="p-1">
             {options.map((option) => {
               const isSelected = value === option.value;
