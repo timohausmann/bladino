@@ -1,4 +1,5 @@
 import { navRailRowClassName } from '@/components/layout/navRailLayout';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';
 
@@ -31,24 +32,27 @@ export function NavRailIconLink({
 
   if (disabled) {
     return (
-      <div className={inactiveClassName} aria-disabled title={label}>
-        <Icon size={20} aria-hidden className="shrink-0" />
-      </div>
+      <Tooltip content={label}>
+        <div className={inactiveClassName} aria-disabled aria-label={label}>
+          <Icon size={20} aria-hidden className="shrink-0" />
+        </div>
+      </Tooltip>
     );
   }
 
   return (
-    <Link
-      to={to}
-      params={params}
-      title={label}
-      aria-label={label}
-      activeOptions={{ exact }}
-      className={inactiveClassName}
-      activeProps={{ className: activeClassName }}
-      inactiveProps={{ className: inactiveClassName }}
-    >
-      <Icon size={20} aria-hidden className="shrink-0" />
-    </Link>
+    <Tooltip content={label}>
+      <Link
+        to={to}
+        params={params}
+        aria-label={label}
+        activeOptions={{ exact }}
+        className={inactiveClassName}
+        activeProps={{ className: activeClassName }}
+        inactiveProps={{ className: inactiveClassName }}
+      >
+        <Icon size={20} aria-hidden className="shrink-0" />
+      </Link>
+    </Tooltip>
   );
 }

@@ -3,6 +3,7 @@ import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LazyEmojiPicker } from '@/components/ui/LazyEmojiPicker';
+import { Tooltip } from '@/components/ui/Tooltip';
 import type {
   HeaderButtonShape,
   HeaderButtonVariant,
@@ -28,19 +29,24 @@ export function CreateAddEmoji({
 }: CreateAddEmojiProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const label = t('posts:addEmoji');
 
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
-        <HeaderButton
-          icon={<SmilePlus size={20} />}
-          label={t('posts:addEmoji')}
-          variant={variant}
-          shape={shape}
-          className={className}
-          disableTooltip
-        />
-      </Popover.Trigger>
+      <Tooltip content={label}>
+        <Popover.Trigger asChild>
+          <HeaderButton
+            icon={<SmilePlus size={20} />}
+            label={label}
+            variant={variant}
+            shape={shape}
+            className={className}
+            disableTooltip
+            aria-expanded={isOpen}
+            aria-haspopup="dialog"
+          />
+        </Popover.Trigger>
+      </Tooltip>
 
       <Popover.Portal>
         <Popover.Content className="z-50" sideOffset={8} align="start">

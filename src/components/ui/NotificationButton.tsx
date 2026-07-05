@@ -3,6 +3,7 @@ import {
   navRailLabelClassName,
   navRailRowClassName,
 } from '@/components/layout/navRailLayout';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { Bell } from 'lucide-react';
@@ -51,11 +52,12 @@ export function NotificationButton({
   const { t } = useTranslation();
   const inactiveClassName = navRailRowClassName();
   const activeClassName = navRailRowClassName({ active: true });
+  const label = t('notifications:title');
 
-  return (
+  const link = (
     <Link
       to="/notifications"
-      title={expanded ? undefined : t('notifications:title')}
+      aria-label={label}
       className={inactiveClassName}
       activeProps={{ className: activeClassName }}
       inactiveProps={{ className: inactiveClassName }}
@@ -73,12 +75,12 @@ export function NotificationButton({
       </NavRailIconTrack>
       {expanded ? (
         <>
-          <span className={navRailLabelClassName}>
-            {t('notifications:title')}
-          </span>
+          <span className={navRailLabelClassName}>{label}</span>
           <CountBadge count={count} className="mr-2" />
         </>
       ) : null}
     </Link>
   );
+
+  return expanded ? link : <Tooltip content={label}>{link}</Tooltip>;
 }

@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip';
 import React from 'react';
 
 interface PostActionButtonProps {
@@ -21,15 +22,18 @@ export function PostActionButton({
   hideCount = false,
 }: PostActionButtonProps) {
   return (
-    <button
-      className={`flex cursor-pointer items-center gap-2 rounded-full border-none bg-black/5 px-3 py-2 transition-all duration-200 hover:bg-black/10 hover:shadow-md dark:bg-black/10 dark:hover:bg-black/20 ${className}`}
-      title={label}
-      aria-label={`${count} ${label}`}
-      onClick={onClick}
-      tabIndex={0}
-    >
-      {icon}
-      {!hideCount ? <span className="text-sm font-medium">{count}</span> : null}
-    </button>
+    <Tooltip content={label}>
+      <button
+        className={`flex cursor-pointer items-center gap-2 rounded-full border-none bg-black/5 px-3 py-2 transition-all duration-200 hover:bg-black/10 hover:shadow-md dark:bg-black/10 dark:hover:bg-black/20 ${className}`}
+        aria-label={`${count} ${label}`}
+        onClick={onClick}
+        tabIndex={0}
+      >
+        {icon}
+        {!hideCount ? (
+          <span className="text-sm font-medium">{count}</span>
+        ) : null}
+      </button>
+    </Tooltip>
   );
 }

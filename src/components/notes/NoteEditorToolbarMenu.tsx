@@ -12,6 +12,7 @@ import {
   inlineSelectItemClassName,
 } from '@/components/ui/InlineSelect';
 import { ContextMenuButton, ContextMenuDivider } from '@/components/ui/popover';
+import { Tooltip } from '@/components/ui/Tooltip';
 import * as Popover from '@radix-ui/react-popover';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import clsx from 'clsx';
@@ -81,17 +82,19 @@ export function NoteEditorToolbarMenu({
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger asChild>
-        <Toolbar.Button asChild>
-          <HeaderButton
-            icon={<MoreHorizontal size={18} />}
-            label={t('notes:moreActions')}
-            disableTooltip
-            aria-expanded={open}
-            aria-haspopup="menu"
-          />
-        </Toolbar.Button>
-      </Popover.Trigger>
+      <Tooltip content={t('notes:moreActions')}>
+        <Popover.Trigger asChild>
+          <Toolbar.Button asChild>
+            <HeaderButton
+              icon={<MoreHorizontal size={18} />}
+              label={t('notes:moreActions')}
+              disableTooltip
+              aria-expanded={open}
+              aria-haspopup="menu"
+            />
+          </Toolbar.Button>
+        </Popover.Trigger>
+      </Tooltip>
 
       <Popover.Portal>
         <Popover.Content

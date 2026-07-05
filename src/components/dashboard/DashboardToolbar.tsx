@@ -1,6 +1,7 @@
 import { HeaderButton } from '@/components/ui/HeaderButton';
 import { headerButtonVariants } from '@/components/ui/headerButtonVariants';
 import { ContextMenuButton, PopoverContent } from '@/components/ui/popover';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { useDashboardStore, type WidgetType } from '@/stores/dashboardStore';
 import * as Popover from '@radix-ui/react-popover';
 import * as Toolbar from '@radix-ui/react-toolbar';
@@ -76,18 +77,20 @@ export function DashboardToolbar({
       </div>
 
       <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger asChild>
-          <Toolbar.Button asChild>
-            <HeaderButton
-              icon={<Plus size={18} />}
-              label={t('dashboard:addWidget')}
-              variant="persistent"
-              disableTooltip
-              aria-expanded={open}
-              aria-haspopup="menu"
-            />
-          </Toolbar.Button>
-        </Popover.Trigger>
+        <Tooltip content={t('dashboard:addWidget')}>
+          <Popover.Trigger asChild>
+            <Toolbar.Button asChild>
+              <HeaderButton
+                icon={<Plus size={18} />}
+                label={t('dashboard:addWidget')}
+                variant="persistent"
+                disableTooltip
+                aria-expanded={open}
+                aria-haspopup="menu"
+              />
+            </Toolbar.Button>
+          </Popover.Trigger>
+        </Tooltip>
 
         <PopoverContent width="w-56">
           {WIDGET_MENU.map(({ type, icon, labelKey }) => (

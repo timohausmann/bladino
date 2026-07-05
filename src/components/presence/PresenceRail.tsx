@@ -1,5 +1,6 @@
 import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
+import { Tooltip } from '@/components/ui/Tooltip';
 import type { UsersLastActionQuery } from '@/graphql';
 import { useUiStore } from '@/stores/uiStore';
 import * as Collapsible from '@radix-ui/react-collapsible';
@@ -78,34 +79,42 @@ export function PresenceRail({ users = [] }: PresenceRailProps) {
         open={isPresenceRailOpen}
         onOpenChange={setPresenceRailOpen}
       >
-        <Collapsible.Trigger asChild>
-          <button
-            type="button"
-            className={clsx([
-              'group flex w-full items-center justify-between gap-3',
-              'cursor-pointer text-left',
-            ])}
-            aria-label={
-              isPresenceRailOpen ? t('presence:collapse') : t('presence:expand')
-            }
-          >
-            <h2 className="text-foreground text-sm font-semibold">
-              {t('presence:community')}
-            </h2>
+        <Tooltip
+          content={
+            isPresenceRailOpen ? t('presence:collapse') : t('presence:expand')
+          }
+        >
+          <Collapsible.Trigger asChild>
+            <button
+              type="button"
+              className={clsx([
+                'group flex w-full items-center justify-between gap-3',
+                'cursor-pointer text-left',
+              ])}
+              aria-label={
+                isPresenceRailOpen
+                  ? t('presence:collapse')
+                  : t('presence:expand')
+              }
+            >
+              <h2 className="text-foreground text-sm font-semibold">
+                {t('presence:community')}
+              </h2>
 
-            <span className="flex shrink-0 items-center gap-2">
-              <ChevronDown
-                size={16}
-                className={clsx([
-                  'text-muted-foreground',
-                  'transition-transform duration-200',
-                  'group-data-[state=open]:rotate-180',
-                ])}
-                aria-hidden
-              />
-            </span>
-          </button>
-        </Collapsible.Trigger>
+              <span className="flex shrink-0 items-center gap-2">
+                <ChevronDown
+                  size={16}
+                  className={clsx([
+                    'text-muted-foreground',
+                    'transition-transform duration-200',
+                    'group-data-[state=open]:rotate-180',
+                  ])}
+                  aria-hidden
+                />
+              </span>
+            </button>
+          </Collapsible.Trigger>
+        </Tooltip>
 
         <Collapsible.Content
           className={clsx([

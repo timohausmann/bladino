@@ -24,6 +24,7 @@ import {
   ContextMenuDivider,
   PopoverContent,
 } from '@/components/ui/popover';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { toast } from '@/components/ui/toast';
 
 interface PostContextMenuProps {
@@ -126,15 +127,18 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
   return (
     <>
       <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger asChild>
-          <button
-            className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-0 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
-            aria-label={t('posts:postOptions')}
-            title={t('posts:moreOptions')}
-          >
-            <MoreVertical size={16} />
-          </button>
-        </Popover.Trigger>
+        <Tooltip content={t('posts:moreOptions')}>
+          <Popover.Trigger asChild>
+            <button
+              className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-0 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+              aria-label={t('posts:postOptions')}
+              aria-expanded={open}
+              aria-haspopup="menu"
+            >
+              <MoreVertical size={16} />
+            </button>
+          </Popover.Trigger>
+        </Tooltip>
 
         <PopoverContent>
           <ContextMenuButton

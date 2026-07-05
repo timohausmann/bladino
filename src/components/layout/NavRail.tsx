@@ -6,6 +6,7 @@ import {
   getUnreadNotificationCount,
 } from '@/lib/mockNotifications';
 import { NotificationButton } from '@/components/ui/NotificationButton';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
 import { NavRailIconLink } from '@/components/layout/NavRailIconLink';
 import { NavRailLink } from '@/components/layout/NavRailLink';
@@ -69,43 +70,49 @@ export function NavRail() {
               </Link>
             ) : (
               <NavRailIconTrack>
-                <Link to="/" aria-label={t('navigation:dashboard')}>
-                  <img
-                    src="/icon-trashnet-2026.svg"
-                    alt="trashnet"
-                    className="block h-8 w-8 shrink-0"
-                  />
-                </Link>
+                <Tooltip content={t('navigation:dashboard')}>
+                  <Link to="/" aria-label={t('navigation:dashboard')}>
+                    <img
+                      src="/icon-trashnet-2026.svg"
+                      alt="trashnet"
+                      className="block h-8 w-8 shrink-0"
+                    />
+                  </Link>
+                </Tooltip>
               </NavRailIconTrack>
             )}
             {expanded ? (
-              <button
-                type="button"
-                onClick={toggleNavRail}
-                className={clsx(
-                  'ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
-                  'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
-                  'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
-                  'transition-colors duration-150',
-                )}
-                aria-label={t('navigation:collapseNavigation')}
-              >
-                <PanelLeftClose size={18} />
-              </button>
+              <Tooltip content={t('navigation:collapseNavigation')}>
+                <button
+                  type="button"
+                  onClick={toggleNavRail}
+                  className={clsx(
+                    'ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                    'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
+                    'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
+                    'transition-colors duration-150',
+                  )}
+                  aria-label={t('navigation:collapseNavigation')}
+                >
+                  <PanelLeftClose size={18} />
+                </button>
+              </Tooltip>
             ) : null}
           </div>
 
           {!expanded ? (
-            <button
-              type="button"
-              onClick={toggleNavRail}
-              className={navRailRowClassName()}
-              aria-label={t('navigation:expandNavigation')}
-            >
-              <NavRailIconTrack>
-                <PanelLeftOpen size={18} />
-              </NavRailIconTrack>
-            </button>
+            <Tooltip content={t('navigation:expandNavigation')}>
+              <button
+                type="button"
+                onClick={toggleNavRail}
+                className={navRailRowClassName()}
+                aria-label={t('navigation:expandNavigation')}
+              >
+                <NavRailIconTrack>
+                  <PanelLeftOpen size={18} />
+                </NavRailIconTrack>
+              </button>
+            </Tooltip>
           ) : null}
         </div>
       </div>

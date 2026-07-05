@@ -3,6 +3,7 @@ import {
   navRailLabelClassName,
   navRailRowClassName,
 } from '@/components/layout/navRailLayout';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';
 
@@ -41,18 +42,20 @@ export function NavRailLink({
   );
 
   if (disabled) {
-    return (
-      <div className={inactiveClassName} aria-disabled title={label}>
+    const item = (
+      <div className={inactiveClassName} aria-disabled aria-label={label}>
         {content}
       </div>
     );
+
+    return expanded ? item : <Tooltip content={label}>{item}</Tooltip>;
   }
 
-  return (
+  const link = (
     <Link
       to={to}
       params={params}
-      title={expanded ? undefined : label}
+      aria-label={label}
       activeOptions={{ exact }}
       className={inactiveClassName}
       activeProps={{ className: activeClassName }}
@@ -61,4 +64,6 @@ export function NavRailLink({
       {content}
     </Link>
   );
+
+  return expanded ? link : <Tooltip content={label}>{link}</Tooltip>;
 }
