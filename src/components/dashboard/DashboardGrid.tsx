@@ -1,9 +1,12 @@
 import type { UsersLastActionQuery } from '@/graphql';
 import {
   DASHBOARD_MARGIN,
+  DASHBOARD_MIN_ROW_HEIGHT,
   DASHBOARD_MIN_ROWS,
   DASHBOARD_RESIZE_HANDLES,
+  normalizeDashboardLayout,
   useDashboardStore,
+  type WidgetType,
 } from '@/stores/dashboardStore';
 import {
   memo,
@@ -12,6 +15,7 @@ import {
   useLayoutEffect,
   useMemo,
   useState,
+  type MutableRefObject,
   type RefObject,
 } from 'react';
 import ReactGridLayout, {
@@ -19,56 +23,32 @@ import ReactGridLayout, {
   useResponsiveLayout,
   type EventCallback,
   type Layout,
-  type LayoutItem,
 } from 'react-grid-layout';
 import { noCompactor, verticalCompactor } from 'react-grid-layout/core';
 import clsx from 'clsx';
 import { DashboardGridBackground } from './DashboardGridBackground';
-import {
-  computeDashboardGridMetrics,
-  computeMobileDashboardGridMetrics,
-} from './dashboardGridMetrics';
+import { computeDashboardGridMetrics } from './dashboardGridMetrics';
 import {
   DASHBOARD_BREAKPOINTS,
   DASHBOARD_COLS_BY_BREAKPOINT,
-  isMobileDashboardBreakpoint,
-  isPersistedDashboardBreakpoint,
   type DashboardBreakpoint,
 } from './dashboardResponsive';
 import { CommunityWidget } from './widgets/CommunityWidget';
 import { PostOfTheDayWidget } from './widgets/PostOfTheDayWidget';
 import { ServerStatusWidget } from './widgets/ServerStatusWidget';
 import { WeatherWidget } from './widgets/WeatherWidget';
-import type { WidgetType } from '@/stores/dashboardStore';
 
 interface DashboardGridProps {
   presenceUsers?: UsersLastActionQuery['usersLastAction'];
   gridRef?: RefObject<HTMLDivElement | null>;
   isDragging?: boolean;
+  skipLayoutChangeRef?: MutableRefObject<boolean>;
   onDragStart?: EventCallback;
   onDrag?: EventCallback;
   onDragStop?: EventCallback;
-  shouldSkipLayoutChange?: () => boolean;
 }
-
-const WIDGET_MIN_W = 2;
-const WIDGET_MIN_H = 2;
 
 const DASHBOARD_COMPACTOR = { ...noCompactor, preventCollision: true };
-
-function normalizeLayout(layout: Layout): LayoutItem[] {
-  return layout.map(({ i, x, y, w, h, static: isStatic, minW, minH }) => ({
-    i,
-    x,
-    y,
-    w,
-    h,
-    minW: minW ?? WIDGET_MIN_W,
-    minH: minH ?? WIDGET_MIN_H,
-    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-    ...(isStatic ? { static: isStatic } : {}),
-  }));
-}
 
 function layoutRows(layout: Layout): number {
   const usedRows = layout.reduce(
@@ -85,7 +65,6 @@ function layoutMatchesStore(nextLayout: Layout, storedLayout: Layout): boolean {
   }
 
   const nextIds = new Set(nextLayout.map((item) => item.i));
-
   return storedLayout.every((item) => nextIds.has(item.i));
 }
 
@@ -101,10 +80,7 @@ function useContainerHeight(
     const node = containerRef.current;
     if (!node) return;
 
-    const updateHeight = () => {
-      setHeight(node.clientHeight);
-    };
-
+    const updateHeight = () => setHeight(node.clientHeight);
     updateHeight();
 
     const observer = new ResizeObserver(updateHeight);
@@ -123,10 +99,10 @@ export function DashboardGrid({
   presenceUsers = [],
   gridRef,
   isDragging = false,
+  skipLayoutChangeRef,
   onDragStart,
   onDrag,
   onDragStop,
-  shouldSkipLayoutChange,
 }: DashboardGridProps) {
   const { width, containerRef, mounted } = useContainerWidth();
   const storedLayout = useDashboardStore((store) => store.layout);
@@ -141,7 +117,7 @@ export function DashboardGrid({
   );
 
   const desktopLayouts = useMemo(
-    () => ({ lg: normalizeLayout(storedLayout) }),
+    () => ({ lg: normalizeDashboardLayout(storedLayout) }),
     [storedLayout],
   );
 
@@ -155,15 +131,15 @@ export function DashboardGrid({
     });
 
   useLayoutEffect(() => {
-    if (!hasHydrated) {
-      return;
-    }
+    if (!hasHydrated) return;
 
-    const currentLayout = useDashboardStore.getState().layout;
-    setLayoutForBreakpoint('lg', normalizeLayout(currentLayout));
+    setLayoutForBreakpoint(
+      'lg',
+      normalizeDashboardLayout(useDashboardStore.getState().layout),
+    );
   }, [hasHydrated, layoutVersion, setLayoutForBreakpoint]);
 
-  const isMobile = isMobileDashboardBreakpoint(breakpoint);
+  const isMobile = breakpoint === 'xs';
 
   useEffect(() => {
     const syncHydration = () => setHasHydrated(true);
@@ -180,7 +156,7 @@ export function DashboardGrid({
     const rows = layoutRows(layout);
 
     if (isMobile) {
-      return computeMobileDashboardGridMetrics(rows);
+      return { rowCount: rows, rowHeight: DASHBOARD_MIN_ROW_HEIGHT };
     }
 
     return computeDashboardGridMetrics(containerHeight, rows);
@@ -198,11 +174,12 @@ export function DashboardGrid({
 
   const onLayoutChange = useCallback(
     (nextLayout: Layout) => {
-      if (shouldSkipLayoutChange?.()) {
+      if (skipLayoutChangeRef?.current) {
+        skipLayoutChangeRef.current = false;
         return;
       }
 
-      const normalized = normalizeLayout(nextLayout);
+      const normalized = normalizeDashboardLayout(nextLayout);
 
       // Ignore stale grid updates that still contain removed or not-yet-added widgets.
       if (!layoutMatchesStore(normalized, storedLayout)) {
@@ -211,7 +188,7 @@ export function DashboardGrid({
 
       setLayoutForBreakpoint(breakpoint as DashboardBreakpoint, normalized);
 
-      if (isPersistedDashboardBreakpoint(breakpoint)) {
+      if (breakpoint === 'lg') {
         persistLayout(normalized);
       }
     },
@@ -219,7 +196,7 @@ export function DashboardGrid({
       breakpoint,
       persistLayout,
       setLayoutForBreakpoint,
-      shouldSkipLayoutChange,
+      skipLayoutChangeRef,
       storedLayout,
     ],
   );

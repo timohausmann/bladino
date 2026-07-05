@@ -1,7 +1,4 @@
-/**
- * Tailwind-aligned dashboard breakpoints.
- * lg = full desktop grid (persisted), sm = tablet, xs = phone stack.
- */
+/** Tailwind-aligned breakpoints: lg = desktop (persisted), xs = mobile stack. */
 export const DASHBOARD_BREAKPOINTS = {
   lg: 1024,
   sm: 640,
@@ -16,16 +13,3 @@ export const DASHBOARD_COLS_BY_BREAKPOINT: Record<DashboardBreakpoint, number> =
     sm: 6,
     xs: 1,
   };
-
-export function isMobileDashboardBreakpoint(
-  breakpoint: string,
-): breakpoint is 'xs' {
-  return breakpoint === 'xs';
-}
-
-/** Only the large desktop layout is saved to localStorage. */
-export function isPersistedDashboardBreakpoint(
-  breakpoint: string,
-): breakpoint is 'lg' {
-  return breakpoint === 'lg';
-}

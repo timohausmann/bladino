@@ -1,11 +1,7 @@
 import { HeaderButton } from '@/components/ui/HeaderButton';
 import { headerButtonVariants } from '@/components/ui/headerButtonVariants';
 import { ContextMenuButton, PopoverContent } from '@/components/ui/popover';
-import {
-  ALL_WIDGET_TYPES,
-  useDashboardStore,
-  type WidgetType,
-} from '@/stores/dashboardStore';
+import { useDashboardStore, type WidgetType } from '@/stores/dashboardStore';
 import * as Popover from '@radix-ui/react-popover';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import clsx from 'clsx';
@@ -18,22 +14,19 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react';
-import { useState, type RefObject } from 'react';
+import { useMemo, useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const WIDGET_ICONS: Record<WidgetType, LucideIcon> = {
-  community: Users,
-  weather: CloudSun,
-  postOfTheDay: Newspaper,
-  serverStatus: Server,
-};
-
-const WIDGET_LABEL_KEYS: Record<WidgetType, string> = {
-  community: 'presence:community',
-  weather: 'dashboard:weather',
-  postOfTheDay: 'dashboard:postOfTheDay',
-  serverStatus: 'dashboard:serverStatus',
-};
+const WIDGET_MENU: Array<{
+  type: WidgetType;
+  icon: LucideIcon;
+  labelKey: string;
+}> = [
+  { type: 'community', icon: Users, labelKey: 'presence:community' },
+  { type: 'weather', icon: CloudSun, labelKey: 'dashboard:weather' },
+  { type: 'postOfTheDay', icon: Newspaper, labelKey: 'dashboard:postOfTheDay' },
+  { type: 'serverStatus', icon: Server, labelKey: 'dashboard:serverStatus' },
+];
 
 interface DashboardToolbarProps {
   trashRef: RefObject<HTMLDivElement | null>;
@@ -50,7 +43,10 @@ export function DashboardToolbar({
   const layout = useDashboardStore((store) => store.layout);
   const addWidget = useDashboardStore((store) => store.addWidget);
   const [open, setOpen] = useState(false);
-  const activeIds = new Set(layout.map((item) => item.i));
+  const activeIds = useMemo(
+    () => new Set(layout.map((item) => item.i)),
+    [layout],
+  );
 
   return (
     <Toolbar.Root
@@ -94,18 +90,14 @@ export function DashboardToolbar({
         </Popover.Trigger>
 
         <PopoverContent width="w-56">
-          {ALL_WIDGET_TYPES.map((type) => (
+          {WIDGET_MENU.map(({ type, icon, labelKey }) => (
             <ContextMenuButton
               key={type}
               id={type}
-              label={t(WIDGET_LABEL_KEYS[type])}
-              icon={WIDGET_ICONS[type]}
+              label={t(labelKey)}
+              icon={icon}
               disabled={activeIds.has(type)}
               onClick={() => {
-                if (activeIds.has(type)) {
-                  return;
-                }
-
                 addWidget(type);
                 setOpen(false);
               }}

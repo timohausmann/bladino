@@ -57,7 +57,7 @@ function layoutItem(type: WidgetType) {
 
 const DEFAULT_LAYOUT: Layout = [layoutItem('community')];
 
-function normalizeStoredLayout(layout: Layout): Layout {
+function normalizeDashboardLayout(layout: Layout): Layout {
   return layout.map((item) => ({
     i: item.i,
     x: item.x,
@@ -85,7 +85,7 @@ export const useDashboardStore = create<DashboardState>()(
     (set) => ({
       layout: DEFAULT_LAYOUT,
       layoutVersion: 0,
-      setLayout: (layout) => set({ layout: normalizeStoredLayout(layout) }),
+      setLayout: (layout) => set({ layout: normalizeDashboardLayout(layout) }),
       addWidget: (type) =>
         set((state) => {
           if (state.layout.some((item) => item.i === type)) {
@@ -109,3 +109,5 @@ export const useDashboardStore = create<DashboardState>()(
     },
   ),
 );
+
+export { normalizeDashboardLayout };

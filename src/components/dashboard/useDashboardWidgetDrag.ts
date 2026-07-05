@@ -18,20 +18,12 @@ function isOver(event: Event, element: HTMLElement | null): boolean {
   );
 }
 
-function widgetId(
-  oldItem: LayoutItem | null,
-  newItem: LayoutItem | null,
-): WidgetType | null {
-  const id = newItem?.i ?? oldItem?.i;
-  return id ? (id as WidgetType) : null;
-}
-
 export function useDashboardWidgetDrag(
   trashRef: RefObject<HTMLDivElement | null>,
   gridRef: RefObject<HTMLDivElement | null>,
 ) {
   const removeWidget = useDashboardStore((store) => store.removeWidget);
-  const skipNextLayoutChange = useRef(false);
+  const skipLayoutChangeRef = useRef(false);
   const [draggingId, setDraggingId] = useState<WidgetType | null>(null);
   const [overTrash, setOverTrash] = useState(false);
   const [fadeWidget, setFadeWidget] = useState(false);
@@ -49,11 +41,8 @@ export function useDashboardWidgetDrag(
   );
 
   const onDragStart = useCallback<EventCallback>(
-    (_layout, oldItem, newItem) => {
-      const id = widgetId(oldItem, newItem);
-      if (id) {
-        setDraggingId(id);
-      }
+    (_layout, _oldItem, newItem) => {
+      setDraggingId((newItem?.i as WidgetType) ?? null);
     },
     [],
   );
@@ -66,11 +55,11 @@ export function useDashboardWidgetDrag(
   );
 
   const onDragStop = useCallback<EventCallback>(
-    (_layout, oldItem, newItem, _placeholder, event) => {
-      const id = widgetId(oldItem, newItem);
+    (_layout, _oldItem, newItem, _placeholder, event) => {
+      const id = newItem?.i as WidgetType | undefined;
 
       if (id && isOver(event, trashRef.current)) {
-        skipNextLayoutChange.current = true;
+        skipLayoutChangeRef.current = true;
         removeWidget(id);
       }
 
@@ -81,22 +70,13 @@ export function useDashboardWidgetDrag(
     [removeWidget, trashRef],
   );
 
-  const shouldSkipLayoutChange = useCallback(() => {
-    if (!skipNextLayoutChange.current) {
-      return false;
-    }
-
-    skipNextLayoutChange.current = false;
-    return true;
-  }, []);
-
   return {
     draggingId,
     overTrash,
     fadeWidget,
+    skipLayoutChangeRef,
     onDragStart,
     onDrag,
     onDragStop,
-    shouldSkipLayoutChange,
   };
 }

@@ -43,10 +43,10 @@ export function Dashboard() {
         gridRef={gridRef}
         presenceUsers={presenceData?.usersLastAction ?? []}
         isDragging={drag.draggingId !== null}
+        skipLayoutChangeRef={drag.skipLayoutChangeRef}
         onDragStart={drag.onDragStart}
         onDrag={drag.onDrag}
         onDragStop={drag.onDragStop}
-        shouldSkipLayoutChange={drag.shouldSkipLayoutChange}
       />
     </div>
   );
