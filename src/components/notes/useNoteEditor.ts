@@ -15,6 +15,11 @@ import i18n from '@/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
+interface NoteDraft {
+  title: string;
+  body: string;
+}
+
 export function useNoteEditor(
   noteId: string,
   onDeleted?: (deletedId: string) => void,
@@ -27,6 +32,7 @@ export function useNoteEditor(
   const updateNote = useGraphQLMutation(UpdateNoteDocument);
   const deleteNote = useGraphQLMutation(DeleteNoteDocument);
 
+  const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [saveStatus, setSaveStatus] = useState<NoteSaveStatus>('idle');
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -35,16 +41,21 @@ export function useNoteEditor(
 
   useEffect(() => {
     if (note) {
+      setTitle(note.title ?? '');
       setBody(note.body);
       setSaveStatus('idle');
     }
   }, [note?.id]);
 
-  const persistBody = useCallback(
-    async (value: string) => {
+  const persistNote = useCallback(
+    async ({ title: nextTitle, body: nextBody }: NoteDraft) => {
       setSaveStatus('saving');
       try {
-        await updateNote.mutateAsync({ id: noteId, body: value });
+        await updateNote.mutateAsync({
+          id: noteId,
+          title: nextTitle,
+          body: nextBody,
+        });
         await queryClient.invalidateQueries({ queryKey: ['Notes'] });
         await queryClient.invalidateQueries({
           queryKey: ['Note', { id: noteId }],
@@ -58,14 +69,23 @@ export function useNoteEditor(
   );
 
   const debouncedSave = useDebouncedCallback(
-    persistBody,
+    persistNote,
     NOTE_SAVE_DEBOUNCE_MS,
   );
 
+  const queueSave = (draft: NoteDraft) => {
+    setSaveStatus('pending');
+    debouncedSave(draft);
+  };
+
+  const handleTitleChange = (value: string) => {
+    setTitle(value);
+    queueSave({ title: value, body });
+  };
+
   const handleChange = (value: string) => {
     setBody(value);
-    setSaveStatus('pending');
-    debouncedSave(value);
+    queueSave({ title, body: value });
   };
 
   const handleEmojiSelect = (emoji: string) => {
@@ -89,6 +109,7 @@ export function useNoteEditor(
   };
 
   return {
+    title,
     body,
     saveStatus,
     deleteOpen,
@@ -96,6 +117,7 @@ export function useNoteEditor(
     isLoading: isPending,
     isError,
     note,
+    handleTitleChange,
     handleChange,
     handleEmojiSelect,
     handleDelete,

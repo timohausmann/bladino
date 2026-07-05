@@ -46,7 +46,7 @@ export function Notes() {
 
   const handleCreate = async () => {
     try {
-      const result = await addNote.mutateAsync({ body: '' });
+      const result = await addNote.mutateAsync({});
       await queryClient.invalidateQueries({ queryKey: ['Notes'] });
       if (result.addNote) {
         navigate({ to: '/notes/$id', params: { id: result.addNote.id } });

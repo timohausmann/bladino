@@ -143,7 +143,8 @@ export type MutationAddCommentArgs = {
 
 
 export type MutationAddNoteArgs = {
-  body: Scalars['String']['input'];
+  body?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -264,8 +265,9 @@ export type MutationUpdateCommentArgs = {
 
 
 export type MutationUpdateNoteArgs = {
-  body: Scalars['String']['input'];
+  body?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -300,6 +302,7 @@ export type Note = Post & {
   dateCreated?: Maybe<Scalars['Date']['output']>;
   dateEdited?: Maybe<Scalars['Date']['output']>;
   id: Scalars['ID']['output'];
+  title?: Maybe<Scalars['String']['output']>;
   user: User;
   voteNum?: Maybe<Scalars['Int']['output']>;
   votes?: Maybe<Array<Maybe<Vote>>>;

@@ -8,6 +8,7 @@
   "sort": "Notizen sortieren",
   "loading": "Notiz wird geladen…",
   "editorPlaceholder": "Los schreiben…",
+  "titlePlaceholder": "Titel",
   "deleteTitle": "Notiz löschen",
   "deleteDescription": "Diese Notiz wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
   "delete": "Notiz löschen",

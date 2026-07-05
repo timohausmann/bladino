@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 interface NotesSidebarListNote {
   id: string;
+  title?: string | null;
   body: string;
   dateCreated?: string | null;
   dateEdited?: string | null;
@@ -38,7 +39,7 @@ export function NotesSidebarList({
       {notes.map((note) => (
         <ListItem
           key={note.id}
-          title={noteTitle(note.body)}
+          title={noteTitle(note)}
           meta={t('notes:editedMeta', {
             date: formatCommentDate(note.dateEdited ?? note.dateCreated),
           })}

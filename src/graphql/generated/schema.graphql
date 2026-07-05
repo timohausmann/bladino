@@ -166,7 +166,7 @@ type Mutation {
   addComment(body: String, channel: ID, files: [ID!], parent: ID): Comment!
 
   """"""
-  addNote(body: String!): Note!
+  addNote(body: String, title: String): Note!
 
   """"""
   addUser(name: String!, password: String): User!
@@ -245,7 +245,7 @@ type Mutation {
   updateComment(body: String, files: [ID!], id: ID!): Comment!
 
   """"""
-  updateNote(body: String!, id: ID!): Note!
+  updateNote(body: String, id: ID!, title: String): Note!
 
   """"""
   updatePassword(id: ID!, newpass: String!, oldpass: String!): Boolean
@@ -270,6 +270,9 @@ type Note implements Post {
 
   """"""
   id: ID!
+
+  """"""
+  title: String
 
   """"""
   user: User!

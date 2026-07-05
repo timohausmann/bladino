@@ -14,6 +14,7 @@ interface NoteEditorProps {
 export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
   const { t } = useTranslation();
   const {
+    title,
     body,
     saveStatus,
     deleteOpen,
@@ -21,6 +22,7 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
     isLoading,
     isError,
     note,
+    handleTitleChange,
     handleChange,
     handleEmojiSelect,
     handleDelete,
@@ -61,6 +63,14 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
       />
 
       <div className="flex min-h-0 flex-1 flex-col p-4">
+        <input
+          type="text"
+          value={title}
+          onChange={(event) => handleTitleChange(event.target.value)}
+          placeholder={t('notes:titlePlaceholder')}
+          aria-label={t('notes:titlePlaceholder')}
+          className="mb-3 w-full border-none bg-transparent p-0 text-xl font-semibold text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-100 dark:placeholder:text-neutral-500"
+        />
         <Textarea
           value={body}
           onChange={handleChange}

@@ -8,6 +8,7 @@
   "sort": "Sort notes",
   "loading": "Loading note…",
   "editorPlaceholder": "Start writing…",
+  "titlePlaceholder": "Title",
   "deleteTitle": "Delete note",
   "deleteDescription": "This note will be permanently deleted. This action cannot be undone.",
   "delete": "Delete note",

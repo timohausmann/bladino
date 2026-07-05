@@ -1,6 +1,7 @@
 query Notes {
   notes {
     id
+    title
     body
     dateCreated
     dateEdited
@@ -10,24 +11,27 @@ query Notes {
 query Note($id: ID!) {
   note(id: $id) {
     id
+    title
     body
     dateCreated
     dateEdited
   }
 }
 
-mutation AddNote($body: String!) {
-  addNote(body: $body) {
+mutation AddNote($body: String, $title: String) {
+  addNote(body: $body, title: $title) {
     id
+    title
     body
     dateCreated
     dateEdited
   }
 }
 
-mutation UpdateNote($id: ID!, $body: String!) {
-  updateNote(id: $id, body: $body) {
+mutation UpdateNote($id: ID!, $body: String, $title: String) {
+  updateNote(id: $id, body: $body, title: $title) {
     id
+    title
     body
     dateCreated
     dateEdited
