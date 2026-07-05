@@ -1,7 +1,7 @@
 export { getNextNoteIdAfterDelete } from './getNextNoteIdAfterDelete';
 export { NoteEditor } from './NoteEditor';
 export { NoteEditorToolbar } from './NoteEditorToolbar';
-export { NoteSaveStatusLabel } from './NoteSaveStatusLabel';
+export { NoteSaveStatusIndicator } from './NoteSaveStatusIndicator';
 export { NotesEmptyState } from './NotesEmptyState';
 export { NotesSidebarList } from './NotesSidebarList';
 export { NotesSidebarToolbar } from './NotesSidebarToolbar';

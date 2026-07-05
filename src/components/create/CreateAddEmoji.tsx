@@ -38,6 +38,7 @@ export function CreateAddEmoji({
           variant={variant}
           shape={shape}
           className={className}
+          disableTooltip
         />
       </Popover.Trigger>
 

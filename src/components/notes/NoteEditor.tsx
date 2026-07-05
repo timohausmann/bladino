@@ -1,9 +1,14 @@
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
-import { Textarea } from '@/components/ui/Textarea';
+import { NoteEditorBody } from '@/components/notes/NoteEditorBody';
 import { NoteEditorToolbar } from '@/components/notes/NoteEditorToolbar';
+import type {
+  NoteEditorFontFamily,
+  NoteEditorViewMode,
+} from '@/components/notes/types';
 import { useNoteEditor } from '@/components/notes/useNoteEditor';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface NoteEditorProps {
@@ -13,6 +18,8 @@ interface NoteEditorProps {
 
 export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
   const { t } = useTranslation();
+  const [viewMode, setViewMode] = useState<NoteEditorViewMode>('edit');
+  const [fontFamily, setFontFamily] = useState<NoteEditorFontFamily>('mono');
   const {
     title,
     body,
@@ -57,30 +64,23 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <NoteEditorToolbar
+        title={title}
         saveStatus={saveStatus}
-        onEmojiSelect={handleEmojiSelect}
+        viewMode={viewMode}
+        fontFamily={fontFamily}
+        onTitleChange={handleTitleChange}
+        onViewModeChange={setViewMode}
+        onFontFamilyChange={setFontFamily}
         onDelete={() => setDeleteOpen(true)}
       />
 
-      <div className="flex min-h-0 flex-1 flex-col p-4">
-        <input
-          type="text"
-          value={title}
-          onChange={(event) => handleTitleChange(event.target.value)}
-          placeholder={t('notes:titlePlaceholder')}
-          aria-label={t('notes:titlePlaceholder')}
-          className="mb-3 w-full border-none bg-transparent p-0 text-xl font-semibold text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-100 dark:placeholder:text-neutral-500"
-        />
-        <Textarea
-          value={body}
-          onChange={handleChange}
-          placeholder={t('notes:editorPlaceholder')}
-          resize="resize-none"
-          wrapperClassName="flex-1 min-h-0 flex flex-col"
-          className="h-full min-h-0 flex-1 overflow-y-auto rounded-none border-none bg-transparent p-0 text-base leading-relaxed focus:bg-transparent dark:bg-transparent dark:focus:bg-transparent"
-          rows={1}
-        />
-      </div>
+      <NoteEditorBody
+        body={body}
+        viewMode={viewMode}
+        fontFamily={fontFamily}
+        onBodyChange={handleChange}
+        onEmojiSelect={handleEmojiSelect}
+      />
 
       <ConfirmDialog
         open={deleteOpen}
