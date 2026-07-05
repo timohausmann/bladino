@@ -1,6 +1,10 @@
 {
-  "title": "Dashboard",
-  "subtitle": "Widgets per Griff ziehen, um das Raster neu anzuordnen.",
+  "welcome": "Willkommen, {{name}}",
+  "welcomeFallback": "Willkommen",
+  "toolbarLabel": "Dashboard-Aktionen",
+  "addWidget": "Widget hinzufügen",
+  "addWidgetAllAdded": "Alle Widgets sind bereits sichtbar.",
+  "removeWidgetDrop": "Widget hier ablegen zum Entfernen",
   "weather": "Wetter",
   "weatherClear": "Klar",
   "weatherPartlyCloudy": "Teilweise bewölkt",

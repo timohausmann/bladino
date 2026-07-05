@@ -1,6 +1,10 @@
 {
-  "title": "Dashboard",
-  "subtitle": "Drag widgets by their handle to rearrange the grid.",
+  "welcome": "Welcome, {{name}}",
+  "welcomeFallback": "Welcome",
+  "toolbarLabel": "Dashboard actions",
+  "addWidget": "Add widget",
+  "addWidgetAllAdded": "All widgets are already visible.",
+  "removeWidgetDrop": "Drop widget here to remove",
   "weather": "Weather",
   "weatherClear": "Clear",
   "weatherPartlyCloudy": "Partly cloudy",

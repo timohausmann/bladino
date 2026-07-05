@@ -1,7 +1,7 @@
 import type { MailFolder } from '@/components/mails/types';
 import { MAIL_FOLDERS } from '@/components/mails/types';
-import { HeaderButton } from '@/components/ui/HeaderButton';
 import { InlineSelect } from '@/components/ui/InlineSelect';
+import { ToolbarTooltipButton } from '@/components/ui/ToolbarTooltipButton';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import clsx from 'clsx';
 import { Plus, RefreshCw } from 'lucide-react';
@@ -31,15 +31,13 @@ export function MailsSidebarToolbar({
       className="flex shrink-0 items-center gap-1 border-b border-neutral-200 p-2 dark:border-neutral-800"
       aria-label={t('mail:listActions')}
     >
-      <Toolbar.Button asChild>
-        <HeaderButton
-          icon={<Plus size={18} />}
-          label={t('mail:newMail')}
-          variant="persistent"
-          onClick={onCompose}
-          disabled={isSending}
-        />
-      </Toolbar.Button>
+      <ToolbarTooltipButton
+        icon={<Plus size={18} />}
+        label={t('mail:newMail')}
+        variant="persistent"
+        onClick={onCompose}
+        disabled={isSending}
+      />
       <InlineSelect
         value={folder}
         onValueChange={onFolderChange}
@@ -50,20 +48,18 @@ export function MailsSidebarToolbar({
         ariaLabel={t('mail:folderLabel')}
       />
       <div className="ml-auto">
-        <Toolbar.Button asChild>
-          <HeaderButton
-            icon={
-              <RefreshCw
-                size={18}
-                className={clsx(isReloading && 'animate-spin')}
-              />
-            }
-            label={t('mail:reload')}
-            variant="default"
-            onClick={onReload}
-            disabled={isReloading}
-          />
-        </Toolbar.Button>
+        <ToolbarTooltipButton
+          icon={
+            <RefreshCw
+              size={18}
+              className={clsx(isReloading && 'animate-spin')}
+            />
+          }
+          label={t('mail:reload')}
+          variant="default"
+          onClick={onReload}
+          disabled={isReloading}
+        />
       </div>
     </Toolbar.Root>
   );

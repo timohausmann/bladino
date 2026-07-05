@@ -8,13 +8,18 @@ export type WidgetType =
   | 'postOfTheDay'
   | 'serverStatus';
 
+export const ALL_WIDGET_TYPES: WidgetType[] = [
+  'community',
+  'weather',
+  'postOfTheDay',
+  'serverStatus',
+];
+
 export const DASHBOARD_COLS = 12;
 export const DASHBOARD_MIN_ROWS = 8;
-/** Target minimum row height when calculating how many rows fit in the viewport. */
 export const DASHBOARD_MIN_ROW_HEIGHT = 72;
 export const DASHBOARD_MARGIN: readonly [number, number] = [16, 16];
 
-/** All edge and corner resize handles for dashboard widgets. */
 export const DASHBOARD_RESIZE_HANDLES = [
   's',
   'w',
@@ -26,178 +31,81 @@ export const DASHBOARD_RESIZE_HANDLES = [
   'ne',
 ] as const;
 
-const DEFAULT_LAYOUT: Layout = [
-  {
-    i: 'community',
-    x: 0,
-    y: 4,
-    w: 3,
-    h: 4,
-    minW: 2,
-    minH: 2,
-    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-  },
-  {
-    i: 'weather',
-    x: 3,
-    y: 4,
-    w: 3,
-    h: 4,
-    minW: 2,
-    minH: 2,
-    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-  },
-  {
-    i: 'postOfTheDay',
-    x: 6,
-    y: 4,
-    w: 3,
-    h: 4,
-    minW: 2,
-    minH: 2,
-    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-  },
-  {
-    i: 'serverStatus',
-    x: 9,
-    y: 6,
-    w: 2,
-    h: 2,
-    minW: 2,
-    minH: 2,
-    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-  },
-];
-
-const DEFAULT_WIDGET_TYPES: Record<string, WidgetType> = {
-  community: 'community',
-  weather: 'weather',
-  postOfTheDay: 'postOfTheDay',
-  serverStatus: 'serverStatus',
+const WIDGET_DEFAULTS: Record<
+  WidgetType,
+  { x: number; y: number; w: number; h: number }
+> = {
+  community: { x: 0, y: 4, w: 3, h: 4 },
+  weather: { x: 3, y: 4, w: 3, h: 4 },
+  postOfTheDay: { x: 6, y: 4, w: 3, h: 4 },
+  serverStatus: { x: 9, y: 6, w: 2, h: 2 },
 };
+
+function layoutItem(type: WidgetType) {
+  const { x, y, w, h } = WIDGET_DEFAULTS[type];
+  return {
+    i: type,
+    x,
+    y,
+    w,
+    h,
+    minW: 2,
+    minH: 2,
+    resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
+  };
+}
+
+const DEFAULT_LAYOUT: Layout = [layoutItem('community')];
+
+function normalizeStoredLayout(layout: Layout): Layout {
+  return layout.map((item) => ({
+    i: item.i,
+    x: item.x,
+    y: item.y,
+    w: item.w,
+    h: item.h,
+    minW: item.minW ?? 2,
+    minH: item.minH ?? 2,
+    resizeHandles: item.resizeHandles ?? [...DASHBOARD_RESIZE_HANDLES],
+    ...(item.static ? { static: item.static } : {}),
+  }));
+}
 
 interface DashboardState {
   layout: Layout;
-  widgetTypes: Record<string, WidgetType>;
+  /** Syncs grid after add/remove — RGL internal state lags behind the store. */
+  layoutVersion: number;
   setLayout: (layout: Layout) => void;
-  resetLayout: () => void;
-}
-
-interface PersistedDashboardState {
-  layout: Layout;
-  widgetTypes: Record<string, WidgetType>;
-}
-
-interface LegacyPersistedState {
-  widgets?: Array<{
-    id: string;
-    type: WidgetType;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  }>;
+  addWidget: (type: WidgetType) => void;
+  removeWidget: (type: WidgetType) => void;
 }
 
 export const useDashboardStore = create<DashboardState>()(
   persist(
     (set) => ({
       layout: DEFAULT_LAYOUT,
-      widgetTypes: DEFAULT_WIDGET_TYPES,
-      setLayout: (layout) =>
-        set({
-          layout: layout.map((item) => ({
-            i: item.i,
-            x: item.x,
-            y: item.y,
-            w: item.w,
-            h: item.h,
-            minW: item.minW ?? 2,
-            minH: item.minH ?? 2,
-            resizeHandles: item.resizeHandles ?? [...DASHBOARD_RESIZE_HANDLES],
-            ...(item.static ? { static: item.static } : {}),
-          })),
+      layoutVersion: 0,
+      setLayout: (layout) => set({ layout: normalizeStoredLayout(layout) }),
+      addWidget: (type) =>
+        set((state) => {
+          if (state.layout.some((item) => item.i === type)) {
+            return state;
+          }
+
+          return {
+            layout: [...state.layout, layoutItem(type)],
+            layoutVersion: state.layoutVersion + 1,
+          };
         }),
-      resetLayout: () =>
-        set({ layout: DEFAULT_LAYOUT, widgetTypes: DEFAULT_WIDGET_TYPES }),
+      removeWidget: (type) =>
+        set((state) => ({
+          layout: state.layout.filter((item) => item.i !== type),
+          layoutVersion: state.layoutVersion + 1,
+        })),
     }),
     {
       name: 'bladino.dashboard',
-      version: 4,
-      migrate: (persistedState, version) => {
-        let state = persistedState as PersistedDashboardState;
-
-        if (version === 0) {
-          const legacy = persistedState as LegacyPersistedState;
-          if (legacy.widgets?.length) {
-            state = {
-              layout: legacy.widgets.map((widget) => ({
-                i: widget.id,
-                x: widget.x,
-                y: widget.y,
-                w: widget.w,
-                h: widget.h,
-              })),
-              widgetTypes: Object.fromEntries(
-                legacy.widgets.map((widget) => [widget.id, widget.type]),
-              ),
-            };
-          }
-        }
-
-        if (
-          version < 2 &&
-          !state.layout.some((item) => item.i === 'serverStatus')
-        ) {
-          state = {
-            ...state,
-            layout: [
-              ...state.layout,
-              {
-                i: 'serverStatus',
-                x: 9,
-                y: 0,
-                w: 2,
-                h: 2,
-                minW: 2,
-                minH: 2,
-                resizeHandles: [...DASHBOARD_RESIZE_HANDLES],
-              },
-            ],
-            widgetTypes: {
-              ...state.widgetTypes,
-              serverStatus: 'serverStatus',
-            },
-          };
-        }
-
-        if (version < 3) {
-          state = {
-            ...state,
-            layout: state.layout.map((item) =>
-              item.i === 'serverStatus'
-                ? { ...item, w: 2, h: 2, minW: 2, minH: 2 }
-                : item,
-            ),
-          };
-        }
-
-        if (version < 4) {
-          const hadOnlyTopRow = state.layout.every((item) => item.y === 0);
-
-          if (hadOnlyTopRow) {
-            state = {
-              ...state,
-              layout: state.layout.map((item) => ({
-                ...item,
-                y: item.h === 2 ? 6 : 4,
-              })),
-            };
-          }
-        }
-
-        return state;
-      },
+      partialize: (state) => ({ layout: state.layout }),
     },
   ),
 );

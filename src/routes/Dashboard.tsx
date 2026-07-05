@@ -1,31 +1,53 @@
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
-import { DashboardGrid } from '@/components/dashboard';
+import { DashboardGrid, DashboardToolbar } from '@/components/dashboard';
+import { useDashboardWidgetDrag } from '@/components/dashboard/useDashboardWidgetDrag';
 import { UsersLastActionDocument, useGraphQLQuery } from '@/graphql';
-import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import { useEffect, useRef } from 'react';
 
-/**
- * Customizable dashboard with draggable widgets on a dot grid.
- */
 export function Dashboard() {
-  const { t } = useTranslation();
   const { data: presenceData } = useGraphQLQuery(UsersLastActionDocument);
+  const trashRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const drag = useDashboardWidgetDrag(trashRef, gridRef);
+
+  useEffect(() => {
+    const main = document.querySelector('main');
+    if (!main) {
+      return;
+    }
+
+    main.classList.toggle('dashboard-dragging', drag.draggingId !== null);
+
+    return () => main.classList.remove('dashboard-dragging');
+  }, [drag.draggingId]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <header className="shrink-0">
-        <h1 className="text-foreground text-2xl font-bold">
-          {t('dashboard:title')}
-        </h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {t('dashboard:subtitle')}
-        </p>
+    <div
+      className={clsx(
+        'relative -m-4 flex min-h-0 flex-1 flex-col',
+        drag.fadeWidget && 'dashboard-drag-faded',
+      )}
+    >
+      <header className="flex shrink-0 justify-end px-4 pt-4 pb-2">
+        <DashboardToolbar
+          trashRef={trashRef}
+          draggingId={drag.draggingId}
+          overTrash={drag.overTrash}
+        />
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col">
-        <DashboardGrid presenceUsers={presenceData?.usersLastAction ?? []} />
-      </div>
+      <DashboardGrid
+        gridRef={gridRef}
+        presenceUsers={presenceData?.usersLastAction ?? []}
+        isDragging={drag.draggingId !== null}
+        onDragStart={drag.onDragStart}
+        onDrag={drag.onDrag}
+        onDragStop={drag.onDragStop}
+        shouldSkipLayoutChange={drag.shouldSkipLayoutChange}
+      />
     </div>
   );
 }

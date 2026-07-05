@@ -9,6 +9,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type RefObject,
@@ -16,10 +17,12 @@ import {
 import ReactGridLayout, {
   useContainerWidth,
   useResponsiveLayout,
+  type EventCallback,
   type Layout,
   type LayoutItem,
 } from 'react-grid-layout';
 import { noCompactor, verticalCompactor } from 'react-grid-layout/core';
+import clsx from 'clsx';
 import { DashboardGridBackground } from './DashboardGridBackground';
 import {
   computeDashboardGridMetrics,
@@ -36,9 +39,16 @@ import { CommunityWidget } from './widgets/CommunityWidget';
 import { PostOfTheDayWidget } from './widgets/PostOfTheDayWidget';
 import { ServerStatusWidget } from './widgets/ServerStatusWidget';
 import { WeatherWidget } from './widgets/WeatherWidget';
+import type { WidgetType } from '@/stores/dashboardStore';
 
 interface DashboardGridProps {
   presenceUsers?: UsersLastActionQuery['usersLastAction'];
+  gridRef?: RefObject<HTMLDivElement | null>;
+  isDragging?: boolean;
+  onDragStart?: EventCallback;
+  onDrag?: EventCallback;
+  onDragStop?: EventCallback;
+  shouldSkipLayoutChange?: () => boolean;
 }
 
 const WIDGET_MIN_W = 2;
@@ -67,6 +77,16 @@ function layoutRows(layout: Layout): number {
   );
 
   return Math.max(DASHBOARD_MIN_ROWS, usedRows);
+}
+
+function layoutMatchesStore(nextLayout: Layout, storedLayout: Layout): boolean {
+  if (nextLayout.length !== storedLayout.length) {
+    return false;
+  }
+
+  const nextIds = new Set(nextLayout.map((item) => item.i));
+
+  return storedLayout.every((item) => nextIds.has(item.i));
 }
 
 function useContainerHeight(
@@ -99,10 +119,18 @@ function useContainerHeight(
 /**
  * Dot-grid dashboard backed by react-grid-layout with free positioning.
  */
-export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
+export function DashboardGrid({
+  presenceUsers = [],
+  gridRef,
+  isDragging = false,
+  onDragStart,
+  onDrag,
+  onDragStop,
+  shouldSkipLayoutChange,
+}: DashboardGridProps) {
   const { width, containerRef, mounted } = useContainerWidth();
   const storedLayout = useDashboardStore((store) => store.layout);
-  const widgetTypes = useDashboardStore((store) => store.widgetTypes);
+  const layoutVersion = useDashboardStore((store) => store.layoutVersion);
   const persistLayout = useDashboardStore((store) => store.setLayout);
   const [hasHydrated, setHasHydrated] = useState(() =>
     useDashboardStore.persist.hasHydrated(),
@@ -125,6 +153,15 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
       layouts: desktopLayouts,
       compactor: verticalCompactor,
     });
+
+  useLayoutEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
+    const currentLayout = useDashboardStore.getState().layout;
+    setLayoutForBreakpoint('lg', normalizeLayout(currentLayout));
+  }, [hasHydrated, layoutVersion, setLayoutForBreakpoint]);
 
   const isMobile = isMobileDashboardBreakpoint(breakpoint);
 
@@ -149,16 +186,42 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
     return computeDashboardGridMetrics(containerHeight, rows);
   }, [containerHeight, isMobile, layout]);
 
+  const setGridContainerRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef.current = node;
+      if (gridRef) {
+        gridRef.current = node;
+      }
+    },
+    [containerRef, gridRef],
+  );
+
   const onLayoutChange = useCallback(
     (nextLayout: Layout) => {
+      if (shouldSkipLayoutChange?.()) {
+        return;
+      }
+
       const normalized = normalizeLayout(nextLayout);
+
+      // Ignore stale grid updates that still contain removed or not-yet-added widgets.
+      if (!layoutMatchesStore(normalized, storedLayout)) {
+        return;
+      }
+
       setLayoutForBreakpoint(breakpoint as DashboardBreakpoint, normalized);
 
       if (isPersistedDashboardBreakpoint(breakpoint)) {
         persistLayout(normalized);
       }
     },
-    [breakpoint, persistLayout, setLayoutForBreakpoint],
+    [
+      breakpoint,
+      persistLayout,
+      setLayoutForBreakpoint,
+      shouldSkipLayoutChange,
+      storedLayout,
+    ],
   );
 
   const children = useMemo(
@@ -166,28 +229,30 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
       layout.map((item) => (
         <div key={item.i} className="h-full min-h-0">
           <WidgetShell
-            type={widgetTypes[item.i]}
+            type={item.i as WidgetType}
             presenceUsers={presenceUsers}
           />
         </div>
       )),
-    [layout, widgetTypes, presenceUsers],
+    [layout, presenceUsers],
   );
 
   if (!hasHydrated) {
-    return <div ref={containerRef} className="relative min-h-0 flex-1" />;
+    return (
+      <div ref={setGridContainerRef} className="relative min-h-0 flex-1" />
+    );
   }
 
   const gridReady = mounted && width > 0 && (isMobile || containerHeight > 0);
 
   return (
     <div
-      ref={containerRef}
-      className={
-        isMobile
-          ? 'relative min-h-0 flex-1 overflow-y-auto'
-          : 'relative min-h-0 flex-1'
-      }
+      ref={setGridContainerRef}
+      className={clsx(
+        'relative min-h-0 flex-1',
+        isDragging && 'overflow-visible',
+        isMobile && 'overflow-y-auto',
+      )}
     >
       {gridReady && (
         <div className={isMobile ? 'relative min-h-full' : 'absolute inset-0'}>
@@ -215,7 +280,7 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
             }}
             dragConfig={{
               enabled: !isMobile,
-              bounded: true,
+              bounded: false,
               handle: '.dashboard-widget-header',
               cancel: '.dashboard-widget-body, .dashboard-widget-body *',
             }}
@@ -224,6 +289,9 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
               handles: [...DASHBOARD_RESIZE_HANDLES],
             }}
             onLayoutChange={onLayoutChange}
+            onDragStart={onDragStart}
+            onDrag={onDrag}
+            onDragStop={onDragStop}
             className="dashboard-grid"
           >
             {children}
@@ -235,7 +303,7 @@ export function DashboardGrid({ presenceUsers = [] }: DashboardGridProps) {
 }
 
 interface WidgetShellProps {
-  type: string | undefined;
+  type: WidgetType;
   presenceUsers: UsersLastActionQuery['usersLastAction'];
 }
 
