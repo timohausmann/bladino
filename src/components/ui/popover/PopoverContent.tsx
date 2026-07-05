@@ -1,5 +1,5 @@
 import * as Popover from '@radix-ui/react-popover';
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 interface PopoverContentProps {
   children: React.ReactNode;
@@ -19,16 +19,12 @@ export function PopoverContent({
   return (
     <Popover.Portal>
       <Popover.Content
-        className={clsx(
-          'z-50 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900',
-          width,
-          className,
-        )}
+        className={twMerge('panel-surface z-50', width, 'p-2', className)}
         sideOffset={8}
         align="end"
       >
         <div className="space-y-1">{children}</div>
-        <Popover.Arrow className="fill-white dark:fill-neutral-700" />
+        <Popover.Arrow className="fill-panel" />
       </Popover.Content>
     </Popover.Portal>
   );

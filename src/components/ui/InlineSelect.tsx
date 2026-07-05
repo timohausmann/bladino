@@ -39,9 +39,6 @@ export const inlineSelectTriggerReadOnlyClassName = clsx(
   'cursor-default bg-transparent font-medium',
 );
 
-export const inlineSelectContentClassName =
-  'z-50 overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800';
-
 export const inlineSelectItemClassName =
   'flex cursor-pointer items-center justify-between gap-2 rounded px-3 py-2 text-sm text-neutral-900 outline-none select-none hover:bg-neutral-100 data-[highlighted]:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-700 dark:data-[highlighted]:bg-neutral-700';
 
@@ -79,7 +76,7 @@ export function InlineSelect<T extends string = string>({
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className={inlineSelectContentClassName}>
+        <Select.Content className="panel-surface z-50">
           <Select.Viewport className="p-1">
             {options.map((option) => {
               const isSelected = value === option.value;

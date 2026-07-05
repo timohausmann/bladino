@@ -1,4 +1,5 @@
 import { EmojiPicker as FrimoussePicker } from 'frimousse';
+import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
 
 interface EmojiPickerProps {
@@ -11,7 +12,10 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
 
   return (
     <FrimoussePicker.Root
-      className="isolate flex h-[368px] w-fit flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+      className={twMerge(
+        'panel-surface',
+        'isolate flex h-[368px] w-fit flex-col',
+      )}
       onEmojiSelect={(emoji) => {
         onEmojiSelect(emoji.emoji);
         onClose();

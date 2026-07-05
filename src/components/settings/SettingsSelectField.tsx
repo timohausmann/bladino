@@ -37,7 +37,7 @@ export function SettingsSelectField<T extends string>({
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
+          <Select.Content className="panel-surface">
             <Select.Viewport className="p-1">
               {options.map((option) => (
                 <Select.Item

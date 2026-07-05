@@ -40,10 +40,8 @@ export function AlertDialogContent({
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         className={twMerge(
-          'fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2',
-          'rounded-xl border border-neutral-200 dark:border-neutral-700',
-          'bg-white p-6 shadow-xl dark:bg-neutral-900',
-          'focus:outline-none',
+          'fixed top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2',
+          'panel-surface z-50 p-6 focus:outline-none',
           className,
         )}
       >

@@ -7,10 +7,7 @@ import type {
   NoteEditorViewMode,
 } from '@/components/notes/types';
 import { HeaderButton } from '@/components/ui/HeaderButton';
-import {
-  inlineSelectContentClassName,
-  inlineSelectItemClassName,
-} from '@/components/ui/InlineSelect';
+import { inlineSelectItemClassName } from '@/components/ui/InlineSelect';
 import { ContextMenuButton, ContextMenuDivider } from '@/components/ui/popover';
 import { Tooltip } from '@/components/ui/Tooltip';
 import * as Popover from '@radix-ui/react-popover';
@@ -98,7 +95,7 @@ export function NoteEditorToolbarMenu({
 
       <Popover.Portal>
         <Popover.Content
-          className={clsx(inlineSelectContentClassName, 'w-52 p-1')}
+          className={clsx('panel-surface z-50', 'w-52 p-1')}
           sideOffset={8}
           align="end"
         >

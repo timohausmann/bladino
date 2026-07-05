@@ -11,6 +11,8 @@
   --color-card: rgb(255 255 255 / 50%);
   --color-card-foreground: theme(colors.neutral.900);
   --color-card-border: rgb(255 255 255 / 100%);
+  --color-panel: theme(colors.white);
+  --color-panel-border: theme(colors.neutral.200);
 }
 
 /* Dark theme */
@@ -22,6 +24,8 @@
   --color-card: rgb(34 34 34 / 100%);
   --color-card-foreground: theme(colors.neutral.100);
   --color-card-border: rgb(255 255 255 / 5%);
+  --color-panel: theme(colors.neutral.800);
+  --color-panel-border: theme(colors.neutral.700);
 }
 
 /* Dark Transparent theme */
@@ -33,6 +37,8 @@
   --color-card: rgb(255 255 255 / 7.5%);
   --color-card-foreground: theme(colors.neutral.100);
   --color-card-border: rgb(255 255 255 / 10%);
+  --color-panel: theme(colors.neutral.800);
+  --color-panel-border: theme(colors.neutral.700);
 }
 
 /* Base layer - for base element styles */
@@ -135,6 +141,15 @@
   .btn-corner-squircle {
     border-radius: 20px;
     corner-shape: squircle;
+  }
+
+  /* Floating menus, popovers, selects, and dialogs */
+  .panel-surface {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-panel-border);
+    background-color: var(--color-panel);
+    box-shadow: var(--shadow-lg);
   }
 
   /* Loading shimmer — ::after so Tailwind bg-* classes stay intact */
