@@ -4,42 +4,42 @@
 
 @theme {
   /* Light theme (default) */
-  --color-background: theme(colors.neutral.100);
-  --color-foreground: theme(colors.neutral.900);
-  --color-muted: theme(colors.neutral.50);
-  --color-muted-foreground: theme(colors.neutral.500);
+  --color-background: var(--color-neutral-100);
+  --color-foreground: var(--color-neutral-900);
+  --color-muted: var(--color-neutral-50);
+  --color-muted-foreground: var(--color-neutral-500);
   --color-card: rgb(255 255 255 / 50%);
-  --color-card-foreground: theme(colors.neutral.900);
+  --color-card-foreground: var(--color-neutral-900);
   --color-card-border: rgb(255 255 255 / 100%);
-  --color-panel: theme(colors.white);
-  --color-panel-border: theme(colors.neutral.200);
+  --color-panel: var(--color-white);
+  --color-panel-border: var(--color-neutral-200);
   --ease-dialog-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Dark theme */
 .dark {
-  --color-background: theme(colors.neutral.900);
-  --color-foreground: theme(colors.neutral.50);
-  --color-muted: theme(colors.neutral.800);
-  --color-muted-foreground: theme(colors.neutral.400);
+  --color-background: var(--color-neutral-900);
+  --color-foreground: var(--color-neutral-50);
+  --color-muted: var(--color-neutral-800);
+  --color-muted-foreground: var(--color-neutral-400);
   --color-card: rgb(34 34 34 / 100%);
-  --color-card-foreground: theme(colors.neutral.100);
+  --color-card-foreground: var(--color-neutral-100);
   --color-card-border: rgb(255 255 255 / 5%);
-  --color-panel: theme(colors.neutral.800);
-  --color-panel-border: theme(colors.neutral.700);
+  --color-panel: var(--color-neutral-800);
+  --color-panel-border: var(--color-neutral-700);
 }
 
 /* Dark Transparent theme */
 .dark-transparent {
-  --color-background: theme(colors.neutral.900);
-  --color-foreground: theme(colors.neutral.50);
-  --color-muted: theme(colors.neutral.800);
-  --color-muted-foreground: theme(colors.neutral.400);
+  --color-background: var(--color-neutral-900);
+  --color-foreground: var(--color-neutral-50);
+  --color-muted: var(--color-neutral-800);
+  --color-muted-foreground: var(--color-neutral-400);
   --color-card: rgb(255 255 255 / 7.5%);
-  --color-card-foreground: theme(colors.neutral.100);
+  --color-card-foreground: var(--color-neutral-100);
   --color-card-border: rgb(255 255 255 / 10%);
-  --color-panel: theme(colors.neutral.800);
-  --color-panel-border: theme(colors.neutral.700);
+  --color-panel: var(--color-neutral-800);
+  --color-panel-border: var(--color-neutral-700);
 }
 
 /* Base layer - for base element styles */

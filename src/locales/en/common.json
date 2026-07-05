@@ -21,34 +21,5 @@
   "removeFile": "Remove {{name}}",
   "openFile": "Open {{name}}",
   "visitLink": "Visit {{title}}",
-  "noEmojiFound": "No emoji found.",
-  "devOnly": "Dev only",
-  "buttonLab": {
-    "title": "Button Lab",
-    "description": "Experiment with variants, appearances, glow, and loading states.",
-    "defaultLabel": "Click me",
-    "liveControls": "Live Controls",
-    "variantMatrix": "Variant Matrix",
-    "experimentZone": "Experiment Zone",
-    "experimentDescription": "Isolated effect showcases — hover to see the glow animation.",
-    "variant": "Variant",
-    "appearance": "Appearance",
-    "effect": "Effect",
-    "icon": "Icon",
-    "label": "Label",
-    "loading": "Loading",
-    "disabled": "Disabled",
-    "default": "Default",
-    "glowOnly": "Glow only",
-    "noEffect": "No effect",
-    "dangerOutline": "Danger outline",
-    "shimmerLoading": "Shimmer loading",
-    "bothIcons": "Both icons",
-    "icons": {
-      "none": "None",
-      "send": "Send",
-      "trash": "Trash",
-      "user": "UserPlus"
-    }
-  }
+  "noEmojiFound": "No emoji found."
 }

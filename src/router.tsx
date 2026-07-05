@@ -250,23 +250,11 @@ const logoutRoute = createRoute({
   component: lazyRouteComponent(() => import('./routes/Logout'), 'Logout'),
 });
 
-const buttonLabRoute = import.meta.env.DEV
-  ? createRoute({
-      getParentRoute: () => rootRoute,
-      path: '/lab/button',
-      component: lazyRouteComponent(
-        () => import('./routes/ButtonLab'),
-        'ButtonLab',
-      ),
-    })
-  : null;
-
 const publicRoutes = [
   loginRoute,
   checkinRoute,
   forgotPasswordRoute,
   logoutRoute,
-  ...(buttonLabRoute ? [buttonLabRoute] : []),
 ];
 
 const routeTree = rootRoute.addChildren([

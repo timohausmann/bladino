@@ -21,34 +21,5 @@
   "removeFile": "{{name}} entfernen",
   "openFile": "{{name}} öffnen",
   "visitLink": "{{title}} besuchen",
-  "noEmojiFound": "Kein Emoji gefunden.",
-  "devOnly": "Nur Entwicklung",
-  "buttonLab": {
-    "title": "Button Lab",
-    "description": "Experimentiere mit Varianten, Erscheinungsbild, Glow und Ladezuständen.",
-    "defaultLabel": "Klick mich",
-    "liveControls": "Live-Steuerung",
-    "variantMatrix": "Varianten-Matrix",
-    "experimentZone": "Experimentierbereich",
-    "experimentDescription": "Isolierte Effekt-Demos — zum Ansehen des Glow-Effekts darüberfahren.",
-    "variant": "Variante",
-    "appearance": "Erscheinungsbild",
-    "effect": "Effekt",
-    "icon": "Icon",
-    "label": "Beschriftung",
-    "loading": "Lädt",
-    "disabled": "Deaktiviert",
-    "default": "Standard",
-    "glowOnly": "Nur Glow",
-    "noEffect": "Kein Effekt",
-    "dangerOutline": "Gefahr Outline",
-    "shimmerLoading": "Shimmer-Laden",
-    "bothIcons": "Beide Icons",
-    "icons": {
-      "none": "Keins",
-      "send": "Senden",
-      "trash": "Papierkorb",
-      "user": "UserPlus"
-    }
-  }
+  "noEmojiFound": "Kein Emoji gefunden."
 }
