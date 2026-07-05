@@ -223,6 +223,18 @@ const loginRoute = createRoute({
   component: lazyRouteComponent(() => import('./routes/Login'), 'Login'),
 });
 
+const checkinRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/checkin/$token',
+  beforeLoad: async () => {
+    const user = await ensureSession();
+    if (user) {
+      throw redirect({ to: '/', replace: true });
+    }
+  },
+  component: lazyRouteComponent(() => import('./routes/Checkin'), 'Checkin'),
+});
+
 const forgotPasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/forgot-password',
@@ -251,6 +263,7 @@ const buttonLabRoute = import.meta.env.DEV
 
 const publicRoutes = [
   loginRoute,
+  checkinRoute,
   forgotPasswordRoute,
   logoutRoute,
   ...(buttonLabRoute ? [buttonLabRoute] : []),

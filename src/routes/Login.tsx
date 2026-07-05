@@ -121,9 +121,9 @@ export function Login() {
                 href="/forgot-password"
                 className="text-muted-foreground hover:text-foreground underline decoration-transparent transition-colors duration-200 hover:decoration-current"
                 tabIndex={0}
-                aria-label={t('auth:forgotPassword')}
+                aria-label={t('auth:passwordlessLogin')}
               >
-                {t('auth:forgotPassword')}
+                {t('auth:passwordlessLogin')}
               </a>
               <div>
                 <Button
