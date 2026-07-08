@@ -16,6 +16,7 @@ type LikeUser = NonNullable<NonNullable<LikeVote>['user']>;
 
 interface PostLikesProps {
   comment: Pick<Comment, 'id' | 'voteNum' | 'votes' | 'parent'>;
+  variant?: 'default' | 'compact' | 'textOnly';
 }
 
 function getDisplayName(
@@ -166,7 +167,7 @@ function LikesDialog({
 /**
  * PostLikes - Separated controls for toggling a like vs. viewing all likes.
  */
-export function PostLikes({ comment }: PostLikesProps) {
+export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const currentUser = useUserStore((store) => store.currentUser);
@@ -179,21 +180,52 @@ export function PostLikes({ comment }: PostLikesProps) {
 
   return (
     <>
-      <div className="flex min-w-0 items-center gap-2">
-        <PostVoteButton comment={comment} />
-        {likedByText ? (
+      {variant === 'default' ? (
+        <div className="flex min-w-0 items-center gap-2">
+          {likedByText ? (
+            <button
+              type="button"
+              className={clsx(
+                'text-muted-foreground text-sm transition-colors',
+                'hover:text-foreground text-left',
+              )}
+              onClick={() => setDialogOpen(true)}
+            >
+              {likedByText}
+            </button>
+          ) : null}
+          <PostVoteButton comment={comment} />
+        </div>
+      ) : variant === 'textOnly' ? (
+        likedByText ? (
           <button
             type="button"
             className={clsx(
-              'text-muted-foreground text-sm transition-colors',
-              'hover:text-foreground text-left',
+              'text-muted-foreground hover:text-foreground text-left text-sm transition-colors',
             )}
             onClick={() => setDialogOpen(true)}
           >
             {likedByText}
           </button>
-        ) : null}
-      </div>
+        ) : (
+          <span aria-hidden />
+        )
+      ) : (
+        <div className="flex items-center gap-2">
+          {users.length > 0 ? (
+            <button
+              type="button"
+              className={clsx(
+                'text-foreground min-w-[0.75rem] text-right text-xs font-semibold transition-colors hover:underline',
+              )}
+              onClick={() => setDialogOpen(true)}
+            >
+              {users.length}
+            </button>
+          ) : null}
+          <PostVoteButton comment={comment} variant="compact" />
+        </div>
+      )}
 
       <LikesDialog
         open={dialogOpen}

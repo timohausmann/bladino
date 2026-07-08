@@ -15,6 +15,7 @@ import clsx from 'clsx';
 
 interface PostVoteButtonProps {
   comment: Pick<Comment, 'id' | 'voteNum' | 'votes' | 'parent'>;
+  variant?: 'default' | 'compact';
 }
 
 interface VoteHeartIconProps {
@@ -61,7 +62,10 @@ function hasCurrentUserVoted(
 /**
  * PostVoteButton - Heart button to like/unlike a post or reply
  */
-export function PostVoteButton({ comment }: PostVoteButtonProps) {
+export function PostVoteButton({
+  comment,
+  variant = 'default',
+}: PostVoteButtonProps) {
   const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
   const queryClient = useQueryClient();
@@ -102,6 +106,26 @@ export function PostVoteButton({ comment }: PostVoteButtonProps) {
       toast(message);
     }
   };
+
+  if (variant === 'compact') {
+    return (
+      <button
+        type="button"
+        aria-label={hasVoted ? t('posts:unlikePost') : t('posts:likePost')}
+        className={clsx(
+          'text-muted-foreground hover:text-foreground flex h-8 cursor-pointer items-center gap-1.5 rounded-full border-none bg-transparent px-0 transition-colors',
+          isPending && 'opacity-60',
+        )}
+        onClick={() => void handleClick()}
+      >
+        <VoteHeartIcon
+          hasVoted={hasVoted}
+          burst={burst}
+          onBurstEnd={() => setBurst(false)}
+        />
+      </button>
+    );
+  }
 
   return (
     <PostActionButton

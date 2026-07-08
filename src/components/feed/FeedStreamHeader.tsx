@@ -7,7 +7,7 @@ interface FeedStreamHeaderProps {
 /** Page title for feed-style views (/feed, channels). */
 export function FeedStreamHeader({ children }: FeedStreamHeaderProps) {
   return (
-    <header className="bg-background/80 sticky top-0 z-10 px-4 py-4 backdrop-blur">
+    <header className="bg-background/80 sticky top-0 z-10 py-3 backdrop-blur">
       <h1 className="text-foreground text-xl font-bold">{children}</h1>
     </header>
   );

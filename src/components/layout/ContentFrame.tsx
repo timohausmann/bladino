@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { floatingSurfaceClassName } from '@/components/ui/Card';
 
 interface ContentFrameProps {
   children: React.ReactNode;
@@ -6,12 +7,16 @@ interface ContentFrameProps {
 }
 
 /**
- * Route-sized surface for dense app views.
+ * Shared card-like surface for dense master/detail routes.
  */
 export function ContentFrame({ children, className }: ContentFrameProps) {
   return (
     <div
-      className={clsx('flex h-full min-h-0 flex-1 overflow-hidden', className)}
+      className={clsx(
+        'bg-card border-card-border flex h-full min-h-0 flex-1 overflow-hidden rounded-2xl border',
+        floatingSurfaceClassName,
+        className,
+      )}
     >
       {children}
     </div>

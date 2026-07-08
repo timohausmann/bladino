@@ -15,6 +15,7 @@ interface PostHeaderProps {
   onEdit?: () => void;
   /** Hide the ⋯ menu (e.g. dashboard preview cards). */
   showContextMenu?: boolean;
+  showDate?: boolean;
   variant?: 'default' | 'compact';
 }
 
@@ -22,6 +23,7 @@ export function PostHeader({
   comment,
   onEdit,
   showContextMenu = true,
+  showDate = true,
   variant = 'default',
 }: PostHeaderProps) {
   const { t } = useTranslation();
@@ -47,7 +49,7 @@ export function PostHeader({
         <Avatar
           avatar={user.avatar}
           alt={t('common:userAvatar', { name: user.name })}
-          className={isCompact ? COMPACT_AVATAR_CLASS : 'h-12 w-12'}
+          className={isCompact ? COMPACT_AVATAR_CLASS : 'h-10 w-10'}
         />
       </Link>
       <div className="min-w-0 flex-1">
@@ -86,17 +88,19 @@ export function PostHeader({
             )}
           </div>
           <div className="flex items-center gap-2">
-            {isCompact ? (
-              <span className={dateClassName}>{formattedDate}</span>
-            ) : (
-              <Link
-                to="/post/$id"
-                params={{ id: comment.id }}
-                className={dateClassName}
-              >
-                {formattedDate}
-              </Link>
-            )}
+            {showDate ? (
+              isCompact ? (
+                <span className={dateClassName}>{formattedDate}</span>
+              ) : (
+                <Link
+                  to="/post/$id"
+                  params={{ id: comment.id }}
+                  className={dateClassName}
+                >
+                  {formattedDate}
+                </Link>
+              )
+            ) : null}
             {showContextMenu && (
               <PostContextMenu comment={comment} onEdit={onEdit} />
             )}

@@ -9,6 +9,7 @@ import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMatch, useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import {
   Edit,
   Flag,
@@ -30,12 +31,17 @@ import { toast } from '@/components/ui/toast';
 interface PostContextMenuProps {
   comment: Comment;
   onEdit?: () => void;
+  variant?: 'default' | 'compact';
 }
 
 /**
  * Context menu items for post actions
  */
-export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
+export function PostContextMenu({
+  comment,
+  onEdit,
+  variant = 'default',
+}: PostContextMenuProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -130,7 +136,12 @@ export function PostContextMenu({ comment, onEdit }: PostContextMenuProps) {
         <Tooltip content={t('posts:moreOptions')}>
           <Popover.Trigger asChild>
             <button
-              className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-0 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+              className={clsx(
+                'text-muted-foreground hover:text-foreground flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors',
+                variant === 'compact'
+                  ? 'h-8 w-8 rounded-full'
+                  : 'text-foreground h-10 w-10 rounded-full hover:bg-black/10 dark:hover:bg-white/10',
+              )}
               aria-label={t('posts:postOptions')}
               aria-expanded={open}
               aria-haspopup="menu"

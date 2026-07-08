@@ -13,8 +13,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
-const REPLY_TEXTAREA_CLASS =
-  'min-h-14 max-h-[400px] overflow-y-auto pt-[14px] pb-2 leading-normal';
+const REPLY_TEXTAREA_COMPACT_CLASS =
+  'min-h-6 max-h-[400px] overflow-y-auto rounded-none bg-inset p-0 text-[15px] leading-6';
+const REPLY_TEXTAREA_ACTIVE_CLASS =
+  'min-h-14 max-h-[400px] overflow-y-auto px-3 py-3 text-base leading-normal dark:bg-neutral-900';
 
 /** Paperclip always visible; emoji picker from md breakpoint. */
 const COMPOSER_END_ADORNMENT_SLOTS = { base: 1, md: 2 } as const;
@@ -69,6 +71,7 @@ export function CommentComposerForm({
     replyFocused ||
     composer.content.trim().length > 0 ||
     composer.files.length > 0;
+  const replyActive = replyFocused || composer.content.length > 0;
 
   const inlineActions = (
     <>
@@ -92,13 +95,15 @@ export function CommentComposerForm({
       onChange={composer.setContent}
       placeholder={resolvedPlaceholder}
       rows={1}
-      autoGrow
-      variant={isReply ? 'ghost' : 'default'}
+      autoGrow={!isReply || replyActive}
+      resize={isReply ? 'resize-none' : undefined}
       endAdornmentReveal={isReply ? 'focus-or-filled' : 'always'}
       wrapperClassName={isReply ? 'min-w-0 flex-1' : undefined}
       className={
         isReply
-          ? REPLY_TEXTAREA_CLASS
+          ? replyActive
+            ? REPLY_TEXTAREA_ACTIVE_CLASS
+            : REPLY_TEXTAREA_COMPACT_CLASS
           : 'max-h-[400px] min-h-[82px] overflow-y-auto py-3 leading-normal'
       }
       endAdornment={inlineActions}
@@ -144,7 +149,7 @@ export function CommentComposerForm({
       disabled={!composer.canSubmit}
       loading={composer.isSubmitting}
       aria-label={resolvedSubmitLabel}
-      className="mt-2 h-10 w-10 shrink-0 !rounded-full !p-0"
+      className="h-10 w-10 shrink-0 !rounded-full !p-0"
       iconBefore={<Send size={18} />}
     >
       <span className="sr-only">{resolvedSubmitLabel}</span>
@@ -176,7 +181,7 @@ export function CommentComposerForm({
               <div
                 className={twMerge(
                   'shrink-0 overflow-hidden transition-all duration-200',
-                  showReplySend ? 'w-10 opacity-100' : 'w-0 opacity-0',
+                  showReplySend ? 'h-10 w-10 opacity-100' : 'h-0 w-0 opacity-0',
                 )}
               >
                 {replySend}

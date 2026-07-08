@@ -51,7 +51,6 @@ export function NavRail() {
     <aside
       className={clsx(
         'sticky top-0 flex h-dvh min-h-dvh shrink-0 flex-col',
-        'border-line border-r',
         'transition-[width] duration-300 ease-in-out',
         expanded ? NAV_RAIL_EXPANDED_WIDTH : NAV_RAIL_COLLAPSED_WIDTH,
       )}
@@ -162,20 +161,20 @@ export function NavRail() {
           navRailSectionClassName,
         )}
       >
-        <Divider className="mt-0 mb-1" />
-        <NavRailLink
-          to="/notes"
-          label={t('navigation:notes')}
-          icon={StickyNote}
-          expanded={expanded}
-        />
-        <NavRailLink
-          to="/mails"
-          label={t('navigation:mail')}
-          icon={Mail}
-          expanded={expanded}
-        />
-        <Divider className="my-1" />
+        <div className="flex shrink-0 flex-col gap-1 pb-2">
+          <NavRailLink
+            to="/notes"
+            label={t('navigation:notes')}
+            icon={StickyNote}
+            expanded={expanded}
+          />
+          <NavRailLink
+            to="/mails"
+            label={t('navigation:mail')}
+            icon={Mail}
+            expanded={expanded}
+          />
+        </div>
         {expanded ? (
           <div className="flex w-full items-center gap-1">
             <div className="min-w-0 flex-1">

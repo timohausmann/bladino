@@ -3,6 +3,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --color-neutral-850: oklch(23.5% 0 0);
+
   /* Light theme (default) — one flat surface, content separated by hairlines */
   --color-background: var(--color-white);
   --color-foreground: var(--color-neutral-900);
@@ -11,6 +13,7 @@
   --color-card: var(--color-white);
   --color-card-foreground: var(--color-neutral-900);
   --color-card-border: var(--color-neutral-200);
+  --color-inset: var(--color-neutral-100);
   --color-panel: var(--color-white);
   --color-panel-border: var(--color-neutral-200);
   /* Structural hairline between layout regions and feed items */
@@ -23,13 +26,14 @@
 
 /* Dark theme — soft dark base (not near-black), lifted surfaces for overlays */
 .dark {
-  --color-background: var(--color-neutral-800);
+  --color-background: var(--color-neutral-900);
   --color-foreground: var(--color-neutral-50);
   --color-muted: var(--color-neutral-800);
   --color-muted-foreground: var(--color-neutral-400);
   --color-card: var(--color-neutral-800);
   --color-card-foreground: var(--color-neutral-100);
   --color-card-border: rgb(255 255 255 / 8%);
+  --color-inset: var(--color-neutral-850);
   --color-panel: var(--color-neutral-800);
   --color-panel-border: rgb(255 255 255 / 8%);
   --color-line: rgb(255 255 255 / 8%);

@@ -1,5 +1,6 @@
 import { CreatePostChannelField } from '@/components/create/CreatePostChannelField';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
+import { Card } from '@/components/ui/Card';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +19,7 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
   const effectiveChannel = channel ?? selectedChannel;
 
   return (
-    <div className="px-4 pt-1 pb-4">
+    <Card>
       <CommentComposerForm
         mode="create"
         layout="card"
@@ -35,6 +36,6 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
           )
         }
       />
-    </div>
+    </Card>
   );
 }

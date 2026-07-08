@@ -29,8 +29,7 @@ interface TextareaProps {
   endAdornmentInsetClassName?: string;
   /** Grows height with content from a single-line minimum. */
   autoGrow?: boolean;
-  variant?: 'default' | 'ghost';
-  /** When to show endAdornment. Ghost composers use focus-or-filled. */
+  /** When to show endAdornment. */
   endAdornmentReveal?: 'always' | 'focus-or-filled';
   onFocus?: () => void;
   onBlur?: () => void;
@@ -55,7 +54,6 @@ export function Textarea({
   endAdornmentSlotCounts,
   endAdornmentInsetClassName = 'pr-12',
   autoGrow = false,
-  variant = 'default',
   endAdornmentReveal = 'always',
   onFocus,
   onBlur,
@@ -65,10 +63,13 @@ export function Textarea({
   const [focused, setFocused] = useState(false);
 
   useLayoutEffect(() => {
-    if (!autoGrow) return;
-
     const el = textareaRef.current;
     if (!el) return;
+
+    if (!autoGrow) {
+      el.style.height = '';
+      return;
+    }
 
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
@@ -76,8 +77,6 @@ export function Textarea({
 
   const resolvedResize = autoGrow ? 'resize-none' : resize;
   const isFilled = value.length > 0;
-  const isGhost = variant === 'ghost';
-  const isGhostActive = isGhost && (focused || isFilled);
   const revealAdornment =
     endAdornment != null &&
     (endAdornmentReveal === 'always' || focused || isFilled);
@@ -127,22 +126,10 @@ export function Textarea({
         required={required}
         autoComplete={autoComplete}
         className={twMerge(
-          'block w-full rounded-lg outline-none',
+          'bg-inset block w-full rounded-lg border border-transparent p-4 outline-none',
           'placeholder:text-muted-foreground',
-          'transition-[background-color,border-color,padding] duration-200',
+          'transition-[background-color,font-size,line-height,min-height,padding] duration-200 ease-out',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          isGhost
-            ? twMerge(
-                'border border-transparent bg-transparent px-3 py-2',
-                'dark:border-transparent dark:bg-transparent',
-                isGhostActive &&
-                  'border-neutral-200 bg-white/90 dark:border-neutral-800 dark:bg-black/20',
-                isGhostActive && 'focus:bg-white dark:focus:bg-black/30',
-              )
-            : twMerge(
-                'border border-solid border-neutral-200 bg-white/90 p-4 dark:border-neutral-800 dark:bg-black/20',
-                'focus:bg-white dark:focus:bg-black/30',
-              ),
           resolvedEndInset,
           resolvedResize,
           className,
