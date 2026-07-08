@@ -1,4 +1,5 @@
 import { ContextPanel } from '@/components/layout/ContextPanel';
+import { ContentFrame } from '@/components/layout/ContentFrame';
 import {
   getNextNoteIdAfterDelete,
   NoteEditor,
@@ -69,7 +70,7 @@ export function Notes() {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-1">
+    <ContentFrame>
       <ContextPanel
         header={
           <NotesSidebarToolbar
@@ -86,13 +87,13 @@ export function Notes() {
         />
       </ContextPanel>
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+      <div className="bg-card flex min-h-0 min-w-0 flex-1 flex-col">
         {selectedId ? (
           <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
         ) : (
           <NotesEmptyState />
         )}
       </div>
-    </div>
+    </ContentFrame>
   );
 }

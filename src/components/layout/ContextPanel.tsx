@@ -19,8 +19,7 @@ export function ContextPanel({
     <aside
       className={clsx(
         'flex min-h-0 w-72 shrink-0 flex-col',
-        'border-r border-neutral-200 dark:border-neutral-800',
-        'bg-white/50 dark:bg-black/10',
+        'border-line border-r',
         className,
       )}
     >

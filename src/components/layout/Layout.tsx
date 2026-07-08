@@ -52,13 +52,16 @@ export function Layout({
         ),
   );
 
+  // Master/detail and feed run edge-to-edge; only full-width tools keep padding.
   const mainClasses = clsx(
-    'flex-1 flex flex-col min-h-0 min-w-0 p-4',
+    'flex-1 flex flex-col min-h-0 min-w-0',
+    layoutMode === 'fullWidth' ? 'p-4' : 'p-0',
     fixedViewport ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden',
   );
 
+  // Feed is a single continuous column; kept open (no framing borders).
   const feedWrapperClasses = clsx(
-    'flex-1 w-full mx-auto max-w-3xl flex flex-col gap-8 py-4',
+    'flex-1 w-full mx-auto max-w-2xl flex flex-col',
     fixedViewport ? 'min-h-0 overflow-auto' : '',
   );
 

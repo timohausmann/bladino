@@ -8,6 +8,7 @@ import {
   useMailComposer,
 } from '@/components/mails';
 import { ContextPanel } from '@/components/layout/ContextPanel';
+import { ContentFrame } from '@/components/layout/ContentFrame';
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { MailsDocument, useGraphQLQuery } from '@/graphql';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
@@ -125,7 +126,7 @@ export function Mails() {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-1">
+    <ContentFrame>
       <ContextPanel
         header={
           <MailsSidebarToolbar
@@ -147,7 +148,7 @@ export function Mails() {
         />
       </ContextPanel>
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+      <div className="bg-card flex min-h-0 min-w-0 flex-1 flex-col">
         {isComposing ? (
           <MailComposer
             to={composer.to}
@@ -186,6 +187,6 @@ export function Mails() {
         destructive
         onConfirm={handleDiscardConfirm}
       />
-    </div>
+    </ContentFrame>
   );
 }

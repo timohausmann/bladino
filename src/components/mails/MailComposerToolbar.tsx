@@ -1,3 +1,4 @@
+import { contentPanelHeaderClassName } from '@/components/layout/panelHeader';
 import { Button } from '@/components/ui/button';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,7 @@ export function MailComposerToolbar({
 
   return (
     <Toolbar.Root
-      className="flex shrink-0 items-center gap-4 border-b border-neutral-200 px-4 py-3 dark:border-neutral-800"
+      className={contentPanelHeaderClassName}
       aria-label={t('mail:composeActions')}
     >
       <Toolbar.Button asChild>

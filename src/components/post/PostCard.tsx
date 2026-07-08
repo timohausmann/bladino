@@ -3,7 +3,6 @@ import { getCommentChildren, getCommentFiles } from '@/utils/commentUtils';
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '@/components/ui/Card';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
@@ -29,11 +28,11 @@ export function PostCard({ comment }: PostCardProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="flex flex-col gap-1">
-      <Card
-        className="flex flex-col gap-4"
-        viewTransitionName={`POST_DETAIL-${commentId}`}
-      >
+    <article
+      className="border-line border-b px-4 py-4"
+      style={{ viewTransitionName: `POST_DETAIL-${commentId}` }}
+    >
+      <div className="flex flex-col gap-3">
         <PostHeader comment={comment} onEdit={() => setIsEditing(true)} />
 
         {isEditing ? (
@@ -66,10 +65,10 @@ export function PostCard({ comment }: PostCardProps) {
             onClick={() => setShowComments(!showComments)}
           />
         </div>
-      </Card>
+      </div>
 
       {showComments && (
-        <div className="ml-6 flex flex-col gap-1">
+        <div className="mt-4 flex flex-col gap-5 pl-6">
           {children.map((child, index) => (
             <PostComment
               key={`${child.id}-${index}`}
@@ -78,14 +77,12 @@ export function PostCard({ comment }: PostCardProps) {
             />
           ))}
 
-          <Card className="p-2">
-            <PostReply
-              parentId={commentId}
-              channel={comment.channel ?? undefined}
-            />
-          </Card>
+          <PostReply
+            parentId={commentId}
+            channel={comment.channel ?? undefined}
+          />
         </div>
       )}
-    </div>
+    </article>
   );
 }

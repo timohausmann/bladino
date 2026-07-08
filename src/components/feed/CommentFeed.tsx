@@ -72,12 +72,14 @@ export function CommentFeed({
   return (
     <div className={className}>
       {title && (
-        <h2 className="text-foreground mb-6 text-xl font-bold">{title}</h2>
+        <h2 className="text-foreground px-4 pt-4 pb-2 text-lg font-bold">
+          {title}
+        </h2>
       )}
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col">
         {isLoading && (
-          <p className="text-muted-foreground py-8 text-center">
+          <p className="text-muted-foreground px-4 py-8 text-center">
             {t('posts:loadingFeed')}
           </p>
         )}
@@ -86,12 +88,12 @@ export function CommentFeed({
           <Banner
             message={t('errors:feedLoadFailed')}
             variant="negative"
-            className="mx-auto max-w-lg"
+            className="m-4"
           />
         )}
 
         {!isLoading && !isError && comments.length === 0 && (
-          <p className="text-muted-foreground py-8 text-center">
+          <p className="text-muted-foreground px-4 py-8 text-center">
             {resolvedEmptyMessage}
           </p>
         )}
@@ -103,7 +105,7 @@ export function CommentFeed({
         {hasNextPage && <div ref={loadMoreRef} aria-hidden className="h-1" />}
 
         {isFetchingNextPage && (
-          <p className="text-muted-foreground py-4 text-center">
+          <p className="text-muted-foreground px-4 py-4 text-center">
             {t('posts:loadingMore')}
           </p>
         )}

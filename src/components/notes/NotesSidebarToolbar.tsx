@@ -1,3 +1,4 @@
+import { panelSidebarHeaderClassName } from '@/components/layout/panelHeader';
 import { ToolbarTooltipButton } from '@/components/ui/ToolbarTooltipButton';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { ArrowDownAZ, Plus, Search } from 'lucide-react';
@@ -16,13 +17,14 @@ export function NotesSidebarToolbar({
 
   return (
     <Toolbar.Root
-      className="flex shrink-0 items-center gap-1 border-b border-neutral-200 p-2 dark:border-neutral-800"
+      className={panelSidebarHeaderClassName}
       aria-label={t('notes:listActions')}
     >
       <ToolbarTooltipButton
-        icon={<Plus size={18} />}
+        icon={<Plus size={16} />}
         label={t('notes:newNote')}
         variant="persistent"
+        size="sm"
         onClick={onCreate}
         disabled={isCreating}
       />

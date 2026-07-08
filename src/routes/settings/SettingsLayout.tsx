@@ -1,4 +1,6 @@
+import { SettingsSidebarHeader } from '@/components/settings/SettingsSidebarHeader';
 import { SettingsSidebar } from '@/components/settings';
+import { ContentFrame } from '@/components/layout/ContentFrame';
 import { SidebarLayout } from '@/components/layout/SidebarLayout';
 import { Outlet } from '@tanstack/react-router';
 
@@ -7,10 +9,17 @@ import { Outlet } from '@tanstack/react-router';
  */
 export function SettingsLayout() {
   return (
-    <div className="flex h-full min-h-0 flex-1 overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-      <SidebarLayout sidebar={<SettingsSidebar />}>
+    <ContentFrame>
+      <SidebarLayout
+        sidebar={
+          <>
+            <SettingsSidebarHeader />
+            <SettingsSidebar />
+          </>
+        }
+      >
         <Outlet />
       </SidebarLayout>
-    </div>
+    </ContentFrame>
   );
 }

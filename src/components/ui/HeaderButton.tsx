@@ -1,6 +1,7 @@
 import {
   headerButtonVariants,
   type HeaderButtonShape,
+  type HeaderButtonSize,
   type HeaderButtonVariant,
 } from '@/components/ui/headerButtonVariants';
 import { Tooltip } from '@/components/ui/Tooltip';
@@ -14,6 +15,7 @@ interface HeaderButtonProps
   active?: boolean;
   variant?: HeaderButtonVariant;
   shape?: HeaderButtonShape;
+  size?: HeaderButtonSize;
   /** Set when an outer Tooltip or Radix `asChild` parent wraps the button. */
   disableTooltip?: boolean;
 }
@@ -35,6 +37,7 @@ export const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
       active = false,
       variant = 'default',
       shape = 'round',
+      size = 'default',
       disabled = false,
       disableTooltip = false,
       tabIndex,
@@ -51,6 +54,7 @@ export const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
         className={headerButtonVariants({
           variant,
           shape,
+          size,
           active,
           disabled,
           className,

@@ -1,3 +1,4 @@
+import { ContentPanelHeader } from '@/components/layout/ContentPanelHeader';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import { MailDocument, useGraphQLQuery } from '@/graphql';
@@ -62,11 +63,9 @@ export function MailViewer({ mailId }: MailViewerProps) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <header className="shrink-0 border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
-        <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-          {mailSubject(mail.subject)}
-        </h1>
-        <dl className="mt-3 space-y-1 text-sm text-neutral-600 dark:text-neutral-400">
+      <header className="shrink-0">
+        <ContentPanelHeader title={mailSubject(mail.subject)} />
+        <dl className="space-y-1 px-6 pb-4 text-sm text-neutral-600 dark:text-neutral-400">
           {mail.from && (
             <div className="flex gap-2">
               <dt className="w-12 shrink-0 text-neutral-500 dark:text-neutral-500">

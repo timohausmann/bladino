@@ -104,7 +104,7 @@ const settingsLayoutRoute = createRoute({
     () => import('./routes/settings/SettingsLayout'),
     'SettingsLayout',
   ),
-  staticData: { fixedViewport: true, layoutMode: 'fullWidth' },
+  staticData: { fixedViewport: true, layoutMode: 'masterDetail' },
 });
 
 const settingsIndexRoute = createRoute({

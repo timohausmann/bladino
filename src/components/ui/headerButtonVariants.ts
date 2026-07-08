@@ -2,13 +2,18 @@ import { tv } from 'tailwind-variants';
 
 export type HeaderButtonVariant = 'default' | 'persistent' | 'dangerous';
 export type HeaderButtonShape = 'round' | 'soft';
+export type HeaderButtonSize = 'default' | 'sm';
 
 export const headerButtonVariants = tv({
   base: [
-    'border-none flex items-center justify-center w-10 h-10 p-0 transition-colors',
+    'border-none flex items-center justify-center p-0 transition-colors',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   ],
   variants: {
+    size: {
+      default: 'h-10 w-10',
+      sm: 'h-8 w-8',
+    },
     shape: {
       round: 'rounded-full',
       soft: 'rounded-lg',
@@ -75,6 +80,7 @@ export const headerButtonVariants = tv({
   defaultVariants: {
     variant: 'default',
     shape: 'round',
+    size: 'default',
     active: false,
     disabled: false,
   },

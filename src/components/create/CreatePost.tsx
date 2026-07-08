@@ -1,9 +1,7 @@
 import { CreatePostChannelField } from '@/components/create/CreatePostChannelField';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
-import clsx from 'clsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '@/components/ui/Card';
 
 export interface CreatePostProps {
   /** When set, posts are created in this channel (no picker shown). */
@@ -20,12 +18,7 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
   const effectiveChannel = channel ?? selectedChannel;
 
   return (
-    <Card
-      className={clsx(
-        'overflow-hidden transition-all duration-300 ease-in-out',
-        'opacity-100',
-      )}
-    >
+    <div className="px-4 pt-1 pb-4">
       <CommentComposerForm
         mode="create"
         layout="card"
@@ -42,6 +35,6 @@ export function CreatePost({ channel, parent }: CreatePostProps) {
           )
         }
       />
-    </Card>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import { HeaderButton } from '@/components/ui/HeaderButton';
 import type {
   HeaderButtonShape,
+  HeaderButtonSize,
   HeaderButtonVariant,
 } from '@/components/ui/headerButtonVariants';
 import { Tooltip } from '@/components/ui/Tooltip';
@@ -15,6 +16,7 @@ interface ToolbarTooltipButtonProps
   active?: boolean;
   variant?: HeaderButtonVariant;
   shape?: HeaderButtonShape;
+  size?: HeaderButtonSize;
   className?: string;
 }
 
@@ -26,6 +28,7 @@ export function ToolbarTooltipButton({
   active = false,
   variant = 'default',
   shape = 'round',
+  size = 'default',
   className,
   disabled = false,
   ...buttonProps
@@ -39,6 +42,7 @@ export function ToolbarTooltipButton({
           active={active}
           variant={variant}
           shape={shape}
+          size={size}
           className={className}
           disabled={disabled}
           disableTooltip

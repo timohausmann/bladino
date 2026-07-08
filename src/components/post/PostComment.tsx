@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { FilePreview } from '@/components/ui/FilePreview';
-import { Card } from '@/components/ui/Card';
 import {
   PostHeader,
   COMPACT_AVATAR_WIDTH_CLASS,
@@ -26,7 +25,7 @@ export function PostComment({ comment, channel }: PostCommentProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <Card className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       <PostHeader
         comment={comment}
         variant="compact"
@@ -65,6 +64,6 @@ export function PostComment({ comment, channel }: PostCommentProps) {
           )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

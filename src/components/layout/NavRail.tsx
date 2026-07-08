@@ -51,14 +51,18 @@ export function NavRail() {
     <aside
       className={clsx(
         'sticky top-0 flex h-dvh min-h-dvh shrink-0 flex-col',
-        'border-r border-neutral-200 dark:border-neutral-800',
-        'bg-white/50 backdrop-blur-sm dark:bg-black/10',
+        'border-line border-r',
         'transition-[width] duration-300 ease-in-out',
         expanded ? NAV_RAIL_EXPANDED_WIDTH : NAV_RAIL_COLLAPSED_WIDTH,
       )}
     >
-      {/* Header */}
-      <div className={clsx('shrink-0 py-3', navRailSectionClassName)}>
+      {/* Header — 64px, matches Notes/Mails/Settings sidebar headers */}
+      <div
+        className={clsx(
+          'flex min-h-16 shrink-0 items-center',
+          navRailSectionClassName,
+        )}
+      >
         <div className="flex flex-col gap-1">
           <div className={navRailRowClassName({ noHover: true })}>
             {expanded ? (

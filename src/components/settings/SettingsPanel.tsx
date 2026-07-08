@@ -1,3 +1,5 @@
+import { ContentPanelHeader } from '@/components/layout/ContentPanelHeader';
+
 interface SettingsPanelProps {
   title: string;
   description?: string;
@@ -13,18 +15,14 @@ export function SettingsPanel({
   children,
 }: SettingsPanelProps) {
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-auto p-6">
-      <div className="mx-auto w-full max-w-2xl">
-        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-          {title}
-        </h1>
+    <div className="flex min-h-0 flex-1 flex-col overflow-auto">
+      <div className="mx-auto w-full max-w-2xl px-6 pb-6">
+        <ContentPanelHeader title={title} className="px-0" />
         {description ? (
-          <p className="mt-1 mb-6 text-neutral-600 dark:text-neutral-400">
+          <p className="mb-6 text-neutral-600 dark:text-neutral-400">
             {description}
           </p>
-        ) : (
-          <div className="mb-6" />
-        )}
+        ) : null}
         {children}
       </div>
     </div>
