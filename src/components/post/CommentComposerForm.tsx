@@ -182,6 +182,7 @@ export function CommentComposerForm({
                 className={twMerge(
                   'shrink-0 overflow-hidden transition-all duration-200',
                   showReplySend ? 'h-10 w-10 opacity-100' : 'h-0 w-0 opacity-0',
+                  replyActive && 'mt-2',
                 )}
               >
                 {replySend}

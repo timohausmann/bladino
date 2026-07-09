@@ -18,6 +18,24 @@ interface PostVoteButtonProps {
   variant?: 'default' | 'compact';
 }
 
+type VoteUser = {
+  id: string;
+  name: string;
+  avatar?: string | null;
+};
+
+type VoteEntry = {
+  id?: string | null;
+  user?: VoteUser | null;
+};
+
+type VotableRecord = {
+  id?: string | number | null;
+  voteNum?: number | null;
+  votes?: Array<VoteEntry | null> | null;
+  [key: string]: unknown;
+};
+
 interface VoteHeartIconProps {
   hasVoted: boolean;
   burst: boolean;
@@ -59,6 +77,69 @@ function hasCurrentUserVoted(
   return (votes ?? []).some((vote) => vote?.user?.id === currentUserId);
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function updateVoteFields(
+  value: VotableRecord,
+  isLiking: boolean,
+  user: VoteUser,
+): VotableRecord {
+  const votes = value.votes ?? [];
+  const hasVote = votes.some((vote) => vote?.user?.id === user.id);
+
+  if (isLiking && hasVote) {
+    return value;
+  }
+
+  if (!isLiking && !hasVote) {
+    return value;
+  }
+
+  const nextVotes = isLiking
+    ? [{ id: `optimistic-${user.id}`, user }, ...votes]
+    : votes.filter((vote) => vote?.user?.id !== user.id);
+  const currentVoteNum = value.voteNum ?? votes.length;
+
+  return {
+    ...value,
+    voteNum: Math.max(0, currentVoteNum + (isLiking ? 1 : -1)),
+    votes: nextVotes,
+  };
+}
+
+function updateCommentVoteInTree(
+  value: unknown,
+  targetId: string,
+  isLiking: boolean,
+  user: VoteUser,
+): unknown {
+  if (Array.isArray(value)) {
+    return value.map((entry) =>
+      updateCommentVoteInTree(entry, targetId, isLiking, user),
+    );
+  }
+
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  const next: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value)) {
+    next[key] = updateCommentVoteInTree(child, targetId, isLiking, user);
+  }
+
+  if (
+    String(value.id ?? '') === targetId &&
+    ('voteNum' in value || 'votes' in value)
+  ) {
+    return updateVoteFields(next as VotableRecord, isLiking, user);
+  }
+
+  return next;
+}
+
 /**
  * PostVoteButton - Heart button to like/unlike a post or reply
  */
@@ -81,10 +162,37 @@ export function PostVoteButton({
       return;
     }
 
+    if (!currentUser) {
+      return;
+    }
+
     const isLiking = !hasVoted;
     if (isLiking) {
       setBurst(true);
     }
+
+    const optimisticUser = {
+      id: currentUser.id,
+      name: currentUser.name,
+      avatar: currentUser.avatar,
+    };
+
+    queryClient.setQueriesData({ queryKey: ['CommentFeed'] }, (oldData) =>
+      updateCommentVoteInTree(
+        oldData,
+        String(comment.id),
+        isLiking,
+        optimisticUser,
+      ),
+    );
+    queryClient.setQueriesData({ queryKey: ['Comment'] }, (oldData) =>
+      updateCommentVoteInTree(
+        oldData,
+        String(comment.id),
+        isLiking,
+        optimisticUser,
+      ),
+    );
 
     try {
       await toggleVote({ post: comment.id });
@@ -104,6 +212,10 @@ export function PostVoteButton({
         getGraphQLErrorMessage(error) ??
         (error instanceof Error ? error.message : t('errors:likeFailed'));
       toast(message);
+      await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      await queryClient.invalidateQueries({
+        queryKey: ['Comment', { id: comment.id }],
+      });
     }
   };
 

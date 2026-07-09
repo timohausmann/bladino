@@ -207,9 +207,7 @@ export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
           >
             {likedByText}
           </button>
-        ) : (
-          <span aria-hidden />
-        )
+        ) : null
       ) : (
         <div className="flex items-center gap-2">
           {users.length > 0 ? (

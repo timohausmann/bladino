@@ -37,15 +37,13 @@ export function PostCard({ comment }: PostCardProps) {
             <PostHeader
               comment={comment}
               onEdit={() => setIsEditing(true)}
-              showContextMenu={false}
               showDate={false}
+              showContextMenu={false}
             />
           </div>
-          <div className="flex min-w-0 shrink-0 items-center gap-1">
-            <div className="flex min-w-0 shrink-0 items-center gap-2">
-              <PostLikes comment={comment} variant="textOnly" />
-              <PostLikes comment={comment} variant="compact" />
-            </div>
+          <div className="flex min-w-0 shrink-0 items-center gap-2">
+            <PostLikes comment={comment} variant="textOnly" />
+            <PostLikes comment={comment} variant="compact" />
             <PostContextMenu
               comment={comment}
               onEdit={() => setIsEditing(true)}
