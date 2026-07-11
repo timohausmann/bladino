@@ -49,37 +49,44 @@ function buildRestingAnimate(
   if (!idle && !scale) return false;
 
   const animate: TargetAndTransition = {};
-  const transition: TargetAndTransition['transition'] = {};
 
   if (idle) {
     animate.x = [0, c.idle.x, 0, -c.idle.x, 0];
     animate.y = [0, c.idle.y, 0, -c.idle.y, 0];
     animate.rotate = [0, c.idle.rotate, 0, -c.idle.rotate, 0];
-    Object.assign(transition, {
-      x: { duration: c.idle.duration, repeat: Infinity, ease: 'easeInOut' },
-      y: {
-        duration: c.idle.duration * 1.3,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-      rotate: {
-        duration: c.idle.duration * 0.85,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-    });
   }
 
   if (scale) {
     animate.scale = [...SCALE_OVERLAY.keyframes];
-    transition.scale = {
-      duration: SCALE_OVERLAY.duration,
-      repeat: Infinity,
-      ease: 'easeInOut',
-    };
   }
 
-  animate.transition = transition;
+  animate.transition = {
+    ...(idle
+      ? {
+          x: { duration: c.idle.duration, repeat: Infinity, ease: 'easeInOut' },
+          y: {
+            duration: c.idle.duration * 1.3,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          },
+          rotate: {
+            duration: c.idle.duration * 0.85,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          },
+        }
+      : {}),
+    ...(scale
+      ? {
+          scale: {
+            duration: SCALE_OVERLAY.duration,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          },
+        }
+      : {}),
+  };
+
   return animate;
 }
 
