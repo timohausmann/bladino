@@ -80,7 +80,7 @@ export function InlineSelect<T extends string = string>({
         <Select.Content
           className={twMerge(
             panelStyles.surface,
-            panelStyles.selectContent,
+            panelStyles.dropdownContent,
             'z-50',
           )}
         >

@@ -40,7 +40,10 @@ export function SettingsSelectField<T extends string>({
         </Select.Trigger>
         <Select.Portal>
           <Select.Content
-            className={twMerge(panelStyles.surface, panelStyles.selectContent)}
+            className={twMerge(
+              panelStyles.surface,
+              panelStyles.dropdownContent,
+            )}
           >
             <Select.Viewport className="p-1">
               {options.map((option) => (

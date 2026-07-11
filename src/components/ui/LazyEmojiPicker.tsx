@@ -18,7 +18,7 @@ export function LazyEmojiPicker(props: EmojiPickerProps) {
         <div
           className={twMerge(
             panelStyles.surface,
-            panelStyles.content,
+            panelStyles.dropdownContent,
             'flex h-[368px] w-64 items-center justify-center',
           )}
           aria-hidden

@@ -98,7 +98,7 @@ export function NoteEditorToolbarMenu({
         <Popover.Content
           className={clsx(
             panelStyles.surface,
-            panelStyles.content,
+            panelStyles.dropdownContent,
             'z-50 w-52 p-1',
           )}
           sideOffset={8}

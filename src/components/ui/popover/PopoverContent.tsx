@@ -22,8 +22,8 @@ export function PopoverContent({
       <Popover.Content
         className={twMerge(
           panelStyles.surface,
-          panelStyles.content,
-          'z-50 p-2',
+          panelStyles.dropdownContent,
+          'z-50 origin-top-right p-2',
           width,
           className,
         )}

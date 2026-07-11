@@ -10,13 +10,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
-import {
-  Edit,
-  Flag,
-  Link as LinkIcon,
-  MoreVertical,
-  Trash2,
-} from 'lucide-react';
+import { Edit, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from '@/components/ui/alert-dialog';
@@ -59,11 +53,6 @@ export function PostContextMenu({
   const { mutateAsync: deleteComment } = useGraphQLMutation(
     DeleteCommentDocument,
   );
-
-  const handleReport = () => {
-    console.log('Report post:', comment.id);
-    setOpen(false);
-  };
 
   const handleCopyLink = () => {
     if (isComment && comment.parent) {
@@ -153,13 +142,6 @@ export function PostContextMenu({
 
         <PopoverContent>
           <ContextMenuButton
-            id="report"
-            label={t('posts:report')}
-            icon={Flag}
-            onClick={handleReport}
-            disabled
-          />
-          <ContextMenuButton
             id="copy-link"
             label={t('posts:copyLink')}
             icon={LinkIcon}
@@ -170,15 +152,13 @@ export function PostContextMenu({
               <ContextMenuDivider id="divider" />
               <ContextMenuButton
                 id="edit"
-                label={isComment ? t('posts:editComment') : t('posts:editPost')}
+                label={t('common:edit')}
                 icon={Edit}
                 onClick={handleEdit}
               />
               <ContextMenuButton
                 id="delete"
-                label={
-                  isComment ? t('posts:deleteComment') : t('posts:deletePost')
-                }
+                label={t('common:delete')}
                 icon={Trash2}
                 onClick={handleDeleteClick}
                 variant="destructive"

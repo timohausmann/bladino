@@ -15,7 +15,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
     <FrimoussePicker.Root
       className={twMerge(
         panelStyles.surface,
-        panelStyles.content,
+        panelStyles.dropdownContent,
         'isolate flex h-[368px] w-fit flex-col',
       )}
       onEmojiSelect={(emoji) => {
