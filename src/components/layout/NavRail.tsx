@@ -1,5 +1,4 @@
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
-import { Divider } from '@/components/ui/Divider';
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
 import {
   getMockNotifications,

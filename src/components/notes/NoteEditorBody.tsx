@@ -36,7 +36,6 @@ export function NoteEditorBody({
       onChange={onBodyChange}
       placeholder={t('notes:editorPlaceholder')}
       resize="resize-none"
-      variant="default"
       endAdornmentReveal="always"
       wrapperClassName="flex h-full min-h-0 flex-1 flex-col"
       className={twMerge(
