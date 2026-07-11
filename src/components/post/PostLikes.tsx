@@ -10,6 +10,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { panelStyles } from '@/components/ui/panel';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { PostVoteButton } from '@/components/post/PostVoteButton';
+import { useOptimisticCommentVote } from '@/components/post/useOptimisticCommentVote';
 
 type LikeVote = NonNullable<Comment['votes']>[number];
 type LikeUser = NonNullable<NonNullable<LikeVote>['user']>;
@@ -177,6 +178,7 @@ export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
     [comment.votes, currentUserId],
   );
   const likedByText = getLikedByText(users, currentUserId, t);
+  const vote = useOptimisticCommentVote({ comment });
 
   return (
     <>
@@ -194,7 +196,12 @@ export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
               {likedByText}
             </button>
           ) : null}
-          <PostVoteButton comment={comment} />
+          <PostVoteButton
+            liked={vote.liked}
+            count={vote.count}
+            pending={vote.pending}
+            onToggle={() => void vote.toggle()}
+          />
         </div>
       ) : variant === 'textOnly' ? (
         likedByText ? (
@@ -221,7 +228,13 @@ export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
               {users.length}
             </button>
           ) : null}
-          <PostVoteButton comment={comment} variant="compact" />
+          <PostVoteButton
+            liked={vote.liked}
+            count={vote.count}
+            pending={vote.pending}
+            onToggle={() => void vote.toggle()}
+            variant="compact"
+          />
         </div>
       )}
 
