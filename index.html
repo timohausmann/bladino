@@ -6,6 +6,13 @@
     <link rel="icon" type="image/svg+xml" href="/icon-trashnet-2026-black.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>trashnet</title>
+    <script>
+        try {
+            if (localStorage.getItem('backgroundStyle') !== 'plain') {
+                document.documentElement.classList.add('bg-pattern');
+            }
+        } catch (e) {}
+    </script>
 </head>
 
 <body class="bg-background text-foreground">

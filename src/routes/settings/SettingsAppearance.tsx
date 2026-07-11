@@ -1,3 +1,7 @@
+import {
+  useBackgroundStyle,
+  type BackgroundStyle,
+} from '@/components/BackgroundStyleProvider';
 import { useTheme } from '@/components/ThemeProvider';
 import { SettingsPanel, SettingsSelectField } from '@/components/settings';
 import {
@@ -9,10 +13,12 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const THEME_OPTIONS = ['dark', 'light', 'system'] as const;
+const BACKGROUND_STYLE_OPTIONS = ['pattern', 'plain'] as const;
 
 export function SettingsAppearance() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
+  const { backgroundStyle, setBackgroundStyle } = useBackgroundStyle();
   const currentLanguage = normalizeLanguage(i18n.language);
 
   const languageOptions = SUPPORTED_LANGUAGES.map((language) => ({
@@ -23,6 +29,11 @@ export function SettingsAppearance() {
   const themeOptions = THEME_OPTIONS.map((option) => ({
     value: option,
     label: t(`settings:theme.options.${option}`),
+  }));
+
+  const backgroundStyleOptions = BACKGROUND_STYLE_OPTIONS.map((option) => ({
+    value: option,
+    label: t(`settings:background.options.${option}`),
   }));
 
   return (
@@ -46,6 +57,15 @@ export function SettingsAppearance() {
           }
           placeholder={t('settings:theme.placeholder')}
           options={themeOptions}
+        />
+        <SettingsSelectField
+          label={t('settings:background.label')}
+          value={backgroundStyle}
+          onValueChange={(value) =>
+            setBackgroundStyle(value as BackgroundStyle)
+          }
+          placeholder={t('settings:background.placeholder')}
+          options={backgroundStyleOptions}
         />
       </div>
     </SettingsPanel>

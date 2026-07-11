@@ -52,5 +52,13 @@
     },
     "switchToLight": "Zum hellen Design wechseln",
     "switchToDark": "Zum dunklen Design wechseln"
+  },
+  "background": {
+    "label": "Hintergrund",
+    "placeholder": "Hintergrund auswählen",
+    "options": {
+      "plain": "Schlicht",
+      "pattern": "Muster"
+    }
   }
 }
