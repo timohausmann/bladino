@@ -8,14 +8,23 @@ function getDateLocale(): string {
   return normalizeLanguage(i18n.language) === 'de' ? 'de-DE' : 'en-US';
 }
 
-/** Formats API date values for display in post headers and comments. */
-export function formatCommentDate(date: ApiDate): string {
+function parseApiDate(date: ApiDate): Date | null {
   if (!date) {
-    return '';
+    return null;
   }
 
   const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return parsed;
+}
+
+/** Formats API date values for display in post headers and comments. */
+export function formatCommentDate(date: ApiDate): string {
+  const parsed = parseApiDate(date);
+  if (!parsed) {
     return '';
   }
 
@@ -26,52 +35,68 @@ export function formatCommentDate(date: ApiDate): string {
   });
 }
 
-/** Compact relative age for dense post headers, e.g. "45 min ago". */
+/** Localized timestamp for date tooltips. */
+export function formatCommentTimestamp(date: ApiDate): string {
+  const parsed = parseApiDate(date);
+  if (!parsed) {
+    return '';
+  }
+
+  return parsed.toLocaleString(getDateLocale(), {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/** Localized relative age for dense post metadata, e.g. "vor 7 Tagen". */
 export function formatRelativeCommentDate(date: ApiDate): string {
-  if (!date) {
+  const parsed = parseApiDate(date);
+  if (!parsed) {
     return '';
   }
 
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
-    return '';
+  const deltaSeconds = Math.round((parsed.getTime() - Date.now()) / 1000);
+  const absoluteSeconds = Math.abs(deltaSeconds);
+  const formatter = new Intl.RelativeTimeFormat(getDateLocale(), {
+    numeric: 'auto',
+  });
+
+  if (absoluteSeconds < 60) {
+    return formatter.format(deltaSeconds, 'second');
   }
 
-  const elapsedMs = Date.now() - parsed.getTime();
-  const elapsedSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
-  const language = normalizeLanguage(i18n.language);
-  const suffix = language === 'de' ? 'her' : 'ago';
-
-  if (elapsedSeconds < 60) {
-    return language === 'de' ? 'gerade eben' : 'just now';
+  if (absoluteSeconds < 60 * 60) {
+    return formatter.format(Math.round(deltaSeconds / 60), 'minute');
   }
 
-  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-  if (elapsedMinutes < 60) {
-    return `${elapsedMinutes} min ${suffix}`;
+  if (absoluteSeconds < 60 * 60 * 24) {
+    return formatter.format(Math.round(deltaSeconds / (60 * 60)), 'hour');
   }
 
-  const elapsedHours = Math.floor(elapsedMinutes / 60);
-  if (elapsedHours < 24) {
-    return `${elapsedHours} h ${suffix}`;
+  if (absoluteSeconds < 60 * 60 * 24 * 30) {
+    return formatter.format(Math.round(deltaSeconds / (60 * 60 * 24)), 'day');
   }
 
-  const elapsedDays = Math.floor(elapsedHours / 24);
-  if (elapsedDays < 30) {
-    return `${elapsedDays} d ${suffix}`;
+  if (absoluteSeconds < 60 * 60 * 24 * 365) {
+    return formatter.format(
+      Math.round(deltaSeconds / (60 * 60 * 24 * 30)),
+      'month',
+    );
   }
 
-  return formatCommentDate(date);
+  return formatter.format(
+    Math.round(deltaSeconds / (60 * 60 * 24 * 365)),
+    'year',
+  );
 }
 
 /** Formats a join date for profile pages. */
 export function formatJoinDate(date: ApiDate): string {
-  if (!date) {
-    return '';
-  }
-
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
+  const parsed = parseApiDate(date);
+  if (!parsed) {
     return '';
   }
 

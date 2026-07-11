@@ -38,6 +38,7 @@ export function PostCard({ comment }: PostCardProps) {
               comment={comment}
               onEdit={() => setIsEditing(true)}
               showDate={false}
+              showMetadata
               showContextMenu={false}
             />
           </div>

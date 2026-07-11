@@ -1,14 +1,10 @@
 import type { Comment } from '@/graphql';
 import { formatRelativeCommentDate } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
-
-/** ~one text-sm line tall — used in comment headers. */
-export const COMPACT_AVATAR_CLASS = 'h-6 w-6';
-export const COMPACT_AVATAR_WIDTH_CLASS = 'w-6';
+import { PostMetadata } from '@/components/post/PostMetadata';
 
 interface PostHeaderProps {
   comment: Comment;
@@ -16,7 +12,8 @@ interface PostHeaderProps {
   /** Hide the ⋯ menu (e.g. dashboard preview cards). */
   showContextMenu?: boolean;
   showDate?: boolean;
-  variant?: 'default' | 'compact';
+  /** Channel and date row below the author name (used in PostCard). */
+  showMetadata?: boolean;
 }
 
 export function PostHeader({
@@ -24,78 +21,50 @@ export function PostHeader({
   onEdit,
   showContextMenu = true,
   showDate = true,
-  variant = 'default',
+  showMetadata = false,
 }: PostHeaderProps) {
   const { t } = useTranslation();
   const { user } = comment;
   const handle = 'handle';
   const showHandle = false;
-  const isCompact = variant === 'compact';
   const formattedDate = formatRelativeCommentDate(comment.dateCreated);
 
-  const dateClassName = clsx([
-    'text-muted-foreground text-xs leading-none',
-    !isCompact && [
-      'underline decoration-transparent',
-      'hover:text-foreground hover:decoration-current',
-      'transition-colors duration-200',
-    ],
-  ]);
-
   return (
-    <div className={clsx('flex items-center', isCompact ? 'gap-2' : 'gap-3')}>
+    <div className="flex items-center gap-3">
       <Link to="/u/$name" params={{ name: user.name }}>
         <Avatar
           avatar={user.avatar}
           alt={t('common:userAvatar', { name: user.name })}
-          className={isCompact ? COMPACT_AVATAR_CLASS : 'h-10 w-10'}
+          className="h-10 w-10"
         />
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex flex-col items-baseline justify-between gap-2 sm:flex-row sm:gap-2">
-          <div className="flex min-w-0 flex-col gap-1">
+          <div className="flex min-w-0 flex-col gap-1.5">
             <div className="flex min-w-0 items-baseline gap-2">
               <Link
                 to="/u/$name"
                 params={{ name: user.name }}
-                className={clsx([
-                  'min-w-0 truncate leading-none',
-                  isCompact
-                    ? 'text-foreground text-sm font-medium hover:underline'
-                    : [
-                        'text-base font-bold',
-                        'underline decoration-transparent',
-                        'hover:decoration-current',
-                        'transition-colors duration-200',
-                      ],
-                ])}
+                className="min-w-0 truncate text-base leading-none font-bold underline decoration-transparent transition-colors duration-200 hover:decoration-current"
               >
                 {user.name}
               </Link>
               {showDate && formattedDate ? (
-                isCompact ? (
-                  <span className={dateClassName}>{formattedDate}</span>
-                ) : (
-                  <Link
-                    to="/post/$id"
-                    params={{ id: comment.id }}
-                    className={dateClassName}
-                  >
-                    {formattedDate}
-                  </Link>
-                )
+                <Link
+                  to="/post/$id"
+                  params={{ id: comment.id }}
+                  className="text-muted-foreground hover:text-foreground text-xs leading-none underline decoration-transparent transition-colors duration-200 hover:decoration-current"
+                >
+                  {formattedDate}
+                </Link>
               ) : null}
             </div>
+            {showMetadata ? <PostMetadata comment={comment} /> : null}
             {showHandle && (
               <Link
                 to="/u/$name"
                 params={{ name: user.name }}
-                className={clsx([
-                  'text-muted-foreground text-sm leading-none',
-                  'underline decoration-transparent',
-                  'hover:text-foreground hover:decoration-current',
-                  'transition-colors duration-200',
-                ])}
+                className="text-muted-foreground hover:text-foreground text-sm leading-none underline decoration-transparent transition-colors duration-200 hover:decoration-current"
               >
                 @{handle}
               </Link>
