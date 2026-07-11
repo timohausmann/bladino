@@ -1,7 +1,8 @@
 import { PostCard } from '@/components/post';
 import { Banner } from '@/components/ui/Banner';
+import { TimelineDivider } from '@/components/ui/TimelineDivider';
 import type { Comment, CommentFeedQuery, CommentFilter } from '@/graphql';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCommentFeed } from './useCommentFeed';
 
@@ -75,7 +76,7 @@ export function CommentFeed({
         <h2 className="text-foreground pt-2 pb-1 text-lg font-bold">{title}</h2>
       )}
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8 py-6">
         {isLoading && (
           <p className="text-muted-foreground py-8 text-center">
             {t('posts:loadingFeed')}
@@ -96,8 +97,13 @@ export function CommentFeed({
           </p>
         )}
 
-        {comments.map((comment) => (
-          <PostCard key={comment.id} comment={comment as Comment} />
+        {comments.map((comment, index) => (
+          <Fragment key={comment.id}>
+            {index === 1 && (
+              <TimelineDivider>{t('posts:timelineEarlier')}</TimelineDivider>
+            )}
+            <PostCard comment={comment as Comment} />
+          </Fragment>
         ))}
 
         {hasNextPage && <div ref={loadMoreRef} aria-hidden className="h-1" />}
