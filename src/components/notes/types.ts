@@ -13,4 +13,4 @@ export const NOTE_EDITOR_FONT_CLASS: Record<NoteEditorFontFamily, string> = {
 export const NOTE_SAVE_DEBOUNCE_MS = 400;
 
 /** Shared horizontal padding for note editor body (aligned with content headers). */
-export const NOTE_EDITOR_PADDING_X = 'px-6';
+export const NOTE_EDITOR_PADDING_X = 'px-2 md:px-6';
