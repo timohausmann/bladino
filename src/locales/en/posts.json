@@ -39,5 +39,6 @@
   "moreOptions": "More options",
   "copyLink": "Copy link",
   "reactWith": "React with {{emoji}}",
-  "addReaction": "Add a reaction"
+  "addReaction": "Add a reaction",
+  "unread": "New"
 }

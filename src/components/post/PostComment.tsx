@@ -8,22 +8,25 @@ import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 import { PostLikes } from '@/components/post/PostLikes';
+import { UnreadIndicator } from '@/components/post/UnreadIndicator';
 
 interface PostCommentProps {
   comment: Comment;
   channel?: string;
+  isUnread?: boolean;
 }
 
 /**
  * PostComment - Compact comment display component
  */
-export function PostComment({ comment, channel }: PostCommentProps) {
+export function PostComment({ comment, channel, isUnread }: PostCommentProps) {
   const { t } = useTranslation();
   const files = getCommentFiles(comment);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="flex gap-3">
+    <div className="relative flex gap-3">
+      <UnreadIndicator isUnread={isUnread} layout="comment" />
       <Avatar
         avatar={comment.user.avatar}
         alt={t('common:userAvatar', { name: comment.user.name })}

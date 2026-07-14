@@ -102,7 +102,7 @@ export function CommentFeed({
             {index === 1 && (
               <TimelineDivider>{t('posts:timelineEarlier')}</TimelineDivider>
             )}
-            <PostCard comment={comment as Comment} />
+            <PostCard comment={comment as Comment} isUnread />
           </Fragment>
         ))}
 

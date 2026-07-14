@@ -13,7 +13,7 @@ const linkPreview = tv({
       'transition-all duration-200',
       'sm:flex-row',
     ],
-    image: 'h-40 w-full flex-shrink-0 bg-black/10 sm:w-1/3 sm:max-w-[240px]',
+    image: 'bg-inset h-40 w-full flex-shrink-0 sm:w-1/3 sm:max-w-[240px]',
     content: 'flex-grow p-3 sm:p-4',
     domain: 'text-muted-foreground mb-2 flex items-center text-sm',
     favicon: 'mr-1.5 h-4 w-4 flex-shrink-0 rounded-sm object-contain',
@@ -36,15 +36,10 @@ const linkPreview = tv({
     },
     hasImage: {
       true: {
-        card: 'bg-black/5 hover:bg-black/10 dark:bg-black/20 dark:hover:bg-black/30',
+        card: 'bg-elevated hover:bg-elevated-hover',
       },
       false: {
-        card: [
-          'border border-solid border-neutral-200/60 bg-transparent',
-          'hover:border-neutral-300/80 hover:bg-black/[0.03]',
-          'dark:border-white/10 dark:bg-transparent',
-          'dark:hover:border-white/20 dark:hover:bg-white/[0.03]',
-        ],
+        card: 'border border-solid border-elevated-border bg-elevated hover:bg-elevated-hover',
       },
     },
   },
