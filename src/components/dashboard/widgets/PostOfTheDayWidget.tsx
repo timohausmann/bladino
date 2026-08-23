@@ -44,6 +44,7 @@ export function PostOfTheDayWidget() {
             weblinks={(post as Comment).weblinks}
             className="text-foreground line-clamp-4 text-sm"
             linkPreviewVariant="compact"
+            parentSurface="surface"
           />
           <Link
             to="/post/$id"

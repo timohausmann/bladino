@@ -55,9 +55,12 @@ export function PostComment({ comment, channel, isUnread }: PostCommentProps) {
               body={comment.body}
               weblinks={comment.weblinks}
               linkPreviewVariant="compact"
+              parentSurface="inset"
               className="text-foreground min-w-0 text-[15px] leading-6"
             />
-            {files.length > 0 && <FilePreview files={files} compact />}
+            {files.length > 0 && (
+              <FilePreview files={files} compact parentSurface="inset" />
+            )}
           </div>
         )}
       </div>

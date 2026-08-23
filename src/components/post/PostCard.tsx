@@ -32,10 +32,10 @@ export function PostCard({ comment, isUnread }: PostCardProps) {
     <div className="relative">
       <UnreadIndicator isUnread={isUnread} layout="card" />
       <article
-        className={`border-card-border bg-inset overflow-hidden rounded-xl border ${floatingSurfaceClassName}`}
+        className={`border-surface-border bg-inset overflow-hidden rounded-xl border ${floatingSurfaceClassName}`}
         style={{ viewTransitionName: `POST_DETAIL-${commentId}` }}
       >
-        <div className="bg-card text-card-foreground flex flex-col gap-4 rounded-xl p-4">
+        <div className="bg-surface text-surface-foreground flex flex-col gap-4 rounded-xl p-4">
           <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">
               <PostHeader

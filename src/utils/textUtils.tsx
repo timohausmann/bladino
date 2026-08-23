@@ -3,6 +3,7 @@ import {
   LinkPreview,
   type LinkPreviewVariant,
 } from '@/components/ui/LinkPreview';
+import type { ParentSurface } from '@/components/ui/surface';
 import React from 'react';
 
 interface WeblinkMatch {
@@ -206,6 +207,7 @@ export function parseCommentBody(
   body: string,
   weblinks?: Array<Weblink | null> | null,
   linkPreviewVariant: LinkPreviewVariant = 'default',
+  parentSurface: ParentSurface = 'surface',
 ): React.ReactNode[] {
   if (!body) {
     return [];
@@ -245,6 +247,7 @@ export function parseCommentBody(
         image={weblink.image ?? undefined}
         icon={weblink.icon ?? undefined}
         variant={linkPreviewVariant}
+        parentSurface={parentSurface}
       />,
     );
 

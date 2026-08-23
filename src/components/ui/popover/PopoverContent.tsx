@@ -1,5 +1,5 @@
 import * as Popover from '@radix-ui/react-popover';
-import { panelStyles } from '@/components/ui/panel';
+import { overlayContentVariants } from '@/components/ui/overlay';
 import { twMerge } from 'tailwind-merge';
 
 interface PopoverContentProps {
@@ -21,8 +21,10 @@ export function PopoverContent({
     <Popover.Portal>
       <Popover.Content
         className={twMerge(
-          panelStyles.surface,
-          panelStyles.dropdownContent,
+          overlayContentVariants({
+            tone: 'elevated',
+            motion: 'dropdown',
+          }),
           'z-50 origin-top-right p-2',
           width,
           className,
@@ -31,7 +33,7 @@ export function PopoverContent({
         align="end"
       >
         <div className="space-y-1">{children}</div>
-        <Popover.Arrow className="fill-panel" />
+        <Popover.Arrow className="fill-elevated" />
       </Popover.Content>
     </Popover.Portal>
   );

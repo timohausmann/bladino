@@ -1,0 +1,98 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as PostCardStories from '../../src/components/post/PostCard.stories';
+
+<Meta title="Design System/Surface Layers" />
+
+# Surface Layers
+
+Surface tokens are a **four-step ladder**. Fill values are **solid colors**;
+hairline strokes may use transparency so they adapt to the owning fill. Nested
+fills never skip a step relative to the parent.
+
+Definitions live in `src/tailwind.css`. The typed overlay recipe composes
+chrome, tone, and motion in `src/components/ui/overlay/overlayVariants.ts`;
+behavior-heavy keyframes remain in `overlay.module.css`. Dialogs paint
+`surface`; dropdowns and popovers paint `elevated`. Overlay is a placement
+recipe, not a fifth fill level.
+
+## Styling layers
+
+1. **Token** — `tailwind.css` owns primitive values and semantic aliases.
+2. **Utility** — Tailwind exposes aliases as `bg-surface`,
+   `border-elevated-border`, and related atomic classes.
+3. **Recipe** — `tailwind-variants` combines recurring classes into typed
+   variants such as overlay `tone` and `motion`.
+4. **Component** — UI primitives select a recipe variant and add only their
+   local layout.
+
+CSS Modules are reserved for keyframes, stateful selectors, pseudo-elements,
+and third-party overrides. Do not add global `.surface-*` combination classes;
+reusable combinations belong in a typed recipe.
+
+## Ladder
+
+| Step   | Token / class                          | Role                                                                      |
+| ------ | -------------------------------------- | ------------------------------------------------------------------------- |
+| **+1** | `--color-elevated` / `bg-elevated`     | On surface — previews, dropdowns, popovers                                |
+| **0**  | `--color-surface` / `bg-surface`       | Default: post body, layout frames, dialogs                                |
+| **−1** | `--color-inset` / `bg-inset`           | Wells: reply thread, textarea on surface, image well on a surface preview |
+| **−2** | `--color-inset-deep` / `bg-inset-deep` | Control on inset — active reply textarea                                  |
+
+**Never skip a step:**
+
+- Preview with `parentSurface="surface"` → `elevated`
+- Preview with `parentSurface="inset"` → `surface`
+- Image well one step below the preview: `surface` or `inset`, matching its context
+- Textarea on surface → `inset`
+- Reply textarea idle → `inset` (same as the thread); focused/filled → `inset-deep`
+
+`compact` only controls layout density. `parentSurface` describes the parent
+fill and therefore selects the preview fill.
+
+Interactive previews stay on their semantic level: `surface` uses
+`bg-surface-hover`, while `elevated` uses `bg-elevated-hover`.
+In light mode, hover moves toward the next lighter level without crossing it;
+`elevated-hover` reaches canvas white.
+
+## Outside the ladder
+
+| Token                                                               | Role                                                                                   |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `--color-background`                                                | Page canvas — lighter than elevated in light; currently equal to inset-deep in dark    |
+| `--color-line`, `--color-surface-border`, `--color-elevated-border` | Translucent hairlines composited over the owning fill                                  |
+| Overlay chrome                                                      | Shared shadow/radius/stroke. Dialogs use surface; dropdowns and popovers use elevated. |
+
+Layout names like `ContextPanel` are app structure, not color tokens. The
+`Card` component uses surface tokens; `PostCard` is a feature name.
+
+## PostCard structure
+
+```
+background
+└── article (inset + border) ──────────────── outer frame
+    ├── div (surface) ─────────────────────── post body
+    │   ├── CommentBody
+    │   ├── LinkPreview (elevated)
+    │   │   └── image well (surface)
+    │   └── FilePreview (elevated)
+    └── div (inset) ───────────────────────── replies + reply composer
+        ├── PostComment
+        │   ├── CommentBody
+        │   │   └── LinkPreview compact (surface)
+        │   └── FilePreview compact (surface)
+        └── PostReply → CommentComposerForm
+            ├── Textarea idle (inset) / active (inset-deep)
+            └── FilePreview compact (surface)   …when drafting attachments
+```
+
+## Live example
+
+The **Post → PostCard → Full** story shows every layer at once: previews on
+surface, compact previews on inset, and the reply field.
+
+<Canvas of={PostCardStories.Full} />
+
+## Dark mode
+
+Same token names. `.dark` remaps the primitive slots in `tailwind.css`;
+semantic aliases follow. Visual order is unchanged.

@@ -1,4 +1,4 @@
-import { panelStyles } from '@/components/ui/panel';
+import { overlayContentVariants } from '@/components/ui/overlay';
 import { EmojiPicker as FrimoussePicker } from 'frimousse';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +14,10 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
   return (
     <FrimoussePicker.Root
       className={twMerge(
-        panelStyles.surface,
-        panelStyles.dropdownContent,
+        overlayContentVariants({
+          tone: 'elevated',
+          motion: 'dropdown',
+        }),
         'isolate flex h-[368px] w-fit flex-col',
       )}
       onEmojiSelect={(emoji) => {
@@ -36,7 +38,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
           components={{
             CategoryHeader: ({ category, ...props }) => (
               <div
-                className="bg-white px-3 pt-3 pb-1.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
+                className="bg-elevated px-3 pt-3 pb-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400"
                 {...props}
               >
                 {category.label}

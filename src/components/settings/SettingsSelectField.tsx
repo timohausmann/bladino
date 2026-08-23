@@ -1,7 +1,6 @@
-import { panelStyles } from '@/components/ui/panel';
+import { overlayContentVariants } from '@/components/ui/overlay';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDown } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
 
 interface SettingsSelectOption<T extends string> {
   value: T;
@@ -40,10 +39,10 @@ export function SettingsSelectField<T extends string>({
         </Select.Trigger>
         <Select.Portal>
           <Select.Content
-            className={twMerge(
-              panelStyles.surface,
-              panelStyles.dropdownContent,
-            )}
+            className={overlayContentVariants({
+              tone: 'elevated',
+              motion: 'dropdown',
+            })}
           >
             <Select.Viewport className="p-1">
               {options.map((option) => (

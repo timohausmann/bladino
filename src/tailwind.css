@@ -2,41 +2,58 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --color-neutral-850: oklch(23.5% 0 0);
+/*
+ * Surface ladder primitives — oklch lives only here (no --color- prefix,
+ * so Tailwind does not emit bg-surface-default etc.).
+ * elevated +1 · surface 0 · inset -1 · inset-deep -2
+ * Light fills descend by 2.4 L; hover lifts halfway toward the next level.
+ * Stroke and canvas sit outside the ladder.
+ */
+:root {
+  --surface-elevated-hover: oklch(100% 0 0);
+  --surface-elevated: oklch(98.8% 0 0);
+  --surface-default-hover: oklch(97.6% 0 0);
+  --surface-default: oklch(96.4% 0 0);
+  --surface-inset: oklch(94% 0 0);
+  --surface-inset-deep: oklch(91.6% 0 0);
+  --stroke: rgb(0 0 0 / 8%);
+}
 
-  /* Light theme (default) — one flat surface, content separated by hairlines */
+@theme {
   --color-background: var(--color-white);
   --color-foreground: var(--color-neutral-900);
   --color-muted: var(--color-neutral-100);
   --color-muted-foreground: var(--color-neutral-500);
-  --color-card: var(--color-white);
-  --color-card-foreground: var(--color-neutral-900);
-  --color-card-border: var(--color-neutral-200);
-  --color-inset: var(--color-neutral-100);
-  --color-panel: var(--color-white);
-  --color-panel-border: var(--color-neutral-200);
-  /* Structural hairline between layout regions and feed items */
-  --color-line: var(--color-neutral-200);
-  /* Accent (cyan) — matches the theme's brand color */
+  --color-surface: var(--surface-default);
+  --color-surface-hover: var(--surface-default-hover);
+  --color-surface-foreground: var(--color-neutral-900);
+  --color-surface-border: var(--stroke);
+  --color-inset: var(--surface-inset);
+  --color-inset-deep: var(--surface-inset-deep);
+  --color-elevated: var(--surface-elevated);
+  --color-elevated-hover: var(--surface-elevated-hover);
+  --color-elevated-border: var(--stroke);
+  --color-line: var(--stroke);
   --color-primary: var(--color-cyan-500);
   --color-primary-foreground: var(--color-white);
   --ease-dialog-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Dark theme — soft dark base (not near-black), lifted surfaces for overlays */
+/* Dark remaps ladder primitives; semantic --color-* aliases follow. */
 .dark {
+  --surface-elevated: oklch(31% 0 0);
+  --surface-elevated-hover: oklch(33.5% 0 0);
+  --surface-default: var(--color-neutral-800);
+  --surface-default-hover: oklch(28.5% 0 0);
+  --surface-inset: oklch(23.5% 0 0);
+  --surface-inset-deep: var(--color-neutral-900);
+  --stroke: rgb(255 255 255 / 8%);
+
   --color-background: var(--color-neutral-900);
   --color-foreground: var(--color-neutral-50);
   --color-muted: var(--color-neutral-800);
   --color-muted-foreground: var(--color-neutral-400);
-  --color-card: var(--color-neutral-800);
-  --color-card-foreground: var(--color-neutral-100);
-  --color-card-border: rgb(255 255 255 / 8%);
-  --color-inset: var(--color-neutral-850);
-  --color-panel: var(--color-neutral-800);
-  --color-panel-border: rgb(255 255 255 / 8%);
-  --color-line: rgb(255 255 255 / 8%);
+  --color-surface-foreground: var(--color-neutral-100);
   --color-primary: var(--color-cyan-500);
   --color-primary-foreground: var(--color-neutral-950);
 }

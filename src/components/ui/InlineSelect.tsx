@@ -1,4 +1,4 @@
-import { panelStyles } from '@/components/ui/panel';
+import { overlayContentVariants } from '@/components/ui/overlay';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
@@ -79,8 +79,10 @@ export function InlineSelect<T extends string = string>({
       <Select.Portal>
         <Select.Content
           className={twMerge(
-            panelStyles.surface,
-            panelStyles.dropdownContent,
+            overlayContentVariants({
+              tone: 'elevated',
+              motion: 'dropdown',
+            }),
             'z-50',
           )}
         >

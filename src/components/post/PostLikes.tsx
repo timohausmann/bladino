@@ -7,7 +7,10 @@ import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
-import { panelStyles } from '@/components/ui/panel';
+import {
+  overlayBackdropEnterClassName,
+  overlayContentVariants,
+} from '@/components/ui/overlay';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { PostVoteButton } from '@/components/post/PostVoteButton';
 import { useOptimisticCommentVote } from '@/components/post/useOptimisticCommentVote';
@@ -108,16 +111,18 @@ function LikesDialog({
       <Dialog.Portal>
         <Dialog.Overlay
           className={clsx(
-            panelStyles.overlay,
+            overlayBackdropEnterClassName,
             'fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
           )}
         />
         <Dialog.Content
           className={clsx(
             'fixed top-1/2 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md',
-            panelStyles.content,
-            '-translate-x-1/2 -translate-y-1/2 rounded-xl border border-neutral-200',
-            'bg-white p-6 shadow-xl focus:outline-none dark:border-neutral-700 dark:bg-neutral-900',
+            overlayContentVariants({
+              tone: 'surface',
+              motion: 'dialog',
+            }),
+            '-translate-x-1/2 -translate-y-1/2 p-6 focus:outline-none',
           )}
         >
           <div className="mb-4 flex items-center justify-between gap-4">
@@ -145,7 +150,7 @@ function LikesDialog({
                   key={user.id}
                   to="/u/$name"
                   params={{ name: user.name }}
-                  className="hover:bg-muted flex items-center gap-3 rounded-xl px-1 py-2 transition-colors"
+                  className="hover:bg-surface-hover flex items-center gap-3 rounded-xl px-1 py-2 transition-colors"
                 >
                   <Avatar
                     avatar={user.avatar}

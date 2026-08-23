@@ -16,7 +16,7 @@ import { twMerge } from 'tailwind-merge';
 const REPLY_TEXTAREA_COMPACT_CLASS =
   'min-h-6 max-h-[400px] overflow-y-auto rounded-none bg-inset p-0 text-[15px] leading-6';
 const REPLY_TEXTAREA_ACTIVE_CLASS =
-  'min-h-14 max-h-[400px] overflow-y-auto px-3 py-3 text-base leading-normal dark:bg-neutral-900';
+  'min-h-14 max-h-[400px] overflow-y-auto bg-inset-deep px-3 py-3 text-base leading-normal';
 
 /** Paperclip always visible; emoji picker from md breakpoint. */
 const COMPOSER_END_ADORNMENT_SLOTS = { base: 1, md: 2 } as const;
@@ -126,6 +126,8 @@ export function CommentComposerForm({
         <FilePreview
           files={composer.files}
           onRemove={composer.handleRemoveFile}
+          compact={isReply}
+          parentSurface={isReply ? 'inset' : 'surface'}
         />
       </div>
     ) : null;

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { Comment } from '@/graphql';
-import { mockComments } from '@/mocks';
+import { getUserById, mockComments } from '@/mocks';
 import { withPostCardLayout } from '../../../.storybook/decorators/withPostProviders';
 import { PostCard } from './PostCard';
 
@@ -28,6 +28,77 @@ const withLinkComment: Comment = {
       descr: 'A practical guide to mobile-first responsive layouts.',
       image: 'https://picsum.photos/800/420',
       icon: null,
+      dateCreated: '2023-05-25',
+    },
+  ],
+};
+
+const replyLinkUrl = 'https://example.com/design-system-guide';
+
+const fullComment: Comment = {
+  ...textOnlyComment,
+  id: 'post-full',
+  body: `Shipped a new release with docs and screenshots. Full write-up: ${withLinkUrl}`,
+  voteNum: 42,
+  files: [
+    {
+      id: 'file-full-1',
+      user: getUserById('user-4')!,
+      filename: '/mockfiles/image-landscape.jpeg',
+      name: 'release-screenshot.jpeg',
+      type: 'image/jpeg',
+      size: 71000,
+    },
+    {
+      id: 'file-full-2',
+      user: getUserById('user-4')!,
+      filename: '/mockfiles/dummy.pdf',
+      name: 'release-notes.pdf',
+      type: 'application/pdf',
+      size: 13000,
+    },
+  ],
+  weblinks: [
+    {
+      id: 'weblink-full-1',
+      url: withLinkUrl,
+      alias: [withLinkUrl],
+      title: 'Responsive Design Patterns',
+      descr: 'A practical guide to mobile-first responsive layouts.',
+      image: 'https://picsum.photos/800/420',
+      icon: null,
+      dateCreated: '2023-05-25',
+    },
+  ],
+  children: [
+    {
+      id: 'comment-full-1',
+      user: getUserById('user-5')!,
+      parent: 'post-full',
+      body: `Love it — here's a related guide: ${replyLinkUrl}`,
+      dateCreated: '2023-05-25',
+      weblinks: [
+        {
+          id: 'weblink-reply-1',
+          url: replyLinkUrl,
+          alias: [replyLinkUrl],
+          title: 'Design System Guide',
+          descr: 'Tokens, surfaces, and component conventions.',
+          image: 'https://picsum.photos/640/360',
+          icon: null,
+          dateCreated: '2023-05-25',
+        },
+      ],
+      files: [
+        {
+          id: 'file-reply-1',
+          user: getUserById('user-5')!,
+          filename: '/mockfiles/dummy.pdf',
+          name: 'feedback-sketch.pdf',
+          type: 'application/pdf',
+          size: 13000,
+        },
+      ],
     },
   ],
 };
@@ -91,5 +162,12 @@ export const WithReplies: Story = {
   args: {
     ...TextOnly.args,
     comment: commentOptions['post-3'],
+  },
+};
+
+export const Full: Story = {
+  args: {
+    ...TextOnly.args,
+    comment: fullComment,
   },
 };

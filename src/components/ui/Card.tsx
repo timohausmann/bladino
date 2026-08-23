@@ -12,7 +12,7 @@ export interface CardProps {
 
 export function Card({ children, className, viewTransitionName }: CardProps) {
   const classes = twMerge(
-    'rounded-xl border border-card-border bg-card p-4 text-card-foreground',
+    'rounded-xl border border-surface-border bg-surface p-4 text-surface-foreground',
     floatingSurfaceClassName,
     className,
   );

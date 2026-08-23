@@ -27,7 +27,7 @@ export function DashboardWidget({
     >
       <header
         className={clsx(
-          'dashboard-widget-header border-card-border flex w-full shrink-0 cursor-grab items-center gap-2 border-b px-3 py-2',
+          'dashboard-widget-header border-surface-border flex w-full shrink-0 cursor-grab items-center gap-2 border-b px-3 py-2',
           'touch-none select-none active:cursor-grabbing',
         )}
       >

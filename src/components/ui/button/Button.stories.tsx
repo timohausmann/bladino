@@ -112,7 +112,7 @@ export const VariantMatrix: Story = {
     controls: { disable: true },
   },
   render: (args) => (
-    <div className="bg-card max-w-3xl space-y-6 rounded-xl border border-black/10 p-6 dark:border-white/10">
+    <div className="bg-surface max-w-3xl space-y-6 rounded-xl border border-black/10 p-6 dark:border-white/10">
       <div className="space-y-1">
         <h2 className="text-lg font-semibold">Button variants</h2>
         <p className="text-muted-foreground text-sm">

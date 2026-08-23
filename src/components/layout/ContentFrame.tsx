@@ -13,7 +13,7 @@ export function ContentFrame({ children, className }: ContentFrameProps) {
   return (
     <div
       className={clsx(
-        'bg-card border-card-border flex h-full min-h-0 flex-1 overflow-hidden rounded-2xl border',
+        'bg-surface border-surface-border flex h-full min-h-0 flex-1 overflow-hidden rounded-2xl border',
         floatingSurfaceClassName,
         className,
       )}

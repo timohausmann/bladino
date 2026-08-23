@@ -1,4 +1,5 @@
 import { AsyncImage } from '@/components/ui/AsyncImage';
+import type { ParentSurface } from '@/components/ui/surface';
 import { ExternalLink } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +14,7 @@ const linkPreview = tv({
       'transition-all duration-200',
       'sm:flex-row',
     ],
-    image: 'bg-inset h-40 w-full flex-shrink-0 sm:w-1/3 sm:max-w-[240px]',
+    image: 'h-40 w-full flex-shrink-0 sm:w-1/3 sm:max-w-[240px]',
     content: 'flex-grow p-3 sm:p-4',
     domain: 'text-muted-foreground mb-2 flex items-center text-sm',
     favicon: 'mr-1.5 h-4 w-4 flex-shrink-0 rounded-sm object-contain',
@@ -34,17 +35,27 @@ const linkPreview = tv({
         description: 'text-xs',
       },
     },
-    hasImage: {
-      true: {
-        card: 'bg-elevated hover:bg-elevated-hover',
+    parentSurface: {
+      // Nested previews always move exactly one level above their parent.
+      surface: {
+        card: 'border-elevated-border bg-elevated hover:bg-elevated-hover',
+        image: 'bg-surface',
       },
+      inset: {
+        card: 'border-surface-border bg-surface hover:bg-surface-hover',
+        image: 'bg-inset',
+      },
+    },
+    hasImage: {
+      true: {},
       false: {
-        card: 'border border-solid border-elevated-border bg-elevated hover:bg-elevated-hover',
+        card: 'border border-solid',
       },
     },
   },
   defaultVariants: {
     variant: 'default',
+    parentSurface: 'surface',
     hasImage: true,
   },
 });
@@ -56,6 +67,8 @@ interface LinkPreviewProps {
   image?: string;
   icon?: string;
   variant?: LinkPreviewVariant;
+  /** Fill of the parent containing this preview. */
+  parentSurface?: ParentSurface;
 }
 
 /**
@@ -69,6 +82,7 @@ export function LinkPreview({
   image,
   icon,
   variant = 'default',
+  parentSurface = 'surface',
 }: LinkPreviewProps) {
   const { t } = useTranslation();
   const domain = useMemo(() => {
@@ -80,7 +94,11 @@ export function LinkPreview({
   }, [url]);
 
   const displayTitle = title || domain;
-  const styles = linkPreview({ variant, hasImage: Boolean(image) });
+  const styles = linkPreview({
+    variant,
+    parentSurface,
+    hasImage: Boolean(image),
+  });
   const externalLinkSize = variant === 'compact' ? 12 : 14;
   const externalLinkClass = variant === 'compact' ? 'ml-1' : 'ml-1.5';
 
