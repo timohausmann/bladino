@@ -6,21 +6,22 @@
  * Surface ladder primitives — oklch lives only here (no --color- prefix,
  * so Tailwind does not emit bg-surface-default etc.).
  * elevated +1 · surface 0 · inset -1 · inset-deep -2
- * Light fills descend by 2.4 L; hover lifts halfway toward the next level.
+ * Light uses shared white fills for Surface/Elevated; chrome conveys elevation.
  * Stroke and canvas sit outside the ladder.
  */
 :root {
-  --surface-elevated-hover: oklch(100% 0 0);
-  --surface-elevated: oklch(98.8% 0 0);
-  --surface-default-hover: oklch(97.6% 0 0);
-  --surface-default: oklch(96.4% 0 0);
-  --surface-inset: oklch(94% 0 0);
-  --surface-inset-deep: oklch(91.6% 0 0);
+  --canvas: oklch(96% 0 0);
+  --surface-elevated-hover: oklch(98.5% 0 0);
+  --surface-elevated: oklch(100% 0 0);
+  --surface-default-hover: oklch(98.5% 0 0);
+  --surface-default: oklch(100% 0 0);
+  --surface-inset: oklch(96% 0 0);
+  --surface-inset-deep: oklch(92% 0 0);
   --stroke: rgb(0 0 0 / 8%);
 }
 
 @theme {
-  --color-background: var(--color-white);
+  --color-background: var(--canvas);
   --color-foreground: var(--color-neutral-900);
   --color-muted: var(--color-neutral-100);
   --color-muted-foreground: var(--color-neutral-500);
@@ -41,6 +42,7 @@
 
 /* Dark remaps ladder primitives; semantic --color-* aliases follow. */
 .dark {
+  --canvas: var(--color-neutral-900);
   --surface-elevated: oklch(31% 0 0);
   --surface-elevated-hover: oklch(33.5% 0 0);
   --surface-default: var(--color-neutral-800);
@@ -49,7 +51,6 @@
   --surface-inset-deep: var(--color-neutral-900);
   --stroke: rgb(255 255 255 / 8%);
 
-  --color-background: var(--color-neutral-900);
   --color-foreground: var(--color-neutral-50);
   --color-muted: var(--color-neutral-800);
   --color-muted-foreground: var(--color-neutral-400);

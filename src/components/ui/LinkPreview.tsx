@@ -10,7 +10,7 @@ export type LinkPreviewVariant = 'default' | 'compact';
 const linkPreview = tv({
   slots: {
     card: [
-      'flex flex-col overflow-hidden rounded-lg',
+      'flex flex-col overflow-hidden rounded-lg border border-solid',
       'transition-all duration-200',
       'sm:flex-row',
     ],
@@ -46,17 +46,10 @@ const linkPreview = tv({
         image: 'bg-inset',
       },
     },
-    hasImage: {
-      true: {},
-      false: {
-        card: 'border border-solid',
-      },
-    },
   },
   defaultVariants: {
     variant: 'default',
     parentSurface: 'surface',
-    hasImage: true,
   },
 });
 
@@ -97,7 +90,6 @@ export function LinkPreview({
   const styles = linkPreview({
     variant,
     parentSurface,
-    hasImage: Boolean(image),
   });
   const externalLinkSize = variant === 'compact' ? 12 : 14;
   const externalLinkClass = variant === 'compact' ? 'ml-1' : 'ml-1.5';

@@ -5,9 +5,11 @@ import * as PostCardStories from '../../src/components/post/PostCard.stories';
 
 # Surface Layers
 
-Surface tokens are a **four-step ladder**. Fill values are **solid colors**;
+Surface tokens describe **four semantic depth levels**. Dark mode renders all
+four as a luminance ladder. Light mode intentionally aliases `surface` and
+`elevated` to white and conveys elevation through chrome. Fill values are solid;
 hairline strokes may use transparency so they adapt to the owning fill. Nested
-fills never skip a step relative to the parent.
+fills never skip a semantic step relative to the parent.
 
 Definitions live in `src/tailwind.css`. The typed overlay recipe composes
 chrome, tone, and motion in `src/components/ui/overlay/overlayVariants.ts`;
@@ -51,14 +53,15 @@ fill and therefore selects the preview fill.
 
 Interactive previews stay on their semantic level: `surface` uses
 `bg-surface-hover`, while `elevated` uses `bg-elevated-hover`.
-In light mode, hover moves toward the next lighter level without crossing it;
-`elevated-hover` reaches canvas white.
+In light mode, both white fills darken to a shared hover value; borders and
+shadows distinguish Elevated from Surface. The page canvas shares the `inset`
+value, so both raised levels read as white.
 
 ## Outside the ladder
 
 | Token                                                               | Role                                                                                   |
 | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `--color-background`                                                | Page canvas — lighter than elevated in light; currently equal to inset-deep in dark    |
+| `--color-background`                                                | Page canvas — currently equal to inset in light and inset-deep in dark                 |
 | `--color-line`, `--color-surface-border`, `--color-elevated-border` | Translucent hairlines composited over the owning fill                                  |
 | Overlay chrome                                                      | Shared shadow/radius/stroke. Dialogs use surface; dropdowns and popovers use elevated. |
 

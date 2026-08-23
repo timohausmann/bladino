@@ -95,9 +95,9 @@ export function FilePreview({
 
   const previewClassName = twMerge(
     parentSurface === 'inset'
-      ? 'bg-surface hover:bg-surface-hover'
-      : 'bg-elevated hover:bg-elevated-hover',
-    'relative min-w-0 overflow-hidden rounded-lg transition-all duration-200',
+      ? 'border-surface-border bg-surface hover:bg-surface-hover'
+      : 'border-elevated-border bg-elevated hover:bg-elevated-hover',
+    'relative min-w-0 overflow-hidden rounded-lg border transition-all duration-200',
     isImagePost ? twMerge('w-full', IMAGE_POST_MAX_HEIGHT) : 'aspect-3/2',
   );
 
