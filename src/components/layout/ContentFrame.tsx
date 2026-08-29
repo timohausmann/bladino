@@ -2,14 +2,19 @@ import clsx from 'clsx';
 import { floatingSurfaceClassName } from '@/components/ui/Card';
 
 interface ContentFrameProps {
+  sidebar: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 }
 
 /**
- * Shared card-like surface for dense master/detail routes.
+ * Shared surface for master/detail routes.
  */
-export function ContentFrame({ children, className }: ContentFrameProps) {
+export function ContentFrame({
+  sidebar,
+  children,
+  className,
+}: ContentFrameProps) {
   return (
     <div
       className={clsx(
@@ -18,7 +23,10 @@ export function ContentFrame({ children, className }: ContentFrameProps) {
         className,
       )}
     >
-      {children}
+      <aside className="border-line flex min-h-0 w-72 shrink-0 flex-col border-r">
+        {sidebar}
+      </aside>
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</div>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { ContextPanel } from '@/components/layout/ContextPanel';
 import { ContentFrame } from '@/components/layout/ContentFrame';
 import {
   getNextNoteIdAfterDelete,
@@ -70,30 +69,27 @@ export function Notes() {
   };
 
   return (
-    <ContentFrame>
-      <ContextPanel
-        header={
+    <ContentFrame
+      sidebar={
+        <>
           <NotesSidebarToolbar
             onCreate={handleCreate}
             isCreating={addNote.isPending}
           />
-        }
-      >
-        <NotesSidebarList
-          notes={notes}
-          selectedId={selectedId}
-          isLoading={isLoading}
-          onSelect={handleSelect}
-        />
-      </ContextPanel>
-
-      <div className="bg-surface flex min-h-0 min-w-0 flex-1 flex-col">
-        {selectedId ? (
-          <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
-        ) : (
-          <NotesEmptyState />
-        )}
-      </div>
+          <NotesSidebarList
+            notes={notes}
+            selectedId={selectedId}
+            isLoading={isLoading}
+            onSelect={handleSelect}
+          />
+        </>
+      }
+    >
+      {selectedId ? (
+        <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
+      ) : (
+        <NotesEmptyState />
+      )}
     </ContentFrame>
   );
 }

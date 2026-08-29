@@ -7,7 +7,6 @@ import {
   type MailFolder,
   useMailComposer,
 } from '@/components/mails';
-import { ContextPanel } from '@/components/layout/ContextPanel';
 import { ContentFrame } from '@/components/layout/ContentFrame';
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { MailsDocument, useGraphQLQuery } from '@/graphql';
@@ -126,29 +125,28 @@ export function Mails() {
   };
 
   return (
-    <ContentFrame>
-      <ContextPanel
-        header={
-          <MailsSidebarToolbar
-            onCompose={handleCompose}
-            folder={folder}
-            onFolderChange={handleFolderChange}
-            onReload={handleReload}
-            isReloading={isFetching && !isLoading}
-            isSending={composer.isSending}
-          />
+    <>
+      <ContentFrame
+        sidebar={
+          <>
+            <MailsSidebarToolbar
+              onCompose={handleCompose}
+              folder={folder}
+              onFolderChange={handleFolderChange}
+              onReload={handleReload}
+              isReloading={isFetching && !isLoading}
+              isSending={composer.isSending}
+            />
+            <MailsSidebarList
+              mails={mails}
+              folder={folder}
+              selectedId={selectedId}
+              isLoading={isLoading}
+              onSelect={handleSelect}
+            />
+          </>
         }
       >
-        <MailsSidebarList
-          mails={mails}
-          folder={folder}
-          selectedId={selectedId}
-          isLoading={isLoading}
-          onSelect={handleSelect}
-        />
-      </ContextPanel>
-
-      <div className="bg-surface flex min-h-0 min-w-0 flex-1 flex-col">
         {isComposing ? (
           <MailComposer
             to={composer.to}
@@ -171,7 +169,7 @@ export function Mails() {
         ) : (
           <MailsEmptyState />
         )}
-      </div>
+      </ContentFrame>
 
       <ConfirmDialog
         open={discardOpen}
@@ -187,6 +185,6 @@ export function Mails() {
         destructive
         onConfirm={handleDiscardConfirm}
       />
-    </ContentFrame>
+    </>
   );
 }
