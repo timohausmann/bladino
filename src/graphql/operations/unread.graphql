@@ -1,0 +1,29 @@
+query UnreadOverview {
+  unreadOverview {
+    snapshotAt
+    feed {
+      lastViewedAt
+      unreadCount
+      unreadPostCount
+    }
+    channels {
+      channel {
+        id
+        name
+        dateCreated
+      }
+      lastViewedAt
+      effectiveLastViewedAt
+      unreadCount
+      unreadPostCount
+    }
+  }
+}
+
+mutation UpdateHomeFeedView($viewedAt: Date!) {
+  updateHomeFeedView(viewedAt: $viewedAt)
+}
+
+mutation UpdateChannelView($id: ID!, $viewedAt: Date!) {
+  updateChannelView(id: $id, viewedAt: $viewedAt)
+}

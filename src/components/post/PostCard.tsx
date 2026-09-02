@@ -16,12 +16,13 @@ import { UnreadIndicator } from '@/components/post/UnreadIndicator';
 interface PostCardProps {
   comment: Comment;
   isUnread?: boolean;
+  getIsUnread?: (comment: Comment) => boolean;
 }
 
 /**
  * PostCard - Main post as a floating card; nested comments stack inside.
  */
-export function PostCard({ comment, isUnread }: PostCardProps) {
+export function PostCard({ comment, isUnread, getIsUnread }: PostCardProps) {
   const { t } = useTranslation();
   const { id: commentId } = comment;
   const children = getCommentChildren(comment);
@@ -86,6 +87,7 @@ export function PostCard({ comment, isUnread }: PostCardProps) {
                 <PostComment
                   comment={child}
                   channel={comment.channel ?? undefined}
+                  isUnread={getIsUnread?.(child)}
                 />
               </div>
             ))}

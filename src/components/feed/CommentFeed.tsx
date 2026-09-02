@@ -2,9 +2,15 @@ import { PostCard } from '@/components/post';
 import { Banner } from '@/components/ui/Banner';
 import { TimelineDivider } from '@/components/ui/TimelineDivider';
 import type { Comment, CommentFeedQuery, CommentFilter } from '@/graphql';
-import { useEffect, useMemo, useRef, Fragment } from 'react';
+import { useCallback, useEffect, useMemo, useRef, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  getFeedSectionIndexes,
+  isCommentUnread,
+  type FeedReadScope,
+} from './feedReadState';
 import { useCommentFeed } from './useCommentFeed';
+import { useFeedReadSession } from './useFeedReadSession';
 
 export type FeedComment = NonNullable<
   NonNullable<CommentFeedQuery['commentFeed']>['comments'][number]
@@ -15,6 +21,7 @@ export interface CommentFeedProps {
   emptyMessage?: string;
   title?: string;
   className?: string;
+  readScope?: FeedReadScope;
 }
 
 /**
@@ -26,9 +33,11 @@ export function CommentFeed({
   emptyMessage,
   title,
   className,
+  readScope,
 }: CommentFeedProps) {
   const { t } = useTranslation();
   const resolvedEmptyMessage = emptyMessage ?? t('posts:emptyFeed');
+  const { snapshot, currentUserId } = useFeedReadSession(readScope);
 
   const {
     data,
@@ -49,6 +58,20 @@ export function CommentFeed({
         ),
       ),
     [data],
+  );
+  const sectionIndexes = useMemo(
+    () => getFeedSectionIndexes(comments, snapshot?.lastViewedAt),
+    [comments, snapshot?.lastViewedAt],
+  );
+  const unreadPostCount = snapshot?.unreadPostCount ?? 0;
+  const hasNewPostSection =
+    sectionIndexes.newPostsIndex !== null && unreadPostCount > 0;
+  const getIsUnread = useCallback(
+    (comment: Comment) =>
+      snapshot
+        ? isCommentUnread(comment, snapshot.lastViewedAt, currentUserId)
+        : false,
+    [currentUserId, snapshot],
   );
 
   useEffect(() => {
@@ -99,10 +122,23 @@ export function CommentFeed({
 
         {comments.map((comment, index) => (
           <Fragment key={comment.id}>
-            {index === 1 && (
-              <TimelineDivider>{t('posts:timelineEarlier')}</TimelineDivider>
+            {hasNewPostSection && index === sectionIndexes.newPostsIndex && (
+              <TimelineDivider
+                label={t('posts:timelineNew', {
+                  count: unreadPostCount,
+                })}
+                showNewIndicator
+              />
             )}
-            <PostCard comment={comment as Comment} isUnread />
+            {hasNewPostSection &&
+              index === sectionIndexes.earlierPostsIndex && (
+                <TimelineDivider label={t('posts:timelineEarlier')} />
+              )}
+            <PostCard
+              comment={comment as Comment}
+              isUnread={getIsUnread(comment as Comment)}
+              getIsUnread={getIsUnread}
+            />
           </Fragment>
         ))}
 

@@ -14,9 +14,16 @@ export type Channel = {
   __typename?: 'Channel';
   dateCreated: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
-  lastView?: Maybe<Scalars['Date']['output']>;
   name: Scalars['String']['output'];
-  unreadCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ChannelUnreadState = {
+  __typename?: 'ChannelUnreadState';
+  channel: Channel;
+  effectiveLastViewedAt: Scalars['Date']['output'];
+  lastViewedAt: Scalars['Date']['output'];
+  unreadCount: Scalars['Int']['output'];
+  unreadPostCount: Scalars['Int']['output'];
 };
 
 export type Comment = Post & {
@@ -46,6 +53,13 @@ export type CommentFilter = {
   mediaOnly?: InputMaybe<Scalars['Boolean']['input']>;
   parent?: InputMaybe<Scalars['ID']['input']>;
   user?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type FeedUnreadState = {
+  __typename?: 'FeedUnreadState';
+  lastViewedAt: Scalars['Date']['output'];
+  unreadCount: Scalars['Int']['output'];
+  unreadPostCount: Scalars['Int']['output'];
 };
 
 export type File = Post & {
@@ -106,7 +120,7 @@ export type Mutation = {
   sendEmail?: Maybe<Scalars['Boolean']['output']>;
   toggleVote: Scalars['Int']['output'];
   updateChannel: Channel;
-  updateChannelView?: Maybe<Scalars['Boolean']['output']>;
+  updateChannelView: Scalars['Boolean']['output'];
   /**
    * Partial update with replace semantics for files.
    *
@@ -122,6 +136,7 @@ export type Mutation = {
    * A comment must always have body and/or at least one file after the update.
    */
   updateComment: Comment;
+  updateHomeFeedView: Scalars['Boolean']['output'];
   updateNote: Note;
   updatePassword?: Maybe<Scalars['Boolean']['output']>;
   updateUser: User;
@@ -254,6 +269,7 @@ export type MutationUpdateChannelArgs = {
 
 export type MutationUpdateChannelViewArgs = {
   id: Scalars['ID']['input'];
+  viewedAt: Scalars['Date']['input'];
 };
 
 
@@ -261,6 +277,11 @@ export type MutationUpdateCommentArgs = {
   body?: InputMaybe<Scalars['String']['input']>;
   files?: InputMaybe<Array<Scalars['ID']['input']>>;
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateHomeFeedViewArgs = {
+  viewedAt: Scalars['Date']['input'];
 };
 
 
@@ -319,7 +340,6 @@ export type Query = {
   __typename?: 'Query';
   channel?: Maybe<Channel>;
   channels: Array<Channel>;
-  channelsUnread: Array<Channel>;
   comment?: Maybe<Comment>;
   commentFeed?: Maybe<CommentFeed>;
   comments: Array<Comment>;
@@ -328,6 +348,7 @@ export type Query = {
   mails: Array<Maybe<Mail>>;
   note?: Maybe<Note>;
   notes: Array<Note>;
+  unreadOverview: UnreadOverview;
   user?: Maybe<User>;
   users: Array<User>;
   usersLastAction: Array<User>;
@@ -379,6 +400,13 @@ export type QueryUserArgs = {
 
 export type QueryVotesArgs = {
   post: Scalars['ID']['input'];
+};
+
+export type UnreadOverview = {
+  __typename?: 'UnreadOverview';
+  channels: Array<ChannelUnreadState>;
+  feed: FeedUnreadState;
+  snapshotAt: Scalars['Date']['output'];
 };
 
 export type User = {

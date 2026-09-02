@@ -58,16 +58,28 @@ const storyRouter = createRouter({
 /**
  * Minimal app shell for post-related stories (router, query client, user, tooltips).
  */
-export const withPostProviders: Decorator = (Story) => {
+interface PostProvidersProps {
+  renderStory: () => ReactNode;
+}
+
+function PostProviders({ renderStory }: PostProvidersProps) {
   useEffect(() => {
-    useUserStore.getState().setCurrentUser(getUserById('user-1')!);
+    const mockUser = getUserById('user-1');
+    if (mockUser) {
+      useUserStore.getState().setCurrentUser({
+        id: mockUser.id,
+        name: mockUser.name,
+        avatar: mockUser.avatar ?? null,
+        email: mockUser.email ?? null,
+        description: mockUser.description ?? null,
+        dateCreated: mockUser.dateCreated ?? null,
+      });
+    }
 
     return () => {
       useUserStore.getState().clearCurrentUser();
     };
   }, []);
-
-  const renderStory = () => <Story />;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -78,6 +90,11 @@ export const withPostProviders: Decorator = (Story) => {
       </TooltipProvider>
     </QueryClientProvider>
   );
+}
+
+export const withPostProviders: Decorator = (Story) => {
+  const renderStory = () => <Story />;
+  return <PostProviders renderStory={renderStory} />;
 };
 
 const postCardLayout: Decorator = (Story) => (

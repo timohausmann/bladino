@@ -3,42 +3,15 @@ import {
   navRailLabelClassName,
   navRailRowClassName,
 } from '@/components/layout/navRailLayout';
+import { NavigationCountBadge } from '@/components/layout/NavigationCountBadge';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
-import clsx from 'clsx';
 import { Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface NotificationButtonProps {
   count?: number;
   expanded?: boolean;
-}
-
-function formatCount(count: number): string {
-  return count > 99 ? '99+' : String(count);
-}
-
-interface NotificationBadgeProps {
-  count: number;
-  className?: string;
-}
-
-function NotificationBadge({ count, className }: NotificationBadgeProps) {
-  if (count <= 0) {
-    return null;
-  }
-
-  return (
-    <span
-      className={clsx(
-        'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-0.5',
-        'bg-cyan-300 text-[10px] font-medium text-black tabular-nums text-shadow-2xs',
-        className,
-      )}
-    >
-      {formatCount(count)}
-    </span>
-  );
 }
 
 /**
@@ -65,7 +38,7 @@ export function NotificationButton({
         <Bell size={20} aria-hidden className="shrink-0" />
         {!expanded && count > 0 ? (
           <span className="pointer-events-none absolute -top-1 right-1">
-            <NotificationBadge
+            <NavigationCountBadge
               count={count}
               className="h-4 min-w-4 px-1 text-[10px]"
             />
@@ -75,7 +48,7 @@ export function NotificationButton({
       {expanded ? (
         <>
           <span className={navRailLabelClassName}>{label}</span>
-          <NotificationBadge count={count} className="mr-2" />
+          <NavigationCountBadge count={count} className="mr-2" />
         </>
       ) : null}
     </Link>

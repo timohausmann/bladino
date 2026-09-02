@@ -7,12 +7,17 @@ import { NotificationButton } from '@/components/ui/NotificationButton';
 import { NavRailIconLink } from '@/components/layout/NavRailIconLink';
 import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
 import { NavRailLink } from '@/components/layout/NavRailLink';
+import { NavigationCountBadge } from '@/components/layout/NavigationCountBadge';
 import {
   navRailLabelClassName,
   navRailRowClassName,
   navRailSectionClassName,
 } from '@/components/layout/navRailLayout';
-import { ChannelsDocument, useGraphQLQuery } from '@/graphql';
+import {
+  UnreadOverviewDocument,
+  useGraphQLQuery,
+  type UnreadOverviewQuery,
+} from '@/graphql';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -37,6 +42,10 @@ interface AppNavigationProps {
  */
 export function AppNavigation({ expanded }: AppNavigationProps) {
   const { t } = useTranslation();
+  const { data: unreadData, isLoading: isUnreadLoading } = useGraphQLQuery(
+    UnreadOverviewDocument,
+  );
+  const unreadOverview = unreadData?.unreadOverview;
   const unreadNotificationCount = getUnreadNotificationCount(
     getMockNotifications(t),
   );
@@ -61,6 +70,7 @@ export function AppNavigation({ expanded }: AppNavigationProps) {
           label={t('navigation:feed')}
           icon={Rss}
           expanded={expanded}
+          count={unreadOverview?.feed.unreadCount}
         />
         <NotificationButton
           count={unreadNotificationCount}
@@ -73,7 +83,11 @@ export function AppNavigation({ expanded }: AppNavigationProps) {
           expanded={expanded}
           disabled
         />
-        <AppNavigationChannels expanded={expanded} />
+        <AppNavigationChannels
+          expanded={expanded}
+          channels={unreadOverview?.channels ?? []}
+          isLoading={isUnreadLoading}
+        />
       </nav>
 
       <div
@@ -125,12 +139,16 @@ export function AppNavigation({ expanded }: AppNavigationProps) {
 
 interface AppNavigationChannelsProps {
   expanded: boolean;
+  channels: UnreadOverviewQuery['unreadOverview']['channels'];
+  isLoading: boolean;
 }
 
-function AppNavigationChannels({ expanded }: AppNavigationChannelsProps) {
+function AppNavigationChannels({
+  expanded,
+  channels,
+  isLoading,
+}: AppNavigationChannelsProps) {
   const { t } = useTranslation();
-  const { data, isLoading } = useGraphQLQuery(ChannelsDocument);
-  const channels = data?.channels ?? [];
 
   if (!expanded) {
     return (
@@ -171,7 +189,7 @@ function AppNavigationChannels({ expanded }: AppNavigationChannelsProps) {
             {t('channels:empty')}
           </p>
         ) : (
-          channels.map((channel) => (
+          channels.map(({ channel, unreadCount }) => (
             <Link
               key={channel.id}
               to="/channels/$id"
@@ -190,11 +208,10 @@ function AppNavigationChannels({ expanded }: AppNavigationChannelsProps) {
               }}
             >
               <span className="min-w-0 flex-1 truncate">#{channel.name}</span>
-              {channel.unreadCount != null && channel.unreadCount > 0 ? (
-                <span className="bg-primary text-primary-foreground shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium">
-                  {channel.unreadCount}
-                </span>
-              ) : null}
+              <NavigationCountBadge
+                count={unreadCount}
+                className="h-5 min-w-5 px-1.5 text-xs"
+              />
             </Link>
           ))
         )}

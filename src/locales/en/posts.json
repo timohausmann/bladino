@@ -1,4 +1,6 @@
 {
+  "timelineNew_one": "{{count}} new post",
+  "timelineNew_other": "{{count}} new posts",
   "timelineEarlier": "Earlier posts",
   "emptyFeed": "No posts yet.",
   "loadingFeed": "Loading feed…",
