@@ -13,6 +13,7 @@ import {
   navRailRowClassName,
   navRailSectionClassName,
 } from '@/components/layout/navRailLayout';
+import { useUiStore } from '@/stores/uiStore';
 import {
   UnreadOverviewDocument,
   useGraphQLQuery,
@@ -149,6 +150,12 @@ function AppNavigationChannels({
   isLoading,
 }: AppNavigationChannelsProps) {
   const { t } = useTranslation();
+  const isChannelsSectionOpen = useUiStore(
+    (store) => store.isChannelsSectionOpen,
+  );
+  const setChannelsSectionOpen = useUiStore(
+    (store) => store.setChannelsSectionOpen,
+  );
 
   if (!expanded) {
     return (
@@ -163,7 +170,8 @@ function AppNavigationChannels({
 
   return (
     <Collapsible.Root
-      defaultOpen={channels.length > 0}
+      open={isChannelsSectionOpen}
+      onOpenChange={setChannelsSectionOpen}
       className="flex shrink-0 flex-col gap-1"
     >
       <Collapsible.Trigger className={clsx(navRailRowClassName(), 'group')}>
