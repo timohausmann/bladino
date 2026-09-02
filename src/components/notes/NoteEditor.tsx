@@ -8,15 +8,20 @@ import type {
   NoteEditorViewMode,
 } from '@/components/notes/types';
 import { useNoteEditor } from '@/components/notes/useNoteEditor';
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface NoteEditorProps {
   noteId: string;
   onDeleted?: (deletedId: string) => void;
+  toolbarLeading?: ReactNode;
 }
 
-export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
+export function NoteEditor({
+  noteId,
+  onDeleted,
+  toolbarLeading,
+}: NoteEditorProps) {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<NoteEditorViewMode>('edit');
   const [fontFamily, setFontFamily] = useState<NoteEditorFontFamily>('mono');
@@ -64,6 +69,7 @@ export function NoteEditor({ noteId, onDeleted }: NoteEditorProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <NoteEditorToolbar
+        leading={toolbarLeading}
         title={title}
         saveStatus={saveStatus}
         viewMode={viewMode}

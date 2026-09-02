@@ -14,10 +14,12 @@ import type {
 } from '@/components/notes/types';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { Trash2 } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
 interface NoteEditorToolbarProps {
+  leading?: ReactNode;
   title: string;
   saveStatus: NoteSaveStatus;
   viewMode: NoteEditorViewMode;
@@ -29,6 +31,7 @@ interface NoteEditorToolbarProps {
 }
 
 export function NoteEditorToolbar({
+  leading,
   title,
   saveStatus,
   viewMode,
@@ -45,6 +48,7 @@ export function NoteEditorToolbar({
       className={twMerge('@container w-full', contentPanelHeaderClassName)}
       aria-label={t('notes:actions')}
     >
+      {leading}
       <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
         <input
           type="text"

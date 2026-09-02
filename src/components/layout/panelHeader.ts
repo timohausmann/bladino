@@ -1,18 +1,22 @@
 import clsx from 'clsx';
 
+const panelHeaderBaseClassName = 'flex min-h-16 shrink-0 items-center';
+
 /** 64px sidebar/context panel header row (Nav logo, Notes, Mails, Settings). */
 export const panelSidebarHeaderClassName = clsx(
-  'flex min-h-16 shrink-0 items-center gap-1 px-2',
+  panelHeaderBaseClassName,
+  'gap-1 px-4 lg:px-2',
 );
 
 /** 64px detail/content panel title row (mail subject, note title, settings page). */
 export const contentPanelHeaderRowClassName = clsx(
-  'flex min-h-16 shrink-0 items-center gap-2',
+  panelHeaderBaseClassName,
+  'gap-2',
 );
 
 export const contentPanelHeaderClassName = clsx(
   contentPanelHeaderRowClassName,
-  'px-6',
+  'px-4 lg:px-6',
 );
 
 /** Shared title typography for all content panel headers. */
@@ -31,8 +35,8 @@ export const panelSidebarLabelClassName = clsx(
   'min-w-0 truncate text-sm leading-none text-neutral-900 dark:text-neutral-100',
 );
 
-/** Settings sidebar header — aligned with sidebar nav padding (p-4). */
+/** Settings sidebar header — aligned with sidebar nav padding. */
 export const panelSidebarHeaderSettingsClassName = clsx(
-  panelSidebarHeaderClassName,
-  'px-4',
+  panelHeaderBaseClassName,
+  'gap-1 px-6',
 );

@@ -110,9 +110,10 @@ const settingsLayoutRoute = createRoute({
 const settingsIndexRoute = createRoute({
   getParentRoute: () => settingsLayoutRoute,
   path: '/',
-  beforeLoad: () => {
-    throw redirect({ to: '/settings/appearance' });
-  },
+  component: lazyRouteComponent(
+    () => import('./routes/settings/SettingsAppearance'),
+    'SettingsAppearance',
+  ),
 });
 
 const settingsAppearanceRoute = createRoute({

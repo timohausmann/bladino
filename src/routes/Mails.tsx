@@ -8,8 +8,10 @@ import {
   useMailComposer,
 } from '@/components/mails';
 import { ContentFrame } from '@/components/layout/ContentFrame';
+import { MobileBackLink } from '@/components/layout/MobileBackLink';
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { MailsDocument, useGraphQLQuery } from '@/graphql';
+import { useDesktopLayout } from '@/hooks/useDesktopLayout';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +23,7 @@ export function Mails() {
   const { t } = useTranslation();
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
+  const isDesktopLayout = useDesktopLayout();
   const search = useSearch({ strict: false });
   const folder: MailFolder = search.folder === 'outbox' ? 'outbox' : 'inbox';
   const isComposing = search.compose === true;
@@ -39,7 +42,7 @@ export function Mails() {
   const selectedId = isComposing ? null : (id ?? null);
 
   useEffect(() => {
-    if (isComposing || id) {
+    if (!isDesktopLayout || isComposing || id) {
       return;
     }
 
@@ -51,7 +54,7 @@ export function Mails() {
         replace: true,
       });
     }
-  }, [id, isComposing, mails, navigate, folder]);
+  }, [id, isComposing, isDesktopLayout, mails, navigate, folder]);
 
   const runOrConfirmDiscard = (action: () => void) => {
     if (isComposing && composer.isDirty) {
@@ -127,6 +130,7 @@ export function Mails() {
   return (
     <>
       <ContentFrame
+        mobilePane={isComposing || selectedId ? 'content' : 'sidebar'}
         sidebar={
           <>
             <MailsSidebarToolbar
@@ -165,7 +169,16 @@ export function Mails() {
             onSend={() => void handleSend()}
           />
         ) : selectedId ? (
-          <MailViewer mailId={selectedId} />
+          <MailViewer
+            mailId={selectedId}
+            headerLeading={
+              <MobileBackLink
+                to="/mails"
+                search={{ folder }}
+                label={t('common:back')}
+              />
+            }
+          />
         ) : (
           <MailsEmptyState />
         )}

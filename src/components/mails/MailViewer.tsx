@@ -3,10 +3,12 @@ import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import { MailDocument, useGraphQLQuery } from '@/graphql';
 import { formatCommentDate } from '@/utils/formatDate';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface MailViewerProps {
   mailId: string;
+  headerLeading?: ReactNode;
 }
 
 function formatAddressList(
@@ -18,7 +20,7 @@ function formatAddressList(
   return filtered && filtered.length > 0 ? filtered.join(', ') : null;
 }
 
-export function MailViewer({ mailId }: MailViewerProps) {
+export function MailViewer({ mailId, headerLeading }: MailViewerProps) {
   const { t } = useTranslation();
   const { data, isLoading, isError } = useGraphQLQuery(MailDocument, {
     id: mailId,
@@ -64,7 +66,10 @@ export function MailViewer({ mailId }: MailViewerProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <header className="shrink-0">
-        <ContentPanelHeader title={mailSubject(mail.subject)} />
+        <ContentPanelHeader
+          title={mailSubject(mail.subject)}
+          leading={headerLeading}
+        />
         <dl className="space-y-1 px-6 pb-4 text-sm text-neutral-600 dark:text-neutral-400">
           {mail.from && (
             <div className="flex gap-2">

@@ -2,12 +2,14 @@ import {
   contentPanelHeaderClassName,
   contentPanelTitleClassName,
 } from '@/components/layout/panelHeader';
+import type { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ContentPanelHeaderProps {
-  title: React.ReactNode;
+  title: ReactNode;
+  leading?: ReactNode;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 /**
@@ -15,11 +17,13 @@ interface ContentPanelHeaderProps {
  */
 export function ContentPanelHeader({
   title,
+  leading,
   className,
   children,
 }: ContentPanelHeaderProps) {
   return (
     <header className={twMerge(contentPanelHeaderClassName, className)}>
+      {leading}
       {typeof title === 'string' ? (
         <h1 className={contentPanelTitleClassName}>{title}</h1>
       ) : (

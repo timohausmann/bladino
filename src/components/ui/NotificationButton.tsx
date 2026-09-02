@@ -18,13 +18,12 @@ function formatCount(count: number): string {
   return count > 99 ? '99+' : String(count);
 }
 
-function CountBadge({
-  count,
-  className,
-}: {
+interface NotificationBadgeProps {
   count: number;
   className?: string;
-}) {
+}
+
+function NotificationBadge({ count, className }: NotificationBadgeProps) {
   if (count <= 0) {
     return null;
   }
@@ -66,7 +65,7 @@ export function NotificationButton({
         <Bell size={20} aria-hidden className="shrink-0" />
         {!expanded && count > 0 ? (
           <span className="pointer-events-none absolute -top-1 right-1">
-            <CountBadge
+            <NotificationBadge
               count={count}
               className="h-4 min-w-4 px-1 text-[10px]"
             />
@@ -76,7 +75,7 @@ export function NotificationButton({
       {expanded ? (
         <>
           <span className={navRailLabelClassName}>{label}</span>
-          <CountBadge count={count} className="mr-2" />
+          <NotificationBadge count={count} className="mr-2" />
         </>
       ) : null}
     </Link>

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useEffect } from 'react';
+import { MobileHeader } from '@/components/layout/MobileHeader';
 import { NavRail } from '@/components/layout/NavRail';
 import {
   useFixedViewport,
@@ -45,7 +46,7 @@ export function Layout({
 
   const shellClasses = clsx(
     showNavRail
-      ? 'flex flex-row h-dvh min-h-dvh overflow-hidden'
+      ? 'flex h-dvh min-h-dvh flex-col overflow-hidden lg:flex-row'
       : clsx(
           'flex flex-col',
           fixedViewport ? 'h-dvh overflow-hidden' : 'min-h-screen',
@@ -55,11 +56,11 @@ export function Layout({
   // Dense routes and feed show the body background around floating surfaces.
   const mainClasses = clsx(
     'flex-1 flex flex-col min-h-0 min-w-0',
-    layoutMode === 'masterDetail' ||
-      layoutMode === 'fullWidth' ||
-      layoutMode === 'feed'
-      ? 'p-4'
-      : 'p-0',
+    layoutMode === 'masterDetail'
+      ? 'p-0 lg:p-4'
+      : layoutMode === 'fullWidth' || layoutMode === 'feed'
+        ? 'p-4'
+        : 'p-0',
     fixedViewport ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden',
   );
 
@@ -71,7 +72,16 @@ export function Layout({
 
   return (
     <div className={shellClasses}>
-      {showNavRail ? <NavRail /> : null}
+      {showNavRail ? (
+        <>
+          <div className="shrink-0 lg:hidden">
+            <MobileHeader />
+          </div>
+          <div className="hidden min-h-0 shrink-0 overflow-hidden lg:flex">
+            <NavRail />
+          </div>
+        </>
+      ) : null}
       <main className={mainClasses}>
         {layoutMode === 'feed' ? (
           <div className={feedWrapperClasses}>{children}</div>
