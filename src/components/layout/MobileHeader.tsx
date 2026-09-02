@@ -85,7 +85,7 @@ export function MobileHeader() {
         />
         <Dialog.Content
           className={twMerge(
-            overlayContentVariants({ tone: 'surface', motion: 'none' }),
+            overlayContentVariants({ tone: 'surface', motion: 'drawer' }),
             clsx(
               'fixed inset-y-0 left-0 z-50 flex h-dvh w-[min(20rem,calc(100vw-1rem))] flex-col',
               'rounded-l-none rounded-r-2xl border-y-0 border-l-0 shadow-xl focus:outline-none',

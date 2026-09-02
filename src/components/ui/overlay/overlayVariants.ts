@@ -2,7 +2,7 @@ import { tv } from 'tailwind-variants';
 import motionStyles from './overlay.module.css';
 
 export type OverlayTone = 'surface' | 'elevated';
-export type OverlayMotion = 'dialog' | 'dropdown' | 'none';
+export type OverlayMotion = 'dialog' | 'drawer' | 'dropdown' | 'none';
 
 /**
  * Visual recipe for floating content.
@@ -17,6 +17,7 @@ export const overlayContentVariants = tv({
     },
     motion: {
       dialog: motionStyles.dialogEnter,
+      drawer: motionStyles.drawer,
       dropdown: motionStyles.dropdownEnter,
       none: '',
     },
