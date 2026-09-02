@@ -21,7 +21,7 @@ export function TimelineDivider({
         {showNewIndicator && (
           <span
             aria-hidden
-            className="bg-primary size-2 shrink-0 rounded-full"
+            className="bg-primary size-1.5 shrink-0 rounded-full"
           />
         )}
         {label}
