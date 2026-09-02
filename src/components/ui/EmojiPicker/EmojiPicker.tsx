@@ -18,7 +18,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
           tone: 'elevated',
           motion: 'dropdown',
         }),
-        'isolate flex h-[368px] w-fit flex-col',
+        'isolate flex h-92 w-fit flex-col',
       )}
       onEmojiSelect={(emoji) => {
         onEmojiSelect(emoji.emoji);
@@ -51,7 +51,7 @@ export function EmojiPicker({ onEmojiSelect, onClose }: EmojiPickerProps) {
             ),
             Emoji: ({ emoji, ...props }) => (
               <button
-                className="flex size-8 items-center justify-center rounded-md text-lg hover:bg-neutral-100 data-[active]:bg-neutral-100 dark:hover:bg-neutral-700 dark:data-[active]:bg-neutral-700"
+                className="flex size-8 items-center justify-center rounded-md text-lg hover:bg-neutral-100 data-active:bg-neutral-100 dark:hover:bg-neutral-700 dark:data-active:bg-neutral-700"
                 {...props}
               >
                 {emoji.emoji}

@@ -89,13 +89,7 @@ export function Textarea({
       : undefined;
 
   return (
-    <div
-      className={twMerge(
-        'w-full',
-        endAdornment && 'relative',
-        wrapperClassName,
-      )}
-    >
+    <div className={twMerge('w-full', wrapperClassName)}>
       {label && (
         <label
           htmlFor={textareaId}
@@ -105,48 +99,55 @@ export function Textarea({
           {required && <span className="ml-1 text-rose-500">*</span>}
         </label>
       )}
-      <textarea
-        ref={textareaRef}
-        id={textareaId}
-        name={name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => {
-          setFocused(true);
-          onFocus?.();
-        }}
-        onBlur={() => {
-          setFocused(false);
-          onBlur?.();
-        }}
-        placeholder={placeholder}
-        maxLength={maxLength}
-        rows={rows}
-        disabled={disabled}
-        required={required}
-        autoComplete={autoComplete}
+      <div
         className={twMerge(
-          'bg-inset block w-full rounded-lg border border-transparent p-4 outline-none',
-          'placeholder:text-muted-foreground',
-          'transition-[background-color,font-size,line-height,min-height,padding] duration-200 ease-out',
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          resolvedEndInset,
-          resolvedResize,
-          className,
+          'flex min-h-0 flex-1 flex-col',
+          endAdornment && 'relative',
         )}
-        aria-label={label || placeholder}
-        tabIndex={disabled ? -1 : 0}
-      />
-      {endAdornment ? (
-        <div
+      >
+        <textarea
+          ref={textareaRef}
+          id={textareaId}
+          name={name}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => {
+            setFocused(true);
+            onFocus?.();
+          }}
+          onBlur={() => {
+            setFocused(false);
+            onBlur?.();
+          }}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          rows={rows}
+          disabled={disabled}
+          required={required}
+          autoComplete={autoComplete}
           className={twMerge(
-            'absolute top-2 right-2 flex items-center gap-0.5 transition-opacity duration-200',
-            revealAdornment ? 'opacity-100' : 'pointer-events-none opacity-0',
+            'bg-inset block w-full rounded-lg border border-transparent p-4 outline-none',
+            'placeholder:text-muted-foreground',
+            'transition-[background-color,font-size,line-height,min-height,padding] duration-200 ease-out',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            resolvedEndInset,
+            resolvedResize,
+            className,
           )}
-        >
-          {endAdornment}
-        </div>
-      ) : null}
+          aria-label={label || placeholder}
+          tabIndex={disabled ? -1 : 0}
+        />
+        {endAdornment ? (
+          <div
+            className={twMerge(
+              'absolute top-2 right-2 flex items-center gap-0.5 transition-opacity duration-200',
+              revealAdornment ? 'opacity-100' : 'pointer-events-none opacity-0',
+            )}
+          >
+            {endAdornment}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { PostActionButton } from '@/components/post/PostActionButton';
 import { Tooltip } from '@/components/ui/Tooltip';
-import { LazyEmojiPicker } from '@/components/ui/LazyEmojiPicker';
+import { LazyEmojiPicker } from '@/components/ui/EmojiPicker/LazyEmojiPicker';
 import * as Popover from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -21,7 +21,7 @@ export function LazyEmojiPicker(props: EmojiPickerProps) {
               tone: 'elevated',
               motion: 'dropdown',
             }),
-            'flex h-[368px] w-64 items-center justify-center',
+            'flex h-92 w-64 items-center justify-center',
           )}
           aria-hidden
         />

@@ -2,7 +2,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LazyEmojiPicker } from '@/components/ui/LazyEmojiPicker';
+import { LazyEmojiPicker } from '@/components/ui/EmojiPicker/LazyEmojiPicker';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type {
   HeaderButtonShape,

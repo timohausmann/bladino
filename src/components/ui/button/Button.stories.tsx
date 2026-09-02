@@ -64,6 +64,9 @@ const meta = {
       table: { disable: true },
     },
   },
+  parameters: {
+    layout: 'centered',
+  },
   render: ({ className, fullWidth, icon, ...args }) => (
     <Button
       {...args}
