@@ -7,9 +7,11 @@ import {
   type MailFolder,
   useMailComposer,
 } from '@/components/mails';
-import { ContextPanel } from '@/components/layout/ContextPanel';
+import { ContentFrame } from '@/components/layout/ContentFrame';
+import { MobileBackLink } from '@/components/layout/MobileBackLink';
 import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
 import { MailsDocument, useGraphQLQuery } from '@/graphql';
+import { useDesktopLayout } from '@/hooks/useDesktopLayout';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +23,7 @@ export function Mails() {
   const { t } = useTranslation();
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
+  const isDesktopLayout = useDesktopLayout();
   const search = useSearch({ strict: false });
   const folder: MailFolder = search.folder === 'outbox' ? 'outbox' : 'inbox';
   const isComposing = search.compose === true;
@@ -39,7 +42,7 @@ export function Mails() {
   const selectedId = isComposing ? null : (id ?? null);
 
   useEffect(() => {
-    if (isComposing || id) {
+    if (!isDesktopLayout || isComposing || id) {
       return;
     }
 
@@ -51,7 +54,7 @@ export function Mails() {
         replace: true,
       });
     }
-  }, [id, isComposing, mails, navigate, folder]);
+  }, [id, isComposing, isDesktopLayout, mails, navigate, folder]);
 
   const runOrConfirmDiscard = (action: () => void) => {
     if (isComposing && composer.isDirty) {
@@ -125,29 +128,29 @@ export function Mails() {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-1">
-      <ContextPanel
-        header={
-          <MailsSidebarToolbar
-            onCompose={handleCompose}
-            folder={folder}
-            onFolderChange={handleFolderChange}
-            onReload={handleReload}
-            isReloading={isFetching && !isLoading}
-            isSending={composer.isSending}
-          />
+    <>
+      <ContentFrame
+        mobilePane={isComposing || selectedId ? 'content' : 'sidebar'}
+        sidebar={
+          <>
+            <MailsSidebarToolbar
+              onCompose={handleCompose}
+              folder={folder}
+              onFolderChange={handleFolderChange}
+              onReload={handleReload}
+              isReloading={isFetching && !isLoading}
+              isSending={composer.isSending}
+            />
+            <MailsSidebarList
+              mails={mails}
+              folder={folder}
+              selectedId={selectedId}
+              isLoading={isLoading}
+              onSelect={handleSelect}
+            />
+          </>
         }
       >
-        <MailsSidebarList
-          mails={mails}
-          folder={folder}
-          selectedId={selectedId}
-          isLoading={isLoading}
-          onSelect={handleSelect}
-        />
-      </ContextPanel>
-
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         {isComposing ? (
           <MailComposer
             to={composer.to}
@@ -166,11 +169,20 @@ export function Mails() {
             onSend={() => void handleSend()}
           />
         ) : selectedId ? (
-          <MailViewer mailId={selectedId} />
+          <MailViewer
+            mailId={selectedId}
+            headerLeading={
+              <MobileBackLink
+                to="/mails"
+                search={{ folder }}
+                label={t('common:back')}
+              />
+            }
+          />
         ) : (
           <MailsEmptyState />
         )}
-      </div>
+      </ContentFrame>
 
       <ConfirmDialog
         open={discardOpen}
@@ -186,6 +198,6 @@ export function Mails() {
         destructive
         onConfirm={handleDiscardConfirm}
       />
-    </div>
+    </>
   );
 }

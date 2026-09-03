@@ -1,4 +1,7 @@
 {
+  "timelineNew_one": "{{count}} neuer Beitrag",
+  "timelineNew_other": "{{count}} neue Beiträge",
+  "timelineEarlier": "Frühere Beiträge",
   "emptyFeed": "Noch keine Beiträge.",
   "loadingFeed": "Feed wird geladen…",
   "loadingMore": "Weitere werden geladen…",
@@ -36,12 +39,8 @@
   "deletePostDescription": "Dieser Beitrag wird dauerhaft entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
   "postOptions": "Beitragsoptionen",
   "moreOptions": "Weitere Optionen",
-  "report": "Melden",
   "copyLink": "Link kopieren",
-  "editComment": "Kommentar bearbeiten",
-  "editPost": "Beitrag bearbeiten",
-  "deleteComment": "Kommentar löschen",
-  "deletePost": "Beitrag löschen",
   "reactWith": "Reagieren mit {{emoji}}",
-  "addReaction": "Reaktion hinzufügen"
+  "addReaction": "Reaktion hinzufügen",
+  "unread": "Neu"
 }

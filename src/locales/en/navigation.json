@@ -6,6 +6,10 @@
   "notes": "Notes",
   "mail": "Mail",
   "settings": "Settings",
+  "drawerTitle": "Navigation",
+  "drawerDescription": "Main navigation and account settings",
+  "openNavigation": "Open navigation",
+  "closeNavigation": "Close navigation",
   "collapseNavigation": "Collapse navigation",
   "expandNavigation": "Expand navigation"
 }

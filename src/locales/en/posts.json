@@ -1,4 +1,7 @@
 {
+  "timelineNew_one": "{{count}} new post",
+  "timelineNew_other": "{{count}} new posts",
+  "timelineEarlier": "Earlier posts",
   "emptyFeed": "No posts yet.",
   "loadingFeed": "Loading feed…",
   "loadingMore": "Loading more…",
@@ -36,12 +39,8 @@
   "deletePostDescription": "This post will be permanently removed. This action cannot be undone.",
   "postOptions": "Post options",
   "moreOptions": "More options",
-  "report": "Report",
-  "copyLink": "Copy Link",
-  "editComment": "Edit Comment",
-  "editPost": "Edit Post",
-  "deleteComment": "Delete Comment",
-  "deletePost": "Delete Post",
+  "copyLink": "Copy link",
   "reactWith": "React with {{emoji}}",
-  "addReaction": "Add a reaction"
+  "addReaction": "Add a reaction",
+  "unread": "New"
 }

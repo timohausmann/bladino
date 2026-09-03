@@ -8,7 +8,7 @@ import type {
 } from '@/components/notes/types';
 import { HeaderButton } from '@/components/ui/HeaderButton';
 import { inlineSelectItemClassName } from '@/components/ui/InlineSelect';
-import { panelStyles } from '@/components/ui/panel';
+import { overlayContentVariants } from '@/components/ui/overlay';
 import { ContextMenuButton, ContextMenuDivider } from '@/components/ui/popover';
 import { Tooltip } from '@/components/ui/Tooltip';
 import * as Popover from '@radix-ui/react-popover';
@@ -97,8 +97,10 @@ export function NoteEditorToolbarMenu({
       <Popover.Portal>
         <Popover.Content
           className={clsx(
-            panelStyles.surface,
-            panelStyles.content,
+            overlayContentVariants({
+              tone: 'elevated',
+              motion: 'dropdown',
+            }),
             'z-50 w-52 p-1',
           )}
           sideOffset={8}

@@ -2,8 +2,6 @@ query Channels {
   channels {
     id
     name
-    unreadCount
     dateCreated
-    lastView
   }
 }

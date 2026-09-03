@@ -1,20 +1,15 @@
-import type { Comment } from '@/graphql';
-import {
-  ToggleVoteDocument,
-  getGraphQLErrorMessage,
-  useGraphQLMutation,
-} from '@/graphql';
-import { useUserStore } from '@/stores/userStore';
-import { useQueryClient } from '@tanstack/react-query';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PostActionButton } from '@/components/post/PostActionButton';
-import { toast } from '@/components/ui/toast';
 import clsx from 'clsx';
 
 interface PostVoteButtonProps {
-  comment: Pick<Comment, 'id' | 'voteNum' | 'votes' | 'parent'>;
+  liked: boolean;
+  count: number;
+  pending: boolean;
+  onToggle: () => void;
+  variant?: 'default' | 'compact';
 }
 
 interface VoteHeartIconProps {
@@ -47,74 +42,63 @@ function VoteHeartIcon({ hasVoted, burst, onBurstEnd }: VoteHeartIconProps) {
   );
 }
 
-function hasCurrentUserVoted(
-  votes: Comment['votes'],
-  currentUserId: string | undefined,
-): boolean {
-  if (!currentUserId) {
-    return false;
-  }
-
-  return (votes ?? []).some((vote) => vote?.user?.id === currentUserId);
-}
-
 /**
- * PostVoteButton - Heart button to like/unlike a post or reply
+ * PostVoteButton - presentational heart button for post/reply votes.
  */
-export function PostVoteButton({ comment }: PostVoteButtonProps) {
+export function PostVoteButton({
+  liked,
+  count,
+  pending,
+  onToggle,
+  variant = 'default',
+}: PostVoteButtonProps) {
   const { t } = useTranslation();
-  const currentUser = useUserStore((store) => store.currentUser);
-  const queryClient = useQueryClient();
-  const { mutateAsync: toggleVote, isPending } =
-    useGraphQLMutation(ToggleVoteDocument);
   const [burst, setBurst] = useState(false);
 
-  const voteCount = comment.voteNum ?? 0;
-  const hasVoted = hasCurrentUserVoted(comment.votes, currentUser?.id);
-
   const handleClick = async () => {
-    if (isPending) {
+    if (pending) {
       return;
     }
 
-    const isLiking = !hasVoted;
-    if (isLiking) {
+    if (!liked) {
       setBurst(true);
     }
 
-    try {
-      await toggleVote({ post: comment.id });
-
-      await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
-      await queryClient.invalidateQueries({
-        queryKey: ['Comment', { id: comment.id }],
-      });
-
-      if (comment.parent) {
-        await queryClient.invalidateQueries({
-          queryKey: ['Comment', { id: comment.parent }],
-        });
-      }
-    } catch (error) {
-      const message =
-        getGraphQLErrorMessage(error) ??
-        (error instanceof Error ? error.message : t('errors:likeFailed'));
-      toast(message);
-    }
+    onToggle();
   };
+
+  if (variant === 'compact') {
+    return (
+      <button
+        type="button"
+        aria-label={liked ? t('posts:unlikePost') : t('posts:likePost')}
+        className={clsx(
+          'text-muted-foreground hover:text-foreground flex h-8 cursor-pointer items-center gap-1.5 rounded-full border-none bg-transparent px-0 transition-colors',
+          pending && 'opacity-60',
+        )}
+        onClick={() => void handleClick()}
+      >
+        <VoteHeartIcon
+          hasVoted={liked}
+          burst={burst}
+          onBurstEnd={() => setBurst(false)}
+        />
+      </button>
+    );
+  }
 
   return (
     <PostActionButton
       icon={
         <VoteHeartIcon
-          hasVoted={hasVoted}
+          hasVoted={liked}
           burst={burst}
           onBurstEnd={() => setBurst(false)}
         />
       }
-      count={voteCount}
-      hideCount={voteCount === 0}
-      label={hasVoted ? t('posts:unlikePost') : t('posts:likePost')}
+      count={count}
+      hideCount={count === 0}
+      label={liked ? t('posts:unlikePost') : t('posts:likePost')}
       className="hover:bg-black/5 hover:shadow-none dark:hover:bg-black/10"
       onClick={() => void handleClick()}
     />

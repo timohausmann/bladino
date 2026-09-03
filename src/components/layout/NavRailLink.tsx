@@ -3,6 +3,7 @@ import {
   navRailLabelClassName,
   navRailRowClassName,
 } from '@/components/layout/navRailLayout';
+import { NavigationCountBadge } from '@/components/layout/NavigationCountBadge';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';
@@ -15,6 +16,7 @@ interface NavRailLinkProps {
   expanded: boolean;
   disabled?: boolean;
   exact?: boolean;
+  count?: number;
 }
 
 /**
@@ -28,16 +30,27 @@ export function NavRailLink({
   expanded,
   disabled = false,
   exact = false,
+  count = 0,
 }: NavRailLinkProps) {
   const inactiveClassName = navRailRowClassName({ disabled });
   const activeClassName = navRailRowClassName({ active: true, disabled });
 
   const content = (
     <>
-      <NavRailIconTrack>
+      <NavRailIconTrack className="relative">
         <Icon size={20} aria-hidden className="shrink-0" />
+        {!expanded && count > 0 ? (
+          <span className="pointer-events-none absolute -top-1 right-1">
+            <NavigationCountBadge count={count} />
+          </span>
+        ) : null}
       </NavRailIconTrack>
-      {expanded ? <span className={navRailLabelClassName}>{label}</span> : null}
+      {expanded ? (
+        <>
+          <span className={navRailLabelClassName}>{label}</span>
+          <NavigationCountBadge count={count} className="mr-2" />
+        </>
+      ) : null}
     </>
   );
 

@@ -1,3 +1,4 @@
+import { panelSidebarHeaderClassName } from '@/components/layout/panelHeader';
 import type { MailFolder } from '@/components/mails/types';
 import { MAIL_FOLDERS } from '@/components/mails/types';
 import { InlineSelect } from '@/components/ui/InlineSelect';
@@ -28,13 +29,14 @@ export function MailsSidebarToolbar({
 
   return (
     <Toolbar.Root
-      className="flex shrink-0 items-center gap-1 border-b border-neutral-200 p-2 dark:border-neutral-800"
+      className={panelSidebarHeaderClassName}
       aria-label={t('mail:listActions')}
     >
       <ToolbarTooltipButton
-        icon={<Plus size={18} />}
+        icon={<Plus size={16} />}
         label={t('mail:newMail')}
         variant="persistent"
+        size="sm"
         onClick={onCompose}
         disabled={isSending}
       />

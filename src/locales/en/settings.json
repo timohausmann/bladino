@@ -52,5 +52,13 @@
     },
     "switchToLight": "Switch to light theme",
     "switchToDark": "Switch to dark theme"
+  },
+  "background": {
+    "label": "Background",
+    "placeholder": "Select background",
+    "options": {
+      "plain": "Plain",
+      "pattern": "Pattern"
+    }
   }
 }

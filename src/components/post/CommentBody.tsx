@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import type { Weblink } from '@/graphql';
 import type { LinkPreviewVariant } from '@/components/ui/LinkPreview';
+import type { ParentSurface } from '@/components/ui/surface';
 import { parseCommentBody } from '@/utils/textUtils';
 import { useMemo } from 'react';
 
@@ -9,6 +10,7 @@ interface CommentBodyProps {
   weblinks?: Array<Weblink | null> | null;
   className?: string;
   linkPreviewVariant?: LinkPreviewVariant;
+  parentSurface?: ParentSurface;
 }
 
 /**
@@ -20,11 +22,14 @@ export function CommentBody({
   weblinks,
   className,
   linkPreviewVariant = 'default',
+  parentSurface = 'surface',
 }: CommentBodyProps) {
   const content = useMemo(
     () =>
-      body ? parseCommentBody(body, weblinks, linkPreviewVariant) : null,
-    [body, weblinks, linkPreviewVariant],
+      body
+        ? parseCommentBody(body, weblinks, linkPreviewVariant, parentSurface)
+        : null,
+    [body, weblinks, linkPreviewVariant, parentSurface],
   );
 
   if (!body) {

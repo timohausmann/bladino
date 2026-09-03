@@ -1,4 +1,5 @@
-import { ContextPanel } from '@/components/layout/ContextPanel';
+import { ContentFrame } from '@/components/layout/ContentFrame';
+import { MobileBackLink } from '@/components/layout/MobileBackLink';
 import {
   getNextNoteIdAfterDelete,
   NoteEditor,
@@ -14,31 +15,36 @@ import {
 } from '@/graphql';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDesktopLayout } from '@/hooks/useDesktopLayout';
 
 /**
  * Notes page with context panel list and main editor area.
  */
 export function Notes() {
+  const { t } = useTranslation();
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isDesktopLayout = useDesktopLayout();
 
   const { data, isLoading } = useGraphQLQuery(NotesDocument);
   const addNote = useGraphQLMutation(AddNoteDocument);
 
-  const notes = data?.notes ?? [];
+  const notes = useMemo(() => data?.notes ?? [], [data?.notes]);
   const selectedId = id ?? null;
+  const isEmpty = !isLoading && notes.length === 0;
 
   useEffect(() => {
-    if (!id && notes.length > 0) {
+    if (isDesktopLayout && !id && notes.length > 0) {
       navigate({
         to: '/notes/$id',
         params: { id: notes[0].id },
         replace: true,
       });
     }
-  }, [id, notes, navigate]);
+  }, [id, isDesktopLayout, notes, navigate]);
 
   const handleSelect = (noteId: string) => {
     navigate({ to: '/notes/$id', params: { id: noteId } });
@@ -69,30 +75,44 @@ export function Notes() {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-1">
-      <ContextPanel
-        header={
+    <ContentFrame
+      mobilePane={selectedId || isEmpty ? 'content' : 'sidebar'}
+      sidebar={
+        <>
           <NotesSidebarToolbar
             onCreate={handleCreate}
             isCreating={addNote.isPending}
           />
-        }
-      >
-        <NotesSidebarList
-          notes={notes}
-          selectedId={selectedId}
-          isLoading={isLoading}
-          onSelect={handleSelect}
+          <NotesSidebarList
+            notes={notes}
+            selectedId={selectedId}
+            isLoading={isLoading}
+            onSelect={handleSelect}
+          />
+        </>
+      }
+    >
+      {selectedId ? (
+        <NoteEditor
+          noteId={selectedId}
+          onDeleted={handleNoteDeleted}
+          toolbarLeading={
+            <MobileBackLink to="/notes" label={t('common:back')} />
+          }
         />
-      </ContextPanel>
-
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        {selectedId ? (
-          <NoteEditor noteId={selectedId} onDeleted={handleNoteDeleted} />
-        ) : (
+      ) : (
+        <div className="flex min-h-0 flex-1 flex-col">
+          {isEmpty ? (
+            <div className="lg:hidden">
+              <NotesSidebarToolbar
+                onCreate={handleCreate}
+                isCreating={addNote.isPending}
+              />
+            </div>
+          ) : null}
           <NotesEmptyState />
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </ContentFrame>
   );
 }

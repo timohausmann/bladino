@@ -7,15 +7,20 @@ import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
-import { panelStyles } from '@/components/ui/panel';
+import {
+  overlayBackdropEnterClassName,
+  overlayContentVariants,
+} from '@/components/ui/overlay';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { PostVoteButton } from '@/components/post/PostVoteButton';
+import { useOptimisticCommentVote } from '@/components/post/useOptimisticCommentVote';
 
 type LikeVote = NonNullable<Comment['votes']>[number];
 type LikeUser = NonNullable<NonNullable<LikeVote>['user']>;
 
 interface PostLikesProps {
   comment: Pick<Comment, 'id' | 'voteNum' | 'votes' | 'parent'>;
+  variant?: 'default' | 'compact' | 'textOnly';
 }
 
 function getDisplayName(
@@ -106,16 +111,18 @@ function LikesDialog({
       <Dialog.Portal>
         <Dialog.Overlay
           className={clsx(
-            panelStyles.overlay,
+            overlayBackdropEnterClassName,
             'fixed inset-0 z-50 bg-black/10 backdrop-blur-sm',
           )}
         />
         <Dialog.Content
           className={clsx(
             'fixed top-1/2 left-1/2 z-50 w-[calc(100%-2rem)] max-w-md',
-            panelStyles.content,
-            '-translate-x-1/2 -translate-y-1/2 rounded-xl border border-neutral-200',
-            'bg-white p-6 shadow-xl focus:outline-none dark:border-neutral-700 dark:bg-neutral-900',
+            overlayContentVariants({
+              tone: 'surface',
+              motion: 'dialog',
+            }),
+            '-translate-x-1/2 -translate-y-1/2 p-6 focus:outline-none',
           )}
         >
           <div className="mb-4 flex items-center justify-between gap-4">
@@ -143,7 +150,7 @@ function LikesDialog({
                   key={user.id}
                   to="/u/$name"
                   params={{ name: user.name }}
-                  className="hover:bg-muted flex items-center gap-3 rounded-xl px-1 py-2 transition-colors"
+                  className="hover:bg-surface-hover flex items-center gap-3 rounded-xl px-1 py-2 transition-colors"
                 >
                   <Avatar
                     avatar={user.avatar}
@@ -166,7 +173,7 @@ function LikesDialog({
 /**
  * PostLikes - Separated controls for toggling a like vs. viewing all likes.
  */
-export function PostLikes({ comment }: PostLikesProps) {
+export function PostLikes({ comment, variant = 'default' }: PostLikesProps) {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const currentUser = useUserStore((store) => store.currentUser);
@@ -176,24 +183,65 @@ export function PostLikes({ comment }: PostLikesProps) {
     [comment.votes, currentUserId],
   );
   const likedByText = getLikedByText(users, currentUserId, t);
+  const vote = useOptimisticCommentVote({ comment });
 
   return (
     <>
-      <div className="flex min-w-0 items-center gap-2">
-        <PostVoteButton comment={comment} />
-        {likedByText ? (
+      {variant === 'default' ? (
+        <div className="flex min-w-0 items-center gap-2">
+          {likedByText ? (
+            <button
+              type="button"
+              className={clsx(
+                'text-muted-foreground text-sm transition-colors',
+                'hover:text-foreground text-left',
+              )}
+              onClick={() => setDialogOpen(true)}
+            >
+              {likedByText}
+            </button>
+          ) : null}
+          <PostVoteButton
+            liked={vote.liked}
+            count={vote.count}
+            pending={vote.pending}
+            onToggle={() => void vote.toggle()}
+          />
+        </div>
+      ) : variant === 'textOnly' ? (
+        likedByText ? (
           <button
             type="button"
             className={clsx(
-              'text-muted-foreground text-sm transition-colors',
-              'hover:text-foreground text-left',
+              'text-muted-foreground hover:text-foreground text-left text-sm transition-colors',
             )}
             onClick={() => setDialogOpen(true)}
           >
             {likedByText}
           </button>
-        ) : null}
-      </div>
+        ) : null
+      ) : (
+        <div className="flex items-center gap-2">
+          {users.length > 0 ? (
+            <button
+              type="button"
+              className={clsx(
+                'text-foreground min-w-[0.75rem] text-right text-xs font-semibold transition-colors hover:underline',
+              )}
+              onClick={() => setDialogOpen(true)}
+            >
+              {users.length}
+            </button>
+          ) : null}
+          <PostVoteButton
+            liked={vote.liked}
+            count={vote.count}
+            pending={vote.pending}
+            onToggle={() => void vote.toggle()}
+            variant="compact"
+          />
+        </div>
+      )}
 
       <LikesDialog
         open={dialogOpen}

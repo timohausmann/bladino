@@ -1,0 +1,91 @@
+/*
+ * Behavior-heavy overlay motion stays local to the primitive.
+ * Visual chrome and tones are composed in overlayVariants.ts.
+ */
+.backdropEnter {
+  animation: overlay-backdrop-blur-in 600ms ease-out;
+}
+
+.dialogEnter {
+  animation: overlay-dialog-content-in 400ms var(--ease-dialog-spring);
+}
+
+.dropdownEnter {
+  animation: overlay-dropdown-content-in 180ms ease-out;
+}
+
+.drawer {
+  will-change: transform;
+}
+
+.drawer[data-state='open'] {
+  animation: overlay-drawer-content-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawer[data-state='closed'] {
+  animation: overlay-drawer-content-out 220ms ease-in;
+}
+
+@keyframes overlay-backdrop-blur-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(var(--blur-sm));
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+  }
+}
+
+@keyframes overlay-dialog-content-in {
+  from {
+    opacity: 0;
+    scale: 1.2;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes overlay-dropdown-content-in {
+  from {
+    opacity: 0;
+    scale: 0.95;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes overlay-drawer-content-in {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes overlay-drawer-content-out {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer {
+    animation: none;
+  }
+}

@@ -1,4 +1,5 @@
 import { AsyncImage } from '@/components/ui/AsyncImage';
+import type { ParentSurface } from '@/components/ui/surface';
 import { ExternalLink } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +10,11 @@ export type LinkPreviewVariant = 'default' | 'compact';
 const linkPreview = tv({
   slots: {
     card: [
-      'flex flex-col overflow-hidden rounded-lg',
+      'flex flex-col overflow-hidden rounded-lg border border-solid',
       'transition-all duration-200',
       'sm:flex-row',
     ],
-    image: 'h-40 w-full flex-shrink-0 bg-black/10 sm:w-1/3 sm:max-w-[240px]',
+    image: 'h-40 w-full flex-shrink-0 sm:w-1/3 sm:max-w-[240px]',
     content: 'flex-grow p-3 sm:p-4',
     domain: 'text-muted-foreground mb-2 flex items-center text-sm',
     favicon: 'mr-1.5 h-4 w-4 flex-shrink-0 rounded-sm object-contain',
@@ -34,23 +35,21 @@ const linkPreview = tv({
         description: 'text-xs',
       },
     },
-    hasImage: {
-      true: {
-        card: 'bg-black/5 hover:bg-black/10 dark:bg-black/20 dark:hover:bg-black/30',
+    parentSurface: {
+      // Nested previews always move exactly one level above their parent.
+      surface: {
+        card: 'border-elevated-border bg-elevated hover:bg-elevated-hover',
+        image: 'bg-surface',
       },
-      false: {
-        card: [
-          'border border-solid border-neutral-200/60 bg-transparent',
-          'hover:border-neutral-300/80 hover:bg-black/[0.03]',
-          'dark:border-white/10 dark:bg-transparent',
-          'dark:hover:border-white/20 dark:hover:bg-white/[0.03]',
-        ],
+      inset: {
+        card: 'border-surface-border bg-surface hover:bg-surface-hover',
+        image: 'bg-inset',
       },
     },
   },
   defaultVariants: {
     variant: 'default',
-    hasImage: true,
+    parentSurface: 'surface',
   },
 });
 
@@ -61,6 +60,8 @@ interface LinkPreviewProps {
   image?: string;
   icon?: string;
   variant?: LinkPreviewVariant;
+  /** Fill of the parent containing this preview. */
+  parentSurface?: ParentSurface;
 }
 
 /**
@@ -74,6 +75,7 @@ export function LinkPreview({
   image,
   icon,
   variant = 'default',
+  parentSurface = 'surface',
 }: LinkPreviewProps) {
   const { t } = useTranslation();
   const domain = useMemo(() => {
@@ -85,7 +87,10 @@ export function LinkPreview({
   }, [url]);
 
   const displayTitle = title || domain;
-  const styles = linkPreview({ variant, hasImage: Boolean(image) });
+  const styles = linkPreview({
+    variant,
+    parentSurface,
+  });
   const externalLinkSize = variant === 'compact' ? 12 : 14;
   const externalLinkClass = variant === 'compact' ? 'ml-1' : 'ml-1.5';
 

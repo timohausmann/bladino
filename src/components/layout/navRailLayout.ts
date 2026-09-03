@@ -34,8 +34,8 @@ export function navRailRowClassName(options?: NavRailRowOptions) {
   } = options ?? {};
 
   return clsx(
-    'flex h-10 items-center rounded-xl transition-colors duration-150',
-    iconOnly ? 'w-10 shrink-0 justify-center' : 'w-full',
+    'flex h-10 shrink-0 items-center rounded-xl transition-colors duration-150',
+    iconOnly ? 'w-10 justify-center' : 'w-full',
     disabled && 'pointer-events-none cursor-not-allowed opacity-40',
     !disabled &&
       'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',

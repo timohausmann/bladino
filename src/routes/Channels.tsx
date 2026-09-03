@@ -8,7 +8,7 @@ import {
   useGraphQLQuery,
 } from '@/graphql';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -20,7 +20,7 @@ export function Channels() {
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useGraphQLQuery(ChannelsDocument);
-  const channels = data?.channels ?? [];
+  const channels = useMemo(() => data?.channels ?? [], [data?.channels]);
 
   useEffect(() => {
     if (!id && channels.length > 0) {
@@ -75,6 +75,7 @@ export function Channels() {
 
       <CommentFeed
         filter={{ channel: id }}
+        readScope={{ kind: 'channel', channelId: id }}
         emptyMessage={t('channels:emptyFeed')}
       />
     </>

@@ -1,5 +1,5 @@
 import { useDashboardStore, type WidgetType } from '@/stores/dashboardStore';
-import type { EventCallback, LayoutItem } from 'react-grid-layout';
+import type { EventCallback } from 'react-grid-layout';
 import { useCallback, useRef, useState, type RefObject } from 'react';
 
 function isOver(event: Event, element: HTMLElement | null): boolean {

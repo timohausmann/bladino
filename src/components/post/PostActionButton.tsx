@@ -8,6 +8,7 @@ interface PostActionButtonProps {
   onClick: () => void;
   className?: string;
   hideCount?: boolean;
+  countRight?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export function PostActionButton({
   count,
   label,
   onClick,
+  countRight = true,
   className = '',
   hideCount = false,
 }: PostActionButtonProps) {
@@ -29,10 +31,11 @@ export function PostActionButton({
         onClick={onClick}
         tabIndex={0}
       >
-        {icon}
+        {countRight ? null : icon}
         {!hideCount ? (
           <span className="text-sm font-medium">{count}</span>
         ) : null}
+        {countRight ? icon : null}
       </button>
     </Tooltip>
   );

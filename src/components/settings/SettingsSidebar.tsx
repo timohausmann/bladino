@@ -1,16 +1,21 @@
 import { settingsNav } from '@/components/settings/settingsNav';
+import { useDesktopLayout } from '@/hooks/useDesktopLayout';
 import { Link, useRouterState } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
+
+const DEFAULT_SETTINGS_PATH = '/settings/appearance';
 
 /**
  * Grouped navigation for settings sub-pages.
  */
 export function SettingsSidebar() {
   const { t } = useTranslation();
+  const isDesktopLayout = useDesktopLayout();
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
+  const isSettingsIndex = pathname === '/settings' || pathname === '/settings/';
 
   return (
     <nav
@@ -24,7 +29,11 @@ export function SettingsSidebar() {
           </p>
           <ul className="space-y-0.5">
             {group.items.map((item) => {
-              const isActive = pathname === item.to;
+              const isActive =
+                pathname === item.to ||
+                (isDesktopLayout &&
+                  isSettingsIndex &&
+                  item.to === DEFAULT_SETTINGS_PATH);
               const isDanger = item.variant === 'danger';
 
               return (

@@ -1,5 +1,6 @@
 import type { File as ApiFile } from '@/graphql';
 import { ScrollArea } from '@/components/ui/ScrollArea';
+import type { ParentSurface } from '@/components/ui/surface';
 import { resolveFileUrl } from '@/utils/fileUrl';
 import { File as FileIcon, FileText, Music, Video, X } from 'lucide-react';
 import type { LocalDraftFile } from '@/utils/postFileUtils';
@@ -19,6 +20,8 @@ interface FilePreviewProps {
   onRemove?: (fileId: string) => void;
   /** Tile layout for every file; skips full-width gallery for 1–2 images. */
   compact?: boolean;
+  /** Fill of the parent containing this preview. */
+  parentSurface?: ParentSurface;
 }
 
 function getDisplayName(file: PreviewFile | LocalDraftFile): string {
@@ -53,6 +56,7 @@ export function FilePreview({
   files,
   onRemove,
   compact = false,
+  parentSurface = 'surface',
 }: FilePreviewProps) {
   const { t } = useTranslation();
 
@@ -90,7 +94,10 @@ export function FilePreview({
   const fitsWithoutScroll = files.length <= 3;
 
   const previewClassName = twMerge(
-    'relative min-w-0 bg-black/20 rounded-lg overflow-hidden transition-all duration-200',
+    parentSurface === 'inset'
+      ? 'border-surface-border bg-surface hover:bg-surface-hover'
+      : 'border-elevated-border bg-elevated hover:bg-elevated-hover',
+    'relative min-w-0 overflow-hidden rounded-lg border transition-all duration-200',
     isImagePost ? twMerge('w-full', IMAGE_POST_MAX_HEIGHT) : 'aspect-3/2',
   );
 
@@ -162,7 +169,7 @@ export function FilePreview({
                   href={previewUrl ?? '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block h-full w-full hover:bg-black/30"
+                  className="block h-full w-full"
                   aria-label={t('common:openFile', { name: displayName })}
                   tabIndex={0}
                 >

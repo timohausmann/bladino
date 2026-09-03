@@ -8,6 +8,8 @@ interface UiState {
   isNavRailExpanded: boolean;
   setNavRailExpanded: (expanded: boolean) => void;
   toggleNavRail: () => void;
+  isChannelsSectionOpen: boolean;
+  setChannelsSectionOpen: (open: boolean) => void;
 }
 
 export const useUiStore = create<UiState>()(
@@ -20,6 +22,8 @@ export const useUiStore = create<UiState>()(
       isNavRailExpanded: true,
       setNavRailExpanded: (expanded) => set({ isNavRailExpanded: expanded }),
       toggleNavRail: () => set({ isNavRailExpanded: !get().isNavRailExpanded }),
+      isChannelsSectionOpen: true,
+      setChannelsSectionOpen: (open) => set({ isChannelsSectionOpen: open }),
     }),
     { name: 'bladino.ui' },
   ),

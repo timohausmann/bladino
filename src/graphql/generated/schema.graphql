@@ -7,13 +7,25 @@ type Channel {
   id: ID!
 
   """"""
-  lastView: Date
-
-  """"""
   name: String!
+}
+
+""""""
+type ChannelUnreadState {
+  """"""
+  channel: Channel!
 
   """"""
-  unreadCount: Int
+  effectiveLastViewedAt: Date!
+
+  """"""
+  lastViewedAt: Date!
+
+  """"""
+  unreadCount: Int!
+
+  """"""
+  unreadPostCount: Int!
 }
 
 """"""
@@ -81,6 +93,18 @@ input CommentFilter {
 
 """"""
 scalar Date
+
+""""""
+type FeedUnreadState {
+  """"""
+  lastViewedAt: Date!
+
+  """"""
+  unreadCount: Int!
+
+  """"""
+  unreadPostCount: Int!
+}
 
 """"""
 type File implements Post {
@@ -226,7 +250,7 @@ type Mutation {
   updateChannel(id: ID!, name: String!): Channel!
 
   """"""
-  updateChannelView(id: ID!): Boolean
+  updateChannelView(id: ID!, viewedAt: Date!): Boolean!
 
   """
   Partial update with replace semantics for files.
@@ -243,6 +267,9 @@ type Mutation {
   A comment must always have body and/or at least one file after the update.
   """
   updateComment(body: String, files: [ID!], id: ID!): Comment!
+
+  """"""
+  updateHomeFeedView(viewedAt: Date!): Boolean!
 
   """"""
   updateNote(body: String, id: ID!, title: String): Note!
@@ -308,9 +335,6 @@ type Query {
   channels: [Channel!]!
 
   """"""
-  channelsUnread: [Channel!]!
-
-  """"""
   comment(id: ID!): Comment
 
   """"""
@@ -335,6 +359,9 @@ type Query {
   notes: [Note!]!
 
   """"""
+  unreadOverview: UnreadOverview!
+
+  """"""
   user(id: ID!): User
 
   """"""
@@ -348,6 +375,18 @@ type Query {
 
   """"""
   weblinks: [Weblink!]!
+}
+
+""""""
+type UnreadOverview {
+  """"""
+  channels: [ChannelUnreadState!]!
+
+  """"""
+  feed: FeedUnreadState!
+
+  """"""
+  snapshotAt: Date!
 }
 
 """"""
