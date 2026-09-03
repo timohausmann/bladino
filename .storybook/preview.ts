@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import type { Preview } from '@storybook/react-vite';
 import '../src/tailwind.css';
 import { initI18n } from '../src/i18n';
@@ -45,6 +47,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: ['Design System', 'UI', 'Post'],
+        method: 'alphabetical',
       },
     },
   },
