@@ -78,13 +78,13 @@ export function CommentComposerForm({
       <span className="hidden md:contents">
         <CreateAddEmoji
           onEmojiSelect={composer.handleEmojiSelect}
-          shape="soft"
+          shape="rounded-square"
         />
       </span>
       <CreateAddAttachment
         onAddFiles={composer.handleAddFilesClick}
         disabled={composer.isSubmitting}
-        shape="soft"
+        shape="rounded-square"
       />
     </>
   );

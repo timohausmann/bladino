@@ -1,4 +1,4 @@
-import { headerButtonVariants } from '@/components/ui/headerButtonVariants';
+import { iconButtonVariants } from '@/components/ui/IconButton';
 import { Link, type LinkProps } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { ArrowLeft } from 'lucide-react';
@@ -26,7 +26,7 @@ export function MobileBackLink({
       aria-label={label}
       title={label}
       className={clsx(
-        headerButtonVariants({ size: 'sm' }),
+        iconButtonVariants({ size: 'sm' }),
         'shrink-0 lg:hidden',
         className,
       )}

@@ -6,7 +6,7 @@ import type {
   NoteEditorFontFamily,
   NoteEditorViewMode,
 } from '@/components/notes/types';
-import { HeaderButton } from '@/components/ui/HeaderButton';
+import { IconButton } from '@/components/ui/IconButton';
 import { inlineSelectItemClassName } from '@/components/ui/InlineSelect';
 import { overlayContentVariants } from '@/components/ui/overlay';
 import { ContextMenuButton, ContextMenuDivider } from '@/components/ui/popover';
@@ -83,7 +83,7 @@ export function NoteEditorToolbarMenu({
       <Tooltip content={t('notes:moreActions')}>
         <Popover.Trigger asChild>
           <Toolbar.Button asChild>
-            <HeaderButton
+            <IconButton
               icon={<MoreHorizontal size={18} />}
               label={t('notes:moreActions')}
               disableTooltip

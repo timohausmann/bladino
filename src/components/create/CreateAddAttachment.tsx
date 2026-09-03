@@ -1,17 +1,17 @@
 import { Paperclip } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type {
-  HeaderButtonShape,
-  HeaderButtonVariant,
-} from '@/components/ui/headerButtonVariants';
-import { HeaderButton } from '@/components/ui/HeaderButton';
+import {
+  IconButton,
+  type IconButtonShape,
+  type IconButtonVariant,
+} from '@/components/ui/IconButton';
 
 interface CreateAddAttachmentProps {
   onAddFiles?: () => void;
   className?: string;
   disabled?: boolean;
-  variant?: HeaderButtonVariant;
-  shape?: HeaderButtonShape;
+  variant?: IconButtonVariant;
+  shape?: IconButtonShape;
 }
 
 export function CreateAddAttachment({
@@ -19,12 +19,12 @@ export function CreateAddAttachment({
   className,
   disabled,
   variant = 'default',
-  shape = 'round',
+  shape = 'circle',
 }: CreateAddAttachmentProps) {
   const { t } = useTranslation();
 
   return (
-    <HeaderButton
+    <IconButton
       type="button"
       icon={<Paperclip size={20} />}
       label={t('posts:addPhotosOrFiles')}

@@ -1,5 +1,4 @@
-import { HeaderButton } from '@/components/ui/HeaderButton';
-import { headerButtonVariants } from '@/components/ui/headerButtonVariants';
+import { IconButton, iconButtonVariants } from '@/components/ui/IconButton';
 import { ContextMenuButton, PopoverContent } from '@/components/ui/popover';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { useDashboardStore, type WidgetType } from '@/stores/dashboardStore';
@@ -62,9 +61,9 @@ export function DashboardToolbar({
         aria-hidden={!draggingId}
         aria-label={t('dashboard:removeWidgetDrop')}
         className={clsx(
-          headerButtonVariants({
+          iconButtonVariants({
             variant: 'dangerous',
-            shape: 'round',
+            shape: 'circle',
             active: overTrash,
           }),
           'bg-rose-500/10 dark:bg-rose-500/15',
@@ -80,7 +79,7 @@ export function DashboardToolbar({
         <Tooltip content={t('dashboard:addWidget')}>
           <Popover.Trigger asChild>
             <Toolbar.Button asChild>
-              <HeaderButton
+              <IconButton
                 icon={<Plus size={18} />}
                 label={t('dashboard:addWidget')}
                 variant="persistent"

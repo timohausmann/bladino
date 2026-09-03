@@ -1,9 +1,9 @@
-import { HeaderButton } from '@/components/ui/HeaderButton';
-import type {
-  HeaderButtonShape,
-  HeaderButtonSize,
-  HeaderButtonVariant,
-} from '@/components/ui/headerButtonVariants';
+import {
+  IconButton,
+  type IconButtonShape,
+  type IconButtonSize,
+  type IconButtonVariant,
+} from '@/components/ui/IconButton';
 import { Tooltip } from '@/components/ui/Tooltip';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import type { ReactNode } from 'react';
@@ -14,9 +14,9 @@ interface ToolbarTooltipButtonProps
   label: string;
   tooltip?: string;
   active?: boolean;
-  variant?: HeaderButtonVariant;
-  shape?: HeaderButtonShape;
-  size?: HeaderButtonSize;
+  variant?: IconButtonVariant;
+  shape?: IconButtonShape;
+  size?: IconButtonSize;
   className?: string;
 }
 
@@ -27,7 +27,7 @@ export function ToolbarTooltipButton({
   tooltip,
   active = false,
   variant = 'default',
-  shape = 'round',
+  shape = 'circle',
   size = 'default',
   className,
   disabled = false,
@@ -36,7 +36,7 @@ export function ToolbarTooltipButton({
   return (
     <Tooltip content={tooltip ?? label}>
       <Toolbar.Button asChild>
-        <HeaderButton
+        <IconButton
           icon={icon}
           label={label}
           active={active}

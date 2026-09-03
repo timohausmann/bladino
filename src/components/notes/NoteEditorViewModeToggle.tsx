@@ -1,5 +1,5 @@
 import { NOTE_EDITOR_VIEW_MODE_OPTIONS } from '@/components/notes/noteEditorToolbarConfig';
-import { HeaderButton } from '@/components/ui/HeaderButton';
+import { IconButton } from '@/components/ui/IconButton';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type { NoteEditorViewMode } from '@/components/notes/types';
 import * as Toolbar from '@radix-ui/react-toolbar';
@@ -32,10 +32,10 @@ export function NoteEditorViewModeToggle({
         return (
           <Tooltip key={mode} content={label}>
             <Toolbar.ToggleItem value={mode} asChild>
-              <HeaderButton
+              <IconButton
                 icon={<Icon size={16} />}
                 label={label}
-                shape="soft"
+                shape="rounded-square"
                 variant="default"
                 active={value === mode}
                 disableTooltip

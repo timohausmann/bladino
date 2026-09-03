@@ -1,10 +1,10 @@
 import { tv } from 'tailwind-variants';
 
-export type HeaderButtonVariant = 'default' | 'persistent' | 'dangerous';
-export type HeaderButtonShape = 'round' | 'soft';
-export type HeaderButtonSize = 'default' | 'sm';
+export type IconButtonVariant = 'default' | 'persistent' | 'dangerous';
+export type IconButtonShape = 'circle' | 'rounded-square';
+export type IconButtonSize = 'default' | 'sm';
 
-export const headerButtonVariants = tv({
+export const iconButtonVariants = tv({
   base: [
     'border-none flex items-center justify-center p-0 transition-colors',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
@@ -15,8 +15,8 @@ export const headerButtonVariants = tv({
       sm: 'h-8 w-8',
     },
     shape: {
-      round: 'rounded-full',
-      soft: 'rounded-lg',
+      circle: 'rounded-full',
+      'rounded-square': 'rounded-lg',
     },
     variant: {
       default: [
@@ -25,8 +25,8 @@ export const headerButtonVariants = tv({
       ],
       persistent: [
         'cursor-pointer text-foreground',
-        'bg-white/30 dark:bg-white/10',
-        'hover:bg-white/50 dark:hover:bg-white/20',
+        'bg-black/5 dark:bg-white/10',
+        'hover:bg-black/10 dark:hover:bg-white/20',
       ],
       dangerous: [
         'cursor-pointer text-rose-600 dark:text-rose-400 bg-transparent',
@@ -47,13 +47,13 @@ export const headerButtonVariants = tv({
       variant: 'default',
       active: true,
       disabled: false,
-      class: 'bg-white/10 dark:bg-white/10',
+      class: 'bg-black/10 dark:bg-white/10',
     },
     {
       variant: 'persistent',
       active: true,
       disabled: false,
-      class: 'bg-white/50 dark:bg-white/20',
+      class: 'bg-black/10 dark:bg-white/20',
     },
     {
       variant: 'dangerous',
@@ -69,7 +69,7 @@ export const headerButtonVariants = tv({
     {
       variant: 'persistent',
       disabled: true,
-      class: 'hover:bg-white/30 dark:hover:bg-white/10',
+      class: 'hover:bg-black/5 dark:hover:bg-white/10',
     },
     {
       variant: 'dangerous',
@@ -79,7 +79,7 @@ export const headerButtonVariants = tv({
   ],
   defaultVariants: {
     variant: 'default',
-    shape: 'round',
+    shape: 'circle',
     size: 'default',
     active: false,
     disabled: false,

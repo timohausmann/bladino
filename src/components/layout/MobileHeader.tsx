@@ -1,8 +1,7 @@
 import { AppNavigation } from '@/components/layout/AppNavigation';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Avatar } from '@/components/ui/Avatar';
-import { HeaderButton } from '@/components/ui/HeaderButton';
-import { headerButtonVariants } from '@/components/ui/headerButtonVariants';
+import { IconButton, iconButtonVariants } from '@/components/ui/IconButton';
 import { NotificationButton } from '@/components/ui/NotificationButton';
 import {
   overlayBackdropEnterClassName,
@@ -52,7 +51,7 @@ export function MobileHeader() {
             <Dialog.Trigger asChild>
               <button
                 type="button"
-                className={headerButtonVariants()}
+                className={iconButtonVariants()}
                 aria-label={t('navigation:openNavigation')}
               >
                 <Avatar
@@ -106,7 +105,7 @@ export function MobileHeader() {
               className="block"
             />
             <Dialog.Close asChild>
-              <HeaderButton
+              <IconButton
                 icon={<X size={20} aria-hidden />}
                 label={t('navigation:closeNavigation')}
                 disableTooltip

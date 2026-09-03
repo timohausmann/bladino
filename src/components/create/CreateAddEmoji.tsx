@@ -3,17 +3,17 @@ import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LazyEmojiPicker } from '@/components/ui/EmojiPicker/LazyEmojiPicker';
+import {
+  IconButton,
+  type IconButtonShape,
+  type IconButtonVariant,
+} from '@/components/ui/IconButton';
 import { Tooltip } from '@/components/ui/Tooltip';
-import type {
-  HeaderButtonShape,
-  HeaderButtonVariant,
-} from '@/components/ui/headerButtonVariants';
-import { HeaderButton } from '@/components/ui/HeaderButton';
 
 interface CreateAddEmojiProps {
   onEmojiSelect: (emoji: string) => void;
-  variant?: HeaderButtonVariant;
-  shape?: HeaderButtonShape;
+  variant?: IconButtonVariant;
+  shape?: IconButtonShape;
   className?: string;
 }
 
@@ -24,7 +24,7 @@ interface CreateAddEmojiProps {
 export function CreateAddEmoji({
   onEmojiSelect,
   variant = 'default',
-  shape = 'round',
+  shape = 'circle',
   className,
 }: CreateAddEmojiProps) {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export function CreateAddEmoji({
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Tooltip content={label}>
         <Popover.Trigger asChild>
-          <HeaderButton
+          <IconButton
             icon={<SmilePlus size={20} />}
             label={label}
             variant={variant}

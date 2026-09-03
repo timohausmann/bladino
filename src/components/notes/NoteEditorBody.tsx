@@ -43,7 +43,7 @@ export function NoteEditorBody({
         NOTE_EDITOR_FONT_CLASS[fontFamily],
       )}
       endAdornment={
-        <CreateAddEmoji onEmojiSelect={onEmojiSelect} shape="soft" />
+        <CreateAddEmoji onEmojiSelect={onEmojiSelect} shape="rounded-square" />
       }
       rows={1}
     />
