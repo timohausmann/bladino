@@ -1,9 +1,9 @@
-import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
+import { NavigationCountBadge } from '@/components/navigation/NavigationCountBadge';
+import { NavRailIconTrack } from '@/components/navigation/NavRailIconTrack';
 import {
   navRailLabelClassName,
   navRailRowClassName,
-} from '@/components/layout/navRailLayout';
-import { NavigationCountBadge } from '@/components/layout/NavigationCountBadge';
+} from '@/components/navigation/navRailLayout';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';

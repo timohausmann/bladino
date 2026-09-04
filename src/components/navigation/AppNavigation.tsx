@@ -1,15 +1,15 @@
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
 import { useNotificationUnreadCount } from '@/components/notifications/useNotificationUnreadCount';
-import { NotificationButton } from '@/components/ui/NotificationButton';
-import { NavRailIconLink } from '@/components/layout/NavRailIconLink';
-import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
-import { NavRailLink } from '@/components/layout/NavRailLink';
-import { NavigationCountBadge } from '@/components/layout/NavigationCountBadge';
+import { NotificationButton } from '@/components/navigation/NotificationButton';
+import { NavRailIconLink } from '@/components/navigation/NavRailIconLink';
+import { NavRailIconTrack } from '@/components/navigation/NavRailIconTrack';
+import { NavRailLink } from '@/components/navigation/NavRailLink';
+import { NavigationCountBadge } from '@/components/navigation/NavigationCountBadge';
 import {
   navRailLabelClassName,
   navRailRowClassName,
   navRailSectionClassName,
-} from '@/components/layout/navRailLayout';
+} from '@/components/navigation/navRailLayout';
 import { useUiStore } from '@/stores/uiStore';
 import {
   UnreadOverviewDocument,
@@ -213,10 +213,7 @@ function AppNavigationChannels({
               }}
             >
               <span className="min-w-0 flex-1 truncate">#{channel.name}</span>
-              <NavigationCountBadge
-                count={unreadCount}
-                className="h-5 min-w-5 px-1.5 text-xs"
-              />
+              <NavigationCountBadge count={unreadCount} />
             </Link>
           ))
         )}

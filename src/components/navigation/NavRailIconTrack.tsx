@@ -1,8 +1,9 @@
-import { navRailIconColumnClassName } from '@/components/layout/navRailLayout';
+import { navRailIconColumnClassName } from '@/components/navigation/navRailLayout';
 import clsx from 'clsx';
+import type { ReactNode } from 'react';
 
 interface NavRailIconTrackProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 

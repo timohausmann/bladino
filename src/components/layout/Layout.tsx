@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useEffect } from 'react';
 import { MobileHeader } from '@/components/layout/MobileHeader';
-import { NavRail } from '@/components/layout/NavRail';
+import { NavRail } from '@/components/navigation/NavRail';
 import {
   useFixedViewport,
   useIsAuthenticatedShell,

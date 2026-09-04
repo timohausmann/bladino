@@ -1,4 +1,4 @@
-import { navRailRowClassName } from '@/components/layout/navRailLayout';
+import { navRailRowClassName } from '@/components/navigation/navRailLayout';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { Link } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';

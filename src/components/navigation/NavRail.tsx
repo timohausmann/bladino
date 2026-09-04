@@ -1,5 +1,5 @@
-import { AppNavigation } from '@/components/layout/AppNavigation';
-import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
+import { AppNavigation } from '@/components/navigation/AppNavigation';
+import { NavRailIconTrack } from '@/components/navigation/NavRailIconTrack';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Tooltip } from '@/components/ui/Tooltip';
 import {
@@ -7,7 +7,7 @@ import {
   NAV_RAIL_EXPANDED_WIDTH,
   navRailRowClassName,
   navRailSectionClassName,
-} from '@/components/layout/navRailLayout';
+} from '@/components/navigation/navRailLayout';
 import { useUiStore } from '@/stores/uiStore';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';

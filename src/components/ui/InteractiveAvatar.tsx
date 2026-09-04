@@ -1,8 +1,8 @@
-import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
+import { NavRailIconTrack } from '@/components/navigation/NavRailIconTrack';
 import {
   navRailLabelClassName,
   navRailRowClassName,
-} from '@/components/layout/navRailLayout';
+} from '@/components/navigation/navRailLayout';
 import { useUserStore } from '@/stores/userStore';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';

@@ -1,9 +1,9 @@
-import { AppNavigation } from '@/components/layout/AppNavigation';
+import { AppNavigation } from '@/components/navigation/AppNavigation';
+import { NotificationButton } from '@/components/navigation/NotificationButton';
 import { useNotificationUnreadCount } from '@/components/notifications/useNotificationUnreadCount';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Avatar } from '@/components/ui/Avatar';
 import { IconButton, iconButtonVariants } from '@/components/ui/IconButton';
-import { NotificationButton } from '@/components/ui/NotificationButton';
 import {
   overlayBackdropEnterClassName,
   overlayContentVariants,
