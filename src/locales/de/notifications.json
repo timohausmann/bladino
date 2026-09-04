@@ -2,11 +2,15 @@
   "title": "Benachrichtigungen",
   "newCount": "{{count}} neu",
   "empty": "Noch keine Benachrichtigungen",
-  "mock": {
-    "likedPost": "{{name}} hat deinen Beitrag geliked",
-    "newComment": "Neuer Kommentar zu deinem Beitrag",
-    "newFollower": "Du hast einen neuen Follower",
-    "minutesAgo": "vor {{count}} Minuten",
-    "hourAgo": "vor 1 Stunde"
+  "loading": "Benachrichtigungen werden geladen …",
+  "loadingMore": "Weitere Benachrichtigungen werden geladen …",
+  "loadError": "Benachrichtigungen konnten nicht geladen werden.",
+  "retry": "Erneut versuchen",
+  "markAllRead": "Alle als gelesen markieren",
+  "unknownActor": "Jemand",
+  "types": {
+    "commentLiked": "{{actor}} hat deinen Beitrag geliked",
+    "commentLikedReply": "{{actor}} hat deinen Kommentar geliked",
+    "commentRepliedTo": "{{actor}} hat auf deinen Beitrag geantwortet"
   }
 }

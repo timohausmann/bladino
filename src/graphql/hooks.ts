@@ -32,9 +32,16 @@ export function useGraphQLQuery<TResult, TVariables extends object>(
   });
 }
 
-export function useGraphQLMutation<TResult, TVariables extends object>(
+export function useGraphQLMutation<
+  TResult,
+  TVariables extends object,
+  TOnMutateResult = unknown,
+>(
   document: TypedDocumentNode<TResult, TVariables>,
-  options?: Omit<UseMutationOptions<TResult, Error, TVariables>, 'mutationFn'>,
+  options?: Omit<
+    UseMutationOptions<TResult, Error, TVariables, TOnMutateResult>,
+    'mutationFn'
+  >,
 ) {
   const operationName = getOperationName(
     document as TypedDocumentNode<unknown, unknown>,

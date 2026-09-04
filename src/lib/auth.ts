@@ -1,5 +1,6 @@
-import { CurrentUserDocument } from '@/graphql/generated/graphql';
+import { isTokenExpiredError, isUnauthorizedError } from '@/graphql/apiError';
 import { requestGraphQL } from '@/graphql/client';
+import { CurrentUserDocument } from '@/graphql/generated/graphql';
 import { queryClient } from '@/lib/queryClient';
 import { clearAuthToken, getAuthToken } from '@/stores/authStore';
 import { useUserStore, type CurrentUser } from '@/stores/userStore';
@@ -23,11 +24,11 @@ export function resolveRedirectTarget(redirect: unknown): string {
   }
 }
 
-/** Clears token, user store, and cached session query. */
+/** Clears the session and all cached API data that may belong to its user. */
 export function clearSession(): void {
   clearAuthToken();
   useUserStore.getState().clearCurrentUser();
-  queryClient.removeQueries({ queryKey: CURRENT_USER_QUERY_KEY });
+  queryClient.clear();
 }
 
 /**
@@ -55,8 +56,11 @@ export async function ensureSession(): Promise<CurrentUser | null> {
 
     useUserStore.getState().setCurrentUser(user);
     return user;
-  } catch {
-    clearSession();
+  } catch (error) {
+    // Keep the token unless the API rejected it.
+    if (isTokenExpiredError(error) || isUnauthorizedError(error)) {
+      clearSession();
+    }
     return null;
   }
 }

@@ -7,19 +7,58 @@ import {
   useGraphQLQuery,
   type Comment,
 } from '@/graphql';
-import { useParams } from '@tanstack/react-router';
+import { getCommentChildren, getCommentDomId } from '@/utils/commentUtils';
+import { useMatch, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /**
- * PostDetail page - displays a single post by ID
+ * PostDetail page - displays a single post by ID, optionally scrolled to a reply.
  */
 export function PostDetail() {
   const { t } = useTranslation();
-  const { id } = useParams({ from: '/_authenticated/post/$id' });
-
-  const { data, isPending, isError, error } = useGraphQLQuery(CommentDocument, {
-    id,
+  const navigate = useNavigate();
+  const postMatch = useMatch({
+    from: '/_authenticated/post/$id',
+    shouldThrow: false,
   });
+  const postCommentMatch = useMatch({
+    from: '/_authenticated/post/$id/comment/$commentId',
+    shouldThrow: false,
+  });
+  const id = postCommentMatch?.params.id ?? postMatch?.params.id;
+  const highlightCommentId = postCommentMatch?.params.commentId;
+
+  const handleDeleted = () => {
+    void navigate({ to: '/feed' });
+  };
+
+  const { data, isPending, isError, error } = useGraphQLQuery(
+    CommentDocument,
+    { id: id ?? '' },
+    { enabled: Boolean(id) },
+  );
+
+  const comment = data?.comment as Comment | undefined;
+  const highlightedCommentExists =
+    highlightCommentId !== undefined &&
+    comment !== undefined &&
+    getCommentChildren(comment).some(
+      (child) => child.id === highlightCommentId,
+    );
+
+  useEffect(() => {
+    if (!highlightCommentId || isPending) return;
+
+    const element = document.getElementById(
+      getCommentDomId(highlightCommentId),
+    );
+    element?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [highlightCommentId, isPending, comment?.id]);
+
+  if (!id) {
+    return <ResourceNotFound resource="post" />;
+  }
 
   if (isPending) {
     return (
@@ -35,11 +74,17 @@ export function PostDetail() {
     );
   }
 
-  const comment = data?.comment;
-
   if (!comment) {
     return <ResourceNotFound resource="post" />;
   }
 
-  return <PostCard comment={comment as Comment} />;
+  return (
+    <PostCard
+      comment={comment}
+      highlightedCommentId={
+        highlightedCommentExists ? highlightCommentId : undefined
+      }
+      onDeleted={handleDeleted}
+    />
+  );
 }

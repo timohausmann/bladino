@@ -5,6 +5,11 @@ export function getCommentFiles(comment: Pick<Comment, 'files'>): ApiFile[] {
   return (comment.files ?? []).filter((file): file is ApiFile => file != null);
 }
 
+/** DOM id used by reply deep-links and copy-link targets. */
+export function getCommentDomId(commentId: string): string {
+  return `comment-${commentId}`;
+}
+
 /** Non-null child comments from a comment. */
 export function getCommentChildren(
   comment: Pick<Comment, 'children'>,

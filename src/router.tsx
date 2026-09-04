@@ -91,6 +91,15 @@ const postRoute = createRoute({
   ),
 });
 
+const postCommentRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/post/$id/comment/$commentId',
+  component: lazyRouteComponent(
+    () => import('./routes/PostDetail'),
+    'PostDetail',
+  ),
+});
+
 const profileRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: '/u/$name',
@@ -265,6 +274,7 @@ const routeTree = rootRoute.addChildren([
     notificationsRoute,
     dashboardRedirectRoute,
     postRoute,
+    postCommentRoute,
     profileRoute,
     settingsLayoutRoute.addChildren([
       settingsIndexRoute,

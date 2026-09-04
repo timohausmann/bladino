@@ -2,11 +2,15 @@
   "title": "Notifications",
   "newCount": "{{count}} new",
   "empty": "No notifications yet",
-  "mock": {
-    "likedPost": "{{name}} liked your post",
-    "newComment": "New comment on your post",
-    "newFollower": "You have a new follower",
-    "minutesAgo": "{{count}} minutes ago",
-    "hourAgo": "1 hour ago"
+  "loading": "Loading notifications…",
+  "loadingMore": "Loading more notifications…",
+  "loadError": "Notifications could not be loaded.",
+  "retry": "Try again",
+  "markAllRead": "Mark all as read",
+  "unknownActor": "Someone",
+  "types": {
+    "commentLiked": "{{actor}} liked your post",
+    "commentLikedReply": "{{actor}} liked your comment",
+    "commentRepliedTo": "{{actor}} replied to your post"
   }
 }

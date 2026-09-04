@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Menu, Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/Tooltip';
 import { IconButton } from './IconButton';
 import type {

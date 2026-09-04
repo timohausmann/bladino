@@ -9,6 +9,7 @@ import { PostMetadata } from '@/components/post/PostMetadata';
 interface PostHeaderProps {
   comment: Comment;
   onEdit?: () => void;
+  onDeleted?: () => void;
   /** Hide the ⋯ menu (e.g. dashboard preview cards). */
   showContextMenu?: boolean;
   showDate?: boolean;
@@ -19,6 +20,7 @@ interface PostHeaderProps {
 export function PostHeader({
   comment,
   onEdit,
+  onDeleted,
   showContextMenu = true,
   showDate = true,
   showMetadata = false,
@@ -72,7 +74,11 @@ export function PostHeader({
           </div>
           <div className="flex items-center gap-2">
             {showContextMenu && (
-              <PostContextMenu comment={comment} onEdit={onEdit} />
+              <PostContextMenu
+                comment={comment}
+                onEdit={onEdit}
+                onDeleted={onDeleted}
+              />
             )}
           </div>
         </div>

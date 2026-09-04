@@ -1,4 +1,5 @@
 import { AppNavigation } from '@/components/layout/AppNavigation';
+import { useNotificationUnreadCount } from '@/components/notifications/useNotificationUnreadCount';
 import { AnimatedLogo } from '@/components/ui/AnimatedLogo';
 import { Avatar } from '@/components/ui/Avatar';
 import { IconButton, iconButtonVariants } from '@/components/ui/IconButton';
@@ -7,10 +8,6 @@ import {
   overlayBackdropEnterClassName,
   overlayContentVariants,
 } from '@/components/ui/overlay/overlayVariants';
-import {
-  getMockNotifications,
-  getUnreadNotificationCount,
-} from '@/lib/mockNotifications';
 import { useUserStore } from '@/stores/userStore';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Link } from '@tanstack/react-router';
@@ -27,9 +24,9 @@ export function MobileHeader() {
   const { t } = useTranslation();
   const currentUser = useUserStore((store) => store.currentUser);
   const [isNavigationOpen, setNavigationOpen] = useState(false);
-  const unreadNotificationCount = getUnreadNotificationCount(
-    getMockNotifications(t),
-  );
+  const { data: notificationCountData } = useNotificationUnreadCount();
+  const unreadNotificationCount =
+    notificationCountData?.unreadNotificationCount ?? 0;
 
   // Close drawer upon navigation click
   const handleDrawerNavigation = (event: MouseEvent<HTMLDivElement>) => {

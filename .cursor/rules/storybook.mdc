@@ -1,0 +1,34 @@
+---
+description: Storybook conventions for UI component stories
+globs: "**/*.stories.tsx"
+alwaysApply: false
+---
+
+# Storybook
+
+Colocate stories with the component: `ComponentName/ComponentName.tsx`, barrel `index.ts`, and `ComponentName.stories.tsx`. Follow existing files (`Button.stories.tsx`, `Input.stories.tsx`).
+
+- Import `Meta` / `StoryObj` from `@storybook/react-vite`
+- `title: 'UI/ComponentName'`, `satisfies Meta`, `layout: 'centered'`
+- Named exports for variants (`Default`, `Placeholder`, `Disabled`)
+
+Stories show the **component's own variants**, not each consumer. Inspect app usages to learn which props and states actually occur, then name stories generically.
+
+```tsx
+// ❌ BAD — one story per call site
+export const MailFolder: Story = {};
+export const NoteEditorFont: Story = {};
+
+// ✅ GOOD — the states the component actually has
+export const Default: Story = {};
+export const Placeholder: Story = { args: { value: undefined } };
+export const Disabled: Story = { args: { disabled: true } };
+```
+
+Do not invent unused styling or prop combinations. If a state is invisible without context (transparent field, `parentSurface`), wrap it in the real surrounding surface (`Card`, `bg-inset`) rather than changing the component.
+
+For controlled inputs, keep value in local `useState`. Hide callback props in the controls table (`table: { disable: true }`). Do not change component APIs for stories.
+
+Components that use TanStack `Link` / `useNavigate` wrap with `withRouter`. Compose extra decorators as an array (`[withRouter, …]`), do not call one decorator from another. PostCard uses `withPostCard` for that. Do not copy the app route tree into Storybook.
+
+Do not call `useMatch({ from: '/_authenticated/...' })` in shared UI just to branch on the current page — pass a callback from the route. Storybook should not recreate app routes to satisfy that.

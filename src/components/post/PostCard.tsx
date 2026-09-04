@@ -17,12 +17,20 @@ interface PostCardProps {
   comment: Comment;
   isUnread?: boolean;
   getIsUnread?: (comment: Comment) => boolean;
+  highlightedCommentId?: string;
+  onDeleted?: () => void;
 }
 
 /**
  * PostCard - Main post as a floating card; nested comments stack inside.
  */
-export function PostCard({ comment, isUnread, getIsUnread }: PostCardProps) {
+export function PostCard({
+  comment,
+  isUnread,
+  getIsUnread,
+  highlightedCommentId,
+  onDeleted,
+}: PostCardProps) {
   const { t } = useTranslation();
   const { id: commentId } = comment;
   const children = getCommentChildren(comment);
@@ -53,6 +61,7 @@ export function PostCard({ comment, isUnread, getIsUnread }: PostCardProps) {
               <PostContextMenu
                 comment={comment}
                 onEdit={() => setIsEditing(true)}
+                onDeleted={onDeleted}
                 variant="compact"
               />
             </div>
@@ -88,6 +97,7 @@ export function PostCard({ comment, isUnread, getIsUnread }: PostCardProps) {
                   comment={child}
                   channel={comment.channel ?? undefined}
                   isUnread={getIsUnread?.(child)}
+                  isHighlighted={child.id === highlightedCommentId}
                 />
               </div>
             ))}

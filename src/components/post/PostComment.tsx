@@ -1,5 +1,6 @@
 import type { Comment } from '@/graphql';
-import { getCommentFiles } from '@/utils/commentUtils';
+import { getCommentFiles, getCommentDomId } from '@/utils/commentUtils';
+import clsx from 'clsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
@@ -14,18 +15,31 @@ interface PostCommentProps {
   comment: Comment;
   channel?: string;
   isUnread?: boolean;
+  isHighlighted?: boolean;
 }
 
 /**
  * PostComment - Compact comment display component
  */
-export function PostComment({ comment, channel, isUnread }: PostCommentProps) {
+export function PostComment({
+  comment,
+  channel,
+  isUnread,
+  isHighlighted = false,
+}: PostCommentProps) {
   const { t } = useTranslation();
   const files = getCommentFiles(comment);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="relative flex gap-3">
+    <div
+      id={getCommentDomId(comment.id)}
+      className={clsx(
+        'relative flex gap-3 rounded-lg',
+        isHighlighted &&
+          'bg-cyan-50 p-2 ring-2 ring-cyan-400 dark:bg-cyan-950/40 dark:ring-cyan-500',
+      )}
+    >
       <UnreadIndicator isUnread={isUnread} layout="comment" />
       <Avatar
         avatar={comment.user.avatar}

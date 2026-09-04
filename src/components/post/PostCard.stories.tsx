@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { Comment } from '@/graphql';
 import { getUserById, mockComments } from '@/mocks';
-import { withPostCardLayout } from '../../../.storybook/decorators/withPostProviders';
+import { withPostCard } from '../../../.storybook/decorators/withPostCard';
 import { PostCard } from './PostCard';
 
 const commentOptions = Object.fromEntries(
@@ -106,7 +106,7 @@ const fullComment: Comment = {
 const meta = {
   title: 'Post/PostCard',
   component: PostCard,
-  decorators: withPostCardLayout,
+  decorators: withPostCard,
   parameters: {
     layout: 'fullscreen',
   },
@@ -124,6 +124,9 @@ const meta = {
     isUnread: {
       control: 'boolean',
       description: 'Shows the unread dot beside the author name',
+    },
+    onDeleted: {
+      table: { disable: true },
     },
   },
 } satisfies Meta<typeof PostCard>;
@@ -162,6 +165,13 @@ export const WithReplies: Story = {
   args: {
     ...TextOnly.args,
     comment: commentOptions['post-3'],
+  },
+};
+
+export const HighlightedReply: Story = {
+  args: {
+    ...WithReplies.args,
+    highlightedCommentId: 'comment-3-1',
   },
 };
 

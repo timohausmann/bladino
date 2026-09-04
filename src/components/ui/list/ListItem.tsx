@@ -34,7 +34,7 @@ export function ListItem({
           className,
         )}
       >
-        <div className="flex min-w-0 items-center gap-2.5">
+        <div className="flex min-w-0 items-center gap-4">
           {Icon && (
             <Icon
               size={16}

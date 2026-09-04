@@ -1,8 +1,5 @@
 import { InteractiveAvatar } from '@/components/ui/InteractiveAvatar';
-import {
-  getMockNotifications,
-  getUnreadNotificationCount,
-} from '@/lib/mockNotifications';
+import { useNotificationUnreadCount } from '@/components/notifications/useNotificationUnreadCount';
 import { NotificationButton } from '@/components/ui/NotificationButton';
 import { NavRailIconLink } from '@/components/layout/NavRailIconLink';
 import { NavRailIconTrack } from '@/components/layout/NavRailIconTrack';
@@ -46,10 +43,10 @@ export function AppNavigation({ expanded }: AppNavigationProps) {
   const { data: unreadData, isLoading: isUnreadLoading } = useGraphQLQuery(
     UnreadOverviewDocument,
   );
+  const { data: notificationCountData } = useNotificationUnreadCount();
   const unreadOverview = unreadData?.unreadOverview;
-  const unreadNotificationCount = getUnreadNotificationCount(
-    getMockNotifications(t),
-  );
+  const unreadNotificationCount =
+    notificationCountData?.unreadNotificationCount ?? 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">

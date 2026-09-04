@@ -8,7 +8,6 @@ import { isReplyComment } from '@/utils/typePredicates';
 import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMatch, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { Edit, Link as LinkIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -25,6 +24,8 @@ import { toast } from '@/components/ui/toast';
 interface PostContextMenuProps {
   comment: Comment;
   onEdit?: () => void;
+  /** Route-specific follow-up after a successful delete (e.g. leave the detail page). */
+  onDeleted?: () => void;
   variant?: 'default' | 'compact';
 }
 
@@ -34,6 +35,7 @@ interface PostContextMenuProps {
 export function PostContextMenu({
   comment,
   onEdit,
+  onDeleted,
   variant = 'default',
 }: PostContextMenuProps) {
   const { t } = useTranslation();
@@ -44,11 +46,6 @@ export function PostContextMenu({
   const isOwner = currentUser?.id === comment.user.id;
   const isComment = isReplyComment(comment);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const postDetailMatch = useMatch({
-    from: '/_authenticated/post/$id',
-    shouldThrow: false,
-  });
 
   const { mutateAsync: deleteComment } = useGraphQLMutation(
     DeleteCommentDocument,
@@ -98,10 +95,7 @@ export function PostContextMenu({
       toast(isComment ? t('posts:commentDeleted') : t('posts:postDeleted'));
 
       setDeleteOpen(false);
-
-      if (!isComment && postDetailMatch?.params.id === String(comment.id)) {
-        void navigate({ to: '/feed' });
-      }
+      onDeleted?.();
     } catch (error) {
       const message =
         getGraphQLErrorMessage(error) ??

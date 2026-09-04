@@ -114,6 +114,8 @@ export type Mutation = {
   login: Scalars['String']['output'];
   loginMagic?: Maybe<Scalars['String']['output']>;
   loginOld?: Maybe<Scalars['String']['output']>;
+  markAllNotificationsRead: Scalars['Boolean']['output'];
+  markNotificationRead: Scalars['Boolean']['output'];
   migrateUser?: Maybe<Scalars['Boolean']['output']>;
   readMail?: Maybe<Scalars['Boolean']['output']>;
   requestMagic?: Maybe<Scalars['Boolean']['output']>;
@@ -226,6 +228,11 @@ export type MutationLoginOldArgs = {
 };
 
 
+export type MutationMarkNotificationReadArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationMigrateUserArgs = {
   birthday?: InputMaybe<Scalars['Date']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -329,6 +336,34 @@ export type Note = Post & {
   votes?: Maybe<Array<Maybe<Vote>>>;
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  actor?: Maybe<User>;
+  actorLabel?: Maybe<Scalars['String']['output']>;
+  dateCreated: Scalars['Date']['output'];
+  dateRead?: Maybe<Scalars['Date']['output']>;
+  id: Scalars['ID']['output'];
+  parentId?: Maybe<Scalars['ID']['output']>;
+  subjectId: Scalars['ID']['output'];
+  subjectType: NotificationSubjectType;
+  type: NotificationType;
+};
+
+export type NotificationFeed = {
+  __typename?: 'NotificationFeed';
+  cursor?: Maybe<Scalars['ID']['output']>;
+  notifications: Array<Notification>;
+};
+
+export enum NotificationSubjectType {
+  Comment = 'COMMENT'
+}
+
+export enum NotificationType {
+  CommentLiked = 'COMMENT_LIKED',
+  CommentRepliedTo = 'COMMENT_REPLIED_TO'
+}
+
 export type Post = {
   dateCreated?: Maybe<Scalars['Date']['output']>;
   dateEdited?: Maybe<Scalars['Date']['output']>;
@@ -348,6 +383,8 @@ export type Query = {
   mails: Array<Maybe<Mail>>;
   note?: Maybe<Note>;
   notes: Array<Note>;
+  notifications: NotificationFeed;
+  unreadNotificationCount: Scalars['Int']['output'];
   unreadOverview: UnreadOverview;
   user?: Maybe<User>;
   users: Array<User>;
@@ -390,6 +427,11 @@ export type QueryMailsArgs = {
 
 export type QueryNoteArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryNotificationsArgs = {
+  cursor?: InputMaybe<Scalars['ID']['input']>;
 };
 
 

@@ -232,6 +232,12 @@ type Mutation {
   loginOld(name: String!, password: String!): String
 
   """"""
+  markAllNotificationsRead: Boolean!
+
+  """"""
+  markNotificationRead(id: ID!): Boolean!
+
+  """"""
   migrateUser(birthday: Date, email: String, id: ID!, name: String!, password: String!, phone: String, token: String!): Boolean
 
   """"""
@@ -312,6 +318,60 @@ type Note implements Post {
 }
 
 """"""
+type Notification {
+  """"""
+  actor: User
+
+  """"""
+  actorLabel: String
+
+  """"""
+  dateCreated: Date!
+
+  """"""
+  dateRead: Date
+
+  """"""
+  id: ID!
+
+  """"""
+  parentId: ID
+
+  """"""
+  subjectId: ID!
+
+  """"""
+  subjectType: NotificationSubjectType!
+
+  """"""
+  type: NotificationType!
+}
+
+""""""
+type NotificationFeed {
+  """"""
+  cursor: ID
+
+  """"""
+  notifications: [Notification!]!
+}
+
+""""""
+enum NotificationSubjectType {
+  """"""
+  COMMENT
+}
+
+""""""
+enum NotificationType {
+  """"""
+  COMMENT_LIKED
+
+  """"""
+  COMMENT_REPLIED_TO
+}
+
+""""""
 interface Post {
   """"""
   dateCreated: Date
@@ -357,6 +417,12 @@ type Query {
 
   """"""
   notes: [Note!]!
+
+  """"""
+  notifications(cursor: ID): NotificationFeed!
+
+  """"""
+  unreadNotificationCount: Int!
 
   """"""
   unreadOverview: UnreadOverview!
