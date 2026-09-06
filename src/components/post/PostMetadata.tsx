@@ -52,8 +52,6 @@ export function PostMetadata({ comment }: PostMetadataProps) {
           #{channel.name}
         </Link>
       ) : null}
-
-      {channel && formattedDate ? <span aria-hidden>·</span> : null}
     </div>
   );
 }
