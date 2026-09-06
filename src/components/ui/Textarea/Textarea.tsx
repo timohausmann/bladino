@@ -1,10 +1,12 @@
 import { nanoid } from 'nanoid';
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  getTextareaEndInsetClassName,
-  type TextareaEndInsetCounts,
-} from '@/utils/textareaEndInset';
+  useLayoutEffect,
+  useState,
+  type ChangeEvent,
+  type ReactNode,
+} from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useTextareaPadding } from './useTextareaPadding';
 
 interface TextareaProps {
   id?: string;
@@ -21,12 +23,8 @@ interface TextareaProps {
   required?: boolean;
   resize?: 'resize-none' | 'resize-y' | 'resize-x' | 'resize';
   autoComplete?: string;
-  /** Rendered inside the field at the top-right (e.g. emoji picker). */
+  /** Overlay in the top-right; field padding tracks the cluster width. */
   endAdornment?: ReactNode;
-  /** Visible w-10 adornment slots; derives right padding automatically. */
-  endAdornmentSlotCounts?: TextareaEndInsetCounts;
-  /** Manual override when endAdornmentSlotCounts is not set. Defaults to pr-12. */
-  endAdornmentInsetClassName?: string;
   /** Grows height with content from a single-line minimum. */
   autoGrow?: boolean;
   /** When to show endAdornment. */
@@ -51,16 +49,24 @@ export function Textarea({
   resize = 'resize-y',
   autoComplete,
   endAdornment,
-  endAdornmentSlotCounts,
-  endAdornmentInsetClassName = 'pr-12',
   autoGrow = false,
   endAdornmentReveal = 'always',
   onFocus,
   onBlur,
 }: TextareaProps) {
   const textareaId = id ?? `textarea-${nanoid()}`;
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [focused, setFocused] = useState(false);
+
+  const hasEndAdornment = endAdornment != null;
+  const revealAdornment =
+    hasEndAdornment &&
+    (endAdornmentReveal === 'always' || focused || value.length > 0);
+  const resolvedResize = autoGrow ? 'resize-none' : resize;
+
+  const { textareaRef, adornmentRef, paddingRight } = useTextareaPadding({
+    hasAdornment: hasEndAdornment,
+    reveal: revealAdornment,
+  });
 
   useLayoutEffect(() => {
     const el = textareaRef.current;
@@ -73,20 +79,21 @@ export function Textarea({
 
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
-  }, [value, autoGrow]);
+  }, [value, autoGrow, paddingRight, textareaRef]);
 
-  const resolvedResize = autoGrow ? 'resize-none' : resize;
-  const isFilled = value.length > 0;
-  const revealAdornment =
-    endAdornment != null &&
-    (endAdornmentReveal === 'always' || focused || isFilled);
+  const handleFocus = () => {
+    setFocused(true);
+    onFocus?.();
+  };
 
-  const resolvedEndInset =
-    revealAdornment && endAdornment
-      ? endAdornmentSlotCounts != null
-        ? getTextareaEndInsetClassName(endAdornmentSlotCounts)
-        : endAdornmentInsetClassName
-      : undefined;
+  const handleBlur = () => {
+    setFocused(false);
+    onBlur?.();
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(event.target.value);
+  };
 
   return (
     <div className={twMerge('w-full', wrapperClassName)}>
@@ -102,7 +109,7 @@ export function Textarea({
       <div
         className={twMerge(
           'flex min-h-0 flex-1 flex-col',
-          endAdornment && 'relative',
+          hasEndAdornment && 'relative',
         )}
       >
         <textarea
@@ -110,37 +117,32 @@ export function Textarea({
           id={textareaId}
           name={name}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => {
-            setFocused(true);
-            onFocus?.();
-          }}
-          onBlur={() => {
-            setFocused(false);
-            onBlur?.();
-          }}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder={placeholder}
           maxLength={maxLength}
           rows={rows}
           disabled={disabled}
           required={required}
           autoComplete={autoComplete}
+          style={paddingRight != null ? { paddingRight } : undefined}
           className={twMerge(
             'bg-inset block w-full rounded-lg border border-transparent p-4 outline-none',
             'placeholder:text-muted-foreground',
             'transition-[background-color,font-size,line-height,min-height,padding] duration-200 ease-out',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            resolvedEndInset,
             resolvedResize,
             className,
           )}
           aria-label={label || placeholder}
           tabIndex={disabled ? -1 : 0}
         />
-        {endAdornment ? (
+        {hasEndAdornment ? (
           <div
+            ref={adornmentRef}
             className={twMerge(
-              'absolute top-2 right-2 flex items-center gap-0.5 transition-opacity duration-200',
+              'absolute top-2 right-2 flex items-center gap-0.5 pl-2 transition-opacity duration-200',
               revealAdornment ? 'opacity-100' : 'pointer-events-none opacity-0',
             )}
           >

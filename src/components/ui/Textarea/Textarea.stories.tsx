@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ComponentProps, ReactNode } from 'react';
 import { useState } from 'react';
+import { CreateAddAttachment } from '@/components/create/CreateAddAttachment';
 import { CreateAddEmoji } from '@/components/create/CreateAddEmoji';
 import { Card } from '@/components/ui/Card';
 import { TooltipProvider } from '@/components/ui/Tooltip';
@@ -84,9 +85,6 @@ const meta = {
     endAdornment: {
       table: { disable: true },
     },
-    endAdornmentSlotCounts: {
-      table: { disable: true },
-    },
     onFocus: {
       table: { disable: true },
     },
@@ -138,4 +136,48 @@ export const WithEmojiPicker: Story = {
     placeholder: 'Share an update…',
   },
   render: (args) => <EmojiTextarea textareaProps={args} />,
+};
+
+const EndAdornmentsTextarea = ({ textareaProps }: ControlledTextareaProps) => {
+  const [value, setValue] = useState(textareaProps.value);
+
+  const handleEmojiSelect = (emoji: string) => {
+    setValue((currentValue) => `${currentValue}${emoji}`);
+  };
+
+  return (
+    <TooltipProvider>
+      <StoryFrame>
+        <Textarea
+          {...textareaProps}
+          value={value}
+          onChange={setValue}
+          endAdornment={
+            <>
+              <span className="hidden md:contents">
+                <CreateAddEmoji
+                  onEmojiSelect={handleEmojiSelect}
+                  shape="rounded-square"
+                />
+              </span>
+              <CreateAddAttachment
+                onAddFiles={() => undefined}
+                shape="rounded-square"
+              />
+            </>
+          }
+        />
+      </StoryFrame>
+    </TooltipProvider>
+  );
+};
+
+export const WithEndAdornments: Story = {
+  args: {
+    label: 'Post',
+    placeholder: 'Share an update…',
+    value:
+      'Long enough that the line would run under the overlay buttons without the measured padding.',
+  },
+  render: (args) => <EndAdornmentsTextarea textareaProps={args} />,
 };

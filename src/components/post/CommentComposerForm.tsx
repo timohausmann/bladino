@@ -16,10 +16,7 @@ import { twMerge } from 'tailwind-merge';
 const REPLY_TEXTAREA_COMPACT_CLASS =
   'min-h-6 max-h-[400px] overflow-y-auto rounded-none bg-inset p-0 text-[15px] leading-6';
 const REPLY_TEXTAREA_ACTIVE_CLASS =
-  'min-h-14 max-h-[400px] overflow-y-auto bg-inset-deep px-3 py-3 text-base leading-normal';
-
-/** Paperclip always visible; emoji picker from md breakpoint. */
-const COMPOSER_END_ADORNMENT_SLOTS = { base: 1, md: 2 } as const;
+  'min-h-14 max-h-[400px] overflow-y-auto bg-inset-deep py-3 pl-3 text-base leading-normal';
 
 export interface CommentComposerFormProps extends UseCommentComposerOptions {
   layout: 'card' | 'reply';
@@ -104,10 +101,9 @@ export function CommentComposerForm({
           ? replyActive
             ? REPLY_TEXTAREA_ACTIVE_CLASS
             : REPLY_TEXTAREA_COMPACT_CLASS
-          : 'max-h-[400px] min-h-[82px] overflow-y-auto py-3 leading-normal'
+          : 'max-h-100 min-h-20.5 overflow-y-auto py-3 leading-normal'
       }
       endAdornment={inlineActions}
-      endAdornmentSlotCounts={COMPOSER_END_ADORNMENT_SLOTS}
       disabled={composer.isSubmitting}
       onFocus={isReply ? () => setReplyFocused(true) : undefined}
       onBlur={isReply ? () => setReplyFocused(false) : undefined}
@@ -151,7 +147,7 @@ export function CommentComposerForm({
       disabled={!composer.canSubmit}
       loading={composer.isSubmitting}
       aria-label={resolvedSubmitLabel}
-      className="h-10 w-10 shrink-0 !rounded-full !p-0"
+      className="h-10 w-10 shrink-0 rounded-full! p-0!"
       iconBefore={<Send size={18} />}
     >
       <span className="sr-only">{resolvedSubmitLabel}</span>
