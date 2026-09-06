@@ -85,7 +85,7 @@ export function Login() {
     <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-lg">
         <AnimatedLogo
-          className="mx-auto mb-4 block shrink-0"
+          className="mx-auto mb-4 block max-w-full"
           logoHeight="4rem"
           padding={42}
         />

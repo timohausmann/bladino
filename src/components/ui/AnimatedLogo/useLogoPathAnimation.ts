@@ -19,7 +19,31 @@ type Opts = {
   scaleFrom: number;
 };
 
-type State = { centers: PathCenter[]; customs: PathAnimationCustom[] };
+type State = {
+  centers: PathCenter[];
+  customs: PathAnimationCustom[];
+  /** getScreenCTM().a — CSS pixels per SVG user unit. */
+  cssPerUserUnit: number;
+};
+
+const restCustoms = (pathCount: number) =>
+  Array.from({ length: pathCount }, () => REST_ANIMATION);
+
+const zeroCenters = (pathCount: number) =>
+  Array.from({ length: pathCount }, () => ZERO_CENTER);
+
+/** getBBox is 0×0 while an ancestor is `display: none` (e.g. NavRail on mobile). */
+const isSvgLaidOut = (path: SVGPathElement | null) => {
+  const svg = path?.ownerSVGElement;
+  if (!svg) return false;
+  const box = svg.getBoundingClientRect();
+  return box.width > 0 && box.height > 0;
+};
+
+const readCssPerUserUnit = (path: SVGPathElement | null) => {
+  const ctm = path?.ownerSVGElement?.getScreenCTM();
+  return ctm && ctm.a > 0 ? ctm.a : 0;
+};
 
 export function useLogoPathAnimation({
   enabled,
@@ -31,15 +55,36 @@ export function useLogoPathAnimation({
   scaleFrom,
 }: Opts) {
   const refs = useRef<(SVGPathElement | null)[]>([]);
+  const customsRef = useRef<PathAnimationCustom[] | null>(null);
   const [state, setState] = useState<State | null>(null);
 
   useLayoutEffect(() => {
-    const centers = refs.current.map((p) =>
-      p ? measureCenter(p) : ZERO_CENTER,
-    );
+    customsRef.current = null;
 
-    const customs = enabled
-      ? centers.map(() =>
+    const measure = () => {
+      const first = refs.current.find((path) => path != null) ?? null;
+
+      if (!enabled) {
+        setState({
+          centers: zeroCenters(pathCount),
+          customs: restCustoms(pathCount),
+          cssPerUserUnit: 1,
+        });
+        return;
+      }
+
+      // Stay unready until the SVG is actually painted — otherwise centers
+      // collapse to 0 and CTM.a is 1, which makes shards orbit the origin.
+      if (!isSvgLaidOut(first)) return;
+
+      const centers = refs.current.map((path) =>
+        path ? measureCenter(path) : ZERO_CENTER,
+      );
+      const cssPerUserUnit = readCssPerUserUnit(first);
+      if (!cssPerUserUnit) return;
+
+      if (!customsRef.current) {
+        customsRef.current = centers.map(() =>
           createAnimation({
             offsetMax,
             yFactor,
@@ -47,10 +92,24 @@ export function useLogoPathAnimation({
             innerDelayMax,
             scaleFrom,
           }),
-        )
-      : Array.from({ length: pathCount }, () => REST_ANIMATION);
+        );
+      }
 
-    setState({ centers, customs });
+      setState({
+        centers,
+        customs: customsRef.current,
+        cssPerUserUnit,
+      });
+    };
+
+    measure();
+
+    const svg = refs.current.find((path) => path != null)?.ownerSVGElement;
+    if (!svg) return undefined;
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(svg);
+    return () => observer.disconnect();
   }, [
     enabled,
     pathCount,
@@ -66,10 +125,9 @@ export function useLogoPathAnimation({
   };
 
   return {
-    centers:
-      state?.centers ?? Array.from({ length: pathCount }, () => ZERO_CENTER),
-    customs:
-      state?.customs ?? Array.from({ length: pathCount }, () => REST_ANIMATION),
+    centers: state?.centers ?? zeroCenters(pathCount),
+    customs: state?.customs ?? restCustoms(pathCount),
+    cssPerUserUnit: state?.cssPerUserUnit ?? 0,
     setRef,
     ready: state !== null,
   };

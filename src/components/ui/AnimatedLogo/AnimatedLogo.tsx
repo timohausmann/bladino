@@ -3,6 +3,7 @@ import {
   lazy,
   Suspense,
   useEffect,
+  useMemo,
   useState,
   useSyncExternalStore,
 } from 'react';
@@ -16,8 +17,8 @@ import {
   DEFAULT_OFFSET_MAX,
   DEFAULT_ROTATE_MAX,
   DEFAULT_Y_FACTOR,
-  LOGO_VIEWBOX_HEIGHT,
-  LOGO_VIEWBOX_WIDTH,
+  motionCustomToSvgUserUnits,
+  paddedViewBoxSize,
   resolveCssSize,
   resolveTotalHeight,
 } from './logoPathTransforms';
@@ -167,15 +168,24 @@ export const AnimatedLogo = ({
   );
   const shouldAnimate = animateEnabled && !reducedMotion;
 
-  const { centers, customs, setRef, ready } = useLogoPathAnimation({
-    enabled: shouldAnimate,
-    pathCount: LOGO_PATHS.length,
-    offsetMax,
-    yFactor,
-    rotateMax,
-    innerDelayMax,
-    scaleFrom,
-  });
+  const { centers, customs, cssPerUserUnit, setRef, ready } =
+    useLogoPathAnimation({
+      enabled: shouldAnimate,
+      pathCount: LOGO_PATHS.length,
+      offsetMax,
+      yFactor,
+      rotateMax,
+      innerDelayMax,
+      scaleFrom,
+    });
+
+  const motionCustoms = useMemo(
+    () =>
+      customs.map((custom) =>
+        motionCustomToSvgUserUnits(custom, cssPerUserUnit),
+      ),
+    [customs, cssPerUserUnit],
+  );
 
   const playAnimation = shouldAnimate && ready;
 
@@ -213,58 +223,59 @@ export const AnimatedLogo = ({
   const resolvedTotalHeight = resolveCssSize(
     totalHeight ?? resolveTotalHeight(logoHeight, padding),
   );
+  const viewBox = paddedViewBoxSize(padding);
 
   return (
     <svg
-      width={LOGO_VIEWBOX_WIDTH}
-      height={LOGO_VIEWBOX_HEIGHT}
-      viewBox={`${-padding} ${-padding} ${LOGO_VIEWBOX_WIDTH + padding * 2} ${LOGO_VIEWBOX_HEIGHT + padding * 2}`}
+      width={viewBox.width}
+      height={viewBox.height}
+      viewBox={`${-padding} ${-padding} ${viewBox.width} ${viewBox.height}`}
       xmlns="http://www.w3.org/2000/svg"
       className={clsx(styles.logo, className)}
-      style={{ height: resolvedTotalHeight, width: 'auto' }}
+      style={{ height: resolvedTotalHeight, width: 'auto', maxWidth: '100%' }}
     >
-      <g transform={`translate(${padding}, ${padding})`}>
-        {LOGO_PATHS.map((path, i) => (
-          <path
-            key={`m${i}`}
-            ref={setRef(i)}
-            d={path.d}
-            style={{ visibility: 'hidden', pointerEvents: 'none' }}
-          />
-        ))}
+      {LOGO_PATHS.map((path, i) => (
+        <path
+          key={`m${i}`}
+          ref={setRef(i)}
+          d={path.d}
+          style={{ visibility: 'hidden', pointerEvents: 'none' }}
+        />
+      ))}
 
-        {/*
-         * Animated paths — appear once centers are measured.
-         *
-         * Two motion layers per path:
-         *   1. Entry — one-time scatter/spring (hidden → visible)
-         *   2. Resting — baseline idle wobble + optional overlays (e.g. scale)
-         *
-         * Transform structure guarantees rotation around each path's own center:
-         *   outer <g> positions the SVG pivot at (cx, cy)
-         *   motion.g animates x/y/rotate relative to that pivot
-         *   inner <path> is shifted so its natural center sits at the pivot (0,0)
-         *
-         * Motion's x/y are in CSS display pixels, independent of SVG user units.
-         */}
-        {showAnimatedPaths &&
-          (shouldAnimate ? (
-            <Suspense fallback={null}>
-              <AnimatedLogoMotionPaths
-                paths={LOGO_PATHS}
-                centers={centers}
-                customs={customs}
-                shouldAnimate={shouldAnimate}
-                entry={entryEnabled}
-                entryComplete={entryComplete}
-                idle={idleEnabled}
-                overlays={overlays}
-              />
-            </Suspense>
-          ) : (
-            <StaticLogoPaths paths={LOGO_PATHS} />
-          ))}
-      </g>
+      {/*
+       * Animated paths — appear once centers are measured.
+       *
+       * Two motion layers per path:
+       *   1. Entry — one-time scatter/spring (hidden → visible)
+       *   2. Resting — baseline idle wobble + optional overlays (e.g. scale)
+       *
+       * Transform structure guarantees rotation around each path's own center:
+       *   outer <g> positions the SVG pivot at (cx, cy)
+       *   motion.g animates x/y/rotate relative to that pivot
+       *   inner <path> is shifted so its natural center sits at the pivot (0,0)
+       *
+       * Motion writes x/y as CSS `px` on SVG groups. Blink treats those as
+       * viewBox units, so we convert CSS-pixel amplitudes through the screen
+       * CTM before animating — same travel at 2rem and 4rem.
+       */}
+      {showAnimatedPaths &&
+        (shouldAnimate ? (
+          <Suspense fallback={null}>
+            <AnimatedLogoMotionPaths
+              paths={LOGO_PATHS}
+              centers={centers}
+              customs={motionCustoms}
+              shouldAnimate={shouldAnimate}
+              entry={entryEnabled}
+              entryComplete={entryComplete}
+              idle={idleEnabled}
+              overlays={overlays}
+            />
+          </Suspense>
+        ) : (
+          <StaticLogoPaths paths={LOGO_PATHS} />
+        ))}
     </svg>
   );
 };

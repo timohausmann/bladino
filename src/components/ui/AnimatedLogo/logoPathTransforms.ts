@@ -67,14 +67,45 @@ export function resolveTotalHeight(
   logoHeight: number | string,
   padding: number,
 ): string {
-  const scale = (LOGO_VIEWBOX_HEIGHT + padding * 2) / LOGO_VIEWBOX_HEIGHT;
+  const { height } = paddedViewBoxSize(padding);
+  const scale = height / LOGO_VIEWBOX_HEIGHT;
   return `calc(${resolveCssSize(logoHeight)} * ${scale.toFixed(5)})`;
+}
+
+/** ViewBox size including scatter padding — must match SVG width/height attrs. */
+export function paddedViewBoxSize(padding: number) {
+  return {
+    width: LOGO_VIEWBOX_WIDTH + padding * 2,
+    height: LOGO_VIEWBOX_HEIGHT + padding * 2,
+  };
 }
 
 /** Measures the path's center in SVG user coordinates (unaffected by CSS transforms). */
 export function measureCenter(path: SVGPathElement): PathCenter {
   const b = path.getBBox();
   return { cx: b.x + b.width / 2, cy: b.y + b.height / 2 };
+}
+
+/**
+ * Motion writes `translateX(npx)` on SVG `<g>`. Blink maps that 1:1 to viewBox
+ * units, then the SVG is scaled to CSS size. Divide CSS-px values by CTM.a so
+ * `offsetMax={20}` stays ~20 CSS pixels on screen at any logoHeight.
+ */
+export function motionCustomToSvgUserUnits(
+  custom: PathAnimationCustom,
+  cssPerUserUnit: number,
+): PathAnimationCustom {
+  const scale = cssPerUserUnit > 0 ? cssPerUserUnit : 1;
+  return {
+    ...custom,
+    x: custom.x / scale,
+    y: custom.y / scale,
+    idle: {
+      ...custom.idle,
+      x: custom.idle.x / scale,
+      y: custom.idle.y / scale,
+    },
+  };
 }
 
 export function createAnimation(opts: {

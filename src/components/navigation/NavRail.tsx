@@ -33,16 +33,20 @@ export function NavRail() {
       {/* Header — 64px, matches Notes/Mails/Settings sidebar headers */}
       <div
         className={clsx(
-          'flex min-h-16 shrink-0 items-center',
+          'flex min-h-16 w-full shrink-0 items-center',
           navRailSectionClassName,
         )}
       >
-        <div className="flex flex-col gap-1">
+        <div className="flex w-full min-w-0 flex-col gap-1">
           <div className={navRailRowClassName({ noHover: true })}>
             {expanded ? (
-              <Link to="/" aria-label={t('navigation:dashboard')}>
+              <Link
+                to="/"
+                aria-label={t('navigation:dashboard')}
+                className="min-w-0 flex-1"
+              >
                 <AnimatedLogo
-                  className="mx-2 block min-w-4 shrink-0"
+                  className="ml-2 block min-w-4"
                   logoHeight="2rem"
                 />
               </Link>
@@ -60,21 +64,23 @@ export function NavRail() {
               </NavRailIconTrack>
             )}
             {expanded ? (
-              <Tooltip content={t('navigation:collapseNavigation')}>
-                <button
-                  type="button"
-                  onClick={toggleNavRail}
-                  className={clsx(
-                    'ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
-                    'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
-                    'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
-                    'transition-colors duration-150',
-                  )}
-                  aria-label={t('navigation:collapseNavigation')}
-                >
-                  <PanelLeftClose size={18} />
-                </button>
-              </Tooltip>
+              <div className="ml-auto shrink-0">
+                <Tooltip content={t('navigation:collapseNavigation')}>
+                  <button
+                    type="button"
+                    onClick={toggleNavRail}
+                    className={clsx(
+                      'flex h-8 w-8 items-center justify-center rounded-lg',
+                      'text-neutral-600 hover:bg-black/10 hover:text-neutral-900',
+                      'dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100',
+                      'transition-colors duration-150',
+                    )}
+                    aria-label={t('navigation:collapseNavigation')}
+                  >
+                    <PanelLeftClose size={18} />
+                  </button>
+                </Tooltip>
+              </div>
             ) : null}
           </div>
 
