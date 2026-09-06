@@ -3,7 +3,9 @@ import { getCommentFiles, getCommentDomId } from '@/utils/commentUtils';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
 import { Avatar } from '@/components/ui/Avatar';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { CommentBody } from '@/components/post/CommentBody';
 import { CommentComposerForm } from '@/components/post/CommentComposerForm';
 import { FilePreview } from '@/components/ui/FilePreview';
@@ -41,11 +43,20 @@ export function PostComment({
       )}
     >
       <UnreadIndicator isUnread={isUnread} layout="comment" />
-      <Avatar
-        avatar={comment.user.avatar}
-        alt={t('common:userAvatar', { name: comment.user.name })}
-        className="h-6 w-6 shrink-0"
-      />
+      <Tooltip content={comment.user.name} side="top">
+        <Link
+          to="/u/$name"
+          params={{ name: comment.user.name }}
+          aria-label={t('common:profileLink', { name: comment.user.name })}
+          className="shrink-0"
+        >
+          <Avatar
+            avatar={comment.user.avatar}
+            alt={t('common:userAvatar', { name: comment.user.name })}
+            className="h-6 w-6"
+          />
+        </Link>
+      </Tooltip>
 
       <div className="min-w-0 flex-1">
         {isEditing ? (
