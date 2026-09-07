@@ -19,6 +19,7 @@ query CommentFeed($filter: CommentFilter!, $cursor: Date) {
         id
         name
         avatar
+        isSystemUser
       }
       files {
         id

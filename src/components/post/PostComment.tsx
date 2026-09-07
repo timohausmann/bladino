@@ -81,6 +81,7 @@ export function PostComment({
               weblinks={comment.weblinks}
               linkPreviewVariant="compact"
               parentSurface="inset"
+              isSystemUser={comment.user.isSystemUser}
               className="text-foreground min-w-0 text-[15px] leading-6"
             />
             {files.length > 0 && (

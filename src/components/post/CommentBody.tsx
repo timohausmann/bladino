@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import type { Weblink } from '@/graphql';
 import type { LinkPreviewVariant } from '@/components/ui/LinkPreview';
 import type { ParentSurface } from '@/components/ui/surface';
@@ -11,6 +12,7 @@ interface CommentBodyProps {
   className?: string;
   linkPreviewVariant?: LinkPreviewVariant;
   parentSurface?: ParentSurface;
+  isSystemUser?: boolean | null;
 }
 
 /**
@@ -23,6 +25,7 @@ export function CommentBody({
   className,
   linkPreviewVariant = 'default',
   parentSurface = 'surface',
+  isSystemUser = false,
 }: CommentBodyProps) {
   const content = useMemo(
     () =>
@@ -38,10 +41,13 @@ export function CommentBody({
 
   return (
     <div
-      className={clsx(
-        'flex flex-col',
-        linkPreviewVariant === 'compact' ? 'gap-2' : 'gap-3',
-        className,
+      className={twMerge(
+        clsx(
+          'flex flex-col',
+          linkPreviewVariant === 'compact' ? 'gap-2' : 'gap-3',
+          className,
+          isSystemUser && 'text-cyan-700 dark:text-cyan-400',
+        ),
       )}
     >
       {content}

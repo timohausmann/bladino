@@ -460,6 +460,7 @@ export type User = {
   description?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  isSystemUser?: Maybe<Scalars['Boolean']['output']>;
   lastAction?: Maybe<Scalars['Date']['output']>;
   mailboxes?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   name: Scalars['String']['output'];

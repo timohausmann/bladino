@@ -82,7 +82,11 @@ export function PostCard({
             />
           ) : (
             <>
-              <CommentBody body={comment.body} weblinks={comment.weblinks} />
+              <CommentBody
+                body={comment.body}
+                weblinks={comment.weblinks}
+                isSystemUser={comment.user.isSystemUser}
+              />
 
               {files.length > 0 && <FilePreview files={files} />}
             </>

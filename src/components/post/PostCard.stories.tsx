@@ -181,3 +181,22 @@ export const Full: Story = {
     comment: fullComment,
   },
 };
+
+const systemUserComment: Comment = {
+  ...textOnlyComment,
+  id: 'post-system-user',
+  user: {
+    ...textOnlyComment.user,
+    isSystemUser: true,
+  },
+};
+
+export const SystemUser: Story = {
+  args: {
+    ...TextOnly.args,
+    comment: systemUserComment,
+  },
+  argTypes: {
+    comment: { table: { disable: true } },
+  },
+};

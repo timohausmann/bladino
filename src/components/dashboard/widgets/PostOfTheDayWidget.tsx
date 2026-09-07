@@ -42,6 +42,7 @@ export function PostOfTheDayWidget() {
           <CommentBody
             body={post.body}
             weblinks={(post as Comment).weblinks}
+            isSystemUser={post.user.isSystemUser}
             className="text-foreground line-clamp-4 text-sm"
             linkPreviewVariant="compact"
             parentSurface="surface"

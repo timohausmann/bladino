@@ -53,6 +53,7 @@ query Comment($id: ID!) {
       id
       name
       avatar
+      isSystemUser
     }
     files {
       id
