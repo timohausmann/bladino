@@ -1,4 +1,5 @@
 import { panelSidebarHeaderClassName } from '@/components/layout/panelHeader';
+import { MailsSidebarMenu } from '@/components/mails/MailsSidebarMenu';
 import type { MailFolder } from '@/components/mails/types';
 import { MAIL_FOLDERS } from '@/components/mails/types';
 import { InlineSelect } from '@/components/ui/InlineSelect';
@@ -13,6 +14,8 @@ interface MailsSidebarToolbarProps {
   folder: MailFolder;
   onFolderChange: (folder: MailFolder) => void;
   onReload: () => void;
+  onDeleteAll: () => void;
+  isDeleteAllPending?: boolean;
   isReloading?: boolean;
   isSending?: boolean;
 }
@@ -22,6 +25,8 @@ export function MailsSidebarToolbar({
   folder,
   onFolderChange,
   onReload,
+  onDeleteAll,
+  isDeleteAllPending = false,
   isReloading = false,
   isSending = false,
 }: MailsSidebarToolbarProps) {
@@ -49,7 +54,7 @@ export function MailsSidebarToolbar({
         }))}
         ariaLabel={t('mail:folderLabel')}
       />
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-1">
         <ToolbarTooltipButton
           icon={
             <RefreshCw
@@ -61,6 +66,10 @@ export function MailsSidebarToolbar({
           variant="default"
           onClick={onReload}
           disabled={isReloading}
+        />
+        <MailsSidebarMenu
+          onDeleteAll={onDeleteAll}
+          isDeleteAllPending={isDeleteAllPending}
         />
       </div>
     </Toolbar.Root>

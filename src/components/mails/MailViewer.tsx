@@ -1,14 +1,26 @@
 import { ContentPanelHeader } from '@/components/layout/ContentPanelHeader';
+import { ConfirmDialog } from '@/components/ui/alert-dialog/ConfirmDialog';
+import { IconButton } from '@/components/ui/IconButton';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
-import { MailDocument, useGraphQLQuery } from '@/graphql';
+import { toast } from '@/components/ui/toast';
+import {
+  DeleteMailDocument,
+  getGraphQLErrorMessage,
+  MailDocument,
+  useGraphQLMutation,
+  useGraphQLQuery,
+} from '@/graphql';
 import { formatCommentDate } from '@/utils/formatDate';
-import type { ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Trash2 } from 'lucide-react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface MailViewerProps {
   mailId: string;
   headerLeading?: ReactNode;
+  onDeleted?: (deletedId: string) => void;
 }
 
 function formatAddressList(
@@ -20,12 +32,42 @@ function formatAddressList(
   return filtered && filtered.length > 0 ? filtered.join(', ') : null;
 }
 
-export function MailViewer({ mailId, headerLeading }: MailViewerProps) {
+export function MailViewer({
+  mailId,
+  headerLeading,
+  onDeleted,
+}: MailViewerProps) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const deleteMail = useGraphQLMutation(DeleteMailDocument);
   const { data, isLoading, isError } = useGraphQLQuery(MailDocument, {
     id: mailId,
   });
   const mail = data?.mail;
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const result = await deleteMail.mutateAsync({ id: mailId });
+      if (!result.deleteMail) {
+        toast(t('errors:deleteFailed'));
+        return;
+      }
+
+      // Refetch inactive folders too. Auto-select reads their cache before they remount.
+      await queryClient.invalidateQueries({
+        queryKey: ['Mails'],
+        refetchType: 'all',
+      });
+      onDeleted?.(mailId);
+      toast(t('mail:deletedToast'));
+    } catch (error) {
+      const message =
+        getGraphQLErrorMessage(error) ??
+        (error instanceof Error ? error.message : t('errors:deleteFailed'));
+      toast(message);
+    }
+  };
 
   const mailSubject = (subject?: string | null): string => {
     const trimmed = subject?.trim();
@@ -69,7 +111,17 @@ export function MailViewer({ mailId, headerLeading }: MailViewerProps) {
         <ContentPanelHeader
           title={mailSubject(mail.subject)}
           leading={headerLeading}
-        />
+        >
+          <div className="ml-auto shrink-0">
+            <IconButton
+              icon={<Trash2 size={18} />}
+              label={t('mail:delete')}
+              variant="dangerous"
+              onClick={() => setDeleteOpen(true)}
+              disabled={deleteMail.isPending}
+            />
+          </div>
+        </ContentPanelHeader>
         <dl className="space-y-1 px-6 pb-4 text-sm text-neutral-600 dark:text-neutral-400">
           {mail.from && (
             <div className="flex gap-2">
@@ -125,6 +177,16 @@ export function MailViewer({ mailId, headerLeading }: MailViewerProps) {
           </p>
         )}
       </div>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title={t('mail:deleteTitle')}
+        description={t('mail:deleteDescription')}
+        confirmLabel={t('common:delete')}
+        destructive
+        onConfirm={() => void handleDeleteConfirm()}
+      />
     </div>
   );
 }

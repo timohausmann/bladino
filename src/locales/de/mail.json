@@ -27,6 +27,15 @@
   "emptyBody": "Diese E-Mail hat keinen Inhalt.",
   "discardDraftTitle": "Entwurf verwerfen?",
   "discardDraftDescription": "Du hast ungespeicherte Änderungen in dieser Nachricht. Verwerfen?",
+  "moreActions": "Weitere Optionen",
+  "deleteAll": "Alle E-Mails löschen",
+  "deleteAllTitle": "Alle E-Mails löschen",
+  "deleteAllDescription": "Alle E-Mails im Posteingang und Postausgang werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "deletedAllToast": "Alle E-Mails gelöscht",
+  "delete": "E-Mail löschen",
+  "deleteTitle": "E-Mail löschen",
+  "deleteDescription": "Diese E-Mail wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "deletedToast": "E-Mail gelöscht",
   "folders": {
     "inbox": "Posteingang",
     "outbox": "Postausgang"

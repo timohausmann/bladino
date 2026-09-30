@@ -27,6 +27,15 @@
   "emptyBody": "This mail has no body.",
   "discardDraftTitle": "Discard draft?",
   "discardDraftDescription": "You have unsaved changes in this message. Discard them?",
+  "moreActions": "More options",
+  "deleteAll": "Delete all mails",
+  "deleteAllTitle": "Delete all mails",
+  "deleteAllDescription": "Every mail in your inbox and outbox will be permanently deleted. This action cannot be undone.",
+  "deletedAllToast": "All mails deleted",
+  "delete": "Delete mail",
+  "deleteTitle": "Delete mail",
+  "deleteDescription": "This mail will be permanently deleted. This action cannot be undone.",
+  "deletedToast": "Mail deleted",
   "folders": {
     "inbox": "Inbox",
     "outbox": "Outbox"

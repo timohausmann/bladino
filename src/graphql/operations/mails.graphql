@@ -36,3 +36,11 @@ mutation SendEmail(
 ) {
   sendEmail(to: $to, subject: $subject, body: $body, cc: $cc, bcc: $bcc)
 }
+
+mutation DeleteMail($id: ID!) {
+  deleteMail(id: $id)
+}
+
+mutation DeleteAllMail {
+  deleteAllMail
+}
