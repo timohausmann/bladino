@@ -127,7 +127,6 @@ export function PostContextMenu({
               )}
               aria-label={t('posts:postOptions')}
               aria-expanded={open}
-              aria-haspopup="menu"
             >
               <MoreVertical size={16} />
             </button>

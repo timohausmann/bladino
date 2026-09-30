@@ -29,7 +29,6 @@ export function MailsSidebarMenu({
               label={t('mail:moreActions')}
               disableTooltip
               aria-expanded={open}
-              aria-haspopup="menu"
             />
           </Toolbar.Button>
         </Popover.Trigger>

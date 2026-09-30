@@ -88,7 +88,6 @@ export function NoteEditorToolbarMenu({
               label={t('notes:moreActions')}
               disableTooltip
               aria-expanded={open}
-              aria-haspopup="menu"
             />
           </Toolbar.Button>
         </Popover.Trigger>
