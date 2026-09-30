@@ -146,6 +146,13 @@ export function useCommentComposer({
         queryKey: ['Comment', { id: commentId }],
       });
     }
+    // Replies are nested on the parent post. Create mode only has `parent`,
+    // and PostDetail reads that Comment query, so it must be refetched too.
+    if (parent && parent !== commentId) {
+      await queryClient.invalidateQueries({
+        queryKey: ['Comment', { id: parent }],
+      });
+    }
   };
 
   const submitCreate = async () => {
