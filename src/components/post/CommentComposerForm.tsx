@@ -141,7 +141,7 @@ export function CommentComposerForm({
         <FilePreview
           files={composer.files}
           onRemove={composer.handleRemoveFile}
-          compact={isReply}
+          compact
           parentSurface={isReply ? 'inset' : 'surface'}
         />
       </div>
