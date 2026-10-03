@@ -5,7 +5,7 @@
  * The service resizes by width only and keeps the source aspect ratio.
  */
 
-const THUMB_BASE_PATH = import.meta.env?.VITE_THUMB_URL ?? '/thumb';
+const THUMB_BASE_PATH = import.meta.env.VITE_THUMB_URL ?? '/thumb';
 
 /**
  * Widths we offer in srcset. The service also accepts 1920, but the feed
