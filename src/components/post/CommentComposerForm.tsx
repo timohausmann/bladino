@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { FilePreview } from '@/components/ui/FilePreview';
 import { Textarea } from '@/components/ui/Textarea';
 import { MAX_COMMENT_FILES } from '@/utils/postFileUtils';
+import clsx from 'clsx';
 import { Send } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type FocusEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { twMerge } from 'tailwind-merge';
 
 const REPLY_TEXTAREA_COMPACT_CLASS =
   'min-h-6 max-h-[400px] overflow-y-auto rounded-none bg-inset p-0 text-[15px] leading-6';
@@ -69,21 +69,41 @@ export function CommentComposerForm({
     composer.content.trim().length > 0 ||
     composer.files.length > 0;
   const replyActive = replyFocused || composer.content.length > 0;
+  // Edit always shows the action rows. Create reveals them with the send button.
+  const showReplyActions = mode === 'edit' || showReplySend;
+
+  const handleReplyFocus = () => {
+    setReplyFocused(true);
+  };
+
+  // Stay open while focus moves from the field to attach / send.
+  const handleReplyBlur = (event: FocusEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget;
+    if (
+      nextTarget instanceof Node &&
+      event.currentTarget.contains(nextTarget)
+    ) {
+      return;
+    }
+    setReplyFocused(false);
+  };
+
+  const renderAttachmentButton = () => (
+    <CreateAddAttachment
+      onAddFiles={composer.handleAddFilesClick}
+      disabled={composer.isSubmitting}
+      shape="rounded-square"
+    />
+  );
 
   const inlineActions = (
-    <>
-      <span className="hidden md:contents">
-        <CreateAddEmoji
-          onEmojiSelect={composer.handleEmojiSelect}
-          shape="rounded-square"
-        />
-      </span>
-      <CreateAddAttachment
-        onAddFiles={composer.handleAddFilesClick}
-        disabled={composer.isSubmitting}
+    <span className="hidden md:contents">
+      <CreateAddEmoji
+        onEmojiSelect={composer.handleEmojiSelect}
         shape="rounded-square"
       />
-    </>
+      {renderAttachmentButton()}
+    </span>
   );
 
   const textarea = (
@@ -95,6 +115,7 @@ export function CommentComposerForm({
       autoGrow={!isReply || replyActive}
       resize={isReply ? 'resize-none' : undefined}
       endAdornmentReveal={isReply ? 'focus-or-filled' : 'always'}
+      endAdornmentClassName="max-md:hidden"
       wrapperClassName={isReply ? 'min-w-0 flex-1' : undefined}
       className={
         isReply
@@ -105,8 +126,6 @@ export function CommentComposerForm({
       }
       endAdornment={inlineActions}
       disabled={composer.isSubmitting}
-      onFocus={isReply ? () => setReplyFocused(true) : undefined}
-      onBlur={isReply ? () => setReplyFocused(false) : undefined}
     />
   );
 
@@ -128,18 +147,21 @@ export function CommentComposerForm({
       </div>
     ) : null;
 
+  const mobileFooterButtonClass = 'max-md:px-3';
+
   const formSubmit = (
     <Button
       disabled={!composer.canSubmit}
       type="submit"
       variant="primary"
       loading={composer.isSubmitting}
+      className={mobileFooterButtonClass}
     >
       {resolvedSubmitLabel}
     </Button>
   );
 
-  const replySend = (
+  const renderReplySend = () => (
     <Button
       type="submit"
       variant="secondary"
@@ -164,6 +186,7 @@ export function CommentComposerForm({
       variant="secondary"
       appearance="outline"
       disabled={composer.isSubmitting}
+      className={mobileFooterButtonClass}
     >
       {t('common:cancel')}
     </Button>
@@ -172,28 +195,45 @@ export function CommentComposerForm({
   return (
     <form onSubmit={composer.handleSubmit} className="flex flex-col gap-2">
       {isReply ? (
-        <div className="flex min-w-0 flex-col gap-2">
+        <div
+          className="flex min-w-0 flex-col gap-2"
+          onFocus={handleReplyFocus}
+          onBlur={handleReplyBlur}
+        >
           <div className="flex min-w-0 items-start gap-2">
             {textarea}
             {mode === 'create' ? (
               <div
-                className={twMerge(
-                  'shrink-0 overflow-hidden transition-all duration-200',
-                  showReplySend ? 'h-10 w-10 opacity-100' : 'h-0 w-0 opacity-0',
-                  replyActive && 'mt-2',
+                className={clsx(
+                  'hidden shrink-0 overflow-hidden md:block',
+                  'transition-all duration-200',
+                  showReplySend
+                    ? [
+                        'md:h-10 md:w-10 md:opacity-100',
+                        replyActive && 'md:mt-2',
+                      ]
+                    : 'h-0 w-0 opacity-0',
                 )}
               >
-                {replySend}
+                {renderReplySend()}
               </div>
             ) : null}
           </div>
           {attachments}
-          {mode === 'edit' && (
-            <div className="flex items-center justify-end gap-2">
-              {cancelButton}
-              {formSubmit}
+          {showReplyActions ? (
+            <div
+              className={clsx(
+                'flex items-center gap-2',
+                mode === 'create' && 'md:hidden',
+              )}
+            >
+              <div className="md:hidden">{renderAttachmentButton()}</div>
+              <div className="ml-auto flex items-center gap-2">
+                {cancelButton}
+                {mode === 'edit' ? formSubmit : renderReplySend()}
+              </div>
             </div>
-          )}
+          ) : null}
         </div>
       ) : (
         <>
@@ -215,9 +255,10 @@ export function CommentComposerForm({
       />
 
       {!isReply && (
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <div className="shrink-0 md:hidden">{renderAttachmentButton()}</div>
           <div className="flex min-w-0 items-center">{leadingActions}</div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
             {cancelButton}
             {formSubmit}
           </div>

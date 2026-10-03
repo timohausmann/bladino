@@ -25,6 +25,7 @@ interface TextareaProps {
   autoComplete?: string;
   /** Overlay in the top-right; field padding tracks the cluster width. */
   endAdornment?: ReactNode;
+  endAdornmentClassName?: string;
   /** Grows height with content from a single-line minimum. */
   autoGrow?: boolean;
   /** When to show endAdornment. */
@@ -49,6 +50,7 @@ export function Textarea({
   resize = 'resize-y',
   autoComplete,
   endAdornment,
+  endAdornmentClassName,
   autoGrow = false,
   endAdornmentReveal = 'always',
   onFocus,
@@ -144,6 +146,7 @@ export function Textarea({
             className={twMerge(
               'absolute top-2 right-2 flex items-center gap-0.5 pl-2 transition-opacity duration-200',
               revealAdornment ? 'opacity-100' : 'pointer-events-none opacity-0',
+              endAdornmentClassName,
             )}
           >
             {endAdornment}
