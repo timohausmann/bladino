@@ -4,7 +4,7 @@ import {
   getGraphQLErrorMessage,
   useGraphQLMutation,
 } from '@/graphql';
-import { isReplyComment } from '@/utils/typePredicates';
+import { isReplyComment } from './isReplyComment';
 import { useUserStore } from '@/stores/userStore';
 import * as Popover from '@radix-ui/react-popover';
 import { useQueryClient } from '@tanstack/react-query';

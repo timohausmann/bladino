@@ -1,5 +1,5 @@
 import type { Comment } from '@/graphql';
-import { getCommentFiles, getCommentDomId } from '@/utils/commentUtils';
+import { getCommentFiles, getCommentDomId } from './commentUtils';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

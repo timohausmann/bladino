@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import type { Weblink } from '@/graphql';
 import type { LinkPreviewVariant } from '@/components/ui/LinkPreview';
 import type { ParentSurface } from '@/components/ui/surface';
-import { parseCommentBody } from '@/utils/textUtils';
+import { parseCommentBody } from './textUtils';
 import { useMemo } from 'react';
 
 interface CommentBodyProps {

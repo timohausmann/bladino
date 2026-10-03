@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/Input';
-import { getWeatherLabelKey } from '@/utils/weatherCode';
+import { getWeatherLabelKey } from './weatherCode';
 import { useWeatherStore } from '@/stores/weatherStore';
 import {
   Cloud,

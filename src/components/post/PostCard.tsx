@@ -1,5 +1,5 @@
 import type { Comment } from '@/graphql';
-import { getCommentChildren, getCommentFiles } from '@/utils/commentUtils';
+import { getCommentChildren, getCommentFiles } from './commentUtils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { floatingSurfaceClassName } from '@/components/ui/Card';

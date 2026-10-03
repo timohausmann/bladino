@@ -1,6 +1,6 @@
 import { List, ListItem } from '@/components/ui/list';
 import { formatCommentDate } from '@/utils/formatDate';
-import { noteTitle } from '@/utils/noteTitle';
+import { noteTitle } from './noteTitle';
 import { useTranslation } from 'react-i18next';
 
 interface NotesSidebarListNote {

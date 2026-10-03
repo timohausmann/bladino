@@ -10,8 +10,6 @@ import { queryClient } from '@/lib/queryClient';
 import { useUserStore } from '@/stores/userStore';
 import { formatJoinDate, type ApiDate } from '@/utils/formatDate';
 import { resolveAvatarUrl } from '@/utils/avatarUrl';
-import { deleteAvatar, uploadAvatar } from '@/utils/uploadAvatar';
-import { runViewTransition } from '@/utils/runViewTransition';
 import clsx from 'clsx';
 import { Calendar, Clock, MessageSquare, Pencil, UserPlus } from 'lucide-react';
 import {
@@ -23,6 +21,8 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ProfileAvatarEditor } from './ProfileAvatarEditor';
+import { runViewTransition } from './runViewTransition';
+import { deleteAvatar, uploadAvatar } from './uploadAvatar';
 
 const PROFILE_HEADER_VIEW_TRANSITION = VIEW_TRANSITION_TYPES.profileHeader;
 

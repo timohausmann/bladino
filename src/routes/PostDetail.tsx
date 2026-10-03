@@ -1,4 +1,8 @@
 import { PostCard } from '@/components/post/PostCard';
+import {
+  getCommentChildren,
+  getCommentDomId,
+} from '@/components/post/commentUtils';
 import { ResourceError } from '@/components/ui/ResourceError';
 import { ResourceNotFound } from '@/components/ui/ResourceNotFound';
 import {
@@ -7,7 +11,6 @@ import {
   useGraphQLQuery,
   type Comment,
 } from '@/graphql';
-import { getCommentChildren, getCommentDomId } from '@/utils/commentUtils';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

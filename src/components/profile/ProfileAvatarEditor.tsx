@@ -1,6 +1,5 @@
 import { Banner } from '@/components/ui/Banner';
 import { Button } from '@/components/ui/button';
-import { renderCroppedAvatar } from '@/utils/renderCroppedAvatar';
 import { AVATAR_FALLBACK_SRC } from '@/utils/avatarUrl';
 import { Trash2, Upload } from 'lucide-react';
 import {
@@ -17,6 +16,7 @@ import Cropper, {
   type Point,
   type Size,
 } from 'react-easy-crop';
+import { renderCroppedAvatar } from './renderCroppedAvatar';
 
 /** Gap between the circular crop and the edge of the crop stage. */
 const CROP_FRAME_INSET = 48;
