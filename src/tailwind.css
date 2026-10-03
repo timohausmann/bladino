@@ -89,6 +89,15 @@
   ::view-transition-new(*) {
     animation-duration: 0.4s;
   }
+
+  /*
+   * Scoped component transitions keep the root snapshot still so unrelated
+   * page content does not flash.
+   */
+  html[data-view-transition]::view-transition-old(root),
+  html[data-view-transition]::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 /* Accordion animations using Radix CSS custom properties */
