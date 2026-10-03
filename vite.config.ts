@@ -25,7 +25,7 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
-      '/avatare': {
+      '/avatars': {
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
@@ -37,7 +37,7 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
-      // POST /avatar. Exact so it does not also match GET /avatare.
+      // POST /avatar. Exact so it does not also match GET /avatars.
       '^/avatar$': {
         target: 'http://localhost:3001',
         changeOrigin: true,

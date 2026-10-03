@@ -1,6 +1,6 @@
 import { resolveAssetUrl } from '@/utils/resolveAssetUrl';
 
-const AVATAR_BASE_PATH = import.meta.env.VITE_AVATAR_URL ?? '/avatare';
+const AVATAR_BASE_PATH = import.meta.env.VITE_AVATAR_URL ?? '/avatars';
 
 /** Shown when the account has no avatar file. */
 export const AVATAR_FALLBACK_SRC = '/avatar_fallback.png';
