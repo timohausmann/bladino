@@ -6,6 +6,7 @@ import { File as FileIcon, FileText, Music, Video, X } from 'lucide-react';
 import type { LocalDraftFile } from '@/utils/postFileUtils';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
+import { getPreviewImageLayout, getThumbnailSources } from './previewSources';
 
 type PreviewFile = Pick<
   ApiFile,
@@ -49,8 +50,9 @@ function isImageType(type?: string | null): boolean {
 const IMAGE_POST_MAX_HEIGHT = 'max-h-[55dvh]';
 
 /**
- * FilePreview - A component that displays files in a horizontally scrollable layout
- * Images are displayed as thumbnails, other files show generic icons with metadata
+ * FilePreview - A component that displays files in a horizontally scrollable layout.
+ * Stored images use the thumbnail service (srcset) so the feed does not download
+ * the original file. The link still opens the full upload.
  */
 export function FilePreview({
   files,
@@ -92,6 +94,13 @@ export function FilePreview({
   const allImages = files.every((file) => isImageType(file.type));
   const isImagePost = !compact && allImages && files.length <= 2;
   const fitsWithoutScroll = files.length <= 3;
+  // Inset compact previews are replies: avatar and actions sit beside the tiles.
+  // Compact on a surface (post composer) stays the full post column, only tiled.
+  const imageLayout = getPreviewImageLayout(
+    compact && parentSurface === 'inset',
+    isImagePost,
+    files.length,
+  );
 
   const previewClassName = twMerge(
     parentSurface === 'inset'
@@ -128,12 +137,19 @@ export function FilePreview({
           const displayName = getDisplayName(file);
           const previewUrl = getPreviewUrl(file);
 
+          const thumbnail = getThumbnailSources(file, imageLayout);
+          const imageSrc = thumbnail?.src ?? previewUrl;
+
           const previewContent =
-            isImageType(file.type) && previewUrl ? (
+            isImageType(file.type) && imageSrc ? (
               <div className="flex w-full justify-center">
                 <img
-                  src={previewUrl}
+                  src={imageSrc}
+                  srcSet={thumbnail?.srcSet}
+                  sizes={thumbnail?.sizes}
                   alt={displayName}
+                  loading="lazy"
+                  decoding="async"
                   className={imageClassName}
                 />
               </div>

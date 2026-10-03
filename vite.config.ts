@@ -25,6 +25,10 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
+      '/thumb': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
       '/isalive': {
         target: 'http://localhost:3001',
         changeOrigin: true,
