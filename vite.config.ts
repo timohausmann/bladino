@@ -25,11 +25,20 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
+      '/avatare': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
       '/thumb': {
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
       '/isalive': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      // POST /avatar. Exact so it does not also match GET /avatare.
+      '^/avatar$': {
         target: 'http://localhost:3001',
         changeOrigin: true,
       },

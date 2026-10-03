@@ -1,4 +1,4 @@
-import { resolveAvatarUrl } from '@/utils/avatarUrl';
+import { resolveAvatarUrl, AVATAR_FALLBACK_SRC } from '@/utils/avatarUrl';
 
 interface AvatarProps {
   /** Resolved image URL – use for external/mock URLs */
@@ -14,16 +14,7 @@ interface AvatarProps {
  * Prefer `avatar` for API filenames; `src` for pre-resolved URLs.
  */
 export function Avatar({ src, avatar, alt, className = '' }: AvatarProps) {
-  const resolvedSrc = src ?? resolveAvatarUrl(avatar);
-
-  if (!resolvedSrc) {
-    return (
-      <div
-        className={`bg-muted aspect-square overflow-hidden rounded-full ${className}`}
-        aria-label={alt}
-      />
-    );
-  }
+  const resolvedSrc = src || resolveAvatarUrl(avatar) || AVATAR_FALLBACK_SRC;
 
   return (
     <div className={`aspect-square overflow-hidden rounded-full ${className}`}>

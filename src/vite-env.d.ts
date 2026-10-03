@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_UPLOAD_URL: string;
   readonly VITE_THUMB_URL: string;
   readonly VITE_AVATAR_URL: string;
+  readonly VITE_AVATAR_UPLOAD_URL: string;
   readonly VITE_ISALIVE_URL: string;
 }
 

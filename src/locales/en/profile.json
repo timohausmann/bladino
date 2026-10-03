@@ -1,13 +1,14 @@
 {
-    "loading": "Loading profile…",
-    "postCount_one": "{{count}} post",
-    "postCount_other": "{{count}} posts",
-    "joined": "Joined {{date}}",
-    "lastSeenOnline": "Last seen online {{time}}",
-    "follow": "Follow",
-    "editAvatar": "Edit avatar",
-    "deleteAvatar": "Delete",
-    "uploadAvatar": "Upload",
-    "postsBy": "Posts by {{name}}",
-    "emptyPosts": "{{name}} hasn't posted anything yet."
+  "loading": "Loading profile…",
+  "postCount_one": "{{count}} post",
+  "postCount_other": "{{count}} posts",
+  "joined": "Joined {{date}}",
+  "lastSeenOnline": "Last seen online {{time}}",
+  "follow": "Follow",
+  "editAvatar": "Edit avatar",
+  "deleteAvatar": "Delete",
+  "uploadAvatar": "Select file",
+  "avatarSaveFailed": "Could not save the avatar.",
+  "postsBy": "Posts by {{name}}",
+  "emptyPosts": "{{name}} hasn't posted anything yet."
 }

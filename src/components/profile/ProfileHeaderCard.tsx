@@ -4,9 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/Card';
 import { CyclingText } from '@/components/ui/CyclingText';
 import { VIEW_TRANSITION_TYPES } from '@/constants/viewTransitions';
+import type { CurrentUserQuery, UserProfileQuery } from '@/graphql';
+import { CURRENT_USER_QUERY_KEY } from '@/lib/auth';
+import { queryClient } from '@/lib/queryClient';
 import { useUserStore } from '@/stores/userStore';
 import { formatJoinDate, type ApiDate } from '@/utils/formatDate';
 import { resolveAvatarUrl } from '@/utils/avatarUrl';
+import { deleteAvatar, uploadAvatar } from '@/utils/uploadAvatar';
 import { runViewTransition } from '@/utils/runViewTransition';
 import clsx from 'clsx';
 import { Calendar, Clock, MessageSquare, Pencil, UserPlus } from 'lucide-react';
@@ -88,10 +92,46 @@ export function ProfileHeaderCard({ user, className }: ProfileHeaderCardProps) {
     [updateAvatarEditMode],
   );
 
-  const handleSaveAvatar = useCallback(() => {
-    // Cropped upload is a later step. Save only leaves edit mode for now.
-    updateAvatarEditMode(false);
-  }, [updateAvatarEditMode]);
+  const handleSaveAvatar = useCallback(
+    async (file: File | null) => {
+      const avatar = file ? await uploadAvatar(file) : await deleteAvatar();
+
+      runViewTransition({
+        type: PROFILE_HEADER_VIEW_TRANSITION,
+        update: () => {
+          useUserStore.getState().updateCurrentUser({ avatar });
+          queryClient.setQueryData<UserProfileQuery>(
+            ['UserProfile', { id: user.id }],
+            (current) => {
+              if (!current?.user) {
+                return current;
+              }
+
+              return { ...current, user: { ...current.user, avatar } };
+            },
+          );
+          queryClient.setQueryData<CurrentUserQuery>(
+            CURRENT_USER_QUERY_KEY,
+            (current) => {
+              if (!current?.currentUser) {
+                return current;
+              }
+
+              return {
+                currentUser: { ...current.currentUser, avatar },
+              };
+            },
+          );
+          setIsEditingAvatar(false);
+        },
+      });
+
+      void queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      void queryClient.invalidateQueries({ queryKey: ['UsersLastAction'] });
+      void queryClient.invalidateQueries({ queryKey: ['Notifications'] });
+    },
+    [user.id],
+  );
 
   const profileMetaLines = useMemo((): ReactNode[] => {
     const lastSeen = user.lastAction

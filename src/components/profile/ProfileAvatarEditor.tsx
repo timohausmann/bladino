@@ -1,4 +1,7 @@
+import { Banner } from '@/components/ui/Banner';
 import { Button } from '@/components/ui/button';
+import { renderCroppedAvatar } from '@/utils/renderCroppedAvatar';
+import { AVATAR_FALLBACK_SRC } from '@/utils/avatarUrl';
 import { Trash2, Upload } from 'lucide-react';
 import {
   useEffect,
@@ -9,6 +12,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import Cropper, {
+  type Area,
   type MediaSize,
   type Point,
   type Size,
@@ -16,9 +20,6 @@ import Cropper, {
 
 /** Gap between the circular crop and the edge of the crop stage. */
 const CROP_FRAME_INSET = 48;
-
-/** Shown in the cropper after delete, so the editor stage stays in place. */
-const AVATAR_FALLBACK_SRC = '/avatar_fallback.png';
 
 /**
  * react-easy-crop leaves images smaller than the stage at their natural size.
@@ -36,12 +37,13 @@ interface ProfileAvatarEditorProps {
   /** Resolved avatar URL. Empty when the profile has no avatar yet. */
   image?: string;
   onCancel: () => void;
-  onSave: () => void;
+  /** Receives the cropped square, or null when the avatar should be removed. */
+  onSave: (file: File | null) => Promise<void>;
 }
 
 /**
  * Edit-avatar mode for the profile header.
- * The chosen file stays on the client until save; upload is a later step.
+ * Save uploads the visible square; crop coordinates are not sent.
  */
 export function ProfileAvatarEditor({
   image,
@@ -56,13 +58,17 @@ export function ProfileAvatarEditor({
   const frameRef = useRef<HTMLDivElement>(null);
   const mediaSizeRef = useRef<MediaSize | null>(null);
 
-  const [imageSrc, setImageSrc] = useState(image);
+  const [imageSrc, setImageSrc] = useState(image || AVATAR_FALLBACK_SRC);
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [cropSize, setCropSize] = useState<Size | null>(null);
   const [minZoom, setMinZoom] = useState(1);
   const [maxZoom, setMaxZoom] = useState(3);
   const [isFitted, setIsFitted] = useState(false);
+  const [cropPixels, setCropPixels] = useState<Area | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const isSavingRef = useRef(false);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -70,7 +76,11 @@ export function ProfileAvatarEditor({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || event.defaultPrevented) {
+      if (
+        event.key !== 'Escape' ||
+        event.defaultPrevented ||
+        isSavingRef.current
+      ) {
         return;
       }
 
@@ -132,6 +142,8 @@ export function ProfileAvatarEditor({
     setZoom(1);
     setMinZoom(1);
     setMaxZoom(3);
+    setCropPixels(null);
+    setSaveError(null);
   };
 
   const handleMediaLoaded = (media: MediaSize) => {
@@ -173,7 +185,7 @@ export function ProfileAvatarEditor({
   const isShowingFallback = imageSrc === AVATAR_FALLBACK_SRC;
 
   const handleDelete = () => {
-    if (isShowingFallback) {
+    if (isShowingFallback || isSaving) {
       return;
     }
 
@@ -185,6 +197,39 @@ export function ProfileAvatarEditor({
     setImageSrc(AVATAR_FALLBACK_SRC);
     resetCrop();
   };
+
+  const handleSave = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    const removing = isShowingFallback;
+    if (removing && !image) {
+      return;
+    }
+    if (!removing && (!imageSrc || !cropPixels)) {
+      return;
+    }
+
+    setIsSaving(true);
+    isSavingRef.current = true;
+    setSaveError(null);
+
+    try {
+      const file = removing
+        ? null
+        : await renderCroppedAvatar(imageSrc as string, cropPixels as Area);
+      await onSave(file);
+    } catch {
+      setSaveError(t('profile:avatarSaveFailed'));
+      setIsSaving(false);
+      isSavingRef.current = false;
+    }
+  };
+
+  const canSave = isShowingFallback
+    ? Boolean(image)
+    : Boolean(imageSrc && cropPixels);
 
   return (
     <div>
@@ -213,12 +258,19 @@ export function ProfileAvatarEditor({
               showGrid={false}
               onCropChange={setCrop}
               onZoomChange={setZoom}
+              onCropComplete={(_area, pixels) => setCropPixels(pixels)}
               onMediaLoaded={handleMediaLoaded}
               style={{
                 containerStyle: { opacity: isFitted ? 1 : 0 },
               }}
             />
           ) : null}
+        </div>
+      ) : null}
+
+      {saveError ? (
+        <div className="px-4 pt-4">
+          <Banner message={saveError} variant="negative" />
         </div>
       ) : null}
 
@@ -230,7 +282,7 @@ export function ProfileAvatarEditor({
             appearance="outline"
             iconBefore={<Trash2 size={16} />}
             onClick={handleDelete}
-            disabled={!imageSrc || isShowingFallback}
+            disabled={!imageSrc || isShowingFallback || isSaving}
           >
             {t('profile:deleteAvatar')}
           </Button>
@@ -239,15 +291,26 @@ export function ProfileAvatarEditor({
             variant="secondary"
             iconBefore={<Upload size={16} />}
             onClick={handleUploadClick}
+            disabled={isSaving}
           >
             {t('profile:uploadAvatar')}
           </Button>
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="secondary" onClick={onCancel}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onCancel}
+            disabled={isSaving}
+          >
             {t('common:cancel')}
           </Button>
-          <Button type="button" onClick={onSave}>
+          <Button
+            type="button"
+            onClick={handleSave}
+            loading={isSaving}
+            disabled={!canSave}
+          >
             {t('common:save')}
           </Button>
         </div>
