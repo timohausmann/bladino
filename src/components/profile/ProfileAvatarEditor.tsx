@@ -1,7 +1,7 @@
 import { Banner } from '@/components/ui/Banner';
 import { Button } from '@/components/ui/button';
 import { AVATAR_FALLBACK_SRC } from '@/utils/avatarUrl';
-import { Trash2, Upload } from 'lucide-react';
+import { Folder, Trash2 } from 'lucide-react';
 import {
   useEffect,
   useLayoutEffect,
@@ -289,7 +289,7 @@ export function ProfileAvatarEditor({
           <Button
             type="button"
             variant="secondary"
-            iconBefore={<Upload size={16} />}
+            iconBefore={<Folder size={16} />}
             onClick={handleUploadClick}
             disabled={isSaving}
           >
