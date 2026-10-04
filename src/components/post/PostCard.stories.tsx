@@ -123,7 +123,7 @@ const meta = {
     },
     isUnread: {
       control: 'boolean',
-      description: 'Shows the unread dot beside the author name',
+      description: 'Shows a small New label next to the date',
     },
     onDeleted: {
       table: { disable: true },
@@ -151,6 +151,7 @@ export const Unread: Story = {
   args: {
     ...TextOnly.args,
     isUnread: true,
+    getIsUnread: (comment) => comment.id === 'comment-4-1',
   },
 };
 

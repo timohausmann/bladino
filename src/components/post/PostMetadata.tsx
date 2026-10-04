@@ -6,15 +6,17 @@ import {
 } from '@/utils/formatDate';
 import { Link } from '@tanstack/react-router';
 import { Tooltip } from '@/components/ui/Tooltip';
+import { UnreadIndicator } from '@/components/post/UnreadIndicator';
 
 interface PostMetadataProps {
   comment: Comment;
+  isUnread?: boolean;
 }
 
 /**
  * Channel and date metadata shown below the author name in post cards.
  */
-export function PostMetadata({ comment }: PostMetadataProps) {
+export function PostMetadata({ comment, isUnread }: PostMetadataProps) {
   const { data } = useGraphQLQuery(ChannelsDocument);
   const channelId = comment.channel ?? undefined;
   const channel = channelId
@@ -23,7 +25,7 @@ export function PostMetadata({ comment }: PostMetadataProps) {
   const formattedDate = formatRelativeCommentDate(comment.dateCreated);
   const timestamp = formatCommentTimestamp(comment.dateCreated);
 
-  if (!channel && !formattedDate) {
+  if (!channel && !formattedDate && !isUnread) {
     return null;
   }
 
@@ -42,7 +44,8 @@ export function PostMetadata({ comment }: PostMetadataProps) {
           </Tooltip>
         </Link>
       ) : null}
-      {formattedDate && channel && ' • '}
+      <UnreadIndicator isUnread={isUnread} variant="label" />
+      {(formattedDate || isUnread) && channel && ' • '}
       {channel && channelId ? (
         <Link
           to="/channels/$id"

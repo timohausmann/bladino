@@ -45,7 +45,7 @@ const withPostShell: Decorator = (Story, context) => (
 
 const withPostCardFrame: Decorator = (Story) => (
   <div className="bg-background min-h-screen px-6 py-10">
-    <div className="mx-auto w-full max-w-2xl pl-6">
+    <div className="mx-auto w-full max-w-2xl">
       <Story />
     </div>
   </div>

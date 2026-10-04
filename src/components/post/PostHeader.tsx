@@ -15,6 +15,7 @@ interface PostHeaderProps {
   showDate?: boolean;
   /** Channel and date row below the author name (used in PostCard). */
   showMetadata?: boolean;
+  isUnread?: boolean;
 }
 
 export function PostHeader({
@@ -24,6 +25,7 @@ export function PostHeader({
   showContextMenu = true,
   showDate = true,
   showMetadata = false,
+  isUnread,
 }: PostHeaderProps) {
   const { t } = useTranslation();
   const { user } = comment;
@@ -61,7 +63,9 @@ export function PostHeader({
                 </Link>
               ) : null}
             </div>
-            {showMetadata ? <PostMetadata comment={comment} /> : null}
+            {showMetadata ? (
+              <PostMetadata comment={comment} isUnread={isUnread} />
+            ) : null}
             {showHandle && (
               <Link
                 to="/u/$name"

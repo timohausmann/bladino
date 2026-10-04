@@ -37,12 +37,11 @@ export function PostComment({
     <div
       id={getCommentDomId(comment.id)}
       className={clsx(
-        'relative flex gap-3 rounded-lg',
+        'flex gap-3 rounded-lg',
         isHighlighted &&
           'bg-cyan-50 p-2 ring-2 ring-cyan-400 dark:bg-cyan-950/40 dark:ring-cyan-500',
       )}
     >
-      <UnreadIndicator isUnread={isUnread} layout="comment" />
       <Tooltip content={comment.user.name} side="top">
         <Link
           to="/u/$name"
@@ -75,18 +74,21 @@ export function PostComment({
             errorMessage={t('errors:updateReplyFailed')}
           />
         ) : (
-          <div className="flex min-w-0 flex-col gap-2 pt-px">
-            <CommentBody
-              body={comment.body}
-              weblinks={comment.weblinks}
-              linkPreviewVariant="compact"
-              parentSurface="inset"
-              isSystemUser={comment.user.isSystemUser}
-              className="text-foreground min-w-0 text-[15px] leading-6"
-            />
-            {files.length > 0 && (
-              <FilePreview files={files} compact parentSurface="inset" />
-            )}
+          <div className="flex min-w-0 items-start gap-1.5 pt-px">
+            <UnreadIndicator isUnread={isUnread} variant="dot" />
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <CommentBody
+                body={comment.body}
+                weblinks={comment.weblinks}
+                linkPreviewVariant="compact"
+                parentSurface="inset"
+                isSystemUser={comment.user.isSystemUser}
+                className="text-foreground min-w-0 text-[15px] leading-6"
+              />
+              {files.length > 0 && (
+                <FilePreview files={files} compact parentSurface="inset" />
+              )}
+            </div>
           </div>
         )}
       </div>
