@@ -60,8 +60,13 @@ export function CommentFeed({
     [data],
   );
   const sectionIndexes = useMemo(
-    () => getFeedSectionIndexes(comments, snapshot?.lastViewedAt),
-    [comments, snapshot?.lastViewedAt],
+    () =>
+      getFeedSectionIndexes(
+        comments,
+        snapshot?.lastViewedAt,
+        snapshot?.channelEffectiveLastViewedAt,
+      ),
+    [comments, snapshot?.channelEffectiveLastViewedAt, snapshot?.lastViewedAt],
   );
   const unreadPostCount = snapshot?.unreadPostCount ?? 0;
   const hasNewPostSection =
@@ -69,7 +74,12 @@ export function CommentFeed({
   const getIsUnread = useCallback(
     (comment: Comment) =>
       snapshot
-        ? isCommentUnread(comment, snapshot.lastViewedAt, currentUserId)
+        ? isCommentUnread(
+            comment,
+            snapshot.lastViewedAt,
+            currentUserId,
+            snapshot.channelEffectiveLastViewedAt,
+          )
         : false,
     [currentUserId, snapshot],
   );
