@@ -1,4 +1,4 @@
-import { getAuthToken } from '@/stores/authStore';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 interface AvatarUploadResponse {
   avatar: string;
@@ -14,17 +14,10 @@ function resolveAvatarUploadUrl(): string {
   return new URL(configured, window.location.origin).href;
 }
 
-function authHeaders(): Record<string, string> {
-  const token = getAuthToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
 /** Removes the stored avatar file and clears it on the user. */
 export async function deleteAvatar(): Promise<null> {
-  const response = await fetch(resolveAvatarUploadUrl(), {
+  const response = await authorizedFetch(resolveAvatarUploadUrl(), {
     method: 'DELETE',
-    headers: authHeaders(),
-    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -39,11 +32,9 @@ export async function uploadAvatar(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch(resolveAvatarUploadUrl(), {
+  const response = await authorizedFetch(resolveAvatarUploadUrl(), {
     method: 'POST',
     body: formData,
-    headers: authHeaders(),
-    credentials: 'include',
   });
 
   if (!response.ok) {

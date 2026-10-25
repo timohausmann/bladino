@@ -1,8 +1,13 @@
-import { handleExpiredSession, notifyUnauthorized } from '@/lib/expiredSession';
-import { isTokenExpiredError, isUnauthorizedError } from './apiError';
-import { getAuthToken } from '@/stores/authStore';
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { GraphQLClient } from 'graphql-request';
+import { handleExpiredSession, notifyUnauthorized } from '@/lib/expiredSession';
+import { isRefreshRejected, refreshAccessToken } from '@/lib/refreshSession';
+import { getAuthToken } from '@/stores/authStore';
+import {
+  isSessionRevokedError,
+  isTokenExpiredError,
+  isUnauthorizedError,
+} from './apiError';
 
 function resolveGraphQLEndpoint(): string {
   const configured = import.meta.env.VITE_GRAPHQL_URL ?? '/graphql';
@@ -26,22 +31,49 @@ function authHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+function rejectAuth(error: unknown): void {
+  if (isTokenExpiredError(error) || isSessionRevokedError(error)) {
+    handleExpiredSession();
+    return;
+  }
+  if (isUnauthorizedError(error)) {
+    notifyUnauthorized();
+  }
+}
+
+async function executeGraphQL<TResult, TVariables extends object>(
+  document: TypedDocumentNode<TResult, TVariables>,
+  variables?: TVariables,
+): Promise<TResult> {
+  return graphqlClient.request<TResult>(document, variables, authHeaders());
+}
+
 export async function requestGraphQL<TResult, TVariables extends object>(
   document: TypedDocumentNode<TResult, TVariables>,
   variables?: TVariables,
 ): Promise<TResult> {
   try {
-    return await graphqlClient.request<TResult>(
-      document,
-      variables,
-      authHeaders(),
-    );
+    return await executeGraphQL(document, variables);
   } catch (error) {
-    if (isTokenExpiredError(error)) {
-      handleExpiredSession();
-    } else if (isUnauthorizedError(error)) {
-      notifyUnauthorized();
+    // One silent refresh, then the same operation. A second expiry logs out.
+    if (!isTokenExpiredError(error)) {
+      rejectAuth(error);
+      throw error;
     }
-    throw error;
+
+    try {
+      await refreshAccessToken();
+    } catch (refreshError) {
+      // A dropped connection still has a cookie. Only a rejected refresh logs out.
+      if (isRefreshRejected(refreshError)) handleExpiredSession();
+      throw refreshError;
+    }
+
+    try {
+      return await executeGraphQL(document, variables);
+    } catch (retryError) {
+      rejectAuth(retryError);
+      throw retryError;
+    }
   }
 }

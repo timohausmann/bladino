@@ -1,4 +1,4 @@
-import { getAuthToken } from '@/stores/authStore';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 export interface UploadFileOptions {
   channel?: string;
@@ -35,17 +35,9 @@ export async function uploadFile(
     formData.append('parent', options.parent);
   }
 
-  const headers: Record<string, string> = {};
-  const token = getAuthToken();
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(resolveUploadUrl(), {
+  const response = await authorizedFetch(resolveUploadUrl(), {
     method: 'POST',
     body: formData,
-    headers,
-    credentials: 'include',
   });
 
   if (!response.ok) {

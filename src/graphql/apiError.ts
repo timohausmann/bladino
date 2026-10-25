@@ -11,6 +11,7 @@ import { ClientError } from 'graphql-request';
  */
 const AUTH_ERROR_CODE = {
   TOKEN_EXPIRED: 'token expired',
+  SESSION_REVOKED: 'session revoked',
   UNAUTHORIZED: 'unauthorized',
 } as const;
 
@@ -69,7 +70,35 @@ export function isTokenExpiredError(error: unknown): boolean {
   return getAuthErrorCode(error) === AUTH_ERROR_CODE.TOKEN_EXPIRED;
 }
 
+/** Whether the server session was deleted or its refresh window ended. */
+export function isSessionRevokedError(error: unknown): boolean {
+  return getAuthErrorCode(error) === AUTH_ERROR_CODE.SESSION_REVOKED;
+}
+
 /** Whether the auth middleware rejected the request for any other auth reason. */
 export function isUnauthorizedError(error: unknown): boolean {
   return getAuthErrorCode(error) === AUTH_ERROR_CODE.UNAUTHORIZED;
+}
+
+/** Auth error code from a fetch Response. The body stays readable for the caller. */
+export async function readAuthErrorCode(
+  response: Response,
+): Promise<AuthErrorCode | undefined> {
+  if (response.status !== 401) return undefined;
+
+  try {
+    const apiError = parseApiErrorBody(await response.clone().json());
+    if (!apiError || !isAuthErrorCode(apiError.error)) return undefined;
+    return apiError.error;
+  } catch {
+    return undefined;
+  }
+}
+
+export function isTokenExpiredCode(code: AuthErrorCode | undefined): boolean {
+  return code === AUTH_ERROR_CODE.TOKEN_EXPIRED;
+}
+
+export function isSessionRevokedCode(code: AuthErrorCode | undefined): boolean {
+  return code === AUTH_ERROR_CODE.SESSION_REVOKED;
 }

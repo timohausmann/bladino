@@ -1,7 +1,12 @@
-import { isTokenExpiredError, isUnauthorizedError } from '@/graphql/apiError';
+import {
+  isSessionRevokedError,
+  isTokenExpiredError,
+  isUnauthorizedError,
+} from '@/graphql/apiError';
 import { requestGraphQL } from '@/graphql/client';
 import { CurrentUserDocument } from '@/graphql/generated/graphql';
 import { queryClient } from '@/lib/queryClient';
+import { prepareAccessToken } from '@/lib/refreshSession';
 import { clearAuthToken, getAuthToken } from '@/stores/authStore';
 import { useUserStore, type CurrentUser } from '@/stores/userStore';
 
@@ -36,6 +41,7 @@ export function clearSession(): void {
  * Returns null when there is no valid session.
  */
 export async function ensureSession(): Promise<CurrentUser | null> {
+  await prepareAccessToken();
   if (!getAuthToken()) {
     useUserStore.getState().clearCurrentUser();
     return null;
@@ -58,7 +64,11 @@ export async function ensureSession(): Promise<CurrentUser | null> {
     return user;
   } catch (error) {
     // Keep the token unless the API rejected it.
-    if (isTokenExpiredError(error) || isUnauthorizedError(error)) {
+    if (
+      isTokenExpiredError(error) ||
+      isSessionRevokedError(error) ||
+      isUnauthorizedError(error)
+    ) {
       clearSession();
     }
     return null;
