@@ -47,25 +47,19 @@ export function CreatePostChannelField({
       disabled={isLoading}
       triggerClassName={clsx(
         'max-w-[12rem] disabled:opacity-100',
-        isLoading && !isNoChannel && 'text-cyan-700 dark:text-cyan-600',
-        isLoading && isNoChannel && 'text-neutral-500 dark:text-neutral-400',
-        !isLoading && isNoChannel && 'text-neutral-500 dark:text-neutral-400',
-        !isLoading &&
-          !isNoChannel &&
-          'font-medium text-cyan-500 dark:text-cyan-400',
+        isNoChannel && 'text-neutral-500 dark:text-neutral-400',
+        !isNoChannel && 'font-medium text-foreground',
         !isLoading &&
           '[&_[data-placeholder]]:text-cyan-700 dark:[&_[data-placeholder]]:text-cyan-600',
       )}
       valueClassName={
         isNoChannel
           ? 'font-normal text-neutral-500 dark:text-neutral-400'
-          : isLoading
-            ? 'text-cyan-700 dark:text-cyan-600'
-            : 'font-medium text-cyan-500 dark:text-cyan-400'
+          : 'font-medium text-foreground'
       }
       getItemClassName={(option, isSelected) =>
         isSelected && option.value !== NO_CHANNEL_VALUE
-          ? 'font-medium text-cyan-500 dark:text-cyan-400'
+          ? 'font-medium text-foreground'
           : undefined
       }
     />
