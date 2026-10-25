@@ -9,6 +9,7 @@ import {
 import type { QueryClient } from '@tanstack/react-query';
 import App from './App';
 import { ensureSession, resolveRedirectTarget } from './lib/auth';
+import { validatePostSearch } from './lib/postSearchParams';
 import { queryClient } from './lib/queryClient';
 
 export interface RouterContext {
@@ -63,6 +64,14 @@ const feedRoute = createRoute({
   path: '/feed',
   component: lazyRouteComponent(() => import('./routes/Home'), 'Home'),
   staticData: { layoutMode: 'feed' },
+});
+
+const searchRoute = createRoute({
+  getParentRoute: () => authenticatedRoute,
+  path: '/search',
+  validateSearch: validatePostSearch,
+  component: lazyRouteComponent(() => import('./routes/Search'), 'Search'),
+  staticData: { layoutMode: 'fullWidth' },
 });
 
 const notificationsRoute = createRoute({
@@ -271,6 +280,7 @@ const routeTree = rootRoute.addChildren([
   authenticatedRoute.addChildren([
     dashboardRoute,
     feedRoute,
+    searchRoute,
     notificationsRoute,
     dashboardRedirectRoute,
     postRoute,
@@ -296,7 +306,9 @@ const routeTree = rootRoute.addChildren([
 export const router = createRouter({
   routeTree,
   context: { queryClient },
-  defaultViewTransition: true,
+  defaultViewTransition: {
+    types: ({ pathChanged }) => (pathChanged ? [] : ['same-document']),
+  },
 });
 
 declare module '@tanstack/react-router' {

@@ -3,11 +3,14 @@ import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { tv } from 'tailwind-variants';
 
 export interface InlineSelectOption<T extends string = string> {
   value: T;
   label: React.ReactNode;
 }
+
+export type InlineSelectSurface = 'ghost' | 'inset' | 'elevated';
 
 export interface InlineSelectProps<T extends string = string> {
   value?: T;
@@ -23,17 +26,35 @@ export interface InlineSelectProps<T extends string = string> {
     isSelected: boolean,
   ) => string | undefined;
   showSelectedIndicator?: boolean;
+  /** Ghost is transparent. Inset and elevated are rungs on the surface ladder. */
+  surface?: InlineSelectSurface;
 }
 
 export const inlineSelectTriggerBaseClassName =
-  'inline-flex w-auto min-w-20 shrink-0 items-center justify-between gap-2 rounded-lg border-none px-2 py-1.5 text-sm transition-colors outline-none';
+  'inline-flex w-auto min-w-20 shrink-0 items-center justify-between gap-2 rounded-lg border-none px-2 py-1.5 text-sm transition-colors';
 
-export const inlineSelectTriggerClassName = clsx(
-  inlineSelectTriggerBaseClassName,
-  'bg-transparent hover:bg-white/10',
-  'disabled:cursor-not-allowed disabled:opacity-60',
-  '[&_[data-placeholder]]:text-muted-foreground [&_[data-placeholder]]:font-normal',
-);
+export const inlineSelectTriggerVariants = tv({
+  base: [
+    inlineSelectTriggerBaseClassName,
+    'focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:outline-none',
+    'disabled:cursor-not-allowed disabled:opacity-60',
+    '[&_[data-placeholder]]:text-muted-foreground [&_[data-placeholder]]:font-normal',
+  ],
+  variants: {
+    surface: {
+      ghost: 'bg-transparent hover:bg-white/10',
+      inset: 'bg-inset hover:bg-inset-deep',
+      // Light elevated matches the card, so the edge is an outline. Dark is already lighter.
+      elevated:
+        'bg-elevated hover:bg-elevated-hover outline outline-elevated-border dark:outline-none',
+    },
+  },
+  defaultVariants: {
+    surface: 'ghost',
+  },
+});
+
+export const inlineSelectTriggerClassName = inlineSelectTriggerVariants();
 
 export const inlineSelectTriggerReadOnlyClassName = clsx(
   inlineSelectTriggerBaseClassName,
@@ -57,6 +78,7 @@ export function InlineSelect<T extends string = string>({
   valueClassName,
   getItemClassName,
   showSelectedIndicator = true,
+  surface = 'ghost',
 }: InlineSelectProps<T>) {
   return (
     <Select.Root
@@ -65,7 +87,10 @@ export function InlineSelect<T extends string = string>({
       disabled={disabled}
     >
       <Select.Trigger
-        className={twMerge(inlineSelectTriggerClassName, triggerClassName)}
+        className={twMerge(
+          inlineSelectTriggerVariants({ surface }),
+          triggerClassName,
+        )}
         aria-label={ariaLabel}
       >
         <Select.Value

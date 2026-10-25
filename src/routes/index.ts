@@ -10,6 +10,7 @@ export { Notifications } from './Notifications';
 export { NotFound } from './NotFound';
 export { PostDetail } from './PostDetail';
 export { Profile } from './Profile';
+export { Search } from './Search';
 export {
   SettingsAppearance,
   SettingsLayout,

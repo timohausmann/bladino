@@ -36,6 +36,7 @@ const meta = {
     ariaLabel: 'Mail folder',
     placeholder: 'Select a folder',
     disabled: false,
+    surface: 'ghost',
   },
   argTypes: {
     value: {
@@ -66,4 +67,32 @@ export const Disabled: Story = {
   args: {
     disabled: true,
   },
+};
+
+// The canvas matches inset, so these stories paint the page with the surface token.
+const surfaceBackground = {
+  parameters: {
+    backgrounds: {
+      options: {
+        surface: { name: 'Surface', value: 'var(--color-surface)' },
+      },
+    },
+  },
+  globals: {
+    backgrounds: { value: 'surface' },
+  },
+} as const;
+
+export const Inset: Story = {
+  args: {
+    surface: 'inset',
+  },
+  ...surfaceBackground,
+};
+
+export const Elevated: Story = {
+  args: {
+    surface: 'elevated',
+  },
+  ...surfaceBackground,
 };

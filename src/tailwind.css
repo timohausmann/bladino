@@ -99,6 +99,15 @@
   html[data-view-transition]::view-transition-new(root) {
     animation: none;
   }
+
+  /*
+   * Same-path updates (search filters, mail folder, compose) still start a
+   * view transition. Kill the root crossfade so the page does not fade.
+   */
+  html:active-view-transition-type(same-document)::view-transition-old(root),
+  html:active-view-transition-type(same-document)::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 /* Accordion animations using Radix CSS custom properties */

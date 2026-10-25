@@ -21,11 +21,11 @@ import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import {
   ChevronDown,
-  Compass,
   Hash,
   LayoutDashboard,
   Mail,
   Rss,
+  Search,
   Settings,
   StickyNote,
 } from 'lucide-react';
@@ -75,11 +75,10 @@ export function AppNavigation({ expanded }: AppNavigationProps) {
           expanded={expanded}
         />
         <NavRailLink
-          to="/explore"
-          label={t('navigation:explore')}
-          icon={Compass}
+          to="/search"
+          label={t('navigation:search')}
+          icon={Search}
           expanded={expanded}
-          disabled
         />
         <AppNavigationChannels
           expanded={expanded}
