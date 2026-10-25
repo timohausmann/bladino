@@ -1,0 +1,26 @@
+---
+description: Dev API calls go through the Vite proxy. Production calls use /api on trashnet.de.
+alwaysApply: true
+---
+
+# API endpoints
+
+Every backend URL the browser calls is a `VITE_*` variable, baked in at build time. Declare it in `.env.development`, `src/vite-env.d.ts`, and the Vite `server.proxy` table.
+
+Dev values are relative paths. Vite proxies them to `http://localhost:3001`. The dev server is the API host, so paths have no `/api` prefix.
+
+```
+VITE_GRAPHQL_URL=/graphql
+VITE_AUTH_REFRESH_URL=/auth/refresh
+```
+
+Production values are absolute and sit behind `/api`. The reverse proxy strips that prefix before the request reaches the Node server.
+
+```
+VITE_GRAPHQL_URL=https://trashnet.de/api/graphql
+VITE_ISALIVE_URL=https://trashnet.de/api/isalive
+VITE_AUTH_REFRESH_URL=https://trashnet.de/api/auth/refresh
+VITE_AUTH_LOGOUT_URL=https://trashnet.de/api/auth/logout
+```
+
+A new endpoint needs both shapes. A relative production path hits the static site, not the API. After changing a `VITE_*` value, rebuild. The running bundle does not pick it up.

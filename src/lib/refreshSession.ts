@@ -4,13 +4,17 @@ import {
   setAuthToken,
 } from '@/stores/authStore';
 
-const REFRESH_PATH = '/auth/refresh';
-const LOGOUT_PATH = '/auth/logout';
-
 let refreshInFlight: Promise<void> | null = null;
 let prepareInFlight: Promise<void> | null = null;
 
-function authEndpoint(path: string): string {
+function authEndpoint(
+  configured: string | undefined,
+  fallback: string,
+): string {
+  const path = configured && configured.length > 0 ? configured : fallback;
+
+  if (/^https?:\/\//.test(path)) return path;
+
   return new URL(path, window.location.origin).href;
 }
 
@@ -39,10 +43,13 @@ async function readToken(response: Response): Promise<string> {
 }
 
 function fetchAccessToken(): Promise<string> {
-  return fetch(authEndpoint(REFRESH_PATH), {
-    method: 'POST',
-    credentials: 'include',
-  }).then(readToken);
+  return fetch(
+    authEndpoint(import.meta.env.VITE_AUTH_REFRESH_URL, '/auth/refresh'),
+    {
+      method: 'POST',
+      credentials: 'include',
+    },
+  ).then(readToken);
 }
 
 /**
@@ -93,10 +100,13 @@ async function prepareOnce(): Promise<void> {
 
 /** Ends the server session. The caller still clears the in-memory token. */
 export async function logoutServerSession(): Promise<void> {
-  const response = await fetch(authEndpoint(LOGOUT_PATH), {
-    method: 'POST',
-    credentials: 'include',
-  });
+  const response = await fetch(
+    authEndpoint(import.meta.env.VITE_AUTH_LOGOUT_URL, '/auth/logout'),
+    {
+      method: 'POST',
+      credentials: 'include',
+    },
+  );
   if (!response.ok) {
     throw new Error(`Logout failed (${response.status})`);
   }

@@ -7,6 +7,8 @@ interface ImportMetaEnv {
   readonly VITE_AVATAR_URL: string;
   readonly VITE_AVATAR_UPLOAD_URL: string;
   readonly VITE_ISALIVE_URL: string;
+  readonly VITE_AUTH_REFRESH_URL: string;
+  readonly VITE_AUTH_LOGOUT_URL: string;
 }
 
 interface ImportMeta {
