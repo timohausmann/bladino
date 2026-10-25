@@ -27,17 +27,13 @@ type SearchComment = NonNullable<
   NonNullable<CommentSearchQuery['commentSearch']>['comments'][number]
 >;
 
-interface SearchIdleProps {
-  query?: string;
-}
-
-function SearchIdle({ query }: SearchIdleProps) {
+function SearchIdle() {
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-1 py-12 text-center">
       <p className="text-foreground text-sm font-medium">
-        {query ? t('search:queryTitle', { query }) : t('search:emptyTitle')}
+        {t('search:emptyTitle')}
       </p>
       <p className="text-muted-foreground text-sm">{t('search:idle')}</p>
     </div>
@@ -50,10 +46,10 @@ interface SearchResultsProps {
 
 function SearchResults({ search }: SearchResultsProps) {
   const { t } = useTranslation();
-  const { q, user, channel, range, from, to, type } = search;
+  const { q, user, channel, range, from, to, type, attachment, link } = search;
   const criteria = useMemo(
-    () => ({ q, user, channel, range, from, to, type }),
-    [q, user, channel, range, from, to, type],
+    () => ({ q, user, channel, range, from, to, type, attachment, link }),
+    [q, user, channel, range, from, to, type, attachment, link],
   );
   const filter = useMemo(() => toCommentSearchFilter(criteria), [criteria]);
   const hasCriteria = hasCommentSearchCriteria(criteria);
@@ -97,7 +93,7 @@ function SearchResults({ search }: SearchResultsProps) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (!hasCriteria) {
-    return <SearchIdle query={q} />;
+    return <SearchIdle />;
   }
 
   // The form already explains an inverted custom range.

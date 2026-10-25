@@ -10,197 +10,197 @@
  * Stroke and canvas sit outside the ladder.
  */
 :root {
-  --canvas: oklch(96% 0 0);
-  --surface-elevated-hover: oklch(98.5% 0 0);
-  --surface-elevated: oklch(100% 0 0);
-  --surface-default-hover: oklch(98.5% 0 0);
-  --surface-default: oklch(100% 0 0);
-  --surface-inset: oklch(96% 0 0);
-  --surface-inset-deep: oklch(92% 0 0);
-  --stroke: rgb(0 0 0 / 8%);
+    --canvas: oklch(96% 0 0);
+    --surface-elevated-hover: oklch(98.5% 0 0);
+    --surface-elevated: oklch(100% 0 0);
+    --surface-default-hover: oklch(98.5% 0 0);
+    --surface-default: oklch(100% 0 0);
+    --surface-inset: oklch(96% 0 0);
+    --surface-inset-deep: oklch(92% 0 0);
+    --stroke: rgb(0 0 0 / 8%);
 }
 
 @theme {
-  --color-background: var(--canvas);
-  --color-foreground: var(--color-neutral-900);
-  --color-muted: var(--color-neutral-100);
-  --color-muted-foreground: var(--color-neutral-500);
-  --color-surface: var(--surface-default);
-  --color-surface-hover: var(--surface-default-hover);
-  --color-surface-foreground: var(--color-neutral-900);
-  --color-surface-border: var(--stroke);
-  --color-inset: var(--surface-inset);
-  --color-inset-deep: var(--surface-inset-deep);
-  --color-elevated: var(--surface-elevated);
-  --color-elevated-hover: var(--surface-elevated-hover);
-  --color-elevated-border: var(--stroke);
-  --color-line: var(--stroke);
-  --color-primary: var(--color-cyan-500);
-  --color-primary-foreground: var(--color-white);
-  --ease-dialog-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --color-background: var(--canvas);
+    --color-foreground: var(--color-neutral-900);
+    --color-muted: var(--color-neutral-100);
+    --color-muted-foreground: var(--color-neutral-500);
+    --color-surface: var(--surface-default);
+    --color-surface-hover: var(--surface-default-hover);
+    --color-surface-foreground: var(--color-neutral-900);
+    --color-surface-border: var(--stroke);
+    --color-inset: var(--surface-inset);
+    --color-inset-border: var(--color-neutral-300);
+    --color-inset-deep: var(--surface-inset-deep);
+    --color-elevated: var(--surface-elevated);
+    --color-elevated-hover: var(--surface-elevated-hover);
+    --color-elevated-border: var(--stroke);
+    --color-line: var(--stroke);
+    --color-primary: var(--color-cyan-500);
+    --color-primary-foreground: var(--color-white);
+    --ease-dialog-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Dark remaps ladder primitives; semantic --color-* aliases follow. */
 .dark {
-  --canvas: var(--color-neutral-900);
-  --surface-elevated: oklch(31% 0 0);
-  --surface-elevated-hover: oklch(33.5% 0 0);
-  --surface-default: var(--color-neutral-800);
-  --surface-default-hover: oklch(28.5% 0 0);
-  --surface-inset: oklch(23.5% 0 0);
-  --surface-inset-deep: var(--color-neutral-900);
-  --stroke: rgb(255 255 255 / 8%);
+    --canvas: var(--color-neutral-900);
+    --surface-elevated: oklch(31% 0 0);
+    --surface-elevated-hover: oklch(33.5% 0 0);
+    --surface-default: var(--color-neutral-800);
+    --surface-default-hover: oklch(28.5% 0 0);
+    --surface-inset: oklch(23.5% 0 0);
+    --surface-inset-deep: var(--color-neutral-900);
+    --stroke: rgb(255 255 255 / 8%);
 
-  --color-foreground: var(--color-neutral-50);
-  --color-muted: var(--color-neutral-800);
-  --color-muted-foreground: var(--color-neutral-400);
-  --color-surface-foreground: var(--color-neutral-100);
-  --color-primary: var(--color-cyan-500);
-  --color-primary-foreground: var(--color-neutral-950);
+    --color-foreground: var(--color-neutral-50);
+    --color-muted: var(--color-neutral-800);
+    --color-muted-foreground: var(--color-neutral-400);
+    --color-surface-foreground: var(--color-neutral-100);
+    --color-primary: var(--color-cyan-500);
+    --color-primary-foreground: var(--color-neutral-950);
+    --color-inset-border: var(--color-neutral-600);
 }
 
 /* Base layer - for base element styles */
 @layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-  }
+    body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+    }
 
-  /* https://pattern.monster/japanese-pattern-1 */
-  html.bg-pattern body {
-    background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23f2f2f2ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='1' stroke='%2300000009' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-  }
+    /* https://pattern.monster/japanese-pattern-1 */
+    html.bg-pattern body {
+        background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23f2f2f2ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='1' stroke='%2300000009' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+    }
 
-  html.dark.bg-pattern body {
-    background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23171717ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='1' stroke='%23ffffff09' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
-  }
+    html.dark.bg-pattern body {
+        background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23171717ff'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='1' stroke='%23ffffff09' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+    }
 
-  button {
-    cursor: pointer;
-  }
+    button {
+        cursor: pointer;
+    }
 
-  html.fixed-viewport,
-  body.fixed-viewport {
-    overflow: hidden;
-    height: 100%;
-  }
+    html.fixed-viewport,
+    body.fixed-viewport {
+        overflow: hidden;
+        height: 100%;
+    }
 
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.4s;
-  }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation-duration: 0.4s;
+    }
 
-  /*
+    /*
    * Scoped component transitions keep the root snapshot still so unrelated
    * page content does not flash.
    */
-  html[data-view-transition]::view-transition-old(root),
-  html[data-view-transition]::view-transition-new(root) {
-    animation: none;
-  }
+    html[data-view-transition]::view-transition-old(root),
+    html[data-view-transition]::view-transition-new(root) {
+        animation: none;
+    }
 
-  /*
+    /*
    * Same-path updates (search filters, mail folder, compose) still start a
    * view transition. Kill the root crossfade so the page does not fade.
    */
-  html:active-view-transition-type(same-document)::view-transition-old(root),
-  html:active-view-transition-type(same-document)::view-transition-new(root) {
-    animation: none;
-  }
+    html:active-view-transition-type(same-document)::view-transition-old(root),
+    html:active-view-transition-type(same-document)::view-transition-new(root) {
+        animation: none;
+    }
 }
 
 /* Accordion animations using Radix CSS custom properties */
 @keyframes radixSlideDown {
-  from {
-    height: 0;
-    padding-bottom: 0;
-  }
+    from {
+        height: 0;
+        padding-bottom: 0;
+    }
 
-  to {
-    height: var(--radix-accordion-content-height);
-    padding-bottom: 1rem;
-  }
+    to {
+        height: var(--radix-accordion-content-height);
+        padding-bottom: 1rem;
+    }
 }
 
 @keyframes radixSlideUp {
-  from {
-    height: var(--radix-accordion-content-height);
-    padding-bottom: 1rem;
-  }
+    from {
+        height: var(--radix-accordion-content-height);
+        padding-bottom: 1rem;
+    }
 
-  to {
-    height: 0;
-    padding-bottom: 0;
-  }
+    to {
+        height: 0;
+        padding-bottom: 0;
+    }
 }
 
 /* Collapsible animations using Radix CSS custom properties */
 @keyframes radixCollapsibleSlideDown {
-  from {
-    height: 0;
-  }
+    from {
+        height: 0;
+    }
 
-  to {
-    height: var(--radix-collapsible-content-height);
-  }
+    to {
+        height: var(--radix-collapsible-content-height);
+    }
 }
 
 @keyframes radixCollapsibleSlideUp {
-  from {
-    height: var(--radix-collapsible-content-height);
-  }
+    from {
+        height: var(--radix-collapsible-content-height);
+    }
 
-  to {
-    height: 0;
-  }
+    to {
+        height: 0;
+    }
 }
 
 /* Button animations */
 @keyframes button-shimmer {
-  0% {
-    background-position: 200% center;
-  }
+    0% {
+        background-position: 200% center;
+    }
 
-  100% {
-    background-position: -200% center;
-  }
+    100% {
+        background-position: -200% center;
+    }
 }
 
 @keyframes heart-burst {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
 
-  100% {
-    transform: scale(4);
-    opacity: 0;
-  }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 @layer components {
-  .btn-corner-squircle {
-    border-radius: 20px;
-    corner-shape: squircle;
-  }
+    .btn-corner-squircle {
+        border-radius: 20px;
+        corner-shape: squircle;
+    }
 
-  /* Loading shimmer — ::after so Tailwind bg-* classes stay intact */
-  .btn-loading::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    corner-shape: inherit;
-    pointer-events: none;
-    z-index: 1;
-    background-image: linear-gradient(
-      110deg,
-      transparent 25%,
-      rgb(255 255 255 / 0.15) 37%,
-      transparent 63%
-    );
-    background-size: 200% 100%;
-    animation: button-shimmer 1.4s linear infinite;
-  }
+    /* Loading shimmer — ::after so Tailwind bg-* classes stay intact */
+    .btn-loading::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        corner-shape: inherit;
+        pointer-events: none;
+        z-index: 1;
+        background-image: linear-gradient(110deg,
+                transparent 25%,
+                rgb(255 255 255 / 0.15) 37%,
+                transparent 63%);
+        background-size: 200% 100%;
+        animation: button-shimmer 1.4s linear infinite;
+    }
 }

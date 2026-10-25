@@ -23,9 +23,10 @@
   "type": "Type",
   "typePost": "Post",
   "typeReply": "Reply",
-  "likedByMe": "Liked by me",
+  "contains": "Contains",
+  "attachment": "Attachment",
+  "link": "Link",
   "emptyTitle": "Search posts",
-  "queryTitle": "“{{query}}”",
   "idle": "Enter a search or set a filter.",
   "noResults": "No matching posts."
 }

@@ -1,4 +1,5 @@
 import { Chip } from '@/components/ui/Chip';
+import { Checkbox } from '@/components/ui/Checkbox';
 import { Divider } from '@/components/ui/Divider';
 import { Avatar } from '@/components/ui/Avatar';
 import {
@@ -8,7 +9,6 @@ import {
 import type { PostSearch } from '@/lib/postSearchParams';
 import { normalizeLanguage } from '@/i18n';
 import * as Collapsible from '@radix-ui/react-collapsible';
-import * as Switch from '@radix-ui/react-switch';
 import clsx from 'clsx';
 import { ChevronUp, SlidersHorizontal } from 'lucide-react';
 import {
@@ -113,6 +113,30 @@ function FilterLabel({ children, htmlFor }: FilterLabelProps) {
   );
 }
 
+interface ContainsCheckboxProps {
+  id: string;
+  label: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}
+
+function ContainsCheckbox({
+  id,
+  label,
+  checked,
+  onCheckedChange,
+}: ContainsCheckboxProps) {
+  return (
+    <label
+      htmlFor={id}
+      className="text-foreground flex cursor-pointer items-center gap-2 text-sm"
+    >
+      <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
+      {label}
+    </label>
+  );
+}
+
 /** Label and control are cells of the parent grid, so the labels share one column. */
 function FilterField({ label, htmlFor, children }: FilterFieldProps) {
   return (
@@ -205,7 +229,9 @@ export function SearchFilters({
   const fromId = `${fieldId}-from`;
   const toId = `${fieldId}-to`;
   const rangeErrorId = `${fieldId}-range`;
-  const likedId = `${fieldId}-liked`;
+  const containsId = `${fieldId}-contains`;
+  const attachmentId = `${fieldId}-attachment`;
+  const linkId = `${fieldId}-link`;
   const hasFilters = Boolean(
     value.user ||
       value.range ||
@@ -213,12 +239,12 @@ export function SearchFilters({
       value.to ||
       value.channel ||
       value.type ||
-      value.liked,
+      value.attachment ||
+      value.link,
   );
   const [open, setOpen] = useState(hasFilters);
   const locale = normalizeLanguage(i18n.language) === 'de' ? 'de-DE' : 'en-US';
   const rangeInvalid = Boolean(value.from && value.to && value.from > value.to);
-  const liked = value.liked === true;
 
   const userOptions = useMemo(
     () =>
@@ -328,11 +354,18 @@ export function SearchFilters({
             onRemove: () => onChange({ type: undefined }),
           }
         : undefined,
-      liked
+      value.attachment
         ? {
-            key: 'liked',
-            label: t('search:likedByMe'),
-            onRemove: () => onChange({ liked: undefined }),
+            key: 'attachment',
+            label: t('search:attachment'),
+            onRemove: () => onChange({ attachment: undefined }),
+          }
+        : undefined,
+      value.link
+        ? {
+            key: 'link',
+            label: t('search:link'),
+            onRemove: () => onChange({ link: undefined }),
           }
         : undefined,
     ] satisfies Array<ActiveFilterChip | undefined>
@@ -506,32 +539,31 @@ export function SearchFilters({
                 }
               />
 
-              <FilterField label={t('search:likedByMe')} htmlFor={likedId}>
-                <Switch.Root
-                  id={likedId}
-                  checked={liked}
+              <p id={containsId} className={filterLabelClassName}>
+                {t('search:contains')}
+              </p>
+              <div
+                role="group"
+                aria-labelledby={containsId}
+                className="flex min-h-10 w-full max-w-64 items-center gap-4"
+              >
+                <ContainsCheckbox
+                  id={attachmentId}
+                  label={t('search:attachment')}
+                  checked={value.attachment === true}
                   onCheckedChange={(checked) =>
-                    onChange({ liked: checked ? true : undefined })
+                    onChange({ attachment: checked ? true : undefined })
                   }
-                  className={clsx([
-                    'relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full',
-                    // border-2 is the inset. The thumb then travels exactly one thumb width.
-                    'border-2 border-transparent',
-                    'bg-black/15 transition-colors dark:bg-white/20',
-                    'data-[state=checked]:bg-cyan-600',
-                    'focus-visible:ring-2 focus-visible:ring-cyan-400/50 focus-visible:outline-none',
-                  ])}
-                >
-                  <Switch.Thumb
-                    className={clsx([
-                      'pointer-events-none block size-5 rounded-full bg-white',
-                      'transition-transform',
-                      'data-[state=unchecked]:translate-x-0',
-                      'data-[state=checked]:translate-x-5',
-                    ])}
-                  />
-                </Switch.Root>
-              </FilterField>
+                />
+                <ContainsCheckbox
+                  id={linkId}
+                  label={t('search:link')}
+                  checked={value.link === true}
+                  onCheckedChange={(checked) =>
+                    onChange({ link: checked ? true : undefined })
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -56,9 +56,13 @@ export type CommentFilter = {
 };
 
 export type CommentSearchFilter = {
+  /** At least one file. */
+  attachment?: InputMaybe<Scalars['Boolean']['input']>;
   channel?: InputMaybe<Scalars['ID']['input']>;
   /** Custom range, inclusive. */
   from?: InputMaybe<Scalars['Date']['input']>;
+  /** At least one link. */
+  link?: InputMaybe<Scalars['Boolean']['input']>;
   q?: InputMaybe<Scalars['String']['input']>;
   /** 30d, 6m, or 12m. A preset ignores from and to. */
   range?: InputMaybe<Scalars['String']['input']>;

@@ -12,9 +12,13 @@ export type CommentFilter = {
 };
 
 export type CommentSearchFilter = {
+  /** At least one file. */
+  attachment?: boolean | null | undefined;
   channel?: string | number | null | undefined;
   /** Custom range, inclusive. */
   from?: string | null | undefined;
+  /** At least one link. */
+  link?: boolean | null | undefined;
   q?: string | null | undefined;
   /** 30d, 6m, or 12m. A preset ignores from and to. */
   range?: string | null | undefined;

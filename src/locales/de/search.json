@@ -23,9 +23,10 @@
   "type": "Typ",
   "typePost": "Post",
   "typeReply": "Antwort",
-  "likedByMe": "Von mir geliked",
+  "contains": "Enthält",
+  "attachment": "Anhang",
+  "link": "Link",
   "emptyTitle": "Posts durchsuchen",
-  "queryTitle": "„{{query}}“",
   "idle": "Suchbegriff eingeben oder einen Filter setzen.",
   "noResults": "Keine passenden Posts."
 }

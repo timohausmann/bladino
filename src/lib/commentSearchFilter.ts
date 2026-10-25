@@ -1,6 +1,6 @@
 import type { PostSearch, PostSearchRange } from './postSearchParams';
 
-/** Fields the search API accepts. `liked` stays in the URL and is not sent. */
+/** Fields the search API accepts. */
 export interface CommentSearchFilter {
   q?: string;
   user?: string;
@@ -11,6 +11,8 @@ export interface CommentSearchFilter {
   /** Exclusive end of the custom range, local midnight of the next day. */
   to?: string;
   type?: 'post' | 'reply';
+  attachment?: boolean;
+  link?: boolean;
 }
 
 function startOfLocalDay(isoDate: string): string {
@@ -31,6 +33,8 @@ export function toCommentSearchFilter(search: PostSearch): CommentSearchFilter {
   if (search.user) filter.user = search.user;
   if (search.channel) filter.channel = search.channel;
   if (search.type) filter.type = search.type;
+  if (search.attachment) filter.attachment = true;
+  if (search.link) filter.link = true;
 
   if (
     search.range === '30d' ||
@@ -46,7 +50,7 @@ export function toCommentSearchFilter(search: PostSearch): CommentSearchFilter {
   return filter;
 }
 
-/** True when the URL has a criterion the API applies. `liked` does not count. */
+/** True when the URL has a criterion the API applies. */
 export function hasCommentSearchCriteria(search: PostSearch): boolean {
   return Object.keys(toCommentSearchFilter(search)).length > 0;
 }

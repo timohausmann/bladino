@@ -82,7 +82,8 @@ export const Active: Story = {
       to: '2026-02-01',
       channel: 'a',
       type: 'post',
-      liked: true,
+      attachment: true,
+      link: true,
     },
   },
 };

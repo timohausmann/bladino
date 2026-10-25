@@ -7,7 +7,7 @@ import {
 } from './commentSearchFilter.ts';
 
 suite('toCommentSearchFilter', () => {
-  test('drops liked and keeps a preset without dates', () => {
+  test('keeps a preset and the contains flags', () => {
     const filter = toCommentSearchFilter({
       q: 'raster',
       user: 'user-1',
@@ -16,7 +16,8 @@ suite('toCommentSearchFilter', () => {
       range: '30d',
       from: '2020-01-01',
       to: '2020-02-01',
-      liked: true,
+      attachment: true,
+      link: true,
     });
 
     assert.deepEqual(filter, {
@@ -25,6 +26,8 @@ suite('toCommentSearchFilter', () => {
       channel: 'channel-1',
       type: 'post',
       range: '30d',
+      attachment: true,
+      link: true,
     });
   });
 
@@ -51,8 +54,9 @@ suite('toCommentSearchFilter', () => {
 });
 
 suite('hasCommentSearchCriteria', () => {
-  test('liked alone does not search', () => {
-    assert.equal(hasCommentSearchCriteria({ liked: true }), false);
+  test('attachment or link alone is a search', () => {
+    assert.equal(hasCommentSearchCriteria({ attachment: true }), true);
+    assert.equal(hasCommentSearchCriteria({ link: true }), true);
     assert.equal(hasCommentSearchCriteria({ range: 'custom' }), false);
     assert.equal(hasCommentSearchCriteria({ q: 'raster' }), true);
     assert.equal(hasCommentSearchCriteria({ range: '6m' }), true);

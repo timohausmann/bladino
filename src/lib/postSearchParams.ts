@@ -10,7 +10,10 @@ export interface PostSearch {
   to?: string;
   channel?: string;
   type?: 'post' | 'reply';
-  liked?: boolean;
+  /** At least one file. */
+  attachment?: boolean;
+  /** At least one link. */
+  link?: boolean;
 }
 
 const DATE_PARAM = /^\d{4}-\d{2}-\d{2}$/;
@@ -39,6 +42,10 @@ function readDate(value: unknown): string | undefined {
   return date;
 }
 
+function readFlag(value: unknown): true | undefined {
+  return value === true || value === 'true' ? true : undefined;
+}
+
 /** Keeps `/search` query params to the filters the page actually renders. */
 export function validatePostSearch(
   search: Record<string, unknown>,
@@ -63,6 +70,7 @@ export function validatePostSearch(
     to: preset ? undefined : readDate(search.to),
     channel: readString(search.channel),
     type,
-    liked: search.liked === true || search.liked === 'true' ? true : undefined,
+    attachment: readFlag(search.attachment),
+    link: readFlag(search.link),
   };
 }

@@ -25,7 +25,20 @@ export const Placeholder: Story = { args: { value: undefined } };
 export const Disabled: Story = { args: { disabled: true } };
 ```
 
-Do not invent unused styling or prop combinations. If a state is invisible without context (transparent field, `parentSurface`), wrap it in the real surrounding surface (`Card`, `bg-inset`) rather than changing the component.
+Do not invent unused styling or prop combinations. The default canvas uses the inset token, so an inset control disappears on it. Paint the story background with the surface token. Do not wrap the story in `Card` or another surface just to show the fill. Follow `InlineSelect.stories.tsx`.
+
+```tsx
+parameters: {
+  backgrounds: {
+    options: {
+      surface: { name: 'Surface', value: 'var(--color-surface)' },
+    },
+  },
+},
+globals: {
+  backgrounds: { value: 'surface' },
+},
+```
 
 For controlled inputs, keep value in local `useState`. Hide callback props in the controls table (`table: { disable: true }`). Do not change component APIs for stories.
 
