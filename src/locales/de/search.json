@@ -26,5 +26,6 @@
   "likedByMe": "Von mir geliked",
   "emptyTitle": "Posts durchsuchen",
   "queryTitle": "„{{query}}“",
-  "pending": "Treffer erscheinen hier, sobald die Post-Suche angebunden ist."
+  "idle": "Suchbegriff eingeben oder einen Filter setzen.",
+  "noResults": "Keine passenden Posts."
 }

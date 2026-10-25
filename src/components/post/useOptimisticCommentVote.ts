@@ -1,4 +1,9 @@
-import type { Comment, CommentFeedQuery, CommentQuery } from '@/graphql';
+import type {
+  Comment,
+  CommentFeedQuery,
+  CommentQuery,
+  CommentSearchQuery,
+} from '@/graphql';
 import {
   ToggleVoteDocument,
   getGraphQLErrorMessage,
@@ -6,7 +11,7 @@ import {
 } from '@/graphql';
 import { useUserStore } from '@/stores/userStore';
 import { toast } from '@/components/ui/toast';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 type VoteUser = {
@@ -104,6 +109,35 @@ function updateCommentList<T extends VotableComment>(
   );
 }
 
+function updateCommentSearchData(
+  oldData: InfiniteData<CommentSearchQuery> | undefined,
+  targetId: string,
+  isLiking: boolean,
+  user: VoteUser,
+): InfiniteData<CommentSearchQuery> | undefined {
+  if (!oldData) return oldData;
+
+  return {
+    ...oldData,
+    pages: oldData.pages.map((page) => {
+      if (!page.commentSearch) return page;
+
+      return {
+        ...page,
+        commentSearch: {
+          ...page.commentSearch,
+          comments: updateCommentList(
+            page.commentSearch.comments ?? [],
+            targetId,
+            isLiking,
+            user,
+          ),
+        },
+      };
+    }),
+  };
+}
+
 /**
  * Handles vote toggling and immediate cache updates for comments/posts.
  */
@@ -166,11 +200,17 @@ export function useOptimisticCommentVote({
             }
           : oldData,
     );
+    queryClient.setQueriesData<InfiniteData<CommentSearchQuery>>(
+      { queryKey: ['CommentSearch'] },
+      (oldData) =>
+        updateCommentSearchData(oldData, targetId, isLiking, optimisticUser),
+    );
 
     try {
       await toggleVote({ post: comment.id });
 
       await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      await queryClient.invalidateQueries({ queryKey: ['CommentSearch'] });
       await queryClient.invalidateQueries({
         queryKey: ['Comment', { id: comment.id }],
       });
@@ -186,6 +226,7 @@ export function useOptimisticCommentVote({
         (error instanceof Error ? error.message : t('errors:likeFailed'));
       toast(message);
       await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      await queryClient.invalidateQueries({ queryKey: ['CommentSearch'] });
       await queryClient.invalidateQueries({
         queryKey: ['Comment', { id: comment.id }],
       });

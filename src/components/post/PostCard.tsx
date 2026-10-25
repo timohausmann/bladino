@@ -1,5 +1,6 @@
 import type { Comment } from '@/graphql';
 import { getCommentChildren, getCommentFiles } from './commentUtils';
+import { isReplyComment } from './isReplyComment';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { floatingSurfaceClassName } from '@/components/ui/Card';
@@ -33,7 +34,11 @@ export function PostCard({
   const { id: commentId } = comment;
   const children = getCommentChildren(comment);
   const files = getCommentFiles(comment);
+  const isReply = isReplyComment(comment);
   const [isEditing, setIsEditing] = useState(false);
+  const showFooter = isReply
+    ? children.length > 0
+    : children.length > 0 || !isEditing;
 
   return (
     <article
@@ -90,7 +95,7 @@ export function PostCard({
         )}
       </div>
 
-      {children.length > 0 || !isEditing ? (
+      {showFooter ? (
         <div className="bg-inset flex flex-col gap-4 rounded-xl px-4 pt-5 pb-3">
           {children.map((child, index) => (
             <div key={`${child.id}-${index}`}>
@@ -103,12 +108,14 @@ export function PostCard({
             </div>
           ))}
 
-          <div>
-            <PostReply
-              parentId={commentId}
-              channel={comment.channel ?? undefined}
-            />
-          </div>
+          {!isReply ? (
+            <div>
+              <PostReply
+                parentId={commentId}
+                channel={comment.channel ?? undefined}
+              />
+            </div>
+          ) : null}
         </div>
       ) : null}
     </article>

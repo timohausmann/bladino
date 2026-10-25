@@ -7,6 +7,7 @@ import {
 import { Link } from '@tanstack/react-router';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { UnreadIndicator } from '@/components/post/UnreadIndicator';
+import { getCommentDetailLink } from './commentUtils';
 
 interface PostMetadataProps {
   comment: Comment;
@@ -24,6 +25,7 @@ export function PostMetadata({ comment, isUnread }: PostMetadataProps) {
     : undefined;
   const formattedDate = formatRelativeCommentDate(comment.dateCreated);
   const timestamp = formatCommentTimestamp(comment.dateCreated);
+  const detailLink = getCommentDetailLink(comment);
 
   if (!channel && !formattedDate && !isUnread) {
     return null;
@@ -33,8 +35,8 @@ export function PostMetadata({ comment, isUnread }: PostMetadataProps) {
     <div className="text-muted-foreground flex min-w-0 items-center justify-start gap-1.5 text-left text-xs leading-none">
       {formattedDate ? (
         <Link
-          to="/post/$id"
-          params={{ id: comment.id }}
+          to={detailLink.to}
+          params={detailLink.params}
           className="hover:text-foreground shrink-0 transition-colors"
         >
           <Tooltip content={timestamp}>

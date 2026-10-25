@@ -1,0 +1,40 @@
+#import "./fragments/weblink.graphql"
+#import "./fragments/vote.graphql"
+#import "./fragments/commentChild.graphql"
+
+query CommentSearch($filter: CommentSearchFilter!, $cursor: Date) {
+  commentSearch(filter: $filter, cursor: $cursor) {
+    cursor
+    comments {
+      id
+      body
+      dateCreated
+      dateEdited
+      parent
+      channel
+      voteNum
+      votes {
+        ...VoteFields
+      }
+      user {
+        id
+        name
+        avatar
+        isSystemUser
+      }
+      files {
+        id
+        filename
+        name
+        type
+        size
+      }
+      weblinks {
+        ...WeblinkFields
+      }
+      children {
+        ...CommentChildFields
+      }
+    }
+  }
+}

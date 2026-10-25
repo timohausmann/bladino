@@ -26,5 +26,6 @@
   "likedByMe": "Liked by me",
   "emptyTitle": "Search posts",
   "queryTitle": "“{{query}}”",
-  "pending": "Matching posts will show up here once search is connected."
+  "idle": "Enter a search or set a filter.",
+  "noResults": "No matching posts."
 }

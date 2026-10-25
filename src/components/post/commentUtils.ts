@@ -18,3 +18,26 @@ export function getCommentChildren(
     (child): child is Comment => child != null,
   );
 }
+
+/** Thread URL. A reply opens inside its parent, never as its own post. */
+export function getCommentDetailLink(comment: {
+  id: string;
+  parent?: string | null;
+}):
+  | {
+      to: '/post/$id/comment/$commentId';
+      params: { id: string; commentId: string };
+    }
+  | { to: '/post/$id'; params: { id: string } } {
+  if (comment.parent) {
+    return {
+      to: '/post/$id/comment/$commentId',
+      params: { id: comment.parent, commentId: comment.id },
+    };
+  }
+
+  return {
+    to: '/post/$id',
+    params: { id: comment.id },
+  };
+}

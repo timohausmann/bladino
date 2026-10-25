@@ -92,6 +92,30 @@ input CommentFilter {
 }
 
 """"""
+input CommentSearchFilter {
+  """"""
+  channel: ID
+
+  """Custom range, inclusive."""
+  from: Date
+
+  """"""
+  q: String
+
+  """30d, 6m, or 12m. A preset ignores from and to."""
+  range: String
+
+  """Custom range, exclusive."""
+  to: Date
+
+  """post, reply, or omitted for both."""
+  type: String
+
+  """"""
+  user: ID
+}
+
+""""""
 scalar Date
 
 """"""
@@ -399,6 +423,9 @@ type Query {
 
   """"""
   commentFeed(cursor: Date, filter: CommentFilter!): CommentFeed
+
+  """"""
+  commentSearch(cursor: Date, filter: CommentSearchFilter!): CommentFeed
 
   """"""
   comments(parent: ID!): [Comment!]!

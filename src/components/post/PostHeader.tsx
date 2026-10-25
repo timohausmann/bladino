@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/Avatar';
 import { PostContextMenu } from '@/components/post/PostContextMenu';
 import { PostMetadata } from '@/components/post/PostMetadata';
+import { getCommentDetailLink } from '@/components/post/commentUtils';
 
 interface PostHeaderProps {
   comment: Comment;
@@ -32,6 +33,7 @@ export function PostHeader({
   const handle = 'handle';
   const showHandle = false;
   const formattedDate = formatRelativeCommentDate(comment.dateCreated);
+  const detailLink = getCommentDetailLink(comment);
 
   return (
     <div className="flex items-center gap-3">
@@ -55,8 +57,8 @@ export function PostHeader({
               </Link>
               {showDate && formattedDate ? (
                 <Link
-                  to="/post/$id"
-                  params={{ id: comment.id }}
+                  to={detailLink.to}
+                  params={detailLink.params}
                   className="text-muted-foreground hover:text-foreground text-xs leading-none underline decoration-transparent transition-colors duration-200 hover:decoration-current"
                 >
                   {formattedDate}

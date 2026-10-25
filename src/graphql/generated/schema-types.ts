@@ -55,6 +55,20 @@ export type CommentFilter = {
   user?: InputMaybe<Scalars['ID']['input']>;
 };
 
+export type CommentSearchFilter = {
+  channel?: InputMaybe<Scalars['ID']['input']>;
+  /** Custom range, inclusive. */
+  from?: InputMaybe<Scalars['Date']['input']>;
+  q?: InputMaybe<Scalars['String']['input']>;
+  /** 30d, 6m, or 12m. A preset ignores from and to. */
+  range?: InputMaybe<Scalars['String']['input']>;
+  /** Custom range, exclusive. */
+  to?: InputMaybe<Scalars['Date']['input']>;
+  /** post, reply, or omitted for both. */
+  type?: InputMaybe<Scalars['String']['input']>;
+  user?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type FeedUnreadState = {
   __typename?: 'FeedUnreadState';
   lastViewedAt: Scalars['Date']['output'];
@@ -377,6 +391,7 @@ export type Query = {
   channels: Array<Channel>;
   comment?: Maybe<Comment>;
   commentFeed?: Maybe<CommentFeed>;
+  commentSearch?: Maybe<CommentFeed>;
   comments: Array<Comment>;
   currentUser?: Maybe<User>;
   mail?: Maybe<Mail>;
@@ -407,6 +422,12 @@ export type QueryCommentArgs = {
 export type QueryCommentFeedArgs = {
   cursor?: InputMaybe<Scalars['Date']['input']>;
   filter: CommentFilter;
+};
+
+
+export type QueryCommentSearchArgs = {
+  cursor?: InputMaybe<Scalars['Date']['input']>;
+  filter: CommentSearchFilter;
 };
 
 

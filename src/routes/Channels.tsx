@@ -74,6 +74,7 @@ export function Channels() {
       <CreatePost channel={id} />
 
       <CommentFeed
+        className="py-6"
         filter={{ channel: id }}
         readScope={{ kind: 'channel', channelId: id }}
         emptyMessage={t('channels:emptyFeed')}

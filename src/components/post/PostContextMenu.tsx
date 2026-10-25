@@ -82,6 +82,7 @@ export function PostContextMenu({
       await deleteComment({ id: comment.id });
 
       await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+      await queryClient.invalidateQueries({ queryKey: ['CommentSearch'] });
       await queryClient.invalidateQueries({
         queryKey: ['Comment', { id: comment.id }],
       });

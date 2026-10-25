@@ -106,10 +106,10 @@ export function CommentFeed({
   return (
     <div className={className}>
       {title && (
-        <h2 className="text-foreground pt-2 pb-1 text-lg font-bold">{title}</h2>
+        <h2 className="text-foreground mb-6 pt-2 text-lg font-bold">{title}</h2>
       )}
 
-      <div className="flex flex-col gap-8 py-6">
+      <div className="flex flex-col gap-8">
         {isLoading && (
           <p className="text-muted-foreground py-8 text-center">
             {t('posts:loadingFeed')}

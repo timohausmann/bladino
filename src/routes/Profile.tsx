@@ -63,6 +63,7 @@ export function Profile() {
       <ProfileHeaderCard user={user} className="mb-6" />
 
       <CommentFeed
+        className="pb-6"
         filter={{ user: user.id }}
         title={t('profile:postsBy', { name: user.name })}
         emptyMessage={t('profile:emptyPosts', { name: user.name })}

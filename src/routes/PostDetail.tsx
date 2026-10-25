@@ -11,7 +11,7 @@ import {
   useGraphQLQuery,
   type Comment,
 } from '@/graphql';
-import { useMatch, useNavigate } from '@tanstack/react-router';
+import { useMatch, useNavigate, Navigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -79,6 +79,17 @@ export function PostDetail() {
 
   if (!comment) {
     return <ResourceNotFound resource="post" />;
+  }
+
+  // A reply is not a post. Open it inside the parent thread.
+  if (comment.parent && !postCommentMatch) {
+    return (
+      <Navigate
+        to="/post/$id/comment/$commentId"
+        params={{ id: comment.parent, commentId: comment.id }}
+        replace
+      />
+    );
   }
 
   return (

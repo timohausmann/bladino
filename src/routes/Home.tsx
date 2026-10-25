@@ -14,7 +14,7 @@ export function Home() {
 
       <CreatePost />
 
-      <CommentFeed filter={{}} readScope={{ kind: 'home' }} />
+      <CommentFeed className="py-6" filter={{}} readScope={{ kind: 'home' }} />
     </>
   );
 }

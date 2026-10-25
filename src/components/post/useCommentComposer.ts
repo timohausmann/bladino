@@ -141,6 +141,7 @@ export function useCommentComposer({
 
   const invalidateQueries = async () => {
     await queryClient.invalidateQueries({ queryKey: ['CommentFeed'] });
+    await queryClient.invalidateQueries({ queryKey: ['CommentSearch'] });
     if (commentId) {
       await queryClient.invalidateQueries({
         queryKey: ['Comment', { id: commentId }],
